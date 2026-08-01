@@ -46,7 +46,7 @@ Each stage lives in its own module under `rag/` so you can follow the pipeline i
 Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
 
 ```bash
-cd rag/01-basic-rag
+cd examples/rag/01-basic-rag
 cp .env.example .env
 # set OPENAI_API_KEY in .env
 

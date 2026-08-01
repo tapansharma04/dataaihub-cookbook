@@ -7,11 +7,11 @@ on:
 
 jobs:
   basic-rag:
-    name: rag/01-basic-rag
+    name: examples/rag/01-basic-rag
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: rag/01-basic-rag
+        working-directory: examples/rag/01-basic-rag
 
     steps:
       - uses: actions/checkout@v4
