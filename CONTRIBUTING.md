@@ -53,7 +53,7 @@ Add folders only when they make the pipeline clearer.
 
 ## Adding a new example
 
-1. Place it in the correct learning path (`rag/`, `agents/`, etc.).
+1. Place it in the correct learning path under `examples/` (`examples/rag/`, `examples/agents/`, etc.).
 2. Number it in sequence (`02-…`, `03-…`) only when it extends that path.
 3. Do not create empty category directories.
 4. Prefer direct SDK usage for foundational examples.

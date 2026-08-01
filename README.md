@@ -23,14 +23,14 @@ Cookbook →  "How is it implemented?"
 
 | ID | Path | Concept |
 |----|------|---------|
-| `basic-rag` | [`rag/01-basic-rag`](rag/01-basic-rag) | Chunk → embed → retrieve → generate |
+| `basic-rag` | [`examples/rag/01-basic-rag`](examples/rag/01-basic-rag) | Chunk → embed → retrieve → generate |
 
 More examples will be added after this first pattern is solid.
 
 ## Quick start
 
 ```bash
-cd rag/01-basic-rag
+cd examples/rag/01-basic-rag
 cp .env.example .env   # add your API key
 uv sync
 uv run python main.py "What is retrieval-augmented generation?"
@@ -45,11 +45,15 @@ dataaihub-cookbook/
 ├── README.md
 ├── CONTRIBUTING.md
 ├── LICENSE
-└── rag/
-    └── 01-basic-rag/
+├── examples/
+│   └── rag/
+│       └── 01-basic-rag/
+├── shared/
+├── docs/
+└── scripts/
 ```
 
-Categories appear only when an implementation exists.
+Example categories under `examples/` appear when an implementation exists.
 
 ## Relationship to DataAIHub
 
