@@ -1,6 +1,6 @@
 # DataAIHub Cookbook
 
-Public reference implementations for [DataAIHub](https://dataaihub.com).
+Public reference implementations for [DataAIHub](https://www.dataaihub.co).
 
 DataAIHub explains the concepts.  
 This repository shows how they are implemented.
@@ -25,7 +25,7 @@ Cookbook →  "How is it implemented?"
 |----|------|---------|
 | `basic-rag` | [`examples/rag/01-basic-rag`](examples/rag/01-basic-rag) | Chunk → embed → retrieve → generate |
 
-More examples will be added after this first pattern is solid.
+More examples will be added as the RAG path progresses.
 
 ## Quick start
 
@@ -47,7 +47,7 @@ dataaihub-cookbook/
 ├── LICENSE
 ├── examples/
 │   └── rag/
-│       └── 01-basic-rag/
+│       ├── 01-basic-rag/
 ├── shared/
 ├── docs/
 └── scripts/
