@@ -1,0 +1,614 @@
+[
+  {
+    "labId": "basic-rag",
+    "traceId": "what-problem-does-rag-solve",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-01T10:48:01Z",
+    "metricsProvenance": "measured",
+    "input": {
+      "question": "What problem does RAG solve?",
+      "config": {
+        "chunkSize": 400,
+        "chunkOverlap": 80,
+        "topK": 3,
+        "embeddingModel": "text-embedding-3-small",
+        "chatModel": "gpt-4o-mini"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 5
+    },
+    "steps": [
+      {
+        "id": "chunking",
+        "type": "chunking",
+        "title": "Chunk documents",
+        "status": "ok",
+        "detail": {
+          "source": "data/sample.md",
+          "chunkCount": 5,
+          "chunkSize": 400,
+          "chunkOverlap": 80,
+          "chunks": [
+            {
+              "id": "sample-0",
+              "text": "# Sample knowledge base for basic RAG\n# Tiny on purpose \u2014 enough to retrieve against, easy to inspect.\n\n## What is RAG?\n\nRetrieval-Augmented Generation (RAG) combines information retrieval with\nlarge language models. Instead of answering only from model parameters,\nthe system first retrieves relevant documents, then conditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for know",
+              "start": 0,
+              "end": 400
+            },
+            {
+              "id": "sample-1",
+              "text": "nditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for knowledge-intensive questions and lets\nanswers stay current without retraining the model.\n\n## Chunking\n\nDocuments are split into smaller pieces called chunks before embedding.\nChunk size is a tradeoff: too small and context is lost; too large and\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeani",
+              "start": 320,
+              "end": 720
+            },
+            {
+              "id": "sample-2",
+              "text": "nd\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeaning that would otherwise be cut at boundaries.\n\n## Embeddings\n\nAn embedding model maps text to a dense vector. Semantically similar\ntexts land near each other in vector space. RAG embeds both document\nchunks (offline) and the user question (at query time).\n\n## Vector search\n\nAt query time, the system embeds the question",
+              "start": 640,
+              "end": 1040
+            },
+            {
+              "id": "sample-3",
+              "text": "at query time).\n\n## Vector search\n\nAt query time, the system embeds the question and finds the nearest\nchunk vectors by similarity (often cosine similarity). The top-k chunks\nbecome the context passed to the language model.\n\n## Prompt construction\n\nRetrieved chunks are inserted into a prompt that instructs the model to\nanswer using only the provided context. If the context is insufficient,\na good",
+              "start": 960,
+              "end": 1360
+            },
+            {
+              "id": "sample-4",
+              "text": "answer using only the provided context. If the context is insufficient,\na good prompt asks the model to say so rather than invent details.\n\n## Limitations of basic RAG\n\nBasic RAG uses dense retrieval only. It may miss exact keyword matches,\ndoes not rerank results, and has no agentic tool use. Production systems\noften add hybrid search, reranking, evaluation, and monitoring.",
+              "start": 1280,
+              "end": 1658
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-corpus",
+        "type": "embedding",
+        "title": "Embed chunks",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "inputCount": 5,
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 2930,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-query",
+        "type": "embedding",
+        "title": "Embed query",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "query": "What problem does RAG solve?",
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 917,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve",
+        "type": "retrieval",
+        "title": "Similarity search",
+        "status": "ok",
+        "detail": {
+          "topK": 3,
+          "similarity": "cosine",
+          "chunks": [
+            {
+              "id": "sample-0",
+              "text": "# Sample knowledge base for basic RAG\n# Tiny on purpose \u2014 enough to retrieve against, easy to inspect.\n\n## What is RAG?\n\nRetrieval-Augmented Generation (RAG) combines information retrieval with\nlarge language models. Instead of answering only from model parameters,\nthe system first retrieves relevant documents, then conditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for know",
+              "score": 0.6127,
+              "start": 0,
+              "end": 400
+            },
+            {
+              "id": "sample-4",
+              "text": "answer using only the provided context. If the context is insufficient,\na good prompt asks the model to say so rather than invent details.\n\n## Limitations of basic RAG\n\nBasic RAG uses dense retrieval only. It may miss exact keyword matches,\ndoes not rerank results, and has no agentic tool use. Production systems\noften add hybrid search, reranking, evaluation, and monitoring.",
+              "score": 0.544,
+              "start": 1280,
+              "end": 1658
+            },
+            {
+              "id": "sample-1",
+              "text": "nditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for knowledge-intensive questions and lets\nanswers stay current without retraining the model.\n\n## Chunking\n\nDocuments are split into smaller pieces called chunks before embedding.\nChunk size is a tradeoff: too small and context is lost; too large and\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeani",
+              "score": 0.4818,
+              "start": 320,
+              "end": 720
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 2,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "prompt",
+        "type": "prompt",
+        "title": "Prompt construction",
+        "status": "ok",
+        "detail": {
+          "system": "You are a helpful assistant that answers using only the\nprovided context. If the context does not contain enough information,\nsay you do not know based on the available documents. Be concise.",
+          "user": "Context:\n[1] (score=0.613, id=sample-0)\n# Sample knowledge base for basic RAG\n# Tiny on purpose \u2014 enough to retrieve against, easy to inspect.\n\n## What is RAG?\n\nRetrieval-Augmented Generation (RAG) combines information retrieval with\nlarge language models. Instead of answering only from model parameters,\nthe system first retrieves relevant documents, then conditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for know\n\n[2] (score=0.544, id=sample-4)\nanswer using only the provided context. If the context is insufficient,\na good prompt asks the model to say so rather than invent details.\n\n## Limitations of basic RAG\n\nBasic RAG uses dense retrieval only. It may miss exact keyword matches,\ndoes not rerank results, and has no agentic tool use. Production systems\noften add hybrid search, reranking, evaluation, and monitoring.\n\n[3] (score=0.482, id=sample-1)\nnditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for knowledge-intensive questions and lets\nanswers stay current without retraining the model.\n\n## Chunking\n\nDocuments are split into smaller pieces called chunks before embedding.\nChunk size is a tradeoff: too small and context is lost; too large and\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeani\n\nQuestion: What problem does RAG solve?\n\nAnswer using only the context above."
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "llm",
+        "type": "llm",
+        "title": "Generation",
+        "status": "ok",
+        "detail": {
+          "model": "gpt-4o-mini",
+          "temperature": 0
+        },
+        "metrics": {
+          "latencyMs": 2155,
+          "promptTokens": 356,
+          "completionTokens": 33,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "output",
+        "type": "output",
+        "title": "Answer",
+        "status": "ok",
+        "detail": {
+          "answer": "RAG solves the problem of reducing hallucinations for knowledge-intensive questions and allows answers to stay current without retraining the model by combining information retrieval with large language models."
+        },
+        "metrics": {
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "RAG solves the problem of reducing hallucinations for knowledge-intensive questions and allows answers to stay current without retraining the model by combining information retrieval with large language models."
+    },
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 2930,
+      "queryEmbeddingMs": 917,
+      "retrievalMs": 2,
+      "generationMs": 2155,
+      "totalMs": 6004,
+      "promptTokens": 356,
+      "completionTokens": 33,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "openai"
+    ],
+    "relatedContent": [
+      "rag",
+      "embeddings"
+    ],
+    "cookbook": {
+      "path": "examples/rag/01-basic-rag"
+    }
+  },
+  {
+    "labId": "basic-rag",
+    "traceId": "why-embeddings",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-01T10:48:04Z",
+    "metricsProvenance": "measured",
+    "input": {
+      "question": "Why are embeddings needed?",
+      "config": {
+        "chunkSize": 400,
+        "chunkOverlap": 80,
+        "topK": 3,
+        "embeddingModel": "text-embedding-3-small",
+        "chatModel": "gpt-4o-mini"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 5
+    },
+    "steps": [
+      {
+        "id": "chunking",
+        "type": "chunking",
+        "title": "Chunk documents",
+        "status": "ok",
+        "detail": {
+          "source": "data/sample.md",
+          "chunkCount": 5,
+          "chunkSize": 400,
+          "chunkOverlap": 80,
+          "chunks": [
+            {
+              "id": "sample-0",
+              "text": "# Sample knowledge base for basic RAG\n# Tiny on purpose \u2014 enough to retrieve against, easy to inspect.\n\n## What is RAG?\n\nRetrieval-Augmented Generation (RAG) combines information retrieval with\nlarge language models. Instead of answering only from model parameters,\nthe system first retrieves relevant documents, then conditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for know",
+              "start": 0,
+              "end": 400
+            },
+            {
+              "id": "sample-1",
+              "text": "nditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for knowledge-intensive questions and lets\nanswers stay current without retraining the model.\n\n## Chunking\n\nDocuments are split into smaller pieces called chunks before embedding.\nChunk size is a tradeoff: too small and context is lost; too large and\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeani",
+              "start": 320,
+              "end": 720
+            },
+            {
+              "id": "sample-2",
+              "text": "nd\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeaning that would otherwise be cut at boundaries.\n\n## Embeddings\n\nAn embedding model maps text to a dense vector. Semantically similar\ntexts land near each other in vector space. RAG embeds both document\nchunks (offline) and the user question (at query time).\n\n## Vector search\n\nAt query time, the system embeds the question",
+              "start": 640,
+              "end": 1040
+            },
+            {
+              "id": "sample-3",
+              "text": "at query time).\n\n## Vector search\n\nAt query time, the system embeds the question and finds the nearest\nchunk vectors by similarity (often cosine similarity). The top-k chunks\nbecome the context passed to the language model.\n\n## Prompt construction\n\nRetrieved chunks are inserted into a prompt that instructs the model to\nanswer using only the provided context. If the context is insufficient,\na good",
+              "start": 960,
+              "end": 1360
+            },
+            {
+              "id": "sample-4",
+              "text": "answer using only the provided context. If the context is insufficient,\na good prompt asks the model to say so rather than invent details.\n\n## Limitations of basic RAG\n\nBasic RAG uses dense retrieval only. It may miss exact keyword matches,\ndoes not rerank results, and has no agentic tool use. Production systems\noften add hybrid search, reranking, evaluation, and monitoring.",
+              "start": 1280,
+              "end": 1658
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-corpus",
+        "type": "embedding",
+        "title": "Embed chunks",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "inputCount": 5,
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 2930,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-query",
+        "type": "embedding",
+        "title": "Embed query",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "query": "Why are embeddings needed?",
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 403,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve",
+        "type": "retrieval",
+        "title": "Similarity search",
+        "status": "ok",
+        "detail": {
+          "topK": 3,
+          "similarity": "cosine",
+          "chunks": [
+            {
+              "id": "sample-2",
+              "text": "nd\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeaning that would otherwise be cut at boundaries.\n\n## Embeddings\n\nAn embedding model maps text to a dense vector. Semantically similar\ntexts land near each other in vector space. RAG embeds both document\nchunks (offline) and the user question (at query time).\n\n## Vector search\n\nAt query time, the system embeds the question",
+              "score": 0.5645,
+              "start": 640,
+              "end": 1040
+            },
+            {
+              "id": "sample-3",
+              "text": "at query time).\n\n## Vector search\n\nAt query time, the system embeds the question and finds the nearest\nchunk vectors by similarity (often cosine similarity). The top-k chunks\nbecome the context passed to the language model.\n\n## Prompt construction\n\nRetrieved chunks are inserted into a prompt that instructs the model to\nanswer using only the provided context. If the context is insufficient,\na good",
+              "score": 0.3083,
+              "start": 960,
+              "end": 1360
+            },
+            {
+              "id": "sample-1",
+              "text": "nditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for knowledge-intensive questions and lets\nanswers stay current without retraining the model.\n\n## Chunking\n\nDocuments are split into smaller pieces called chunks before embedding.\nChunk size is a tradeoff: too small and context is lost; too large and\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeani",
+              "score": 0.2965,
+              "start": 320,
+              "end": 720
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "prompt",
+        "type": "prompt",
+        "title": "Prompt construction",
+        "status": "ok",
+        "detail": {
+          "system": "You are a helpful assistant that answers using only the\nprovided context. If the context does not contain enough information,\nsay you do not know based on the available documents. Be concise.",
+          "user": "Context:\n[1] (score=0.564, id=sample-2)\nnd\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeaning that would otherwise be cut at boundaries.\n\n## Embeddings\n\nAn embedding model maps text to a dense vector. Semantically similar\ntexts land near each other in vector space. RAG embeds both document\nchunks (offline) and the user question (at query time).\n\n## Vector search\n\nAt query time, the system embeds the question\n\n[2] (score=0.308, id=sample-3)\nat query time).\n\n## Vector search\n\nAt query time, the system embeds the question and finds the nearest\nchunk vectors by similarity (often cosine similarity). The top-k chunks\nbecome the context passed to the language model.\n\n## Prompt construction\n\nRetrieved chunks are inserted into a prompt that instructs the model to\nanswer using only the provided context. If the context is insufficient,\na good\n\n[3] (score=0.297, id=sample-1)\nnditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for knowledge-intensive questions and lets\nanswers stay current without retraining the model.\n\n## Chunking\n\nDocuments are split into smaller pieces called chunks before embedding.\nChunk size is a tradeoff: too small and context is lost; too large and\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeani\n\nQuestion: Why are embeddings needed?\n\nAnswer using only the context above."
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "llm",
+        "type": "llm",
+        "title": "Generation",
+        "status": "ok",
+        "detail": {
+          "model": "gpt-4o-mini",
+          "temperature": 0
+        },
+        "metrics": {
+          "latencyMs": 2392,
+          "promptTokens": 357,
+          "completionTokens": 61,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "output",
+        "type": "output",
+        "title": "Answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Embeddings are needed because they map text to a dense vector, allowing semantically similar texts to land near each other in vector space. This is essential for the retrieval-augmented generation (RAG) system, which embeds both document chunks and the user question to facilitate effective vector search and context retrieval."
+        },
+        "metrics": {
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "Embeddings are needed because they map text to a dense vector, allowing semantically similar texts to land near each other in vector space. This is essential for the retrieval-augmented generation (RAG) system, which embeds both document chunks and the user question to facilitate effective vector search and context retrieval."
+    },
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 2930,
+      "queryEmbeddingMs": 403,
+      "retrievalMs": 0,
+      "generationMs": 2392,
+      "totalMs": 5725,
+      "promptTokens": 357,
+      "completionTokens": 61,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "openai"
+    ],
+    "relatedContent": [
+      "rag",
+      "embeddings"
+    ],
+    "cookbook": {
+      "path": "examples/rag/01-basic-rag"
+    }
+  },
+  {
+    "labId": "basic-rag",
+    "traceId": "how-retrieval-works",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-01T10:48:05Z",
+    "metricsProvenance": "measured",
+    "input": {
+      "question": "How does retrieval work?",
+      "config": {
+        "chunkSize": 400,
+        "chunkOverlap": 80,
+        "topK": 3,
+        "embeddingModel": "text-embedding-3-small",
+        "chatModel": "gpt-4o-mini"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 5
+    },
+    "steps": [
+      {
+        "id": "chunking",
+        "type": "chunking",
+        "title": "Chunk documents",
+        "status": "ok",
+        "detail": {
+          "source": "data/sample.md",
+          "chunkCount": 5,
+          "chunkSize": 400,
+          "chunkOverlap": 80,
+          "chunks": [
+            {
+              "id": "sample-0",
+              "text": "# Sample knowledge base for basic RAG\n# Tiny on purpose \u2014 enough to retrieve against, easy to inspect.\n\n## What is RAG?\n\nRetrieval-Augmented Generation (RAG) combines information retrieval with\nlarge language models. Instead of answering only from model parameters,\nthe system first retrieves relevant documents, then conditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for know",
+              "start": 0,
+              "end": 400
+            },
+            {
+              "id": "sample-1",
+              "text": "nditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for knowledge-intensive questions and lets\nanswers stay current without retraining the model.\n\n## Chunking\n\nDocuments are split into smaller pieces called chunks before embedding.\nChunk size is a tradeoff: too small and context is lost; too large and\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeani",
+              "start": 320,
+              "end": 720
+            },
+            {
+              "id": "sample-2",
+              "text": "nd\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeaning that would otherwise be cut at boundaries.\n\n## Embeddings\n\nAn embedding model maps text to a dense vector. Semantically similar\ntexts land near each other in vector space. RAG embeds both document\nchunks (offline) and the user question (at query time).\n\n## Vector search\n\nAt query time, the system embeds the question",
+              "start": 640,
+              "end": 1040
+            },
+            {
+              "id": "sample-3",
+              "text": "at query time).\n\n## Vector search\n\nAt query time, the system embeds the question and finds the nearest\nchunk vectors by similarity (often cosine similarity). The top-k chunks\nbecome the context passed to the language model.\n\n## Prompt construction\n\nRetrieved chunks are inserted into a prompt that instructs the model to\nanswer using only the provided context. If the context is insufficient,\na good",
+              "start": 960,
+              "end": 1360
+            },
+            {
+              "id": "sample-4",
+              "text": "answer using only the provided context. If the context is insufficient,\na good prompt asks the model to say so rather than invent details.\n\n## Limitations of basic RAG\n\nBasic RAG uses dense retrieval only. It may miss exact keyword matches,\ndoes not rerank results, and has no agentic tool use. Production systems\noften add hybrid search, reranking, evaluation, and monitoring.",
+              "start": 1280,
+              "end": 1658
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-corpus",
+        "type": "embedding",
+        "title": "Embed chunks",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "inputCount": 5,
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 2930,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-query",
+        "type": "embedding",
+        "title": "Embed query",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "query": "How does retrieval work?",
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 375,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve",
+        "type": "retrieval",
+        "title": "Similarity search",
+        "status": "ok",
+        "detail": {
+          "topK": 3,
+          "similarity": "cosine",
+          "chunks": [
+            {
+              "id": "sample-2",
+              "text": "nd\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeaning that would otherwise be cut at boundaries.\n\n## Embeddings\n\nAn embedding model maps text to a dense vector. Semantically similar\ntexts land near each other in vector space. RAG embeds both document\nchunks (offline) and the user question (at query time).\n\n## Vector search\n\nAt query time, the system embeds the question",
+              "score": 0.4512,
+              "start": 640,
+              "end": 1040
+            },
+            {
+              "id": "sample-0",
+              "text": "# Sample knowledge base for basic RAG\n# Tiny on purpose \u2014 enough to retrieve against, easy to inspect.\n\n## What is RAG?\n\nRetrieval-Augmented Generation (RAG) combines information retrieval with\nlarge language models. Instead of answering only from model parameters,\nthe system first retrieves relevant documents, then conditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for know",
+              "score": 0.4159,
+              "start": 0,
+              "end": 400
+            },
+            {
+              "id": "sample-1",
+              "text": "nditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for knowledge-intensive questions and lets\nanswers stay current without retraining the model.\n\n## Chunking\n\nDocuments are split into smaller pieces called chunks before embedding.\nChunk size is a tradeoff: too small and context is lost; too large and\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeani",
+              "score": 0.3977,
+              "start": 320,
+              "end": 720
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 2,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "prompt",
+        "type": "prompt",
+        "title": "Prompt construction",
+        "status": "ok",
+        "detail": {
+          "system": "You are a helpful assistant that answers using only the\nprovided context. If the context does not contain enough information,\nsay you do not know based on the available documents. Be concise.",
+          "user": "Context:\n[1] (score=0.451, id=sample-2)\nnd\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeaning that would otherwise be cut at boundaries.\n\n## Embeddings\n\nAn embedding model maps text to a dense vector. Semantically similar\ntexts land near each other in vector space. RAG embeds both document\nchunks (offline) and the user question (at query time).\n\n## Vector search\n\nAt query time, the system embeds the question\n\n[2] (score=0.416, id=sample-0)\n# Sample knowledge base for basic RAG\n# Tiny on purpose \u2014 enough to retrieve against, easy to inspect.\n\n## What is RAG?\n\nRetrieval-Augmented Generation (RAG) combines information retrieval with\nlarge language models. Instead of answering only from model parameters,\nthe system first retrieves relevant documents, then conditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for know\n\n[3] (score=0.398, id=sample-1)\nnditions the LLM\non that retrieved context.\n\nRAG reduces hallucinations for knowledge-intensive questions and lets\nanswers stay current without retraining the model.\n\n## Chunking\n\nDocuments are split into smaller pieces called chunks before embedding.\nChunk size is a tradeoff: too small and context is lost; too large and\nretrieval becomes noisy. Overlap between adjacent chunks helps preserve\nmeani\n\nQuestion: How does retrieval work?\n\nAnswer using only the context above."
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "llm",
+        "type": "llm",
+        "title": "Generation",
+        "status": "ok",
+        "detail": {
+          "model": "gpt-4o-mini",
+          "temperature": 0
+        },
+        "metrics": {
+          "latencyMs": 1365,
+          "promptTokens": 358,
+          "completionTokens": 75,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "output",
+        "type": "output",
+        "title": "Answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Retrieval works by first embedding the user question at query time. The system then retrieves relevant documents based on these embeddings. Retrieval-Augmented Generation (RAG) combines this information retrieval with large language models, allowing the model to condition its responses on the retrieved context. This process helps reduce hallucinations for knowledge-intensive questions and keeps answers current without needing to retrain the model."
+        },
+        "metrics": {
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "Retrieval works by first embedding the user question at query time. The system then retrieves relevant documents based on these embeddings. Retrieval-Augmented Generation (RAG) combines this information retrieval with large language models, allowing the model to condition its responses on the retrieved context. This process helps reduce hallucinations for knowledge-intensive questions and keeps answers current without needing to retrain the model."
+    },
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 2930,
+      "queryEmbeddingMs": 375,
+      "retrievalMs": 2,
+      "generationMs": 1365,
+      "totalMs": 4672,
+      "promptTokens": 358,
+      "completionTokens": 75,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "openai"
+    ],
+    "relatedContent": [
+      "rag",
+      "embeddings"
+    ],
+    "cookbook": {
+      "path": "examples/rag/01-basic-rag"
+    }
+  }
+]
