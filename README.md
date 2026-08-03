@@ -44,7 +44,6 @@ Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
 ```text
 dataaihub-cookbook/
 ├── README.md
-├── CONTRIBUTING.md
 ├── LICENSE
 ├── examples/
 │   └── rag/
@@ -66,10 +65,6 @@ Example categories under `examples/` appear when an implementation exists.
 | Cookbook (this repo) | Runnable reference code |
 
 Cookbook code and Labs correspond conceptually but stay operationally independent.
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
