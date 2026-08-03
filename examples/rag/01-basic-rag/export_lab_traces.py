@@ -9,9 +9,8 @@ from pathlib import Path
 from config import EXAMPLE_ID, get_settings
 from rag.chunker import chunk_text
 from rag.embeddings import embed_query, embed_texts, get_client
-from rag.generator import SYSTEM_PROMPT, build_prompt, generate_answer
+from rag.generator import SYSTEM_PROMPT, build_prompt
 from rag.loader import load_document
-from rag.retriever import retrieve
 from rag.store import InMemoryVectorStore
 
 QUESTIONS = [
