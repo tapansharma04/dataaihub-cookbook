@@ -1,0 +1,1976 @@
+[
+  {
+    "labId": "reranking",
+    "traceId": "clear-reordering-cert-vs-econn42",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-03T13:29:03Z",
+    "metricsProvenance": "measured",
+    "input": {
+      "question": "Is calendar certificate rotation the fix for E_CONN_42?",
+      "config": {
+        "chunkSize": 520,
+        "chunkOverlap": 40,
+        "denseTopK": 8,
+        "lexicalTopK": 8,
+        "candidateK": 8,
+        "finalContextK": 3,
+        "rrfK": 60,
+        "embeddingModel": "text-embedding-3-small",
+        "chatModel": "gpt-4o-mini",
+        "rerankerModel": "cross-encoder/ms-marco-MiniLM-L6-v2"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 11
+    },
+    "steps": [
+      {
+        "id": "chunking",
+        "type": "chunking",
+        "title": "Chunk documents",
+        "status": "ok",
+        "detail": {
+          "source": "data/sample.md",
+          "chunkCount": 11,
+          "chunkSize": 520,
+          "chunkOverlap": 40,
+          "chunks": [
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Several topics share\nvocabulary (TLS, profiles, NebulaAPI, timeouts) so hybrid retrieval can surface\nplausible candidates while a cross-encoder decides final relevance.",
+              "start": 0,
+              "end": 266
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "start": 268,
+              "end": 752
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "start": 754,
+              "end": 1143
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "start": 1145,
+              "end": 1494
+            },
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. Migration for NebulaAPI v2.3: replace synchronous\nreads with getUserProfileAsync and handle the Promise. Under high concurrency,\nthis is the supported path for loading user profiles without blocking the UI.",
+              "start": 1496,
+              "end": 1854
+            },
+            {
+              "id": "sample-5",
+              "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call.",
+              "start": 1856,
+              "end": 2170
+            },
+            {
+              "id": "sample-6",
+              "text": "## Gateway TLS certificate rotation schedule\n\nProduction EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar. Operators schedule the rotation window, stage the next certificate in\n`/etc/acme/gateway/certs/next`, and promote it with `edgectl cert promote`.\nCalendar rotation is preventive maintenance. It is not the remediation procedure\nfor live E_CONN_42 handshake failures.",
+              "start": 2172,
+              "end": 2566
+            },
+            {
+              "id": "sample-7",
+              "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.",
+              "start": 2568,
+              "end": 2924
+            },
+            {
+              "id": "sample-8",
+              "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.",
+              "start": 2926,
+              "end": 3328
+            },
+            {
+              "id": "sample-9",
+              "text": "## Product SKU NX-4400-PRO\n\nNX-4400-PRO ships with dual power supplies. Rack mounting requires NX-RAIL-2.\nSupported firmware baseline for NX-4400-PRO is 14.2.1 or newer. Field swaps\nmust match the NX-4400-PRO SKU exactly.",
+              "start": 3330,
+              "end": 3551
+            },
+            {
+              "id": "sample-10",
+              "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs.",
+              "start": 3553,
+              "end": 3827
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-corpus",
+        "type": "embedding",
+        "title": "Embed chunks",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "inputCount": 11,
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 1472,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "bm25-index",
+        "type": "index",
+        "title": "Build BM25 index",
+        "status": "ok",
+        "detail": {
+          "documentCount": 11,
+          "k1": 1.5,
+          "b": 0.75
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-query",
+        "type": "embedding",
+        "title": "Embed query",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "query": "Is calendar certificate rotation the fix for E_CONN_42?",
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 559,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve-dense",
+        "type": "retrieval",
+        "title": "Dense similarity search",
+        "status": "ok",
+        "detail": {
+          "topK": 8,
+          "similarity": "cosine",
+          "chunks": [
+            {
+              "id": "sample-6",
+              "text": "## Gateway TLS certificate rotation schedule\n\nProduction EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar. Operators schedule the rotation window, stage the next certificate in\n`/etc/acme/gateway/certs/next`, and promote it with `edgectl cert promote`.\nCalendar rotation is preventive maintenance. It is not the remediation procedure\nfor live E_CONN_42 handshake failures.",
+              "score": 0.5587,
+              "rank": 1,
+              "start": 2172,
+              "end": 2566
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "score": 0.5546,
+              "rank": 2,
+              "start": 754,
+              "end": 1143
+            },
+            {
+              "id": "sample-8",
+              "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.",
+              "score": 0.3818,
+              "rank": 3,
+              "start": 2926,
+              "end": 3328
+            },
+            {
+              "id": "sample-7",
+              "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.",
+              "score": 0.325,
+              "rank": 4,
+              "start": 2568,
+              "end": 2924
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "score": 0.2473,
+              "rank": 5,
+              "start": 268,
+              "end": 752
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "score": 0.2085,
+              "rank": 6,
+              "start": 1145,
+              "end": 1494
+            },
+            {
+              "id": "sample-9",
+              "text": "## Product SKU NX-4400-PRO\n\nNX-4400-PRO ships with dual power supplies. Rack mounting requires NX-RAIL-2.\nSupported firmware baseline for NX-4400-PRO is 14.2.1 or newer. Field swaps\nmust match the NX-4400-PRO SKU exactly.",
+              "score": 0.1956,
+              "rank": 7,
+              "start": 3330,
+              "end": 3551
+            },
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Several topics share\nvocabulary (TLS, profiles, NebulaAPI, timeouts) so hybrid retrieval can surface\nplausible candidates while a cross-encoder decides final relevance.",
+              "score": 0.1929,
+              "rank": 8,
+              "start": 0,
+              "end": 266
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve-lexical",
+        "type": "retrieval",
+        "title": "Lexical BM25 search",
+        "status": "ok",
+        "detail": {
+          "topK": 8,
+          "algorithm": "bm25",
+          "chunks": [
+            {
+              "id": "sample-6",
+              "text": "## Gateway TLS certificate rotation schedule\n\nProduction EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar. Operators schedule the rotation window, stage the next certificate in\n`/etc/acme/gateway/certs/next`, and promote it with `edgectl cert promote`.\nCalendar rotation is preventive maintenance. It is not the remediation procedure\nfor live E_CONN_42 handshake failures.",
+              "score": 7.078,
+              "rank": 1,
+              "start": 2172,
+              "end": 2566
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "score": 6.1659,
+              "rank": 2,
+              "start": 754,
+              "end": 1143
+            },
+            {
+              "id": "sample-7",
+              "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.",
+              "score": 4.3499,
+              "rank": 3,
+              "start": 2568,
+              "end": 2924
+            },
+            {
+              "id": "sample-8",
+              "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.",
+              "score": 1.327,
+              "rank": 4,
+              "start": 2926,
+              "end": 3328
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "score": 0.822,
+              "rank": 5,
+              "start": 268,
+              "end": 752
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "fuse-rrf",
+        "type": "fusion",
+        "title": "Reciprocal Rank Fusion",
+        "status": "ok",
+        "detail": {
+          "formula": "RRF(d) = \u03a3 1 / (k + rank(d))",
+          "rrfK": 60,
+          "topK": 8,
+          "inputs": {
+            "denseRanks": [
+              {
+                "id": "sample-6",
+                "rank": 1
+              },
+              {
+                "id": "sample-2",
+                "rank": 2
+              },
+              {
+                "id": "sample-8",
+                "rank": 3
+              },
+              {
+                "id": "sample-7",
+                "rank": 4
+              },
+              {
+                "id": "sample-1",
+                "rank": 5
+              },
+              {
+                "id": "sample-3",
+                "rank": 6
+              },
+              {
+                "id": "sample-9",
+                "rank": 7
+              },
+              {
+                "id": "sample-0",
+                "rank": 8
+              }
+            ],
+            "lexicalRanks": [
+              {
+                "id": "sample-6",
+                "rank": 1
+              },
+              {
+                "id": "sample-2",
+                "rank": 2
+              },
+              {
+                "id": "sample-7",
+                "rank": 3
+              },
+              {
+                "id": "sample-8",
+                "rank": 4
+              },
+              {
+                "id": "sample-1",
+                "rank": 5
+              }
+            ]
+          },
+          "chunks": [
+            {
+              "id": "sample-6",
+              "text": "## Gateway TLS certificate rotation schedule\n\nProduction EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar. Operators schedule the rotation window, stage the next certificate in\n`/etc/acme/gateway/certs/next`, and promote it with `edgectl cert promote`.\nCalendar rotation is preventive maintenance. It is not the remediation procedure\nfor live E_CONN_42 handshake failures.",
+              "rrfScore": 0.032787,
+              "rank": 1,
+              "denseRank": 1,
+              "lexicalRank": 1,
+              "denseScore": 0.5587,
+              "lexicalScore": 7.078,
+              "start": 2172,
+              "end": 2566
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "rrfScore": 0.032258,
+              "rank": 2,
+              "denseRank": 2,
+              "lexicalRank": 2,
+              "denseScore": 0.5546,
+              "lexicalScore": 6.1659,
+              "start": 754,
+              "end": 1143
+            },
+            {
+              "id": "sample-7",
+              "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.",
+              "rrfScore": 0.031498,
+              "rank": 3,
+              "denseRank": 4,
+              "lexicalRank": 3,
+              "denseScore": 0.325,
+              "lexicalScore": 4.3499,
+              "start": 2568,
+              "end": 2924
+            },
+            {
+              "id": "sample-8",
+              "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.",
+              "rrfScore": 0.031498,
+              "rank": 4,
+              "denseRank": 3,
+              "lexicalRank": 4,
+              "denseScore": 0.3818,
+              "lexicalScore": 1.327,
+              "start": 2926,
+              "end": 3328
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "rrfScore": 0.030769,
+              "rank": 5,
+              "denseRank": 5,
+              "lexicalRank": 5,
+              "denseScore": 0.2473,
+              "lexicalScore": 0.822,
+              "start": 268,
+              "end": 752
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "rrfScore": 0.015152,
+              "rank": 6,
+              "denseRank": 6,
+              "lexicalRank": null,
+              "denseScore": 0.2085,
+              "lexicalScore": null,
+              "start": 1145,
+              "end": 1494
+            },
+            {
+              "id": "sample-9",
+              "text": "## Product SKU NX-4400-PRO\n\nNX-4400-PRO ships with dual power supplies. Rack mounting requires NX-RAIL-2.\nSupported firmware baseline for NX-4400-PRO is 14.2.1 or newer. Field swaps\nmust match the NX-4400-PRO SKU exactly.",
+              "rrfScore": 0.014925,
+              "rank": 7,
+              "denseRank": 7,
+              "lexicalRank": null,
+              "denseScore": 0.1956,
+              "lexicalScore": null,
+              "start": 3330,
+              "end": 3551
+            },
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Several topics share\nvocabulary (TLS, profiles, NebulaAPI, timeouts) so hybrid retrieval can surface\nplausible candidates while a cross-encoder decides final relevance.",
+              "rrfScore": 0.014706,
+              "rank": 8,
+              "denseRank": 8,
+              "lexicalRank": null,
+              "denseScore": 0.1929,
+              "lexicalScore": null,
+              "start": 0,
+              "end": 266
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "rerank",
+        "type": "rerank",
+        "title": "Cross-encoder reranking",
+        "status": "ok",
+        "detail": {
+          "model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+          "candidateK": 8,
+          "finalContextK": 3,
+          "candidateIds": [
+            "sample-6",
+            "sample-2",
+            "sample-7",
+            "sample-8",
+            "sample-1",
+            "sample-3",
+            "sample-9",
+            "sample-0"
+          ],
+          "before": [
+            {
+              "id": "sample-6",
+              "rank": 1,
+              "rrfScore": 0.032787
+            },
+            {
+              "id": "sample-2",
+              "rank": 2,
+              "rrfScore": 0.032258
+            },
+            {
+              "id": "sample-7",
+              "rank": 3,
+              "rrfScore": 0.031498
+            },
+            {
+              "id": "sample-8",
+              "rank": 4,
+              "rrfScore": 0.031498
+            },
+            {
+              "id": "sample-1",
+              "rank": 5,
+              "rrfScore": 0.030769
+            },
+            {
+              "id": "sample-3",
+              "rank": 6,
+              "rrfScore": 0.015152
+            },
+            {
+              "id": "sample-9",
+              "rank": 7,
+              "rrfScore": 0.014925
+            },
+            {
+              "id": "sample-0",
+              "rank": 8,
+              "rrfScore": 0.014706
+            }
+          ],
+          "chunks": [
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "rerankerScore": 6.2051,
+              "rank": 1,
+              "previousRank": 2,
+              "movement": "\u2191 2 \u2192 1",
+              "rrfScore": 0.032258,
+              "denseRank": 2,
+              "lexicalRank": 2,
+              "denseScore": 0.5546,
+              "lexicalScore": 6.1659,
+              "start": 754,
+              "end": 1143
+            },
+            {
+              "id": "sample-6",
+              "text": "## Gateway TLS certificate rotation schedule\n\nProduction EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar. Operators schedule the rotation window, stage the next certificate in\n`/etc/acme/gateway/certs/next`, and promote it with `edgectl cert promote`.\nCalendar rotation is preventive maintenance. It is not the remediation procedure\nfor live E_CONN_42 handshake failures.",
+              "rerankerScore": 5.8996,
+              "rank": 2,
+              "previousRank": 1,
+              "movement": "\u2193 1 \u2192 2",
+              "rrfScore": 0.032787,
+              "denseRank": 1,
+              "lexicalRank": 1,
+              "denseScore": 0.5587,
+              "lexicalScore": 7.078,
+              "start": 2172,
+              "end": 2566
+            },
+            {
+              "id": "sample-7",
+              "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.",
+              "rerankerScore": 0.4302,
+              "rank": 3,
+              "previousRank": 3,
+              "movement": "\u2014",
+              "rrfScore": 0.031498,
+              "denseRank": 4,
+              "lexicalRank": 3,
+              "denseScore": 0.325,
+              "lexicalScore": 4.3499,
+              "start": 2568,
+              "end": 2924
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 213,
+          "modelLoadMs": 9138,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "prompt",
+        "type": "prompt",
+        "title": "Prompt construction",
+        "status": "ok",
+        "detail": {
+          "system": "You are a helpful assistant that answers using only the\nprovided context. If the context does not contain enough information,\nsay you do not know based on the available documents. Be concise.",
+          "user": "Context:\n[1] (rerank=6.2051, id=sample-2, prev_rank=2, rrf=0.032258, dense_rank=2, lexical_rank=2)\n## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.\n\n[2] (rerank=5.8996, id=sample-6, prev_rank=1, rrf=0.032787, dense_rank=1, lexical_rank=1)\n## Gateway TLS certificate rotation schedule\n\nProduction EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar. Operators schedule the rotation window, stage the next certificate in\n`/etc/acme/gateway/certs/next`, and promote it with `edgectl cert promote`.\nCalendar rotation is preventive maintenance. It is not the remediation procedure\nfor live E_CONN_42 handshake failures.\n\n[3] (rerank=0.4302, id=sample-7, prev_rank=3, rrf=0.031498, dense_rank=4, lexical_rank=3)\n## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.\n\nQuestion: Is calendar certificate rotation the fix for E_CONN_42?\n\nAnswer using only the context above.",
+          "contextSource": "reranked",
+          "finalContextIds": [
+            "sample-2",
+            "sample-6",
+            "sample-7"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "llm",
+        "type": "llm",
+        "title": "Generation",
+        "status": "ok",
+        "detail": {
+          "model": "gpt-4o-mini",
+          "temperature": 0
+        },
+        "metrics": {
+          "latencyMs": 1466,
+          "promptTokens": 443,
+          "completionTokens": 29,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "output",
+        "type": "output",
+        "title": "Answer",
+        "status": "ok",
+        "detail": {
+          "answer": "No, calendar certificate rotation is not the fix for E_CONN_42. It is preventive maintenance and not the remediation procedure for live handshake failures."
+        },
+        "metrics": {
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "No, calendar certificate rotation is not the fix for E_CONN_42. It is preventive maintenance and not the remediation procedure for live handshake failures."
+    },
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 1472,
+      "bm25IndexMs": 1,
+      "rerankerLoadMs": 9138,
+      "queryEmbeddingMs": 559,
+      "denseRetrievalMs": 1,
+      "lexicalRetrievalMs": 0,
+      "fusionMs": 0,
+      "rerankingMs": 213,
+      "generationMs": 1466,
+      "totalMs": 3712,
+      "promptTokens": 443,
+      "completionTokens": 29,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "openai",
+      "bm25",
+      "rrf",
+      "cross-encoder",
+      "ms-marco-MiniLM-L6-v2"
+    ],
+    "relatedContent": [
+      "rag",
+      "hybrid-retrieval",
+      "reranking",
+      "embeddings"
+    ],
+    "cookbook": {
+      "path": "examples/rag/03-reranking"
+    }
+  },
+  {
+    "labId": "reranking",
+    "traceId": "ranking-agrees-handshake-checklist",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-03T13:29:05Z",
+    "metricsProvenance": "measured",
+    "input": {
+      "question": "Intermittent TLS handshake failures without a stable error code \u2014 checklist?",
+      "config": {
+        "chunkSize": 520,
+        "chunkOverlap": 40,
+        "denseTopK": 8,
+        "lexicalTopK": 8,
+        "candidateK": 8,
+        "finalContextK": 3,
+        "rrfK": 60,
+        "embeddingModel": "text-embedding-3-small",
+        "chatModel": "gpt-4o-mini",
+        "rerankerModel": "cross-encoder/ms-marco-MiniLM-L6-v2"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 11
+    },
+    "steps": [
+      {
+        "id": "chunking",
+        "type": "chunking",
+        "title": "Chunk documents",
+        "status": "ok",
+        "detail": {
+          "source": "data/sample.md",
+          "chunkCount": 11,
+          "chunkSize": 520,
+          "chunkOverlap": 40,
+          "chunks": [
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Several topics share\nvocabulary (TLS, profiles, NebulaAPI, timeouts) so hybrid retrieval can surface\nplausible candidates while a cross-encoder decides final relevance.",
+              "start": 0,
+              "end": 266
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "start": 268,
+              "end": 752
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "start": 754,
+              "end": 1143
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "start": 1145,
+              "end": 1494
+            },
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. Migration for NebulaAPI v2.3: replace synchronous\nreads with getUserProfileAsync and handle the Promise. Under high concurrency,\nthis is the supported path for loading user profiles without blocking the UI.",
+              "start": 1496,
+              "end": 1854
+            },
+            {
+              "id": "sample-5",
+              "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call.",
+              "start": 1856,
+              "end": 2170
+            },
+            {
+              "id": "sample-6",
+              "text": "## Gateway TLS certificate rotation schedule\n\nProduction EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar. Operators schedule the rotation window, stage the next certificate in\n`/etc/acme/gateway/certs/next`, and promote it with `edgectl cert promote`.\nCalendar rotation is preventive maintenance. It is not the remediation procedure\nfor live E_CONN_42 handshake failures.",
+              "start": 2172,
+              "end": 2566
+            },
+            {
+              "id": "sample-7",
+              "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.",
+              "start": 2568,
+              "end": 2924
+            },
+            {
+              "id": "sample-8",
+              "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.",
+              "start": 2926,
+              "end": 3328
+            },
+            {
+              "id": "sample-9",
+              "text": "## Product SKU NX-4400-PRO\n\nNX-4400-PRO ships with dual power supplies. Rack mounting requires NX-RAIL-2.\nSupported firmware baseline for NX-4400-PRO is 14.2.1 or newer. Field swaps\nmust match the NX-4400-PRO SKU exactly.",
+              "start": 3330,
+              "end": 3551
+            },
+            {
+              "id": "sample-10",
+              "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs.",
+              "start": 3553,
+              "end": 3827
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-corpus",
+        "type": "embedding",
+        "title": "Embed chunks",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "inputCount": 11,
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 1472,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "bm25-index",
+        "type": "index",
+        "title": "Build BM25 index",
+        "status": "ok",
+        "detail": {
+          "documentCount": 11,
+          "k1": 1.5,
+          "b": 0.75
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-query",
+        "type": "embedding",
+        "title": "Embed query",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "query": "Intermittent TLS handshake failures without a stable error code \u2014 checklist?",
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 353,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve-dense",
+        "type": "retrieval",
+        "title": "Dense similarity search",
+        "status": "ok",
+        "detail": {
+          "topK": 8,
+          "similarity": "cosine",
+          "chunks": [
+            {
+              "id": "sample-8",
+              "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.",
+              "score": 0.734,
+              "rank": 1,
+              "start": 2926,
+              "end": 3328
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "score": 0.4726,
+              "rank": 2,
+              "start": 754,
+              "end": 1143
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "score": 0.4602,
+              "rank": 3,
+              "start": 268,
+              "end": 752
+            },
+            {
+              "id": "sample-6",
+              "text": "## Gateway TLS certificate rotation schedule\n\nProduction EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar. Operators schedule the rotation window, stage the next certificate in\n`/etc/acme/gateway/certs/next`, and promote it with `edgectl cert promote`.\nCalendar rotation is preventive maintenance. It is not the remediation procedure\nfor live E_CONN_42 handshake failures.",
+              "score": 0.3633,
+              "rank": 4,
+              "start": 2172,
+              "end": 2566
+            },
+            {
+              "id": "sample-7",
+              "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.",
+              "score": 0.3373,
+              "rank": 5,
+              "start": 2568,
+              "end": 2924
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "score": 0.3232,
+              "rank": 6,
+              "start": 1145,
+              "end": 1494
+            },
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Several topics share\nvocabulary (TLS, profiles, NebulaAPI, timeouts) so hybrid retrieval can surface\nplausible candidates while a cross-encoder decides final relevance.",
+              "score": 0.3037,
+              "rank": 7,
+              "start": 0,
+              "end": 266
+            },
+            {
+              "id": "sample-10",
+              "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs.",
+              "score": 0.1354,
+              "rank": 8,
+              "start": 3553,
+              "end": 3827
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve-lexical",
+        "type": "retrieval",
+        "title": "Lexical BM25 search",
+        "status": "ok",
+        "detail": {
+          "topK": 8,
+          "algorithm": "bm25",
+          "chunks": [
+            {
+              "id": "sample-8",
+              "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.",
+              "score": 13.6745,
+              "rank": 1,
+              "start": 2926,
+              "end": 3328
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "score": 4.4187,
+              "rank": 2,
+              "start": 754,
+              "end": 1143
+            },
+            {
+              "id": "sample-6",
+              "text": "## Gateway TLS certificate rotation schedule\n\nProduction EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar. Operators schedule the rotation window, stage the next certificate in\n`/etc/acme/gateway/certs/next`, and promote it with `edgectl cert promote`.\nCalendar rotation is preventive maintenance. It is not the remediation procedure\nfor live E_CONN_42 handshake failures.",
+              "score": 3.5588,
+              "rank": 3,
+              "start": 2172,
+              "end": 2566
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "score": 2.5086,
+              "rank": 4,
+              "start": 268,
+              "end": 752
+            },
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. Migration for NebulaAPI v2.3: replace synchronous\nreads with getUserProfileAsync and handle the Promise. Under high concurrency,\nthis is the supported path for loading user profiles without blocking the UI.",
+              "score": 1.6281,
+              "rank": 5,
+              "start": 1496,
+              "end": 1854
+            },
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Several topics share\nvocabulary (TLS, profiles, NebulaAPI, timeouts) so hybrid retrieval can surface\nplausible candidates while a cross-encoder decides final relevance.",
+              "score": 0.8398,
+              "rank": 6,
+              "start": 0,
+              "end": 266
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "fuse-rrf",
+        "type": "fusion",
+        "title": "Reciprocal Rank Fusion",
+        "status": "ok",
+        "detail": {
+          "formula": "RRF(d) = \u03a3 1 / (k + rank(d))",
+          "rrfK": 60,
+          "topK": 8,
+          "inputs": {
+            "denseRanks": [
+              {
+                "id": "sample-8",
+                "rank": 1
+              },
+              {
+                "id": "sample-2",
+                "rank": 2
+              },
+              {
+                "id": "sample-1",
+                "rank": 3
+              },
+              {
+                "id": "sample-6",
+                "rank": 4
+              },
+              {
+                "id": "sample-7",
+                "rank": 5
+              },
+              {
+                "id": "sample-3",
+                "rank": 6
+              },
+              {
+                "id": "sample-0",
+                "rank": 7
+              },
+              {
+                "id": "sample-10",
+                "rank": 8
+              }
+            ],
+            "lexicalRanks": [
+              {
+                "id": "sample-8",
+                "rank": 1
+              },
+              {
+                "id": "sample-2",
+                "rank": 2
+              },
+              {
+                "id": "sample-6",
+                "rank": 3
+              },
+              {
+                "id": "sample-1",
+                "rank": 4
+              },
+              {
+                "id": "sample-4",
+                "rank": 5
+              },
+              {
+                "id": "sample-0",
+                "rank": 6
+              }
+            ]
+          },
+          "chunks": [
+            {
+              "id": "sample-8",
+              "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.",
+              "rrfScore": 0.032787,
+              "rank": 1,
+              "denseRank": 1,
+              "lexicalRank": 1,
+              "denseScore": 0.734,
+              "lexicalScore": 13.6745,
+              "start": 2926,
+              "end": 3328
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "rrfScore": 0.032258,
+              "rank": 2,
+              "denseRank": 2,
+              "lexicalRank": 2,
+              "denseScore": 0.4726,
+              "lexicalScore": 4.4187,
+              "start": 754,
+              "end": 1143
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "rrfScore": 0.031498,
+              "rank": 3,
+              "denseRank": 3,
+              "lexicalRank": 4,
+              "denseScore": 0.4602,
+              "lexicalScore": 2.5086,
+              "start": 268,
+              "end": 752
+            },
+            {
+              "id": "sample-6",
+              "text": "## Gateway TLS certificate rotation schedule\n\nProduction EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar. Operators schedule the rotation window, stage the next certificate in\n`/etc/acme/gateway/certs/next`, and promote it with `edgectl cert promote`.\nCalendar rotation is preventive maintenance. It is not the remediation procedure\nfor live E_CONN_42 handshake failures.",
+              "rrfScore": 0.031498,
+              "rank": 4,
+              "denseRank": 4,
+              "lexicalRank": 3,
+              "denseScore": 0.3633,
+              "lexicalScore": 3.5588,
+              "start": 2172,
+              "end": 2566
+            },
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Several topics share\nvocabulary (TLS, profiles, NebulaAPI, timeouts) so hybrid retrieval can surface\nplausible candidates while a cross-encoder decides final relevance.",
+              "rrfScore": 0.030077,
+              "rank": 5,
+              "denseRank": 7,
+              "lexicalRank": 6,
+              "denseScore": 0.3037,
+              "lexicalScore": 0.8398,
+              "start": 0,
+              "end": 266
+            },
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. Migration for NebulaAPI v2.3: replace synchronous\nreads with getUserProfileAsync and handle the Promise. Under high concurrency,\nthis is the supported path for loading user profiles without blocking the UI.",
+              "rrfScore": 0.015385,
+              "rank": 6,
+              "denseRank": null,
+              "lexicalRank": 5,
+              "denseScore": null,
+              "lexicalScore": 1.6281,
+              "start": 1496,
+              "end": 1854
+            },
+            {
+              "id": "sample-7",
+              "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.",
+              "rrfScore": 0.015385,
+              "rank": 7,
+              "denseRank": 5,
+              "lexicalRank": null,
+              "denseScore": 0.3373,
+              "lexicalScore": null,
+              "start": 2568,
+              "end": 2924
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "rrfScore": 0.015152,
+              "rank": 8,
+              "denseRank": 6,
+              "lexicalRank": null,
+              "denseScore": 0.3232,
+              "lexicalScore": null,
+              "start": 1145,
+              "end": 1494
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "rerank",
+        "type": "rerank",
+        "title": "Cross-encoder reranking",
+        "status": "ok",
+        "detail": {
+          "model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+          "candidateK": 8,
+          "finalContextK": 3,
+          "candidateIds": [
+            "sample-8",
+            "sample-2",
+            "sample-1",
+            "sample-6",
+            "sample-0",
+            "sample-4",
+            "sample-7",
+            "sample-3"
+          ],
+          "before": [
+            {
+              "id": "sample-8",
+              "rank": 1,
+              "rrfScore": 0.032787
+            },
+            {
+              "id": "sample-2",
+              "rank": 2,
+              "rrfScore": 0.032258
+            },
+            {
+              "id": "sample-1",
+              "rank": 3,
+              "rrfScore": 0.031498
+            },
+            {
+              "id": "sample-6",
+              "rank": 4,
+              "rrfScore": 0.031498
+            },
+            {
+              "id": "sample-0",
+              "rank": 5,
+              "rrfScore": 0.030077
+            },
+            {
+              "id": "sample-4",
+              "rank": 6,
+              "rrfScore": 0.015385
+            },
+            {
+              "id": "sample-7",
+              "rank": 7,
+              "rrfScore": 0.015385
+            },
+            {
+              "id": "sample-3",
+              "rank": 8,
+              "rrfScore": 0.015152
+            }
+          ],
+          "chunks": [
+            {
+              "id": "sample-8",
+              "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.",
+              "rerankerScore": 9.2804,
+              "rank": 1,
+              "previousRank": 1,
+              "movement": "\u2014",
+              "rrfScore": 0.032787,
+              "denseRank": 1,
+              "lexicalRank": 1,
+              "denseScore": 0.734,
+              "lexicalScore": 13.6745,
+              "start": 2926,
+              "end": 3328
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "rerankerScore": 1.8171,
+              "rank": 2,
+              "previousRank": 2,
+              "movement": "\u2014",
+              "rrfScore": 0.032258,
+              "denseRank": 2,
+              "lexicalRank": 2,
+              "denseScore": 0.4726,
+              "lexicalScore": 4.4187,
+              "start": 754,
+              "end": 1143
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "rerankerScore": 0.4907,
+              "rank": 3,
+              "previousRank": 3,
+              "movement": "\u2014",
+              "rrfScore": 0.031498,
+              "denseRank": 3,
+              "lexicalRank": 4,
+              "denseScore": 0.4602,
+              "lexicalScore": 2.5086,
+              "start": 268,
+              "end": 752
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 95,
+          "modelLoadMs": 9138,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "prompt",
+        "type": "prompt",
+        "title": "Prompt construction",
+        "status": "ok",
+        "detail": {
+          "system": "You are a helpful assistant that answers using only the\nprovided context. If the context does not contain enough information,\nsay you do not know based on the available documents. Be concise.",
+          "user": "Context:\n[1] (rerank=9.2804, id=sample-8, prev_rank=1, rrf=0.032787, dense_rank=1, lexical_rank=1)\n## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.\n\n[2] (rerank=1.8171, id=sample-2, prev_rank=2, rrf=0.032258, dense_rank=2, lexical_rank=2)\n## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.\n\n[3] (rerank=0.4907, id=sample-1, prev_rank=3, rrf=0.031498, dense_rank=3, lexical_rank=4)\n## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.\n\nQuestion: Intermittent TLS handshake failures without a stable error code \u2014 checklist?\n\nAnswer using only the context above.",
+          "contextSource": "reranked",
+          "finalContextIds": [
+            "sample-8",
+            "sample-2",
+            "sample-1"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "llm",
+        "type": "llm",
+        "title": "Generation",
+        "status": "ok",
+        "detail": {
+          "model": "gpt-4o-mini",
+          "temperature": 0
+        },
+        "metrics": {
+          "latencyMs": 1682,
+          "promptTokens": 455,
+          "completionTokens": 68,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "output",
+        "type": "output",
+        "title": "Answer",
+        "status": "ok",
+        "detail": {
+          "answer": "To troubleshoot intermittent TLS handshake failures without a stable error code, follow this checklist:\n\n1. Capture packet traces.\n2. Verify NTP clock skew is under 2 seconds.\n3. Confirm that intermediate CA bundles are complete.\n\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation instead of this general checklist."
+        },
+        "metrics": {
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "To troubleshoot intermittent TLS handshake failures without a stable error code, follow this checklist:\n\n1. Capture packet traces.\n2. Verify NTP clock skew is under 2 seconds.\n3. Confirm that intermediate CA bundles are complete.\n\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation instead of this general checklist."
+    },
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 1472,
+      "bm25IndexMs": 1,
+      "rerankerLoadMs": 9138,
+      "queryEmbeddingMs": 353,
+      "denseRetrievalMs": 0,
+      "lexicalRetrievalMs": 0,
+      "fusionMs": 0,
+      "rerankingMs": 95,
+      "generationMs": 1682,
+      "totalMs": 3603,
+      "promptTokens": 455,
+      "completionTokens": 68,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "openai",
+      "bm25",
+      "rrf",
+      "cross-encoder",
+      "ms-marco-MiniLM-L6-v2"
+    ],
+    "relatedContent": [
+      "rag",
+      "hybrid-retrieval",
+      "reranking",
+      "embeddings"
+    ],
+    "cookbook": {
+      "path": "examples/rag/03-reranking"
+    }
+  },
+  {
+    "labId": "reranking",
+    "traceId": "ambiguous-profile-switch",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-03T13:29:06Z",
+    "metricsProvenance": "measured",
+    "input": {
+      "question": "Should I keep using getUserProfile or switch for concurrent UIs?",
+      "config": {
+        "chunkSize": 520,
+        "chunkOverlap": 40,
+        "denseTopK": 8,
+        "lexicalTopK": 8,
+        "candidateK": 8,
+        "finalContextK": 3,
+        "rrfK": 60,
+        "embeddingModel": "text-embedding-3-small",
+        "chatModel": "gpt-4o-mini",
+        "rerankerModel": "cross-encoder/ms-marco-MiniLM-L6-v2"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 11
+    },
+    "steps": [
+      {
+        "id": "chunking",
+        "type": "chunking",
+        "title": "Chunk documents",
+        "status": "ok",
+        "detail": {
+          "source": "data/sample.md",
+          "chunkCount": 11,
+          "chunkSize": 520,
+          "chunkOverlap": 40,
+          "chunks": [
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Several topics share\nvocabulary (TLS, profiles, NebulaAPI, timeouts) so hybrid retrieval can surface\nplausible candidates while a cross-encoder decides final relevance.",
+              "start": 0,
+              "end": 266
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "start": 268,
+              "end": 752
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "start": 754,
+              "end": 1143
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "start": 1145,
+              "end": 1494
+            },
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. Migration for NebulaAPI v2.3: replace synchronous\nreads with getUserProfileAsync and handle the Promise. Under high concurrency,\nthis is the supported path for loading user profiles without blocking the UI.",
+              "start": 1496,
+              "end": 1854
+            },
+            {
+              "id": "sample-5",
+              "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call.",
+              "start": 1856,
+              "end": 2170
+            },
+            {
+              "id": "sample-6",
+              "text": "## Gateway TLS certificate rotation schedule\n\nProduction EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar. Operators schedule the rotation window, stage the next certificate in\n`/etc/acme/gateway/certs/next`, and promote it with `edgectl cert promote`.\nCalendar rotation is preventive maintenance. It is not the remediation procedure\nfor live E_CONN_42 handshake failures.",
+              "start": 2172,
+              "end": 2566
+            },
+            {
+              "id": "sample-7",
+              "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.",
+              "start": 2568,
+              "end": 2924
+            },
+            {
+              "id": "sample-8",
+              "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.",
+              "start": 2926,
+              "end": 3328
+            },
+            {
+              "id": "sample-9",
+              "text": "## Product SKU NX-4400-PRO\n\nNX-4400-PRO ships with dual power supplies. Rack mounting requires NX-RAIL-2.\nSupported firmware baseline for NX-4400-PRO is 14.2.1 or newer. Field swaps\nmust match the NX-4400-PRO SKU exactly.",
+              "start": 3330,
+              "end": 3551
+            },
+            {
+              "id": "sample-10",
+              "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs.",
+              "start": 3553,
+              "end": 3827
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-corpus",
+        "type": "embedding",
+        "title": "Embed chunks",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "inputCount": 11,
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 1472,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "bm25-index",
+        "type": "index",
+        "title": "Build BM25 index",
+        "status": "ok",
+        "detail": {
+          "documentCount": 11,
+          "k1": 1.5,
+          "b": 0.75
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-query",
+        "type": "embedding",
+        "title": "Embed query",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "query": "Should I keep using getUserProfile or switch for concurrent UIs?",
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 380,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve-dense",
+        "type": "retrieval",
+        "title": "Dense similarity search",
+        "status": "ok",
+        "detail": {
+          "topK": 8,
+          "similarity": "cosine",
+          "chunks": [
+            {
+              "id": "sample-5",
+              "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call.",
+              "score": 0.5279,
+              "rank": 1,
+              "start": 1856,
+              "end": 2170
+            },
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. Migration for NebulaAPI v2.3: replace synchronous\nreads with getUserProfileAsync and handle the Promise. Under high concurrency,\nthis is the supported path for loading user profiles without blocking the UI.",
+              "score": 0.507,
+              "rank": 2,
+              "start": 1496,
+              "end": 1854
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "score": 0.4865,
+              "rank": 3,
+              "start": 1145,
+              "end": 1494
+            },
+            {
+              "id": "sample-10",
+              "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs.",
+              "score": 0.4718,
+              "rank": 4,
+              "start": 3553,
+              "end": 3827
+            },
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Several topics share\nvocabulary (TLS, profiles, NebulaAPI, timeouts) so hybrid retrieval can surface\nplausible candidates while a cross-encoder decides final relevance.",
+              "score": 0.2188,
+              "rank": 5,
+              "start": 0,
+              "end": 266
+            },
+            {
+              "id": "sample-9",
+              "text": "## Product SKU NX-4400-PRO\n\nNX-4400-PRO ships with dual power supplies. Rack mounting requires NX-RAIL-2.\nSupported firmware baseline for NX-4400-PRO is 14.2.1 or newer. Field swaps\nmust match the NX-4400-PRO SKU exactly.",
+              "score": 0.144,
+              "rank": 6,
+              "start": 3330,
+              "end": 3551
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "score": 0.1099,
+              "rank": 7,
+              "start": 268,
+              "end": 752
+            },
+            {
+              "id": "sample-8",
+              "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.",
+              "score": 0.0971,
+              "rank": 8,
+              "start": 2926,
+              "end": 3328
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 3,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve-lexical",
+        "type": "retrieval",
+        "title": "Lexical BM25 search",
+        "status": "ok",
+        "detail": {
+          "topK": 8,
+          "algorithm": "bm25",
+          "chunks": [
+            {
+              "id": "sample-10",
+              "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs.",
+              "score": 4.3687,
+              "rank": 1,
+              "start": 3553,
+              "end": 3827
+            },
+            {
+              "id": "sample-5",
+              "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call.",
+              "score": 3.1025,
+              "rank": 2,
+              "start": 1856,
+              "end": 2170
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "score": 2.0838,
+              "rank": 3,
+              "start": 1145,
+              "end": 1494
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "fuse-rrf",
+        "type": "fusion",
+        "title": "Reciprocal Rank Fusion",
+        "status": "ok",
+        "detail": {
+          "formula": "RRF(d) = \u03a3 1 / (k + rank(d))",
+          "rrfK": 60,
+          "topK": 8,
+          "inputs": {
+            "denseRanks": [
+              {
+                "id": "sample-5",
+                "rank": 1
+              },
+              {
+                "id": "sample-4",
+                "rank": 2
+              },
+              {
+                "id": "sample-3",
+                "rank": 3
+              },
+              {
+                "id": "sample-10",
+                "rank": 4
+              },
+              {
+                "id": "sample-0",
+                "rank": 5
+              },
+              {
+                "id": "sample-9",
+                "rank": 6
+              },
+              {
+                "id": "sample-1",
+                "rank": 7
+              },
+              {
+                "id": "sample-8",
+                "rank": 8
+              }
+            ],
+            "lexicalRanks": [
+              {
+                "id": "sample-10",
+                "rank": 1
+              },
+              {
+                "id": "sample-5",
+                "rank": 2
+              },
+              {
+                "id": "sample-3",
+                "rank": 3
+              }
+            ]
+          },
+          "chunks": [
+            {
+              "id": "sample-5",
+              "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call.",
+              "rrfScore": 0.032522,
+              "rank": 1,
+              "denseRank": 1,
+              "lexicalRank": 2,
+              "denseScore": 0.5279,
+              "lexicalScore": 3.1025,
+              "start": 1856,
+              "end": 2170
+            },
+            {
+              "id": "sample-10",
+              "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs.",
+              "rrfScore": 0.032018,
+              "rank": 2,
+              "denseRank": 4,
+              "lexicalRank": 1,
+              "denseScore": 0.4718,
+              "lexicalScore": 4.3687,
+              "start": 3553,
+              "end": 3827
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "rrfScore": 0.031746,
+              "rank": 3,
+              "denseRank": 3,
+              "lexicalRank": 3,
+              "denseScore": 0.4865,
+              "lexicalScore": 2.0838,
+              "start": 1145,
+              "end": 1494
+            },
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. Migration for NebulaAPI v2.3: replace synchronous\nreads with getUserProfileAsync and handle the Promise. Under high concurrency,\nthis is the supported path for loading user profiles without blocking the UI.",
+              "rrfScore": 0.016129,
+              "rank": 4,
+              "denseRank": 2,
+              "lexicalRank": null,
+              "denseScore": 0.507,
+              "lexicalScore": null,
+              "start": 1496,
+              "end": 1854
+            },
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Several topics share\nvocabulary (TLS, profiles, NebulaAPI, timeouts) so hybrid retrieval can surface\nplausible candidates while a cross-encoder decides final relevance.",
+              "rrfScore": 0.015385,
+              "rank": 5,
+              "denseRank": 5,
+              "lexicalRank": null,
+              "denseScore": 0.2188,
+              "lexicalScore": null,
+              "start": 0,
+              "end": 266
+            },
+            {
+              "id": "sample-9",
+              "text": "## Product SKU NX-4400-PRO\n\nNX-4400-PRO ships with dual power supplies. Rack mounting requires NX-RAIL-2.\nSupported firmware baseline for NX-4400-PRO is 14.2.1 or newer. Field swaps\nmust match the NX-4400-PRO SKU exactly.",
+              "rrfScore": 0.015152,
+              "rank": 6,
+              "denseRank": 6,
+              "lexicalRank": null,
+              "denseScore": 0.144,
+              "lexicalScore": null,
+              "start": 3330,
+              "end": 3551
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "rrfScore": 0.014925,
+              "rank": 7,
+              "denseRank": 7,
+              "lexicalRank": null,
+              "denseScore": 0.1099,
+              "lexicalScore": null,
+              "start": 268,
+              "end": 752
+            },
+            {
+              "id": "sample-8",
+              "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist.",
+              "rrfScore": 0.014706,
+              "rank": 8,
+              "denseRank": 8,
+              "lexicalRank": null,
+              "denseScore": 0.0971,
+              "lexicalScore": null,
+              "start": 2926,
+              "end": 3328
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "rerank",
+        "type": "rerank",
+        "title": "Cross-encoder reranking",
+        "status": "ok",
+        "detail": {
+          "model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+          "candidateK": 8,
+          "finalContextK": 3,
+          "candidateIds": [
+            "sample-5",
+            "sample-10",
+            "sample-3",
+            "sample-4",
+            "sample-0",
+            "sample-9",
+            "sample-1",
+            "sample-8"
+          ],
+          "before": [
+            {
+              "id": "sample-5",
+              "rank": 1,
+              "rrfScore": 0.032522
+            },
+            {
+              "id": "sample-10",
+              "rank": 2,
+              "rrfScore": 0.032018
+            },
+            {
+              "id": "sample-3",
+              "rank": 3,
+              "rrfScore": 0.031746
+            },
+            {
+              "id": "sample-4",
+              "rank": 4,
+              "rrfScore": 0.016129
+            },
+            {
+              "id": "sample-0",
+              "rank": 5,
+              "rrfScore": 0.015385
+            },
+            {
+              "id": "sample-9",
+              "rank": 6,
+              "rrfScore": 0.015152
+            },
+            {
+              "id": "sample-1",
+              "rank": 7,
+              "rrfScore": 0.014925
+            },
+            {
+              "id": "sample-8",
+              "rank": 8,
+              "rrfScore": 0.014706
+            }
+          ],
+          "chunks": [
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. Migration for NebulaAPI v2.3: replace synchronous\nreads with getUserProfileAsync and handle the Promise. Under high concurrency,\nthis is the supported path for loading user profiles without blocking the UI.",
+              "rerankerScore": -1.6796,
+              "rank": 1,
+              "previousRank": 4,
+              "movement": "\u2191 4 \u2192 1",
+              "rrfScore": 0.016129,
+              "denseRank": 2,
+              "lexicalRank": null,
+              "denseScore": 0.507,
+              "lexicalScore": null,
+              "start": 1496,
+              "end": 1854
+            },
+            {
+              "id": "sample-5",
+              "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call.",
+              "rerankerScore": -2.8285,
+              "rank": 2,
+              "previousRank": 1,
+              "movement": "\u2193 1 \u2192 2",
+              "rrfScore": 0.032522,
+              "denseRank": 1,
+              "lexicalRank": 2,
+              "denseScore": 0.5279,
+              "lexicalScore": 3.1025,
+              "start": 1856,
+              "end": 2170
+            },
+            {
+              "id": "sample-10",
+              "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs.",
+              "rerankerScore": -2.9065,
+              "rank": 3,
+              "previousRank": 2,
+              "movement": "\u2193 2 \u2192 3",
+              "rrfScore": 0.032018,
+              "denseRank": 4,
+              "lexicalRank": 1,
+              "denseScore": 0.4718,
+              "lexicalScore": 4.3687,
+              "start": 3553,
+              "end": 3827
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 86,
+          "modelLoadMs": 9138,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "prompt",
+        "type": "prompt",
+        "title": "Prompt construction",
+        "status": "ok",
+        "detail": {
+          "system": "You are a helpful assistant that answers using only the\nprovided context. If the context does not contain enough information,\nsay you do not know based on the available documents. Be concise.",
+          "user": "Context:\n[1] (rerank=-1.6796, id=sample-4, prev_rank=4, rrf=0.016129, dense_rank=2, lexical_rank=None)\n## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. Migration for NebulaAPI v2.3: replace synchronous\nreads with getUserProfileAsync and handle the Promise. Under high concurrency,\nthis is the supported path for loading user profiles without blocking the UI.\n\n[2] (rerank=-2.8285, id=sample-5, prev_rank=1, rrf=0.032522, dense_rank=1, lexical_rank=2)\n## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call.\n\n[3] (rerank=-2.9065, id=sample-10, prev_rank=2, rrf=0.032018, dense_rank=4, lexical_rank=1)\n## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs.\n\nQuestion: Should I keep using getUserProfile or switch for concurrent UIs?\n\nAnswer using only the context above.",
+          "contextSource": "reranked",
+          "finalContextIds": [
+            "sample-4",
+            "sample-5",
+            "sample-10"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "llm",
+        "type": "llm",
+        "title": "Generation",
+        "status": "ok",
+        "detail": {
+          "model": "gpt-4o-mini",
+          "temperature": 0
+        },
+        "metrics": {
+          "latencyMs": 1124,
+          "promptTokens": 399,
+          "completionTokens": 39,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "output",
+        "type": "output",
+        "title": "Answer",
+        "status": "ok",
+        "detail": {
+          "answer": "You should switch to using `getUserProfileAsync` for concurrent UIs, as `getUserProfile` is deprecated in NebulaAPI v2.3 and may throw under high concurrency."
+        },
+        "metrics": {
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "You should switch to using `getUserProfileAsync` for concurrent UIs, as `getUserProfile` is deprecated in NebulaAPI v2.3 and may throw under high concurrency."
+    },
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 1472,
+      "bm25IndexMs": 1,
+      "rerankerLoadMs": 9138,
+      "queryEmbeddingMs": 380,
+      "denseRetrievalMs": 3,
+      "lexicalRetrievalMs": 0,
+      "fusionMs": 0,
+      "rerankingMs": 86,
+      "generationMs": 1124,
+      "totalMs": 3066,
+      "promptTokens": 399,
+      "completionTokens": 39,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "openai",
+      "bm25",
+      "rrf",
+      "cross-encoder",
+      "ms-marco-MiniLM-L6-v2"
+    ],
+    "relatedContent": [
+      "rag",
+      "hybrid-retrieval",
+      "reranking",
+      "embeddings"
+    ],
+    "cookbook": {
+      "path": "examples/rag/03-reranking"
+    }
+  }
+]
