@@ -1,0 +1,1025 @@
+[
+  {
+    "labId": "hybrid-rag",
+    "traceId": "dense-friendly-connectivity",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-03T05:22:19Z",
+    "metricsProvenance": "measured",
+    "input": {
+      "question": "What should I do when a customer's internet keeps cutting out unexpectedly?",
+      "config": {
+        "chunkSize": 520,
+        "chunkOverlap": 40,
+        "denseTopK": 3,
+        "lexicalTopK": 3,
+        "hybridTopK": 3,
+        "rrfK": 60,
+        "embeddingModel": "text-embedding-3-small",
+        "chatModel": "gpt-4o-mini"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 6
+    },
+    "steps": [
+      {
+        "id": "chunking",
+        "type": "chunking",
+        "title": "Chunk documents",
+        "status": "ok",
+        "detail": {
+          "source": "data/sample.md",
+          "chunkCount": 6,
+          "chunkSize": 520,
+          "chunkOverlap": 40,
+          "chunks": [
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk so dense and lexical\nsignals can disagree honestly.",
+              "start": 0,
+              "end": 148
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only.",
+              "start": 150,
+              "end": 587
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate gateway client certificate; confirm\nrelay-west.acme.internal is reachable on port 8443; run `edgectl session flush`.\nDo not treat E_CONN_42 as a generic timeout or packet-loss incident.",
+              "start": 589,
+              "end": 902
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "start": 904,
+              "end": 1253
+            },
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 release notes\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. The older `getUserProfile` API is deprecated in\nv2.3 and may throw under high concurrency. Migration for NebulaAPI v2.3:\nreplace synchronous reads with getUserProfileAsync and handle the Promise.",
+              "start": 1255,
+              "end": 1587
+            },
+            {
+              "id": "sample-5",
+              "text": "## Product SKU NX-4400-PRO\n\nNX-4400-PRO ships with dual power supplies. Rack mounting requires NX-RAIL-2.\nSupported firmware baseline for NX-4400-PRO is 14.2.1 or newer. Field swaps\nmust match the NX-4400-PRO SKU exactly.",
+              "start": 1589,
+              "end": 1810
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-corpus",
+        "type": "embedding",
+        "title": "Embed chunks",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "inputCount": 6,
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 850,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "bm25-index",
+        "type": "index",
+        "title": "Build BM25 index",
+        "status": "ok",
+        "detail": {
+          "documentCount": 6,
+          "k1": 1.5,
+          "b": 0.75
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-query",
+        "type": "embedding",
+        "title": "Embed query",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "query": "What should I do when a customer's internet keeps cutting out unexpectedly?",
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 369,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve-dense",
+        "type": "retrieval",
+        "title": "Dense similarity search",
+        "status": "ok",
+        "detail": {
+          "topK": 3,
+          "similarity": "cosine",
+          "chunks": [
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only.",
+              "score": 0.5656,
+              "rank": 1,
+              "start": 150,
+              "end": 587
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "score": 0.3396,
+              "rank": 2,
+              "start": 904,
+              "end": 1253
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate gateway client certificate; confirm\nrelay-west.acme.internal is reachable on port 8443; run `edgectl session flush`.\nDo not treat E_CONN_42 as a generic timeout or packet-loss incident.",
+              "score": 0.2762,
+              "rank": 3,
+              "start": 589,
+              "end": 902
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve-lexical",
+        "type": "retrieval",
+        "title": "Lexical BM25 search",
+        "status": "ok",
+        "detail": {
+          "topK": 3,
+          "algorithm": "bm25",
+          "chunks": [
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only.",
+              "score": 2.5894,
+              "rank": 1,
+              "start": 150,
+              "end": 587
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "fuse-rrf",
+        "type": "fusion",
+        "title": "Reciprocal Rank Fusion",
+        "status": "ok",
+        "detail": {
+          "formula": "RRF(d) = \u03a3 1 / (k + rank(d))",
+          "rrfK": 60,
+          "topK": 3,
+          "inputs": {
+            "denseRanks": [
+              {
+                "id": "sample-1",
+                "rank": 1
+              },
+              {
+                "id": "sample-3",
+                "rank": 2
+              },
+              {
+                "id": "sample-2",
+                "rank": 3
+              }
+            ],
+            "lexicalRanks": [
+              {
+                "id": "sample-1",
+                "rank": 1
+              }
+            ]
+          },
+          "chunks": [
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only.",
+              "rrfScore": 0.032787,
+              "rank": 1,
+              "denseRank": 1,
+              "lexicalRank": 1,
+              "denseScore": 0.5656,
+              "lexicalScore": 2.5894,
+              "start": 150,
+              "end": 587
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "rrfScore": 0.016129,
+              "rank": 2,
+              "denseRank": 2,
+              "lexicalRank": null,
+              "denseScore": 0.3396,
+              "lexicalScore": null,
+              "start": 904,
+              "end": 1253
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate gateway client certificate; confirm\nrelay-west.acme.internal is reachable on port 8443; run `edgectl session flush`.\nDo not treat E_CONN_42 as a generic timeout or packet-loss incident.",
+              "rrfScore": 0.015873,
+              "rank": 3,
+              "denseRank": 3,
+              "lexicalRank": null,
+              "denseScore": 0.2762,
+              "lexicalScore": null,
+              "start": 589,
+              "end": 902
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "prompt",
+        "type": "prompt",
+        "title": "Prompt construction",
+        "status": "ok",
+        "detail": {
+          "system": "You are a helpful assistant that answers using only the\nprovided context. If the context does not contain enough information,\nsay you do not know based on the available documents. Be concise.",
+          "user": "Context:\n[1] (rrf=0.032787, id=sample-1, dense_rank=1, lexical_rank=1)\n## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only.\n\n[2] (rrf=0.016129, id=sample-3, dense_rank=2, lexical_rank=None)\n## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.\n\n[3] (rrf=0.015873, id=sample-2, dense_rank=3, lexical_rank=None)\n## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate gateway client certificate; confirm\nrelay-west.acme.internal is reachable on port 8443; run `edgectl session flush`.\nDo not treat E_CONN_42 as a generic timeout or packet-loss incident.\n\nQuestion: What should I do when a customer's internet keeps cutting out unexpectedly?\n\nAnswer using only the context above.",
+          "contextSource": "hybrid"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "llm",
+        "type": "llm",
+        "title": "Generation",
+        "status": "ok",
+        "detail": {
+          "model": "gpt-4o-mini",
+          "temperature": 0
+        },
+        "metrics": {
+          "latencyMs": 1352,
+          "promptTokens": 377,
+          "completionTokens": 44,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "output",
+        "type": "output",
+        "title": "Answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Begin with environmental triage. Confirm whether other devices share the symptom, reseat cables, and reboot the customer edge router. Most transient outages clear after a simple restart cycle. Capture environment notes before escalating to platform engineering."
+        },
+        "metrics": {
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "Begin with environmental triage. Confirm whether other devices share the symptom, reseat cables, and reboot the customer edge router. Most transient outages clear after a simple restart cycle. Capture environment notes before escalating to platform engineering."
+    },
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 850,
+      "bm25IndexMs": 1,
+      "queryEmbeddingMs": 369,
+      "denseRetrievalMs": 1,
+      "lexicalRetrievalMs": 0,
+      "fusionMs": 0,
+      "generationMs": 1352,
+      "totalMs": 2573,
+      "promptTokens": 377,
+      "completionTokens": 44,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "openai",
+      "bm25",
+      "rrf"
+    ],
+    "relatedContent": [
+      "rag",
+      "hybrid-retrieval",
+      "embeddings"
+    ],
+    "cookbook": {
+      "path": "examples/rag/02-hybrid-rag"
+    }
+  },
+  {
+    "labId": "hybrid-rag",
+    "traceId": "lexical-friendly-error-code",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-03T05:22:20Z",
+    "metricsProvenance": "measured",
+    "input": {
+      "question": "How do I fix error E_CONN_42?",
+      "config": {
+        "chunkSize": 520,
+        "chunkOverlap": 40,
+        "denseTopK": 3,
+        "lexicalTopK": 3,
+        "hybridTopK": 3,
+        "rrfK": 60,
+        "embeddingModel": "text-embedding-3-small",
+        "chatModel": "gpt-4o-mini"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 6
+    },
+    "steps": [
+      {
+        "id": "chunking",
+        "type": "chunking",
+        "title": "Chunk documents",
+        "status": "ok",
+        "detail": {
+          "source": "data/sample.md",
+          "chunkCount": 6,
+          "chunkSize": 520,
+          "chunkOverlap": 40,
+          "chunks": [
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk so dense and lexical\nsignals can disagree honestly.",
+              "start": 0,
+              "end": 148
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only.",
+              "start": 150,
+              "end": 587
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate gateway client certificate; confirm\nrelay-west.acme.internal is reachable on port 8443; run `edgectl session flush`.\nDo not treat E_CONN_42 as a generic timeout or packet-loss incident.",
+              "start": 589,
+              "end": 902
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "start": 904,
+              "end": 1253
+            },
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 release notes\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. The older `getUserProfile` API is deprecated in\nv2.3 and may throw under high concurrency. Migration for NebulaAPI v2.3:\nreplace synchronous reads with getUserProfileAsync and handle the Promise.",
+              "start": 1255,
+              "end": 1587
+            },
+            {
+              "id": "sample-5",
+              "text": "## Product SKU NX-4400-PRO\n\nNX-4400-PRO ships with dual power supplies. Rack mounting requires NX-RAIL-2.\nSupported firmware baseline for NX-4400-PRO is 14.2.1 or newer. Field swaps\nmust match the NX-4400-PRO SKU exactly.",
+              "start": 1589,
+              "end": 1810
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-corpus",
+        "type": "embedding",
+        "title": "Embed chunks",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "inputCount": 6,
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 850,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "bm25-index",
+        "type": "index",
+        "title": "Build BM25 index",
+        "status": "ok",
+        "detail": {
+          "documentCount": 6,
+          "k1": 1.5,
+          "b": 0.75
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-query",
+        "type": "embedding",
+        "title": "Embed query",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "query": "How do I fix error E_CONN_42?",
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 432,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve-dense",
+        "type": "retrieval",
+        "title": "Dense similarity search",
+        "status": "ok",
+        "detail": {
+          "topK": 3,
+          "similarity": "cosine",
+          "chunks": [
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate gateway client certificate; confirm\nrelay-west.acme.internal is reachable on port 8443; run `edgectl session flush`.\nDo not treat E_CONN_42 as a generic timeout or packet-loss incident.",
+              "score": 0.6006,
+              "rank": 1,
+              "start": 589,
+              "end": 902
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only.",
+              "score": 0.2853,
+              "rank": 2,
+              "start": 150,
+              "end": 587
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "score": 0.2321,
+              "rank": 3,
+              "start": 904,
+              "end": 1253
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve-lexical",
+        "type": "retrieval",
+        "title": "Lexical BM25 search",
+        "status": "ok",
+        "detail": {
+          "topK": 3,
+          "algorithm": "bm25",
+          "chunks": [
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate gateway client certificate; confirm\nrelay-west.acme.internal is reachable on port 8443; run `edgectl session flush`.\nDo not treat E_CONN_42 as a generic timeout or packet-loss incident.",
+              "score": 4.3473,
+              "rank": 1,
+              "start": 589,
+              "end": 902
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "fuse-rrf",
+        "type": "fusion",
+        "title": "Reciprocal Rank Fusion",
+        "status": "ok",
+        "detail": {
+          "formula": "RRF(d) = \u03a3 1 / (k + rank(d))",
+          "rrfK": 60,
+          "topK": 3,
+          "inputs": {
+            "denseRanks": [
+              {
+                "id": "sample-2",
+                "rank": 1
+              },
+              {
+                "id": "sample-1",
+                "rank": 2
+              },
+              {
+                "id": "sample-3",
+                "rank": 3
+              }
+            ],
+            "lexicalRanks": [
+              {
+                "id": "sample-2",
+                "rank": 1
+              }
+            ]
+          },
+          "chunks": [
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate gateway client certificate; confirm\nrelay-west.acme.internal is reachable on port 8443; run `edgectl session flush`.\nDo not treat E_CONN_42 as a generic timeout or packet-loss incident.",
+              "rrfScore": 0.032787,
+              "rank": 1,
+              "denseRank": 1,
+              "lexicalRank": 1,
+              "denseScore": 0.6006,
+              "lexicalScore": 4.3473,
+              "start": 589,
+              "end": 902
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only.",
+              "rrfScore": 0.016129,
+              "rank": 2,
+              "denseRank": 2,
+              "lexicalRank": null,
+              "denseScore": 0.2853,
+              "lexicalScore": null,
+              "start": 150,
+              "end": 587
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "rrfScore": 0.015873,
+              "rank": 3,
+              "denseRank": 3,
+              "lexicalRank": null,
+              "denseScore": 0.2321,
+              "lexicalScore": null,
+              "start": 904,
+              "end": 1253
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "prompt",
+        "type": "prompt",
+        "title": "Prompt construction",
+        "status": "ok",
+        "detail": {
+          "system": "You are a helpful assistant that answers using only the\nprovided context. If the context does not contain enough information,\nsay you do not know based on the available documents. Be concise.",
+          "user": "Context:\n[1] (rrf=0.032787, id=sample-2, dense_rank=1, lexical_rank=1)\n## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate gateway client certificate; confirm\nrelay-west.acme.internal is reachable on port 8443; run `edgectl session flush`.\nDo not treat E_CONN_42 as a generic timeout or packet-loss incident.\n\n[2] (rrf=0.016129, id=sample-1, dense_rank=2, lexical_rank=None)\n## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only.\n\n[3] (rrf=0.015873, id=sample-3, dense_rank=3, lexical_rank=None)\n## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.\n\nQuestion: How do I fix error E_CONN_42?\n\nAnswer using only the context above.",
+          "contextSource": "hybrid"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "llm",
+        "type": "llm",
+        "title": "Generation",
+        "status": "ok",
+        "detail": {
+          "model": "gpt-4o-mini",
+          "temperature": 0
+        },
+        "metrics": {
+          "latencyMs": 1335,
+          "promptTokens": 374,
+          "completionTokens": 54,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "output",
+        "type": "output",
+        "title": "Answer",
+        "status": "ok",
+        "detail": {
+          "answer": "To fix error E_CONN_42, rotate the gateway client certificate, confirm that relay-west.acme.internal is reachable on port 8443, and run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout or packet-loss incident."
+        },
+        "metrics": {
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "To fix error E_CONN_42, rotate the gateway client certificate, confirm that relay-west.acme.internal is reachable on port 8443, and run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout or packet-loss incident."
+    },
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 850,
+      "bm25IndexMs": 1,
+      "queryEmbeddingMs": 432,
+      "denseRetrievalMs": 0,
+      "lexicalRetrievalMs": 0,
+      "fusionMs": 0,
+      "generationMs": 1335,
+      "totalMs": 2618,
+      "promptTokens": 374,
+      "completionTokens": 54,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "openai",
+      "bm25",
+      "rrf"
+    ],
+    "relatedContent": [
+      "rag",
+      "hybrid-retrieval",
+      "embeddings"
+    ],
+    "cookbook": {
+      "path": "examples/rag/02-hybrid-rag"
+    }
+  },
+  {
+    "labId": "hybrid-rag",
+    "traceId": "hybrid-mixed-api-version",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-03T05:22:22Z",
+    "metricsProvenance": "measured",
+    "input": {
+      "question": "How do I load user profiles with NebulaAPI v2.3 without blocking?",
+      "config": {
+        "chunkSize": 520,
+        "chunkOverlap": 40,
+        "denseTopK": 3,
+        "lexicalTopK": 3,
+        "hybridTopK": 3,
+        "rrfK": 60,
+        "embeddingModel": "text-embedding-3-small",
+        "chatModel": "gpt-4o-mini"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 6
+    },
+    "steps": [
+      {
+        "id": "chunking",
+        "type": "chunking",
+        "title": "Chunk documents",
+        "status": "ok",
+        "detail": {
+          "source": "data/sample.md",
+          "chunkCount": 6,
+          "chunkSize": 520,
+          "chunkOverlap": 40,
+          "chunks": [
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk so dense and lexical\nsignals can disagree honestly.",
+              "start": 0,
+              "end": 148
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only.",
+              "start": 150,
+              "end": 587
+            },
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate gateway client certificate; confirm\nrelay-west.acme.internal is reachable on port 8443; run `edgectl session flush`.\nDo not treat E_CONN_42 as a generic timeout or packet-loss incident.",
+              "start": 589,
+              "end": 902
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "start": 904,
+              "end": 1253
+            },
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 release notes\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. The older `getUserProfile` API is deprecated in\nv2.3 and may throw under high concurrency. Migration for NebulaAPI v2.3:\nreplace synchronous reads with getUserProfileAsync and handle the Promise.",
+              "start": 1255,
+              "end": 1587
+            },
+            {
+              "id": "sample-5",
+              "text": "## Product SKU NX-4400-PRO\n\nNX-4400-PRO ships with dual power supplies. Rack mounting requires NX-RAIL-2.\nSupported firmware baseline for NX-4400-PRO is 14.2.1 or newer. Field swaps\nmust match the NX-4400-PRO SKU exactly.",
+              "start": 1589,
+              "end": 1810
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-corpus",
+        "type": "embedding",
+        "title": "Embed chunks",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "inputCount": 6,
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 850,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "bm25-index",
+        "type": "index",
+        "title": "Build BM25 index",
+        "status": "ok",
+        "detail": {
+          "documentCount": 6,
+          "k1": 1.5,
+          "b": 0.75
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-query",
+        "type": "embedding",
+        "title": "Embed query",
+        "status": "ok",
+        "detail": {
+          "model": "text-embedding-3-small",
+          "query": "How do I load user profiles with NebulaAPI v2.3 without blocking?",
+          "vectorDimensions": 1536
+        },
+        "metrics": {
+          "latencyMs": 385,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve-dense",
+        "type": "retrieval",
+        "title": "Dense similarity search",
+        "status": "ok",
+        "detail": {
+          "topK": 3,
+          "similarity": "cosine",
+          "chunks": [
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 release notes\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. The older `getUserProfile` API is deprecated in\nv2.3 and may throw under high concurrency. Migration for NebulaAPI v2.3:\nreplace synchronous reads with getUserProfileAsync and handle the Promise.",
+              "score": 0.6599,
+              "rank": 1,
+              "start": 1255,
+              "end": 1587
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "score": 0.4379,
+              "rank": 2,
+              "start": 904,
+              "end": 1253
+            },
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk so dense and lexical\nsignals can disagree honestly.",
+              "score": 0.1988,
+              "rank": 3,
+              "start": 0,
+              "end": 148
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "retrieve-lexical",
+        "type": "retrieval",
+        "title": "Lexical BM25 search",
+        "status": "ok",
+        "detail": {
+          "topK": 3,
+          "algorithm": "bm25",
+          "chunks": [
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 release notes\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. The older `getUserProfile` API is deprecated in\nv2.3 and may throw under high concurrency. Migration for NebulaAPI v2.3:\nreplace synchronous reads with getUserProfileAsync and handle the Promise.",
+              "score": 7.0285,
+              "rank": 1,
+              "start": 1255,
+              "end": 1587
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "score": 1.4684,
+              "rank": 2,
+              "start": 904,
+              "end": 1253
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "fuse-rrf",
+        "type": "fusion",
+        "title": "Reciprocal Rank Fusion",
+        "status": "ok",
+        "detail": {
+          "formula": "RRF(d) = \u03a3 1 / (k + rank(d))",
+          "rrfK": 60,
+          "topK": 3,
+          "inputs": {
+            "denseRanks": [
+              {
+                "id": "sample-4",
+                "rank": 1
+              },
+              {
+                "id": "sample-3",
+                "rank": 2
+              },
+              {
+                "id": "sample-0",
+                "rank": 3
+              }
+            ],
+            "lexicalRanks": [
+              {
+                "id": "sample-4",
+                "rank": 1
+              },
+              {
+                "id": "sample-3",
+                "rank": 2
+              }
+            ]
+          },
+          "chunks": [
+            {
+              "id": "sample-4",
+              "text": "## NebulaAPI v2.3 release notes\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. The older `getUserProfile` API is deprecated in\nv2.3 and may throw under high concurrency. Migration for NebulaAPI v2.3:\nreplace synchronous reads with getUserProfileAsync and handle the Promise.",
+              "rrfScore": 0.032787,
+              "rank": 1,
+              "denseRank": 1,
+              "lexicalRank": 1,
+              "denseScore": 0.6599,
+              "lexicalScore": 7.0285,
+              "start": 1255,
+              "end": 1587
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "rrfScore": 0.032258,
+              "rank": 2,
+              "denseRank": 2,
+              "lexicalRank": 2,
+              "denseScore": 0.4379,
+              "lexicalScore": 1.4684,
+              "start": 904,
+              "end": 1253
+            },
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk so dense and lexical\nsignals can disagree honestly.",
+              "rrfScore": 0.015873,
+              "rank": 3,
+              "denseRank": 3,
+              "lexicalRank": null,
+              "denseScore": 0.1988,
+              "lexicalScore": null,
+              "start": 0,
+              "end": 148
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "prompt",
+        "type": "prompt",
+        "title": "Prompt construction",
+        "status": "ok",
+        "detail": {
+          "system": "You are a helpful assistant that answers using only the\nprovided context. If the context does not contain enough information,\nsay you do not know based on the available documents. Be concise.",
+          "user": "Context:\n[1] (rrf=0.032787, id=sample-4, dense_rank=1, lexical_rank=1)\n## NebulaAPI v2.3 release notes\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. The older `getUserProfile` API is deprecated in\nv2.3 and may throw under high concurrency. Migration for NebulaAPI v2.3:\nreplace synchronous reads with getUserProfileAsync and handle the Promise.\n\n[2] (rrf=0.032258, id=sample-3, dense_rank=2, lexical_rank=2)\n## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.\n\n[3] (rrf=0.015873, id=sample-0, dense_rank=3, lexical_rank=None)\n# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk so dense and lexical\nsignals can disagree honestly.\n\nQuestion: How do I load user profiles with NebulaAPI v2.3 without blocking?\n\nAnswer using only the context above.",
+          "contextSource": "hybrid"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "llm",
+        "type": "llm",
+        "title": "Generation",
+        "status": "ok",
+        "detail": {
+          "model": "gpt-4o-mini",
+          "temperature": 0
+        },
+        "metrics": {
+          "latencyMs": 980,
+          "promptTokens": 341,
+          "completionTokens": 49,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "output",
+        "type": "output",
+        "title": "Answer",
+        "status": "ok",
+        "detail": {
+          "answer": "To load user profiles with NebulaAPI v2.3 without blocking, use the `getUserProfileAsync` method instead of the deprecated `getUserProfile` API. Make sure to handle the Promise returned by `getUserProfileAsync`."
+        },
+        "metrics": {
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "To load user profiles with NebulaAPI v2.3 without blocking, use the `getUserProfileAsync` method instead of the deprecated `getUserProfile` API. Make sure to handle the Promise returned by `getUserProfileAsync`."
+    },
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 850,
+      "bm25IndexMs": 1,
+      "queryEmbeddingMs": 385,
+      "denseRetrievalMs": 0,
+      "lexicalRetrievalMs": 0,
+      "fusionMs": 0,
+      "generationMs": 980,
+      "totalMs": 2216,
+      "promptTokens": 341,
+      "completionTokens": 49,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "openai",
+      "bm25",
+      "rrf"
+    ],
+    "relatedContent": [
+      "rag",
+      "hybrid-retrieval",
+      "embeddings"
+    ],
+    "cookbook": {
+      "path": "examples/rag/02-hybrid-rag"
+    }
+  }
+]

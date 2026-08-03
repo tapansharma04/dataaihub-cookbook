@@ -24,6 +24,7 @@ Cookbook →  "How is it implemented?"
 | ID | Path | Concept |
 |----|------|---------|
 | `basic-rag` | [`examples/rag/01-basic-rag`](examples/rag/01-basic-rag) | Chunk → embed → retrieve → generate |
+| `hybrid-rag` | [`examples/rag/02-hybrid-rag`](examples/rag/02-hybrid-rag) | Dense + BM25 → RRF → generate |
 
 More examples will be added as the RAG path progresses.
 
@@ -48,6 +49,7 @@ dataaihub-cookbook/
 ├── examples/
 │   └── rag/
 │       ├── 01-basic-rag/
+│       └── 02-hybrid-rag/
 ├── shared/
 ├── docs/
 └── scripts/
