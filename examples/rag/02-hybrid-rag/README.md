@@ -25,6 +25,11 @@ Lexical search has the opposite strengths: strong on rare exact tokens, weaker o
 
 Hybrid RAG keeps both signals.
 
+In **this** small corpus, modern embeddings often still retrieve clear identifiers
+(e.g. `E_CONN_42` at dense #1). That does not refute hybrid retrieval: BM25 still
+shows sharper precision (often a single high-confidence hit), and the candidate
+*sets* differ — RRF’s job is combining those rankings, not proving hybrid always wins top-1.
+
 ## Architecture
 
 ```mermaid

@@ -3,7 +3,7 @@
     "labId": "hybrid-rag",
     "traceId": "dense-friendly-connectivity",
     "executionMode": "guided",
-    "recordedAt": "2026-08-01T12:25:46Z",
+    "recordedAt": "2026-08-03T05:22:19Z",
     "metricsProvenance": "measured",
     "input": {
       "question": "What should I do when a customer's internet keeps cutting out unexpectedly?",
@@ -88,7 +88,7 @@
           "vectorDimensions": 1536
         },
         "metrics": {
-          "latencyMs": 1118,
+          "latencyMs": 850,
           "provenance": "measured"
         }
       },
@@ -118,7 +118,7 @@
           "vectorDimensions": 1536
         },
         "metrics": {
-          "latencyMs": 408,
+          "latencyMs": 369,
           "provenance": "measured"
         }
       },
@@ -286,7 +286,7 @@
           "temperature": 0
         },
         "metrics": {
-          "latencyMs": 1115,
+          "latencyMs": 1352,
           "promptTokens": 377,
           "completionTokens": 44,
           "provenance": "measured"
@@ -310,14 +310,14 @@
     },
     "metrics": {
       "chunkingMs": 0,
-      "corpusEmbeddingMs": 1118,
+      "corpusEmbeddingMs": 850,
       "bm25IndexMs": 1,
-      "queryEmbeddingMs": 408,
+      "queryEmbeddingMs": 369,
       "denseRetrievalMs": 1,
       "lexicalRetrievalMs": 0,
       "fusionMs": 0,
-      "generationMs": 1115,
-      "totalMs": 2643,
+      "generationMs": 1352,
+      "totalMs": 2573,
       "promptTokens": 377,
       "completionTokens": 44,
       "provenance": "measured"
@@ -340,7 +340,7 @@
     "labId": "hybrid-rag",
     "traceId": "lexical-friendly-error-code",
     "executionMode": "guided",
-    "recordedAt": "2026-08-01T12:25:48Z",
+    "recordedAt": "2026-08-03T05:22:20Z",
     "metricsProvenance": "measured",
     "input": {
       "question": "How do I fix error E_CONN_42?",
@@ -425,7 +425,7 @@
           "vectorDimensions": 1536
         },
         "metrics": {
-          "latencyMs": 1118,
+          "latencyMs": 850,
           "provenance": "measured"
         }
       },
@@ -455,7 +455,7 @@
           "vectorDimensions": 1536
         },
         "metrics": {
-          "latencyMs": 407,
+          "latencyMs": 432,
           "provenance": "measured"
         }
       },
@@ -487,7 +487,7 @@
             {
               "id": "sample-3",
               "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
-              "score": 0.2322,
+              "score": 0.2321,
               "rank": 3,
               "start": 904,
               "end": 1253
@@ -586,7 +586,7 @@
               "rank": 3,
               "denseRank": 3,
               "lexicalRank": null,
-              "denseScore": 0.2322,
+              "denseScore": 0.2321,
               "lexicalScore": null,
               "start": 904,
               "end": 1253
@@ -623,7 +623,7 @@
           "temperature": 0
         },
         "metrics": {
-          "latencyMs": 1397,
+          "latencyMs": 1335,
           "promptTokens": 374,
           "completionTokens": 54,
           "provenance": "measured"
@@ -647,14 +647,14 @@
     },
     "metrics": {
       "chunkingMs": 0,
-      "corpusEmbeddingMs": 1118,
+      "corpusEmbeddingMs": 850,
       "bm25IndexMs": 1,
-      "queryEmbeddingMs": 407,
+      "queryEmbeddingMs": 432,
       "denseRetrievalMs": 0,
       "lexicalRetrievalMs": 0,
       "fusionMs": 0,
-      "generationMs": 1397,
-      "totalMs": 2923,
+      "generationMs": 1335,
+      "totalMs": 2618,
       "promptTokens": 374,
       "completionTokens": 54,
       "provenance": "measured"
@@ -677,7 +677,7 @@
     "labId": "hybrid-rag",
     "traceId": "hybrid-mixed-api-version",
     "executionMode": "guided",
-    "recordedAt": "2026-08-01T12:25:50Z",
+    "recordedAt": "2026-08-03T05:22:22Z",
     "metricsProvenance": "measured",
     "input": {
       "question": "How do I load user profiles with NebulaAPI v2.3 without blocking?",
@@ -762,7 +762,7 @@
           "vectorDimensions": 1536
         },
         "metrics": {
-          "latencyMs": 1118,
+          "latencyMs": 850,
           "provenance": "measured"
         }
       },
@@ -792,7 +792,7 @@
           "vectorDimensions": 1536
         },
         "metrics": {
-          "latencyMs": 408,
+          "latencyMs": 385,
           "provenance": "measured"
         }
       },
@@ -808,7 +808,7 @@
             {
               "id": "sample-4",
               "text": "## NebulaAPI v2.3 release notes\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call for\nnon-blocking profile fetches. The older `getUserProfile` API is deprecated in\nv2.3 and may throw under high concurrency. Migration for NebulaAPI v2.3:\nreplace synchronous reads with getUserProfileAsync and handle the Promise.",
-              "score": 0.6598,
+              "score": 0.6599,
               "rank": 1,
               "start": 1255,
               "end": 1587
@@ -911,7 +911,7 @@
               "rank": 1,
               "denseRank": 1,
               "lexicalRank": 1,
-              "denseScore": 0.6598,
+              "denseScore": 0.6599,
               "lexicalScore": 7.0285,
               "start": 1255,
               "end": 1587
@@ -972,9 +972,9 @@
           "temperature": 0
         },
         "metrics": {
-          "latencyMs": 1057,
+          "latencyMs": 980,
           "promptTokens": 341,
-          "completionTokens": 48,
+          "completionTokens": 49,
           "provenance": "measured"
         }
       },
@@ -984,7 +984,7 @@
         "title": "Answer",
         "status": "ok",
         "detail": {
-          "answer": "To load user profiles with NebulaAPI v2.3 without blocking, use the `getUserProfileAsync` method instead of the deprecated `getUserProfile` API. Ensure to handle the Promise returned by `getUserProfileAsync`."
+          "answer": "To load user profiles with NebulaAPI v2.3 without blocking, use the `getUserProfileAsync` method instead of the deprecated `getUserProfile` API. Make sure to handle the Promise returned by `getUserProfileAsync`."
         },
         "metrics": {
           "provenance": "measured"
@@ -992,20 +992,20 @@
       }
     ],
     "output": {
-      "answer": "To load user profiles with NebulaAPI v2.3 without blocking, use the `getUserProfileAsync` method instead of the deprecated `getUserProfile` API. Ensure to handle the Promise returned by `getUserProfileAsync`."
+      "answer": "To load user profiles with NebulaAPI v2.3 without blocking, use the `getUserProfileAsync` method instead of the deprecated `getUserProfile` API. Make sure to handle the Promise returned by `getUserProfileAsync`."
     },
     "metrics": {
       "chunkingMs": 0,
-      "corpusEmbeddingMs": 1118,
+      "corpusEmbeddingMs": 850,
       "bm25IndexMs": 1,
-      "queryEmbeddingMs": 408,
+      "queryEmbeddingMs": 385,
       "denseRetrievalMs": 0,
       "lexicalRetrievalMs": 0,
       "fusionMs": 0,
-      "generationMs": 1057,
-      "totalMs": 2584,
+      "generationMs": 980,
+      "totalMs": 2216,
       "promptTokens": 341,
-      "completionTokens": 48,
+      "completionTokens": 49,
       "provenance": "measured"
     },
     "relatedEntities": [
