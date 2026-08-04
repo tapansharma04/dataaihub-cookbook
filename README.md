@@ -26,6 +26,7 @@ Cookbook →  "How is it implemented?"
 | `basic-rag` | [`examples/rag/01-basic-rag`](examples/rag/01-basic-rag) | Chunk → embed → retrieve → generate |
 | `hybrid-rag` | [`examples/rag/02-hybrid-rag`](examples/rag/02-hybrid-rag) | Dense + BM25 → RRF → generate |
 | `reranking` | [`examples/rag/03-reranking`](examples/rag/03-reranking) | Hybrid candidates → cross-encoder → generate |
+| `query-transformation` | [`examples/rag/04-query-transformation`](examples/rag/04-query-transformation) | Multi-query retrieval aggregation → rerank → generate |
 
 More examples will be added as the RAG path progresses.
 
@@ -50,7 +51,8 @@ dataaihub-cookbook/
 │   └── rag/
 │       ├── 01-basic-rag/
 │       ├── 02-hybrid-rag/
-│       └── 03-reranking/
+│       ├── 03-reranking/
+│       └── 04-query-transformation/
 ├── shared/
 ├── docs/
 └── scripts/
