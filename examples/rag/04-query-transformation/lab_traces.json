@@ -1,0 +1,1743 @@
+[
+  {
+    "labId": "query-transformation",
+    "traceId": "transformation-bridges-idle-auth",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-04T11:37:04Z",
+    "metricsProvenance": "measured",
+    "teachingClass": "TRANSFORM_HELPS",
+    "input": {
+      "question": "Why does everyone have to unlock the app again after being idle half a day?",
+      "rerankerQuery": "Why does everyone have to unlock the app again after being idle half a day?",
+      "generationQuestion": "Why does everyone have to unlock the app again after being idle half a day?",
+      "config": {
+        "chunkSize": 520,
+        "chunkOverlap": 40,
+        "denseTopK": 8,
+        "lexicalTopK": 8,
+        "candidateK": 5,
+        "finalContextK": 3,
+        "rrfK": 60,
+        "maxAlternativeQueries": 2,
+        "embeddingModel": "text-embedding-3-small",
+        "chatModel": "gpt-4o-mini",
+        "rerankerModel": "cross-encoder/ms-marco-MiniLM-L6-v2",
+        "queryTransformerModel": "gpt-4o-mini"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 24
+    },
+    "comparison": {
+      "originalOnlyCandidateIds": [
+        "sample-10",
+        "sample-11",
+        "sample-21",
+        "sample-18",
+        "sample-1"
+      ],
+      "multiQueryCandidateIds": [
+        "sample-10",
+        "sample-11",
+        "sample-21",
+        "sample-19",
+        "sample-12"
+      ],
+      "candidatesDiscoveredByTransform": [
+        "sample-12",
+        "sample-19"
+      ],
+      "originalOnlyFinalContextIds": [
+        "sample-11",
+        "sample-1",
+        "sample-21"
+      ],
+      "multiQueryFinalContextIds": [
+        "sample-11",
+        "sample-21",
+        "sample-12"
+      ],
+      "provenance": "derived"
+    },
+    "steps": [
+      {
+        "id": "chunking",
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-corpus",
+        "metrics": {
+          "latencyMs": 1663,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "bm25-index",
+        "metrics": {
+          "latencyMs": 2,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "query-transform",
+        "detail": {
+          "path": "multi-query",
+          "queries": [
+            {
+              "id": "Q0",
+              "text": "Why does everyone have to unlock the app again after being idle half a day?",
+              "isOriginal": true
+            },
+            {
+              "id": "Q1",
+              "text": "App session timeout policy for idle users",
+              "isOriginal": false
+            },
+            {
+              "id": "Q2",
+              "text": "User authentication re-login requirements after inactivity",
+              "isOriginal": false
+            }
+          ],
+          "perQueryRetrievalLatencyMs": [
+            {
+              "queryId": "Q0",
+              "query": "Why does everyone have to unlock the app again after being idle half a day?",
+              "latencyMs": 340,
+              "provenance": "measured"
+            },
+            {
+              "queryId": "Q1",
+              "query": "App session timeout policy for idle users",
+              "latencyMs": 353,
+              "provenance": "measured"
+            },
+            {
+              "queryId": "Q2",
+              "query": "User authentication re-login requirements after inactivity",
+              "latencyMs": 404,
+              "provenance": "measured"
+            }
+          ],
+          "candidateCounts": {
+            "beforeDedup": 15,
+            "afterDedup": 5,
+            "duplicates": 10,
+            "duplicateRate": 0.6667,
+            "provenance": {
+              "beforeDedup": "derived",
+              "afterDedup": "measured",
+              "duplicates": "derived",
+              "duplicateRate": "derived"
+            }
+          },
+          "mergedCandidates": [
+            {
+              "id": "sample-10",
+              "rank": 1,
+              "aggregateRrfScore": 0.047643,
+              "foundBy": [
+                "Q0",
+                "Q1",
+                "Q2"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Why does everyone have to unlock the app again after being idle half a day?",
+                  "denseRank": 2,
+                  "lexicalRank": 3,
+                  "rrfRank": 1,
+                  "denseScore": 0.2586224507225705,
+                  "lexicalScore": 2.746288542545293,
+                  "rrfScore": 0.03200204813108039
+                },
+                {
+                  "queryId": "Q1",
+                  "query": "App session timeout policy for idle users",
+                  "denseRank": 2,
+                  "lexicalRank": null,
+                  "rrfRank": 4,
+                  "denseScore": 0.43547264911690353,
+                  "lexicalScore": null,
+                  "rrfScore": 0.016129032258064516
+                },
+                {
+                  "queryId": "Q2",
+                  "query": "User authentication re-login requirements after inactivity",
+                  "denseRank": 5,
+                  "lexicalRank": 4,
+                  "rrfRank": 4,
+                  "denseScore": 0.36574337311528826,
+                  "lexicalScore": 2.9588272768190826,
+                  "rrfScore": 0.031009615384615385
+                }
+              ]
+            },
+            {
+              "id": "sample-11",
+              "rank": 2,
+              "aggregateRrfScore": 0.032522,
+              "foundBy": [
+                "Q0",
+                "Q1"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Why does everyone have to unlock the app again after being idle half a day?",
+                  "denseRank": 7,
+                  "lexicalRank": 1,
+                  "rrfRank": 2,
+                  "denseScore": 0.19872358079041544,
+                  "lexicalScore": 5.3477693886668884,
+                  "rrfScore": 0.03131881575727918
+                },
+                {
+                  "queryId": "Q1",
+                  "query": "App session timeout policy for idle users",
+                  "denseRank": 4,
+                  "lexicalRank": 1,
+                  "rrfRank": 1,
+                  "denseScore": 0.3934818860018584,
+                  "lexicalScore": 6.033859905906047,
+                  "rrfScore": 0.032018442622950824
+                }
+              ]
+            },
+            {
+              "id": "sample-21",
+              "rank": 3,
+              "aggregateRrfScore": 0.031746,
+              "foundBy": [
+                "Q0",
+                "Q2"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Why does everyone have to unlock the app again after being idle half a day?",
+                  "denseRank": 1,
+                  "lexicalRank": 7,
+                  "rrfRank": 3,
+                  "denseScore": 0.2778391300566077,
+                  "lexicalScore": 1.6187419757569816,
+                  "rrfScore": 0.03131881575727918
+                },
+                {
+                  "queryId": "Q2",
+                  "query": "User authentication re-login requirements after inactivity",
+                  "denseRank": 1,
+                  "lexicalRank": 8,
+                  "rrfRank": 3,
+                  "denseScore": 0.4436078299667974,
+                  "lexicalScore": 1.6187419757569816,
+                  "rrfScore": 0.031099324975891997
+                }
+              ]
+            },
+            {
+              "id": "sample-19",
+              "rank": 4,
+              "aggregateRrfScore": 0.016393,
+              "foundBy": [
+                "Q2"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q2",
+                  "query": "User authentication re-login requirements after inactivity",
+                  "denseRank": 2,
+                  "lexicalRank": 3,
+                  "rrfRank": 1,
+                  "denseScore": 0.4180323891023023,
+                  "lexicalScore": 3.052623043924733,
+                  "rrfScore": 0.03200204813108039
+                }
+              ]
+            },
+            {
+              "id": "sample-12",
+              "rank": 5,
+              "aggregateRrfScore": 0.016129,
+              "foundBy": [
+                "Q2"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q2",
+                  "query": "User authentication re-login requirements after inactivity",
+                  "denseRank": 4,
+                  "lexicalRank": 2,
+                  "rrfRank": 2,
+                  "denseScore": 0.3902490272777388,
+                  "lexicalScore": 3.146587433195832,
+                  "rrfScore": 0.031754032258064516
+                }
+              ]
+            }
+          ],
+          "rerankedContext": [
+            {
+              "id": "sample-11",
+              "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss.",
+              "rerankerScore": -9.8502,
+              "rank": 1,
+              "previousRank": 2,
+              "rrfScore": 0.032522,
+              "start": 3966,
+              "end": 4559
+            },
+            {
+              "id": "sample-21",
+              "text": "## VPN reconnect after laptop sleep\n\nManaged laptops often drop the corporate VPN after sleep or lid-close. Users\nmust reconnect GlobalProtect before internal tools load. VPN sleep reconnect is\nunrelated to relay keepalive termination and unrelated to NebulaAuth token\nrefresh.",
+              "rerankerScore": -10.2279,
+              "rank": 2,
+              "previousRank": 3,
+              "rrfScore": 0.031746,
+              "start": 7608,
+              "end": 7885
+            },
+            {
+              "id": "sample-12",
+              "text": "## NebulaAuth token TTL and silent credential refresh\n\nNebulaAuth access tokens expire after eight hours of inactivity. When the TTL\nelapses, Edge clients receive HTTP 401 with reason code `AUTH_TOKEN_EXPIRED`\nand the Edge UI returns the operator to the credential prompt. Enable silent\ncredential refresh with `nebula auth refresh --background` so tokens renew\nwithout interactive password prompts. Do not treat `AUTH_TOKEN_EXPIRED` as an\nSSO outage, password-reset incident, workstation screen-lock event, or\nNebulaAPI profile-fetch failure.",
+              "rerankerScore": -10.9293,
+              "rank": 3,
+              "previousRank": 5,
+              "rrfScore": 0.016129,
+              "start": 4561,
+              "end": 5104
+            }
+          ],
+          "latency": {
+            "transformMs": 1595,
+            "totalRetrievalMs": 1097,
+            "rerankMs": 56,
+            "provenance": "measured"
+          }
+        }
+      },
+      {
+        "id": "query-baseline",
+        "detail": {
+          "path": "original-only",
+          "queries": [
+            {
+              "id": "Q0",
+              "text": "Why does everyone have to unlock the app again after being idle half a day?",
+              "isOriginal": true
+            }
+          ],
+          "perQueryRetrievalLatencyMs": [
+            {
+              "queryId": "Q0",
+              "query": "Why does everyone have to unlock the app again after being idle half a day?",
+              "latencyMs": 384,
+              "provenance": "measured"
+            }
+          ],
+          "candidateCounts": {
+            "beforeDedup": 5,
+            "afterDedup": 5,
+            "duplicates": 0,
+            "duplicateRate": 0.0,
+            "provenance": {
+              "beforeDedup": "derived",
+              "afterDedup": "measured",
+              "duplicates": "derived",
+              "duplicateRate": "derived"
+            }
+          },
+          "mergedCandidates": [
+            {
+              "id": "sample-10",
+              "rank": 1,
+              "aggregateRrfScore": 0.016393,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Why does everyone have to unlock the app again after being idle half a day?",
+                  "denseRank": 2,
+                  "lexicalRank": 3,
+                  "rrfRank": 1,
+                  "denseScore": 0.2586224507225705,
+                  "lexicalScore": 2.746288542545293,
+                  "rrfScore": 0.03200204813108039
+                }
+              ]
+            },
+            {
+              "id": "sample-11",
+              "rank": 2,
+              "aggregateRrfScore": 0.016129,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Why does everyone have to unlock the app again after being idle half a day?",
+                  "denseRank": 7,
+                  "lexicalRank": 1,
+                  "rrfRank": 2,
+                  "denseScore": 0.19872358079041544,
+                  "lexicalScore": 5.3477693886668884,
+                  "rrfScore": 0.03131881575727918
+                }
+              ]
+            },
+            {
+              "id": "sample-21",
+              "rank": 3,
+              "aggregateRrfScore": 0.015873,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Why does everyone have to unlock the app again after being idle half a day?",
+                  "denseRank": 1,
+                  "lexicalRank": 7,
+                  "rrfRank": 3,
+                  "denseScore": 0.2778391300566077,
+                  "lexicalScore": 1.6187419757569816,
+                  "rrfScore": 0.03131881575727918
+                }
+              ]
+            },
+            {
+              "id": "sample-18",
+              "rank": 4,
+              "aggregateRrfScore": 0.015625,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Why does everyone have to unlock the app again after being idle half a day?",
+                  "denseRank": 8,
+                  "lexicalRank": 5,
+                  "rrfRank": 4,
+                  "denseScore": 0.19768441301774176,
+                  "lexicalScore": 1.772844753790312,
+                  "rrfScore": 0.030090497737556562
+                }
+              ]
+            },
+            {
+              "id": "sample-1",
+              "rank": 5,
+              "aggregateRrfScore": 0.015385,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Why does everyone have to unlock the app again after being idle half a day?",
+                  "denseRank": null,
+                  "lexicalRank": 2,
+                  "rrfRank": 5,
+                  "denseScore": null,
+                  "lexicalScore": 2.8639943205449074,
+                  "rrfScore": 0.016129032258064516
+                }
+              ]
+            }
+          ],
+          "rerankedContext": [
+            {
+              "id": "sample-11",
+              "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss.",
+              "rerankerScore": -9.8502,
+              "rank": 1,
+              "previousRank": 2,
+              "rrfScore": 0.016129,
+              "start": 3966,
+              "end": 4559
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "rerankerScore": -10.1505,
+              "rank": 2,
+              "previousRank": 5,
+              "rrfScore": 0.015385,
+              "start": 342,
+              "end": 826
+            },
+            {
+              "id": "sample-21",
+              "text": "## VPN reconnect after laptop sleep\n\nManaged laptops often drop the corporate VPN after sleep or lid-close. Users\nmust reconnect GlobalProtect before internal tools load. VPN sleep reconnect is\nunrelated to relay keepalive termination and unrelated to NebulaAuth token\nrefresh.",
+              "rerankerScore": -10.2279,
+              "rank": 3,
+              "previousRank": 3,
+              "rrfScore": 0.015873,
+              "start": 7608,
+              "end": 7885
+            }
+          ],
+          "latency": {
+            "transformMs": 0,
+            "totalRetrievalMs": 384,
+            "rerankMs": 401,
+            "provenance": "measured"
+          }
+        }
+      },
+      {
+        "id": "prompt",
+        "detail": {
+          "system": "You are a helpful assistant that answers using only the\nprovided context. If the context does not contain enough information,\nsay you do not know based on the available documents. Be concise.",
+          "user": "Context:\n[1] (rerank=-9.8502, id=sample-11, prev_rank=2, rrf=0.032522, dense_rank=None, lexical_rank=None)\n## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss.\n\n[2] (rerank=-10.2279, id=sample-21, prev_rank=3, rrf=0.031746, dense_rank=None, lexical_rank=None)\n## VPN reconnect after laptop sleep\n\nManaged laptops often drop the corporate VPN after sleep or lid-close. Users\nmust reconnect GlobalProtect before internal tools load. VPN sleep reconnect is\nunrelated to relay keepalive termination and unrelated to NebulaAuth token\nrefresh.\n\n[3] (rerank=-10.9293, id=sample-12, prev_rank=5, rrf=0.016129, dense_rank=None, lexical_rank=None)\n## NebulaAuth token TTL and silent credential refresh\n\nNebulaAuth access tokens expire after eight hours of inactivity. When the TTL\nelapses, Edge clients receive HTTP 401 with reason code `AUTH_TOKEN_EXPIRED`\nand the Edge UI returns the operator to the credential prompt. Enable silent\ncredential refresh with `nebula auth refresh --background` so tokens renew\nwithout interactive password prompts. Do not treat `AUTH_TOKEN_EXPIRED` as an\nSSO outage, password-reset incident, workstation screen-lock event, or\nNebulaAPI profile-fetch failure.\n\nQuestion: Why does everyone have to unlock the app again after being idle half a day?\n\nAnswer using only the context above.",
+          "contextSource": "reranked",
+          "generationQuestion": "Why does everyone have to unlock the app again after being idle half a day?",
+          "finalContextIds": [
+            "sample-11",
+            "sample-21",
+            "sample-12"
+          ]
+        }
+      },
+      {
+        "id": "llm",
+        "metrics": {
+          "latencyMs": 1375,
+          "promptTokens": 492,
+          "completionTokens": 64,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "output",
+        "detail": {
+          "answer": "Everyone has to unlock the app again after being idle half a day because NebulaAuth access tokens expire after eight hours of inactivity. When the token's time-to-live (TTL) elapses, users receive an HTTP 401 error with the reason code `AUTH_TOKEN_EXPIRED`, prompting them to re-enter their credentials."
+        }
+      }
+    ],
+    "output": {
+      "answer": "Everyone has to unlock the app again after being idle half a day because NebulaAuth access tokens expire after eight hours of inactivity. When the token's time-to-live (TTL) elapses, users receive an HTTP 401 error with the reason code `AUTH_TOKEN_EXPIRED`, prompting them to re-enter their credentials."
+    },
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 1663,
+      "bm25IndexMs": 2,
+      "rerankerLoadMs": 8901,
+      "transformMs": 1595,
+      "retrievalMs": 1097,
+      "rerankingMs": 56,
+      "generationMs": 1375,
+      "totalMs": 4123,
+      "promptTokens": 492,
+      "completionTokens": 64,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "openai",
+      "bm25",
+      "rrf",
+      "cross-encoder",
+      "ms-marco-MiniLM-L6-v2"
+    ],
+    "relatedContent": [
+      "rag",
+      "hybrid-retrieval",
+      "query-transformation",
+      "embeddings"
+    ],
+    "cookbook": {
+      "path": "examples/rag/04-query-transformation"
+    }
+  },
+  {
+    "labId": "query-transformation",
+    "traceId": "original-query-already-strong-econn42",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-04T11:37:08Z",
+    "metricsProvenance": "measured",
+    "teachingClass": "REDUNDANT",
+    "input": {
+      "question": "How do I fix error E_CONN_42 on the EdgeGateway?",
+      "rerankerQuery": "How do I fix error E_CONN_42 on the EdgeGateway?",
+      "generationQuestion": "How do I fix error E_CONN_42 on the EdgeGateway?",
+      "config": {
+        "chunkSize": 520,
+        "chunkOverlap": 40,
+        "denseTopK": 8,
+        "lexicalTopK": 8,
+        "candidateK": 5,
+        "finalContextK": 3,
+        "rrfK": 60,
+        "maxAlternativeQueries": 2,
+        "embeddingModel": "text-embedding-3-small",
+        "chatModel": "gpt-4o-mini",
+        "rerankerModel": "cross-encoder/ms-marco-MiniLM-L6-v2",
+        "queryTransformerModel": "gpt-4o-mini"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 24
+    },
+    "comparison": {
+      "originalOnlyCandidateIds": [
+        "sample-2",
+        "sample-7",
+        "sample-8",
+        "sample-11",
+        "sample-6"
+      ],
+      "multiQueryCandidateIds": [
+        "sample-2",
+        "sample-7",
+        "sample-8",
+        "sample-11",
+        "sample-6"
+      ],
+      "candidatesDiscoveredByTransform": [],
+      "originalOnlyFinalContextIds": [
+        "sample-2",
+        "sample-7",
+        "sample-11"
+      ],
+      "multiQueryFinalContextIds": [
+        "sample-2",
+        "sample-7",
+        "sample-11"
+      ],
+      "provenance": "derived"
+    },
+    "steps": [
+      {
+        "id": "chunking",
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-corpus",
+        "metrics": {
+          "latencyMs": 1663,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "bm25-index",
+        "metrics": {
+          "latencyMs": 2,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "query-transform",
+        "detail": {
+          "path": "multi-query",
+          "queries": [
+            {
+              "id": "Q0",
+              "text": "How do I fix error E_CONN_42 on the EdgeGateway?",
+              "isOriginal": true
+            },
+            {
+              "id": "Q1",
+              "text": "EdgeGateway error E_CONN_42 troubleshooting guide",
+              "isOriginal": false
+            },
+            {
+              "id": "Q2",
+              "text": "Resolution steps for E_CONN_42 on EdgeGateway version 3.1.4",
+              "isOriginal": false
+            }
+          ],
+          "perQueryRetrievalLatencyMs": [
+            {
+              "queryId": "Q0",
+              "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+              "latencyMs": 337,
+              "provenance": "measured"
+            },
+            {
+              "queryId": "Q1",
+              "query": "EdgeGateway error E_CONN_42 troubleshooting guide",
+              "latencyMs": 422,
+              "provenance": "measured"
+            },
+            {
+              "queryId": "Q2",
+              "query": "Resolution steps for E_CONN_42 on EdgeGateway version 3.1.4",
+              "latencyMs": 348,
+              "provenance": "measured"
+            }
+          ],
+          "candidateCounts": {
+            "beforeDedup": 15,
+            "afterDedup": 5,
+            "duplicates": 10,
+            "duplicateRate": 0.6667,
+            "provenance": {
+              "beforeDedup": "derived",
+              "afterDedup": "measured",
+              "duplicates": "derived",
+              "duplicateRate": "derived"
+            }
+          },
+          "mergedCandidates": [
+            {
+              "id": "sample-2",
+              "rank": 1,
+              "aggregateRrfScore": 0.04918,
+              "foundBy": [
+                "Q0",
+                "Q1",
+                "Q2"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+                  "denseRank": 1,
+                  "lexicalRank": 2,
+                  "rrfRank": 1,
+                  "denseScore": 0.7750602311993541,
+                  "lexicalScore": 6.294038693844085,
+                  "rrfScore": 0.03252247488101534
+                },
+                {
+                  "queryId": "Q1",
+                  "query": "EdgeGateway error E_CONN_42 troubleshooting guide",
+                  "denseRank": 1,
+                  "lexicalRank": 2,
+                  "rrfRank": 1,
+                  "denseScore": 0.667702300132925,
+                  "lexicalScore": 6.294038693844085,
+                  "rrfScore": 0.03252247488101534
+                },
+                {
+                  "queryId": "Q2",
+                  "query": "Resolution steps for E_CONN_42 on EdgeGateway version 3.1.4",
+                  "denseRank": 1,
+                  "lexicalRank": 2,
+                  "rrfRank": 1,
+                  "denseScore": 0.635450456180174,
+                  "lexicalScore": 4.617781935737813,
+                  "rrfScore": 0.03252247488101534
+                }
+              ]
+            },
+            {
+              "id": "sample-7",
+              "rank": 2,
+              "aggregateRrfScore": 0.048131,
+              "foundBy": [
+                "Q0",
+                "Q1",
+                "Q2"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+                  "denseRank": 2,
+                  "lexicalRank": 1,
+                  "rrfRank": 2,
+                  "denseScore": 0.5966980068104519,
+                  "lexicalScore": 6.733983057790088,
+                  "rrfScore": 0.03252247488101534
+                },
+                {
+                  "queryId": "Q1",
+                  "query": "EdgeGateway error E_CONN_42 troubleshooting guide",
+                  "denseRank": 3,
+                  "lexicalRank": 3,
+                  "rrfRank": 3,
+                  "denseScore": 0.5135763789019745,
+                  "lexicalScore": 3.681360013865355,
+                  "rrfScore": 0.031746031746031744
+                },
+                {
+                  "queryId": "Q2",
+                  "query": "Resolution steps for E_CONN_42 on EdgeGateway version 3.1.4",
+                  "denseRank": 2,
+                  "lexicalRank": 3,
+                  "rrfRank": 2,
+                  "denseScore": 0.5362188678632824,
+                  "lexicalScore": 3.681360013865355,
+                  "rrfScore": 0.03200204813108039
+                }
+              ]
+            },
+            {
+              "id": "sample-8",
+              "rank": 3,
+              "aggregateRrfScore": 0.047387,
+              "foundBy": [
+                "Q0",
+                "Q1",
+                "Q2"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+                  "denseRank": 3,
+                  "lexicalRank": 3,
+                  "rrfRank": 3,
+                  "denseScore": 0.4901154612264546,
+                  "lexicalScore": 3.6683455799190763,
+                  "rrfScore": 0.031746031746031744
+                },
+                {
+                  "queryId": "Q1",
+                  "query": "EdgeGateway error E_CONN_42 troubleshooting guide",
+                  "denseRank": 2,
+                  "lexicalRank": 1,
+                  "rrfRank": 2,
+                  "denseScore": 0.5483846867635271,
+                  "lexicalScore": 6.302527544647292,
+                  "rrfScore": 0.03252247488101534
+                },
+                {
+                  "queryId": "Q2",
+                  "query": "Resolution steps for E_CONN_42 on EdgeGateway version 3.1.4",
+                  "denseRank": 4,
+                  "lexicalRank": 6,
+                  "rrfRank": 5,
+                  "denseScore": 0.4511713208701823,
+                  "lexicalScore": 2.062788643096857,
+                  "rrfScore": 0.030776515151515152
+                }
+              ]
+            },
+            {
+              "id": "sample-11",
+              "rank": 4,
+              "aggregateRrfScore": 0.047123,
+              "foundBy": [
+                "Q0",
+                "Q1",
+                "Q2"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+                  "denseRank": 4,
+                  "lexicalRank": 5,
+                  "rrfRank": 4,
+                  "denseScore": 0.48668653045849897,
+                  "lexicalScore": 2.2123701866494123,
+                  "rrfScore": 0.031009615384615385
+                },
+                {
+                  "queryId": "Q1",
+                  "query": "EdgeGateway error E_CONN_42 troubleshooting guide",
+                  "denseRank": 4,
+                  "lexicalRank": 5,
+                  "rrfRank": 4,
+                  "denseScore": 0.4387760285633979,
+                  "lexicalScore": 2.2123701866494123,
+                  "rrfScore": 0.031009615384615385
+                },
+                {
+                  "queryId": "Q2",
+                  "query": "Resolution steps for E_CONN_42 on EdgeGateway version 3.1.4",
+                  "denseRank": 3,
+                  "lexicalRank": 5,
+                  "rrfRank": 3,
+                  "denseScore": 0.4721331352170353,
+                  "lexicalScore": 2.2123701866494123,
+                  "rrfScore": 0.03125763125763126
+                }
+              ]
+            },
+            {
+              "id": "sample-6",
+              "rank": 5,
+              "aggregateRrfScore": 0.046394,
+              "foundBy": [
+                "Q0",
+                "Q1",
+                "Q2"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+                  "denseRank": 6,
+                  "lexicalRank": 4,
+                  "rrfRank": 5,
+                  "denseScore": 0.4442608479095155,
+                  "lexicalScore": 2.7968932511002835,
+                  "rrfScore": 0.030776515151515152
+                },
+                {
+                  "queryId": "Q1",
+                  "query": "EdgeGateway error E_CONN_42 troubleshooting guide",
+                  "denseRank": 6,
+                  "lexicalRank": 4,
+                  "rrfRank": 5,
+                  "denseScore": 0.39342623707876573,
+                  "lexicalScore": 2.7968932511002835,
+                  "rrfScore": 0.030776515151515152
+                },
+                {
+                  "queryId": "Q2",
+                  "query": "Resolution steps for E_CONN_42 on EdgeGateway version 3.1.4",
+                  "denseRank": 5,
+                  "lexicalRank": 4,
+                  "rrfRank": 4,
+                  "denseScore": 0.43022558942907974,
+                  "lexicalScore": 2.7968932511002835,
+                  "rrfScore": 0.031009615384615385
+                }
+              ]
+            }
+          ],
+          "rerankedContext": [
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "rerankerScore": 7.1175,
+              "rank": 1,
+              "previousRank": 1,
+              "rrfScore": 0.04918,
+              "start": 828,
+              "end": 1217
+            },
+            {
+              "id": "sample-7",
+              "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.",
+              "rerankerScore": 5.2952,
+              "rank": 2,
+              "previousRank": 2,
+              "rrfScore": 0.048131,
+              "start": 2705,
+              "end": 3061
+            },
+            {
+              "id": "sample-11",
+              "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss.",
+              "rerankerScore": 2.3627,
+              "rank": 3,
+              "previousRank": 4,
+              "rrfScore": 0.047123,
+              "start": 3966,
+              "end": 4559
+            }
+          ],
+          "latency": {
+            "transformMs": 1214,
+            "totalRetrievalMs": 1107,
+            "rerankMs": 59,
+            "provenance": "measured"
+          }
+        }
+      },
+      {
+        "id": "query-baseline",
+        "detail": {
+          "path": "original-only",
+          "queries": [
+            {
+              "id": "Q0",
+              "text": "How do I fix error E_CONN_42 on the EdgeGateway?",
+              "isOriginal": true
+            }
+          ],
+          "perQueryRetrievalLatencyMs": [
+            {
+              "queryId": "Q0",
+              "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+              "latencyMs": 411,
+              "provenance": "measured"
+            }
+          ],
+          "candidateCounts": {
+            "beforeDedup": 5,
+            "afterDedup": 5,
+            "duplicates": 0,
+            "duplicateRate": 0.0,
+            "provenance": {
+              "beforeDedup": "derived",
+              "afterDedup": "measured",
+              "duplicates": "derived",
+              "duplicateRate": "derived"
+            }
+          },
+          "mergedCandidates": [
+            {
+              "id": "sample-2",
+              "rank": 1,
+              "aggregateRrfScore": 0.016393,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+                  "denseRank": 1,
+                  "lexicalRank": 2,
+                  "rrfRank": 1,
+                  "denseScore": 0.7750602311993541,
+                  "lexicalScore": 6.294038693844085,
+                  "rrfScore": 0.03252247488101534
+                }
+              ]
+            },
+            {
+              "id": "sample-7",
+              "rank": 2,
+              "aggregateRrfScore": 0.016129,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+                  "denseRank": 2,
+                  "lexicalRank": 1,
+                  "rrfRank": 2,
+                  "denseScore": 0.5966980068104519,
+                  "lexicalScore": 6.733983057790088,
+                  "rrfScore": 0.03252247488101534
+                }
+              ]
+            },
+            {
+              "id": "sample-8",
+              "rank": 3,
+              "aggregateRrfScore": 0.015873,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+                  "denseRank": 3,
+                  "lexicalRank": 3,
+                  "rrfRank": 3,
+                  "denseScore": 0.4901154612264546,
+                  "lexicalScore": 3.6683455799190763,
+                  "rrfScore": 0.031746031746031744
+                }
+              ]
+            },
+            {
+              "id": "sample-11",
+              "rank": 4,
+              "aggregateRrfScore": 0.015625,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+                  "denseRank": 4,
+                  "lexicalRank": 5,
+                  "rrfRank": 4,
+                  "denseScore": 0.48668653045849897,
+                  "lexicalScore": 2.2123701866494123,
+                  "rrfScore": 0.031009615384615385
+                }
+              ]
+            },
+            {
+              "id": "sample-6",
+              "rank": 5,
+              "aggregateRrfScore": 0.015385,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+                  "denseRank": 6,
+                  "lexicalRank": 4,
+                  "rrfRank": 5,
+                  "denseScore": 0.4442608479095155,
+                  "lexicalScore": 2.7968932511002835,
+                  "rrfScore": 0.030776515151515152
+                }
+              ]
+            }
+          ],
+          "rerankedContext": [
+            {
+              "id": "sample-2",
+              "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.",
+              "rerankerScore": 7.1175,
+              "rank": 1,
+              "previousRank": 1,
+              "rrfScore": 0.016393,
+              "start": 828,
+              "end": 1217
+            },
+            {
+              "id": "sample-7",
+              "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.",
+              "rerankerScore": 5.2952,
+              "rank": 2,
+              "previousRank": 2,
+              "rrfScore": 0.016129,
+              "start": 2705,
+              "end": 3061
+            },
+            {
+              "id": "sample-11",
+              "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss.",
+              "rerankerScore": 2.3627,
+              "rank": 3,
+              "previousRank": 4,
+              "rrfScore": 0.015625,
+              "start": 3966,
+              "end": 4559
+            }
+          ],
+          "latency": {
+            "transformMs": 0,
+            "totalRetrievalMs": 411,
+            "rerankMs": 74,
+            "provenance": "measured"
+          }
+        }
+      },
+      {
+        "id": "prompt",
+        "detail": {
+          "system": "You are a helpful assistant that answers using only the\nprovided context. If the context does not contain enough information,\nsay you do not know based on the available documents. Be concise.",
+          "user": "Context:\n[1] (rerank=7.1175, id=sample-2, prev_rank=1, rrf=0.049180, dense_rank=None, lexical_rank=None)\n## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation.\n\n[2] (rerank=5.2952, id=sample-7, prev_rank=2, rrf=0.048131, dense_rank=None, lexical_rank=None)\n## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42.\n\n[3] (rerank=2.3627, id=sample-11, prev_rank=4, rrf=0.047123, dense_rank=None, lexical_rank=None)\n## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss.\n\nQuestion: How do I fix error E_CONN_42 on the EdgeGateway?\n\nAnswer using only the context above.",
+          "contextSource": "reranked",
+          "generationQuestion": "How do I fix error E_CONN_42 on the EdgeGateway?",
+          "finalContextIds": [
+            "sample-2",
+            "sample-7",
+            "sample-11"
+          ]
+        }
+      },
+      {
+        "id": "llm",
+        "metrics": {
+          "latencyMs": 1483,
+          "promptTokens": 492,
+          "completionTokens": 73,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "output",
+        "detail": {
+          "answer": "To fix error E_CONN_42 on the EdgeGateway, you should:\n\n1. Rotate the gateway client certificate used by the EdgeGateway process.\n2. Confirm that relay-west.acme.internal is reachable on port 8443.\n3. Run `edgectl session flush`.\n\nDo not treat E_CONN_42 as a generic timeout or routine certificate calendar rotation."
+        }
+      }
+    ],
+    "output": {
+      "answer": "To fix error E_CONN_42 on the EdgeGateway, you should:\n\n1. Rotate the gateway client certificate used by the EdgeGateway process.\n2. Confirm that relay-west.acme.internal is reachable on port 8443.\n3. Run `edgectl session flush`.\n\nDo not treat E_CONN_42 as a generic timeout or routine certificate calendar rotation."
+    },
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 1663,
+      "bm25IndexMs": 2,
+      "rerankerLoadMs": 8901,
+      "transformMs": 1214,
+      "retrievalMs": 1107,
+      "rerankingMs": 59,
+      "generationMs": 1483,
+      "totalMs": 3863,
+      "promptTokens": 492,
+      "completionTokens": 73,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "openai",
+      "bm25",
+      "rrf",
+      "cross-encoder",
+      "ms-marco-MiniLM-L6-v2"
+    ],
+    "relatedContent": [
+      "rag",
+      "hybrid-retrieval",
+      "query-transformation",
+      "embeddings"
+    ],
+    "cookbook": {
+      "path": "examples/rag/04-query-transformation"
+    }
+  },
+  {
+    "labId": "query-transformation",
+    "traceId": "expansion-adds-platform-noise",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-04T11:37:12Z",
+    "metricsProvenance": "measured",
+    "teachingClass": "ADDS_NOISE",
+    "input": {
+      "question": "Something feels off with the edge platform today \u2014 profiles or network?",
+      "rerankerQuery": "Something feels off with the edge platform today \u2014 profiles or network?",
+      "generationQuestion": "Something feels off with the edge platform today \u2014 profiles or network?",
+      "config": {
+        "chunkSize": 520,
+        "chunkOverlap": 40,
+        "denseTopK": 8,
+        "lexicalTopK": 8,
+        "candidateK": 5,
+        "finalContextK": 3,
+        "rrfK": 60,
+        "maxAlternativeQueries": 2,
+        "embeddingModel": "text-embedding-3-small",
+        "chatModel": "gpt-4o-mini",
+        "rerankerModel": "cross-encoder/ms-marco-MiniLM-L6-v2",
+        "queryTransformerModel": "gpt-4o-mini"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 24
+    },
+    "comparison": {
+      "originalOnlyCandidateIds": [
+        "sample-0",
+        "sample-1",
+        "sample-3",
+        "sample-4",
+        "sample-20"
+      ],
+      "multiQueryCandidateIds": [
+        "sample-0",
+        "sample-1",
+        "sample-14",
+        "sample-10",
+        "sample-18"
+      ],
+      "candidatesDiscoveredByTransform": [
+        "sample-10",
+        "sample-14",
+        "sample-18"
+      ],
+      "originalOnlyFinalContextIds": [
+        "sample-0",
+        "sample-1",
+        "sample-3"
+      ],
+      "multiQueryFinalContextIds": [
+        "sample-0",
+        "sample-1",
+        "sample-10"
+      ],
+      "provenance": "derived"
+    },
+    "steps": [
+      {
+        "id": "chunking",
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "embed-corpus",
+        "metrics": {
+          "latencyMs": 1663,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "bm25-index",
+        "metrics": {
+          "latencyMs": 2,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "query-transform",
+        "detail": {
+          "path": "multi-query",
+          "queries": [
+            {
+              "id": "Q0",
+              "text": "Something feels off with the edge platform today \u2014 profiles or network?",
+              "isOriginal": true
+            },
+            {
+              "id": "Q1",
+              "text": "Edge platform network performance issues",
+              "isOriginal": false
+            },
+            {
+              "id": "Q2",
+              "text": "Edge platform profile synchronization errors",
+              "isOriginal": false
+            }
+          ],
+          "perQueryRetrievalLatencyMs": [
+            {
+              "queryId": "Q0",
+              "query": "Something feels off with the edge platform today \u2014 profiles or network?",
+              "latencyMs": 343,
+              "provenance": "measured"
+            },
+            {
+              "queryId": "Q1",
+              "query": "Edge platform network performance issues",
+              "latencyMs": 349,
+              "provenance": "measured"
+            },
+            {
+              "queryId": "Q2",
+              "query": "Edge platform profile synchronization errors",
+              "latencyMs": 352,
+              "provenance": "measured"
+            }
+          ],
+          "candidateCounts": {
+            "beforeDedup": 15,
+            "afterDedup": 5,
+            "duplicates": 10,
+            "duplicateRate": 0.6667,
+            "provenance": {
+              "beforeDedup": "derived",
+              "afterDedup": "measured",
+              "duplicates": "derived",
+              "duplicateRate": "derived"
+            }
+          },
+          "mergedCandidates": [
+            {
+              "id": "sample-0",
+              "rank": 1,
+              "aggregateRrfScore": 0.048916,
+              "foundBy": [
+                "Q0",
+                "Q1",
+                "Q2"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Something feels off with the edge platform today \u2014 profiles or network?",
+                  "denseRank": 2,
+                  "lexicalRank": 1,
+                  "rrfRank": 1,
+                  "denseScore": 0.35555008212005546,
+                  "lexicalScore": 4.931830633069032,
+                  "rrfScore": 0.03252247488101534
+                },
+                {
+                  "queryId": "Q1",
+                  "query": "Edge platform network performance issues",
+                  "denseRank": 4,
+                  "lexicalRank": 2,
+                  "rrfRank": 2,
+                  "denseScore": 0.38021028636910287,
+                  "lexicalScore": 2.6809982553295795,
+                  "rrfScore": 0.031754032258064516
+                },
+                {
+                  "queryId": "Q2",
+                  "query": "Edge platform profile synchronization errors",
+                  "denseRank": 1,
+                  "lexicalRank": 2,
+                  "rrfRank": 1,
+                  "denseScore": 0.36165404109189253,
+                  "lexicalScore": 2.6809982553295795,
+                  "rrfScore": 0.03252247488101534
+                }
+              ]
+            },
+            {
+              "id": "sample-1",
+              "rank": 2,
+              "aggregateRrfScore": 0.032522,
+              "foundBy": [
+                "Q0",
+                "Q1"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Something feels off with the edge platform today \u2014 profiles or network?",
+                  "denseRank": 1,
+                  "lexicalRank": 2,
+                  "rrfRank": 2,
+                  "denseScore": 0.3702206381008778,
+                  "lexicalScore": 4.2732368669219465,
+                  "rrfScore": 0.03252247488101534
+                },
+                {
+                  "queryId": "Q1",
+                  "query": "Edge platform network performance issues",
+                  "denseRank": 1,
+                  "lexicalRank": 1,
+                  "rrfRank": 1,
+                  "denseScore": 0.43762350390408433,
+                  "lexicalScore": 4.2732368669219465,
+                  "rrfScore": 0.03278688524590164
+                }
+              ]
+            },
+            {
+              "id": "sample-14",
+              "rank": 3,
+              "aggregateRrfScore": 0.031498,
+              "foundBy": [
+                "Q1",
+                "Q2"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q1",
+                  "query": "Edge platform network performance issues",
+                  "denseRank": 2,
+                  "lexicalRank": null,
+                  "rrfRank": 4,
+                  "denseScore": 0.41706601112197395,
+                  "lexicalScore": null,
+                  "rrfScore": 0.016129032258064516
+                },
+                {
+                  "queryId": "Q2",
+                  "query": "Edge platform profile synchronization errors",
+                  "denseRank": 3,
+                  "lexicalRank": 6,
+                  "rrfRank": 3,
+                  "denseScore": 0.33681371203604266,
+                  "lexicalScore": 2.1754779548457823,
+                  "rrfScore": 0.031024531024531024
+                }
+              ]
+            },
+            {
+              "id": "sample-10",
+              "rank": 4,
+              "aggregateRrfScore": 0.016129,
+              "foundBy": [
+                "Q2"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q2",
+                  "query": "Edge platform profile synchronization errors",
+                  "denseRank": 4,
+                  "lexicalRank": 3,
+                  "rrfRank": 2,
+                  "denseScore": 0.33666813729808365,
+                  "lexicalScore": 2.6138663041372525,
+                  "rrfScore": 0.03149801587301587
+                }
+              ]
+            },
+            {
+              "id": "sample-18",
+              "rank": 5,
+              "aggregateRrfScore": 0.015873,
+              "foundBy": [
+                "Q1"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q1",
+                  "query": "Edge platform network performance issues",
+                  "denseRank": 6,
+                  "lexicalRank": 7,
+                  "rrfRank": 3,
+                  "denseScore": 0.3612344980144685,
+                  "lexicalScore": 0.9092132459917436,
+                  "rrfScore": 0.03007688828584351
+                }
+              ]
+            }
+          ],
+          "rerankedContext": [
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Topics share some\nvocabulary (TLS, profiles, NebulaAPI, timeouts) while other sections deliberately\nuse handbook jargon that end-user questions rarely contain \u2014 useful when\ncomparing original-only retrieval against multi-query transformation.",
+              "rerankerScore": -2.1296,
+              "rank": 1,
+              "previousRank": 1,
+              "rrfScore": 0.048916,
+              "start": 0,
+              "end": 340
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "rerankerScore": -4.7228,
+              "rank": 2,
+              "previousRank": 2,
+              "rrfScore": 0.032522,
+              "start": 342,
+              "end": 826
+            },
+            {
+              "id": "sample-10",
+              "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs.",
+              "rerankerScore": -7.0242,
+              "rank": 3,
+              "previousRank": 4,
+              "rrfScore": 0.016129,
+              "start": 3690,
+              "end": 3964
+            }
+          ],
+          "latency": {
+            "transformMs": 967,
+            "totalRetrievalMs": 1044,
+            "rerankMs": 73,
+            "provenance": "measured"
+          }
+        }
+      },
+      {
+        "id": "query-baseline",
+        "detail": {
+          "path": "original-only",
+          "queries": [
+            {
+              "id": "Q0",
+              "text": "Something feels off with the edge platform today \u2014 profiles or network?",
+              "isOriginal": true
+            }
+          ],
+          "perQueryRetrievalLatencyMs": [
+            {
+              "queryId": "Q0",
+              "query": "Something feels off with the edge platform today \u2014 profiles or network?",
+              "latencyMs": 340,
+              "provenance": "measured"
+            }
+          ],
+          "candidateCounts": {
+            "beforeDedup": 5,
+            "afterDedup": 5,
+            "duplicates": 0,
+            "duplicateRate": 0.0,
+            "provenance": {
+              "beforeDedup": "derived",
+              "afterDedup": "measured",
+              "duplicates": "derived",
+              "duplicateRate": "derived"
+            }
+          },
+          "mergedCandidates": [
+            {
+              "id": "sample-0",
+              "rank": 1,
+              "aggregateRrfScore": 0.016393,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Something feels off with the edge platform today \u2014 profiles or network?",
+                  "denseRank": 2,
+                  "lexicalRank": 1,
+                  "rrfRank": 1,
+                  "denseScore": 0.35558528797514244,
+                  "lexicalScore": 4.931830633069032,
+                  "rrfScore": 0.03252247488101534
+                }
+              ]
+            },
+            {
+              "id": "sample-1",
+              "rank": 2,
+              "aggregateRrfScore": 0.016129,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Something feels off with the edge platform today \u2014 profiles or network?",
+                  "denseRank": 1,
+                  "lexicalRank": 2,
+                  "rrfRank": 2,
+                  "denseScore": 0.3702737795444213,
+                  "lexicalScore": 4.2732368669219465,
+                  "rrfScore": 0.03252247488101534
+                }
+              ]
+            },
+            {
+              "id": "sample-3",
+              "rank": 3,
+              "aggregateRrfScore": 0.015873,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Something feels off with the edge platform today \u2014 profiles or network?",
+                  "denseRank": 3,
+                  "lexicalRank": 3,
+                  "rrfRank": 3,
+                  "denseScore": 0.34963285441620734,
+                  "lexicalScore": 2.327706850979065,
+                  "rrfScore": 0.031746031746031744
+                }
+              ]
+            },
+            {
+              "id": "sample-4",
+              "rank": 4,
+              "aggregateRrfScore": 0.015625,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Something feels off with the edge platform today \u2014 profiles or network?",
+                  "denseRank": 5,
+                  "lexicalRank": 4,
+                  "rrfRank": 4,
+                  "denseScore": 0.3429249466231913,
+                  "lexicalScore": 2.2023428955081936,
+                  "rrfScore": 0.031009615384615385
+                }
+              ]
+            },
+            {
+              "id": "sample-20",
+              "rank": 5,
+              "aggregateRrfScore": 0.015385,
+              "foundBy": [
+                "Q0"
+              ],
+              "perQueryProvenance": [
+                {
+                  "queryId": "Q0",
+                  "query": "Something feels off with the edge platform today \u2014 profiles or network?",
+                  "denseRank": 4,
+                  "lexicalRank": null,
+                  "rrfRank": 5,
+                  "denseScore": 0.3486128486196268,
+                  "lexicalScore": null,
+                  "rrfScore": 0.015625
+                }
+              ]
+            }
+          ],
+          "rerankedContext": [
+            {
+              "id": "sample-0",
+              "text": "# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Topics share some\nvocabulary (TLS, profiles, NebulaAPI, timeouts) while other sections deliberately\nuse handbook jargon that end-user questions rarely contain \u2014 useful when\ncomparing original-only retrieval against multi-query transformation.",
+              "rerankerScore": -2.1296,
+              "rank": 1,
+              "previousRank": 1,
+              "rrfScore": 0.016393,
+              "start": 0,
+              "end": 340
+            },
+            {
+              "id": "sample-1",
+              "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.",
+              "rerankerScore": -4.7228,
+              "rank": 2,
+              "previousRank": 2,
+              "rrfScore": 0.016129,
+              "start": 342,
+              "end": 826
+            },
+            {
+              "id": "sample-3",
+              "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern.",
+              "rerankerScore": -8.184,
+              "rank": 3,
+              "previousRank": 3,
+              "rrfScore": 0.015873,
+              "start": 1219,
+              "end": 1568
+            }
+          ],
+          "latency": {
+            "transformMs": 0,
+            "totalRetrievalMs": 340,
+            "rerankMs": 78,
+            "provenance": "measured"
+          }
+        }
+      },
+      {
+        "id": "prompt",
+        "detail": {
+          "system": "You are a helpful assistant that answers using only the\nprovided context. If the context does not contain enough information,\nsay you do not know based on the available documents. Be concise.",
+          "user": "Context:\n[1] (rerank=-2.1296, id=sample-0, prev_rank=1, rrf=0.048916, dense_rank=None, lexical_rank=None)\n# Acme Edge Platform \u2014 Support Handbook\n\nTiny on purpose. Each ## section is one retrieval chunk. Topics share some\nvocabulary (TLS, profiles, NebulaAPI, timeouts) while other sections deliberately\nuse handbook jargon that end-user questions rarely contain \u2014 useful when\ncomparing original-only retrieval against multi-query transformation.\n\n[2] (rerank=-4.7228, id=sample-1, prev_rank=2, rrf=0.032522, dense_rank=None, lexical_rank=None)\n## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes.\n\n[3] (rerank=-7.0242, id=sample-10, prev_rank=4, rrf=0.016129, dense_rank=None, lexical_rank=None)\n## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs.\n\nQuestion: Something feels off with the edge platform today \u2014 profiles or network?\n\nAnswer using only the context above.",
+          "contextSource": "reranked",
+          "generationQuestion": "Something feels off with the edge platform today \u2014 profiles or network?",
+          "finalContextIds": [
+            "sample-0",
+            "sample-1",
+            "sample-10"
+          ]
+        }
+      },
+      {
+        "id": "llm",
+        "metrics": {
+          "latencyMs": 1985,
+          "promptTokens": 401,
+          "completionTokens": 85,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "output",
+        "detail": {
+          "answer": "Based on the context, if users are experiencing issues with profiles, it may relate to caching strategies for user profile data, which can be affected by logout or role changes. However, if the issue is with network connectivity, it would be more aligned with the guidance on restoring service when the network keeps dropping. Therefore, it could be either profiles or network, but the context suggests starting with network troubleshooting if packets are vanishing."
+        }
+      }
+    ],
+    "output": {
+      "answer": "Based on the context, if users are experiencing issues with profiles, it may relate to caching strategies for user profile data, which can be affected by logout or role changes. However, if the issue is with network connectivity, it would be more aligned with the guidance on restoring service when the network keeps dropping. Therefore, it could be either profiles or network, but the context suggests starting with network troubleshooting if packets are vanishing."
+    },
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 1663,
+      "bm25IndexMs": 2,
+      "rerankerLoadMs": 8901,
+      "transformMs": 967,
+      "retrievalMs": 1044,
+      "rerankingMs": 73,
+      "generationMs": 1985,
+      "totalMs": 4069,
+      "promptTokens": 401,
+      "completionTokens": 85,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "openai",
+      "bm25",
+      "rrf",
+      "cross-encoder",
+      "ms-marco-MiniLM-L6-v2"
+    ],
+    "relatedContent": [
+      "rag",
+      "hybrid-retrieval",
+      "query-transformation",
+      "embeddings"
+    ],
+    "cookbook": {
+      "path": "examples/rag/04-query-transformation"
+    }
+  }
+]
