@@ -1,0 +1,107 @@
+{
+  "description": "Teaching evaluation set for the Acme Edge Platform handbook. Not a production benchmark.",
+  "corpus": "data/sample.md",
+  "relevance_scheme": {
+    "type": "graded",
+    "levels": {
+      "3": "Directly answers the information need",
+      "2": "Strongly related supporting evidence",
+      "1": "Tangentially related / easy to confuse with the answer",
+      "0": "Not relevant (implicit for unlabeled chunks)"
+    },
+    "binary_threshold": 1
+  },
+  "k_default": 3,
+  "queries": [
+    {
+      "id": "auth-idle-timeout",
+      "query": "Why does everyone have to unlock the app again after being idle half a day?",
+      "relevance": {
+        "sample-12": 3
+      },
+      "rationale": {
+        "sample-12": "Direct answer: NebulaAuth tokens expire after eight hours of inactivity (AUTH_TOKEN_EXPIRED) and return users to the credential prompt; silent refresh is the remediation. User phrasing ('unlock the app', 'idle half a day') does not appear in the handbook."
+      }
+    },
+    {
+      "id": "econn-42-remediation",
+      "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+      "relevance": {
+        "sample-2": 3,
+        "sample-6": 1,
+        "sample-8": 1
+      },
+      "rationale": {
+        "sample-2": "Primary remediation playbook for E_CONN_42 (rotate gateway client certificate, reachability, session flush).",
+        "sample-6": "Calendar TLS rotation is related certificate maintenance but explicitly is not the live E_CONN_42 fix.",
+        "sample-8": "General intermittent TLS troubleshooting; points to E_CONN_42 section when that code appears, but is not the remediation itself."
+      }
+    },
+    {
+      "id": "profile-async",
+      "query": "What NebulaAPI call should I use so profile screens do not freeze under load?",
+      "relevance": {
+        "sample-4": 3,
+        "sample-5": 2,
+        "sample-3": 1
+      },
+      "rationale": {
+        "sample-4": "Direct answer: getUserProfileAsync is the preferred concurrent profile fetch in NebulaAPI v2.3.",
+        "sample-5": "Documents the deprecated synchronous getUserProfile path and why to migrate away — strong supporting context.",
+        "sample-3": "General guidance on not blocking the UI during slow profile reads, without naming the NebulaAPI method."
+      }
+    },
+    {
+      "id": "keepalive-rst",
+      "query": "Why do idle EdgeGateway tunnels get RST after long quiet periods?",
+      "relevance": {
+        "sample-11": 3
+      },
+      "rationale": {
+        "sample-11": "Direct answer: relay_keepalive_miss_threshold teardown of idle tunnels with TCP RST / ECONNRESET and keepalive remediation."
+      }
+    },
+    {
+      "id": "dns-relay",
+      "query": "Which DNS resolvers should edge sites use so relay hostnames resolve?",
+      "relevance": {
+        "sample-16": 3
+      },
+      "rationale": {
+        "sample-16": "Direct answer: pin recursive resolvers to dns-a/dns-b.acme.internal; incorrect resolvers cause intermittent NXDOMAIN for relay hostnames."
+      }
+    },
+    {
+      "id": "rate-limit",
+      "query": "What happens when a client exceeds NebulaAPI public request limits?",
+      "relevance": {
+        "sample-15": 3
+      },
+      "rationale": {
+        "sample-15": "Direct answer: 120 req/min limit, RATE_LIMIT_EXCEEDED, Retry-After header, and coalescing guidance."
+      }
+    },
+    {
+      "id": "sso-idp-outage",
+      "query": "Interactive SSO sign-in shows a browser error page — what runbook do I follow?",
+      "relevance": {
+        "sample-20": 3
+      },
+      "rationale": {
+        "sample-20": "Direct answer: corporate IdP unreachable runbook with status page and break-glass accounts. Explicitly distinct from AUTH_TOKEN_EXPIRED on already-authenticated Edge clients."
+      }
+    },
+    {
+      "id": "nx-sku-mount",
+      "query": "What rack mount and firmware baseline does the NX-4400-PRO require?",
+      "relevance": {
+        "sample-9": 3,
+        "sample-13": 1
+      },
+      "rationale": {
+        "sample-9": "Direct SKU facts: dual PSUs, NX-RAIL-2 rack mount, firmware 14.2.1+.",
+        "sample-13": "Firmware drift / FW_DRIFT_WARN for NX-series is related maintenance context but not the SKU shipping requirements."
+      }
+    }
+  ]
+}

@@ -27,6 +27,7 @@ Cookbook →  "How is it implemented?"
 | `hybrid-rag` | [`examples/rag/02-hybrid-rag`](examples/rag/02-hybrid-rag) | Dense + BM25 → RRF → generate |
 | `reranking` | [`examples/rag/03-reranking`](examples/rag/03-reranking) | Hybrid candidates → cross-encoder → generate |
 | `query-transformation` | [`examples/rag/04-query-transformation`](examples/rag/04-query-transformation) | Multi-query retrieval aggregation → rerank → generate |
+| `retrieval-evaluation` | [`examples/rag/05-retrieval-evaluation`](examples/rag/05-retrieval-evaluation) | Measure retrieval with Recall@K, MRR, and nDCG@K against golden judgments |
 
 More examples will be added as the RAG path progresses.
 
@@ -52,7 +53,8 @@ dataaihub-cookbook/
 │       ├── 01-basic-rag/
 │       ├── 02-hybrid-rag/
 │       ├── 03-reranking/
-│       └── 04-query-transformation/
+│       ├── 04-query-transformation/
+│       └── 05-retrieval-evaluation/
 ├── shared/
 ├── docs/
 └── scripts/
