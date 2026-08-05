@@ -1,0 +1,2163 @@
+[
+  {
+    "labId": "retrieval-evaluation",
+    "traceId": "discover-auth-idle-timeout",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-05T05:35:46Z",
+    "metricsProvenance": "measured",
+    "teachingClass": "DISCOVER",
+    "selectionNote": "Measured: dense retrieves sample-12 (relevant) at rank 3, while hybrid / hybrid-reranked / query-transform miss it in final top-K. Example 04 can show candidate discovery of sample-12; example 05 evaluates final top-K=3 retention \u2014 different cuts, not a contradiction. Lesson: candidate discovery \u2260 final top-K quality.",
+    "input": {
+      "queryId": "auth-idle-timeout",
+      "query": "Why does everyone have to unlock the app again after being idle half a day?",
+      "k": 3,
+      "relevanceJudgments": {
+        "sample-12": 3
+      },
+      "rationale": {
+        "sample-12": "Direct answer: NebulaAuth tokens expire after eight hours of inactivity (AUTH_TOKEN_EXPIRED) and return users to the credential prompt; silent refresh is the remediation. User phrasing ('unlock the app', 'idle half a day') does not appear in the handbook."
+      },
+      "config": {
+        "chunkSize": 520,
+        "chunkOverlap": 40,
+        "denseTopK": 8,
+        "lexicalTopK": 8,
+        "candidateK": 5,
+        "evalK": 3,
+        "rrfK": 60,
+        "maxAlternativeQueries": 2,
+        "embeddingModel": "text-embedding-3-small",
+        "rerankerModel": "cross-encoder/ms-marco-MiniLM-L6-v2",
+        "queryTransformerModel": "gpt-4o-mini"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 24
+    },
+    "relevantChunks": [
+      {
+        "chunkId": "sample-12",
+        "grade": 3,
+        "rationale": "Direct answer: NebulaAuth tokens expire after eight hours of inactivity (AUTH_TOKEN_EXPIRED) and return users to the credential prompt; silent refresh is the remediation. User phrasing ('unlock the app', 'idle half a day') does not appear in the handbook.",
+        "text": "## NebulaAuth token TTL and silent credential refresh\n\nNebulaAuth access tokens expire after eight hours of inactivity. When the TTL\nelapses, Edge clients receive HTTP 401 with reason code `AUTH_TOKEN_EXPIRED`\nand the Edge UI returns the operator to the credential prompt. Enable silent\ncredential refresh with `nebula auth refresh --background` so tokens renew\nwithout interactive password prompts. Do not treat `AUTH_TOKEN_EXPIRED` as an\nSSO outage, password-reset incident, workstation screen-lock event, or\nNebulaAPI profile-fetch failure."
+      }
+    ],
+    "pipelines": [
+      {
+        "queryId": "auth-idle-timeout",
+        "query": "Why does everyone have to unlock the app again after being idle half a day?",
+        "pipeline": "dense",
+        "k": 3,
+        "retrieved": [
+          {
+            "chunkId": "sample-21",
+            "rank": 1,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "VPN reconnect after laptop sleep",
+            "text": "## VPN reconnect after laptop sleep\n\nManaged laptops often drop the corporate VPN after sleep or lid-close. Users\nmust reconnect GlobalProtect before internal tools load. VPN sleep reconnect is\nunrelated to relay keepalive termination and unrelated to NebulaAuth token\nrefresh."
+          },
+          {
+            "chunkId": "sample-10",
+            "rank": 2,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Caching strategies for user profile data",
+            "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs."
+          },
+          {
+            "chunkId": "sample-12",
+            "rank": 3,
+            "relevanceGrade": 3,
+            "isRelevant": true,
+            "title": "NebulaAuth token TTL and silent credential refresh",
+            "text": "## NebulaAuth token TTL and silent credential refresh\n\nNebulaAuth access tokens expire after eight hours of inactivity. When the TTL\nelapses, Edge clients receive HTTP 401 with reason code `AUTH_TOKEN_EXPIRED`\nand the Edge UI returns the operator to the credential prompt. Enable silent\ncredential refresh with `nebula auth refresh --background` so tokens renew\nwithout interactive password prompts. Do not treat `AUTH_TOKEN_EXPIRED` as an\nSSO outage, password-reset incident, workstation screen-lock event, or\nNebulaAPI profile-fetch failure."
+          }
+        ],
+        "metrics": {
+          "recallAtK": 1.0,
+          "reciprocalRank": 0.333333,
+          "firstRelevantRank": 3,
+          "dcgAtK": 3.5,
+          "idcgAtK": 7.0,
+          "ndcgAtK": 0.5,
+          "provenance": "computed"
+        },
+        "failure": {
+          "label": "LATE",
+          "firstRelevantRank": 3,
+          "missedIds": [],
+          "lateIds": [
+            "sample-12"
+          ],
+          "goodIds": [],
+          "explanation": "Relevant evidence retrieved but first hit at rank 3 (after rank 1)."
+        },
+        "latencyMs": {
+          "retrieval_ms": 448,
+          "total_ms": 448
+        }
+      },
+      {
+        "queryId": "auth-idle-timeout",
+        "query": "Why does everyone have to unlock the app again after being idle half a day?",
+        "pipeline": "hybrid",
+        "k": 3,
+        "retrieved": [
+          {
+            "chunkId": "sample-10",
+            "rank": 1,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Caching strategies for user profile data",
+            "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs."
+          },
+          {
+            "chunkId": "sample-11",
+            "rank": 2,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Relay idle session keepalive termination",
+            "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss."
+          },
+          {
+            "chunkId": "sample-21",
+            "rank": 3,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "VPN reconnect after laptop sleep",
+            "text": "## VPN reconnect after laptop sleep\n\nManaged laptops often drop the corporate VPN after sleep or lid-close. Users\nmust reconnect GlobalProtect before internal tools load. VPN sleep reconnect is\nunrelated to relay keepalive termination and unrelated to NebulaAuth token\nrefresh."
+          }
+        ],
+        "metrics": {
+          "recallAtK": 0.0,
+          "reciprocalRank": 0.0,
+          "firstRelevantRank": null,
+          "dcgAtK": 0.0,
+          "idcgAtK": 7.0,
+          "ndcgAtK": 0.0,
+          "provenance": "computed"
+        },
+        "failure": {
+          "label": "MISS",
+          "firstRelevantRank": null,
+          "missedIds": [
+            "sample-12"
+          ],
+          "lateIds": [],
+          "goodIds": [],
+          "explanation": "No relevant chunks in top-3. Missing: ['sample-12']."
+        },
+        "latencyMs": {
+          "retrieval_ms": 384,
+          "total_ms": 384
+        }
+      },
+      {
+        "queryId": "auth-idle-timeout",
+        "query": "Why does everyone have to unlock the app again after being idle half a day?",
+        "pipeline": "hybrid-reranked",
+        "k": 3,
+        "retrieved": [
+          {
+            "chunkId": "sample-11",
+            "rank": 1,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Relay idle session keepalive termination",
+            "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss."
+          },
+          {
+            "chunkId": "sample-1",
+            "rank": 2,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Restoring service when the network keeps dropping",
+            "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes."
+          },
+          {
+            "chunkId": "sample-21",
+            "rank": 3,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "VPN reconnect after laptop sleep",
+            "text": "## VPN reconnect after laptop sleep\n\nManaged laptops often drop the corporate VPN after sleep or lid-close. Users\nmust reconnect GlobalProtect before internal tools load. VPN sleep reconnect is\nunrelated to relay keepalive termination and unrelated to NebulaAuth token\nrefresh."
+          }
+        ],
+        "metrics": {
+          "recallAtK": 0.0,
+          "reciprocalRank": 0.0,
+          "firstRelevantRank": null,
+          "dcgAtK": 0.0,
+          "idcgAtK": 7.0,
+          "ndcgAtK": 0.0,
+          "provenance": "computed"
+        },
+        "failure": {
+          "label": "MISS",
+          "firstRelevantRank": null,
+          "missedIds": [
+            "sample-12"
+          ],
+          "lateIds": [],
+          "goodIds": [],
+          "explanation": "No relevant chunks in top-3. Missing: ['sample-12']."
+        },
+        "latencyMs": {
+          "retrieval_ms": 357,
+          "rerank_ms": 527,
+          "total_ms": 884
+        }
+      },
+      {
+        "queryId": "auth-idle-timeout",
+        "query": "Why does everyone have to unlock the app again after being idle half a day?",
+        "pipeline": "query-transform",
+        "k": 3,
+        "retrieved": [
+          {
+            "chunkId": "sample-11",
+            "rank": 1,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Relay idle session keepalive termination",
+            "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss."
+          },
+          {
+            "chunkId": "sample-21",
+            "rank": 2,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "VPN reconnect after laptop sleep",
+            "text": "## VPN reconnect after laptop sleep\n\nManaged laptops often drop the corporate VPN after sleep or lid-close. Users\nmust reconnect GlobalProtect before internal tools load. VPN sleep reconnect is\nunrelated to relay keepalive termination and unrelated to NebulaAuth token\nrefresh."
+          },
+          {
+            "chunkId": "sample-22",
+            "rank": 3,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Browser cookie retention for internal portals",
+            "text": "## Browser cookie retention for internal portals\n\nSome internal portals rely on browser session cookies that expire after a fixed\nwall-clock duration. Cookie retention settings are managed by the portal team.\nThey do not configure NebulaAuth access-token TTL on Edge clients."
+          }
+        ],
+        "metrics": {
+          "recallAtK": 0.0,
+          "reciprocalRank": 0.0,
+          "firstRelevantRank": null,
+          "dcgAtK": 0.0,
+          "idcgAtK": 7.0,
+          "ndcgAtK": 0.0,
+          "provenance": "computed"
+        },
+        "failure": {
+          "label": "MISS",
+          "firstRelevantRank": null,
+          "missedIds": [
+            "sample-12"
+          ],
+          "lateIds": [],
+          "goodIds": [],
+          "explanation": "No relevant chunks in top-3. Missing: ['sample-12']."
+        },
+        "latencyMs": {
+          "transform_ms": 1504,
+          "retrieval_ms": 1105,
+          "rerank_ms": 70,
+          "total_ms": 2679
+        }
+      }
+    ],
+    "observedComparison": {
+      "recallAtKByPipeline": {
+        "dense": 1.0,
+        "hybrid": 0.0,
+        "hybrid-reranked": 0.0,
+        "query-transform": 0.0
+      },
+      "ndcgAtKByPipeline": {
+        "dense": 0.5,
+        "hybrid": 0.0,
+        "hybrid-reranked": 0.0,
+        "query-transform": 0.0
+      },
+      "firstRelevantRankByPipeline": {
+        "dense": 3,
+        "hybrid": null,
+        "hybrid-reranked": null,
+        "query-transform": null
+      },
+      "provenance": "derived-from-measured"
+    },
+    "steps": [
+      {
+        "id": "evaluation-dataset",
+        "detail": {
+          "queryId": "auth-idle-timeout",
+          "query": "Why does everyone have to unlock the app again after being idle half a day?",
+          "datasetSize": 8,
+          "description": "Teaching evaluation set for the Acme Edge Platform handbook. Not a production benchmark."
+        }
+      },
+      {
+        "id": "relevance-judgments",
+        "detail": {
+          "relevance": {
+            "sample-12": 3
+          },
+          "rationale": {
+            "sample-12": "Direct answer: NebulaAuth tokens expire after eight hours of inactivity (AUTH_TOKEN_EXPIRED) and return users to the credential prompt; silent refresh is the remediation. User phrasing ('unlock the app', 'idle half a day') does not appear in the handbook."
+          },
+          "scheme": {
+            "type": "graded",
+            "levels": {
+              "3": "Directly answers the information need",
+              "2": "Strongly related supporting evidence",
+              "1": "Tangentially related / easy to confuse with the answer",
+              "0": "Not relevant (implicit for unlabeled chunks)"
+            },
+            "binary_threshold": 1
+          }
+        }
+      },
+      {
+        "id": "run-retrieval",
+        "detail": {
+          "pipelines": [
+            "dense",
+            "hybrid",
+            "hybrid-reranked",
+            "query-transform"
+          ],
+          "k": 3,
+          "note": "Judgments attach to the original information need; query-transform may retrieve with alternatives."
+        }
+      },
+      {
+        "id": "inspect-ranked-results",
+        "detail": {
+          "byPipeline": {
+            "dense": [
+              {
+                "chunkId": "sample-21",
+                "rank": 1,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "VPN reconnect after laptop sleep",
+                "text": "## VPN reconnect after laptop sleep\n\nManaged laptops often drop the corporate VPN after sleep or lid-close. Users\nmust reconnect GlobalProtect before internal tools load. VPN sleep reconnect is\nunrelated to relay keepalive termination and unrelated to NebulaAuth token\nrefresh."
+              },
+              {
+                "chunkId": "sample-10",
+                "rank": 2,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Caching strategies for user profile data",
+                "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs."
+              },
+              {
+                "chunkId": "sample-12",
+                "rank": 3,
+                "relevanceGrade": 3,
+                "isRelevant": true,
+                "title": "NebulaAuth token TTL and silent credential refresh",
+                "text": "## NebulaAuth token TTL and silent credential refresh\n\nNebulaAuth access tokens expire after eight hours of inactivity. When the TTL\nelapses, Edge clients receive HTTP 401 with reason code `AUTH_TOKEN_EXPIRED`\nand the Edge UI returns the operator to the credential prompt. Enable silent\ncredential refresh with `nebula auth refresh --background` so tokens renew\nwithout interactive password prompts. Do not treat `AUTH_TOKEN_EXPIRED` as an\nSSO outage, password-reset incident, workstation screen-lock event, or\nNebulaAPI profile-fetch failure."
+              }
+            ],
+            "hybrid": [
+              {
+                "chunkId": "sample-10",
+                "rank": 1,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Caching strategies for user profile data",
+                "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs."
+              },
+              {
+                "chunkId": "sample-11",
+                "rank": 2,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Relay idle session keepalive termination",
+                "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss."
+              },
+              {
+                "chunkId": "sample-21",
+                "rank": 3,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "VPN reconnect after laptop sleep",
+                "text": "## VPN reconnect after laptop sleep\n\nManaged laptops often drop the corporate VPN after sleep or lid-close. Users\nmust reconnect GlobalProtect before internal tools load. VPN sleep reconnect is\nunrelated to relay keepalive termination and unrelated to NebulaAuth token\nrefresh."
+              }
+            ],
+            "hybrid-reranked": [
+              {
+                "chunkId": "sample-11",
+                "rank": 1,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Relay idle session keepalive termination",
+                "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss."
+              },
+              {
+                "chunkId": "sample-1",
+                "rank": 2,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Restoring service when the network keeps dropping",
+                "text": "## Restoring service when the network keeps dropping\n\nWhen users report that packets vanish at random times of day, begin with\nenvironmental triage. Confirm whether other devices share the symptom, reseat\ncables, and reboot the customer edge router. Most transient outages clear after\na simple restart cycle. Capture environment notes before escalating to platform\nengineering. This guidance covers general connectivity instability only \u2014 not\ncertificate or TLS handshake error codes."
+              },
+              {
+                "chunkId": "sample-21",
+                "rank": 3,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "VPN reconnect after laptop sleep",
+                "text": "## VPN reconnect after laptop sleep\n\nManaged laptops often drop the corporate VPN after sleep or lid-close. Users\nmust reconnect GlobalProtect before internal tools load. VPN sleep reconnect is\nunrelated to relay keepalive termination and unrelated to NebulaAuth token\nrefresh."
+              }
+            ],
+            "query-transform": [
+              {
+                "chunkId": "sample-11",
+                "rank": 1,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Relay idle session keepalive termination",
+                "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss."
+              },
+              {
+                "chunkId": "sample-21",
+                "rank": 2,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "VPN reconnect after laptop sleep",
+                "text": "## VPN reconnect after laptop sleep\n\nManaged laptops often drop the corporate VPN after sleep or lid-close. Users\nmust reconnect GlobalProtect before internal tools load. VPN sleep reconnect is\nunrelated to relay keepalive termination and unrelated to NebulaAuth token\nrefresh."
+              },
+              {
+                "chunkId": "sample-22",
+                "rank": 3,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Browser cookie retention for internal portals",
+                "text": "## Browser cookie retention for internal portals\n\nSome internal portals rely on browser session cookies that expire after a fixed\nwall-clock duration. Cookie retention settings are managed by the portal team.\nThey do not configure NebulaAuth access-token TTL on Edge clients."
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "calculate-recall-at-k",
+        "detail": {
+          "byPipeline": {
+            "dense": 1.0,
+            "hybrid": 0.0,
+            "hybrid-reranked": 0.0,
+            "query-transform": 0.0
+          },
+          "formula": "Recall@K = |relevant \u2229 top-K| / |relevant|"
+        }
+      },
+      {
+        "id": "calculate-rr-mrr",
+        "detail": {
+          "reciprocalRankByPipeline": {
+            "dense": 0.333333,
+            "hybrid": 0.0,
+            "hybrid-reranked": 0.0,
+            "query-transform": 0.0
+          },
+          "firstRelevantRankByPipeline": {
+            "dense": 3,
+            "hybrid": null,
+            "hybrid-reranked": null,
+            "query-transform": null
+          },
+          "formula": "RR = 1/rank(first relevant); MRR = mean RR"
+        }
+      },
+      {
+        "id": "calculate-ndcg-at-k",
+        "detail": {
+          "byPipeline": {
+            "dense": {
+              "dcgAtK": 3.5,
+              "idcgAtK": 7.0,
+              "ndcgAtK": 0.5
+            },
+            "hybrid": {
+              "dcgAtK": 0.0,
+              "idcgAtK": 7.0,
+              "ndcgAtK": 0.0
+            },
+            "hybrid-reranked": {
+              "dcgAtK": 0.0,
+              "idcgAtK": 7.0,
+              "ndcgAtK": 0.0
+            },
+            "query-transform": {
+              "dcgAtK": 0.0,
+              "idcgAtK": 7.0,
+              "ndcgAtK": 0.0
+            }
+          },
+          "formula": "DCG@K = \u03a3 (2^rel_i - 1) / log2(i+1); nDCG@K = DCG@K / IDCG@K"
+        }
+      },
+      {
+        "id": "compare-pipelines",
+        "detail": {
+          "aggregatesOverFullEvalSet": [
+            {
+              "pipeline": "dense",
+              "k": 3,
+              "queryCount": 8,
+              "meanRecallAtK": 0.916667,
+              "mrr": 0.916667,
+              "meanNdcgAtK": 0.921146,
+              "totalLatencyMs": 4121,
+              "provenance": "computed"
+            },
+            {
+              "pipeline": "hybrid",
+              "k": 3,
+              "queryCount": 8,
+              "meanRecallAtK": 0.791667,
+              "mrr": 0.875,
+              "meanNdcgAtK": 0.858646,
+              "totalLatencyMs": 2866,
+              "provenance": "computed"
+            },
+            {
+              "pipeline": "hybrid-reranked",
+              "k": 3,
+              "queryCount": 8,
+              "meanRecallAtK": 0.75,
+              "mrr": 0.875,
+              "meanNdcgAtK": 0.832424,
+              "totalLatencyMs": 3957,
+              "provenance": "computed"
+            },
+            {
+              "pipeline": "query-transform",
+              "k": 3,
+              "queryCount": 8,
+              "meanRecallAtK": 0.75,
+              "mrr": 0.875,
+              "meanNdcgAtK": 0.845732,
+              "totalLatencyMs": 19176,
+              "provenance": "computed"
+            }
+          ],
+          "thisQuery": {
+            "recallAtK": {
+              "dense": 1.0,
+              "hybrid": 0.0,
+              "hybrid-reranked": 0.0,
+              "query-transform": 0.0
+            },
+            "ndcgAtK": {
+              "dense": 0.5,
+              "hybrid": 0.0,
+              "hybrid-reranked": 0.0,
+              "query-transform": 0.0
+            }
+          }
+        }
+      },
+      {
+        "id": "inspect-failures",
+        "detail": {
+          "byPipeline": {
+            "dense": {
+              "label": "LATE",
+              "firstRelevantRank": 3,
+              "missedIds": [],
+              "lateIds": [
+                "sample-12"
+              ],
+              "goodIds": [],
+              "explanation": "Relevant evidence retrieved but first hit at rank 3 (after rank 1)."
+            },
+            "hybrid": {
+              "label": "MISS",
+              "firstRelevantRank": null,
+              "missedIds": [
+                "sample-12"
+              ],
+              "lateIds": [],
+              "goodIds": [],
+              "explanation": "No relevant chunks in top-3. Missing: ['sample-12']."
+            },
+            "hybrid-reranked": {
+              "label": "MISS",
+              "firstRelevantRank": null,
+              "missedIds": [
+                "sample-12"
+              ],
+              "lateIds": [],
+              "goodIds": [],
+              "explanation": "No relevant chunks in top-3. Missing: ['sample-12']."
+            },
+            "query-transform": {
+              "label": "MISS",
+              "firstRelevantRank": null,
+              "missedIds": [
+                "sample-12"
+              ],
+              "lateIds": [],
+              "goodIds": [],
+              "explanation": "No relevant chunks in top-3. Missing: ['sample-12']."
+            }
+          }
+        }
+      },
+      {
+        "id": "evaluation-summary",
+        "detail": {
+          "teachingClass": "DISCOVER",
+          "selectionNote": "Measured: dense retrieves sample-12 (relevant) at rank 3, while hybrid / hybrid-reranked / query-transform miss it in final top-K. Example 04 can show candidate discovery of sample-12; example 05 evaluates final top-K=3 retention \u2014 different cuts, not a contradiction. Lesson: candidate discovery \u2260 final top-K quality.",
+          "disclaimer": "Small teaching evaluation set \u2014 not a production benchmark of retrieval systems."
+        }
+      }
+    ],
+    "fullEvaluationAggregates": [
+      {
+        "pipeline": "dense",
+        "k": 3,
+        "queryCount": 8,
+        "meanRecallAtK": 0.916667,
+        "mrr": 0.916667,
+        "meanNdcgAtK": 0.921146,
+        "totalLatencyMs": 4121,
+        "provenance": "computed"
+      },
+      {
+        "pipeline": "hybrid",
+        "k": 3,
+        "queryCount": 8,
+        "meanRecallAtK": 0.791667,
+        "mrr": 0.875,
+        "meanNdcgAtK": 0.858646,
+        "totalLatencyMs": 2866,
+        "provenance": "computed"
+      },
+      {
+        "pipeline": "hybrid-reranked",
+        "k": 3,
+        "queryCount": 8,
+        "meanRecallAtK": 0.75,
+        "mrr": 0.875,
+        "meanNdcgAtK": 0.832424,
+        "totalLatencyMs": 3957,
+        "provenance": "computed"
+      },
+      {
+        "pipeline": "query-transform",
+        "k": 3,
+        "queryCount": 8,
+        "meanRecallAtK": 0.75,
+        "mrr": 0.875,
+        "meanNdcgAtK": 0.845732,
+        "totalLatencyMs": 19176,
+        "provenance": "computed"
+      }
+    ],
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 4488,
+      "bm25IndexMs": 1,
+      "rerankerLoadMs": 45798,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "recall-at-k",
+      "mrr",
+      "ndcg",
+      "bm25",
+      "rrf",
+      "cross-encoder"
+    ],
+    "relatedContent": [
+      "rag",
+      "retrieval-evaluation",
+      "hybrid-retrieval",
+      "query-transformation"
+    ],
+    "cookbook": {
+      "path": "examples/rag/05-retrieval-evaluation"
+    }
+  },
+  {
+    "labId": "retrieval-evaluation",
+    "traceId": "ranking-sensitivity-profile-async",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-05T05:35:46Z",
+    "metricsProvenance": "measured",
+    "teachingClass": "RANKING_SENSITIVITY",
+    "selectionNote": "Measured: Recall@3 stays 0.667 across pipelines (primary sample-4 at rank 1), while nDCG@3 moves (~0.947 \u2192 ~0.798) when secondary graded evidence is reordered. Not a ranking improvement \u2014 ranking sensitivity: same Recall, different nDCG.",
+    "input": {
+      "queryId": "profile-async",
+      "query": "What NebulaAPI call should I use so profile screens do not freeze under load?",
+      "k": 3,
+      "relevanceJudgments": {
+        "sample-4": 3,
+        "sample-5": 2,
+        "sample-3": 1
+      },
+      "rationale": {
+        "sample-4": "Direct answer: getUserProfileAsync is the preferred concurrent profile fetch in NebulaAPI v2.3.",
+        "sample-5": "Documents the deprecated synchronous getUserProfile path and why to migrate away \u2014 strong supporting context.",
+        "sample-3": "General guidance on not blocking the UI during slow profile reads, without naming the NebulaAPI method."
+      },
+      "config": {
+        "chunkSize": 520,
+        "chunkOverlap": 40,
+        "denseTopK": 8,
+        "lexicalTopK": 8,
+        "candidateK": 5,
+        "evalK": 3,
+        "rrfK": 60,
+        "maxAlternativeQueries": 2,
+        "embeddingModel": "text-embedding-3-small",
+        "rerankerModel": "cross-encoder/ms-marco-MiniLM-L6-v2",
+        "queryTransformerModel": "gpt-4o-mini"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 24
+    },
+    "relevantChunks": [
+      {
+        "chunkId": "sample-4",
+        "grade": 3,
+        "rationale": "Direct answer: getUserProfileAsync is the preferred concurrent profile fetch in NebulaAPI v2.3.",
+        "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call when many\nUI screens issue profile reads at once. Migration for NebulaAPI v2.3: replace\nsynchronous reads with getUserProfileAsync and handle the Promise. Under high\nconcurrency this avoids freezing the main application thread and is the supported\npath for loading user profiles without blocking the UI."
+      },
+      {
+        "chunkId": "sample-5",
+        "grade": 2,
+        "rationale": "Documents the deprecated synchronous getUserProfile path and why to migrate away \u2014 strong supporting context.",
+        "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call."
+      },
+      {
+        "chunkId": "sample-3",
+        "grade": 1,
+        "rationale": "General guidance on not blocking the UI during slow profile reads, without naming the NebulaAPI method.",
+        "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern."
+      }
+    ],
+    "pipelines": [
+      {
+        "queryId": "profile-async",
+        "query": "What NebulaAPI call should I use so profile screens do not freeze under load?",
+        "pipeline": "dense",
+        "k": 3,
+        "retrieved": [
+          {
+            "chunkId": "sample-4",
+            "rank": 1,
+            "relevanceGrade": 3,
+            "isRelevant": true,
+            "title": "NebulaAPI v2.3 asynchronous profile fetches",
+            "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call when many\nUI screens issue profile reads at once. Migration for NebulaAPI v2.3: replace\nsynchronous reads with getUserProfileAsync and handle the Promise. Under high\nconcurrency this avoids freezing the main application thread and is the supported\npath for loading user profiles without blocking the UI."
+          },
+          {
+            "chunkId": "sample-5",
+            "rank": 2,
+            "relevanceGrade": 2,
+            "isRelevant": true,
+            "title": "NebulaAPI legacy synchronous profile reads",
+            "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call."
+          },
+          {
+            "chunkId": "sample-10",
+            "rank": 3,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Caching strategies for user profile data",
+            "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs."
+          }
+        ],
+        "metrics": {
+          "recallAtK": 0.666667,
+          "reciprocalRank": 1.0,
+          "firstRelevantRank": 1,
+          "dcgAtK": 8.892789,
+          "idcgAtK": 9.392789,
+          "ndcgAtK": 0.946768,
+          "provenance": "computed"
+        },
+        "failure": {
+          "label": "MIXED",
+          "firstRelevantRank": 1,
+          "missedIds": [
+            "sample-3"
+          ],
+          "lateIds": [
+            "sample-5"
+          ],
+          "goodIds": [
+            "sample-4"
+          ],
+          "explanation": "Retrieved some relevant evidence but missed ['sample-3']; first relevant at rank 1."
+        },
+        "latencyMs": {
+          "retrieval_ms": 336,
+          "total_ms": 336
+        }
+      },
+      {
+        "queryId": "profile-async",
+        "query": "What NebulaAPI call should I use so profile screens do not freeze under load?",
+        "pipeline": "hybrid",
+        "k": 3,
+        "retrieved": [
+          {
+            "chunkId": "sample-4",
+            "rank": 1,
+            "relevanceGrade": 3,
+            "isRelevant": true,
+            "title": "NebulaAPI v2.3 asynchronous profile fetches",
+            "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call when many\nUI screens issue profile reads at once. Migration for NebulaAPI v2.3: replace\nsynchronous reads with getUserProfileAsync and handle the Promise. Under high\nconcurrency this avoids freezing the main application thread and is the supported\npath for loading user profiles without blocking the UI."
+          },
+          {
+            "chunkId": "sample-5",
+            "rank": 2,
+            "relevanceGrade": 2,
+            "isRelevant": true,
+            "title": "NebulaAPI legacy synchronous profile reads",
+            "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call."
+          },
+          {
+            "chunkId": "sample-10",
+            "rank": 3,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Caching strategies for user profile data",
+            "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs."
+          }
+        ],
+        "metrics": {
+          "recallAtK": 0.666667,
+          "reciprocalRank": 1.0,
+          "firstRelevantRank": 1,
+          "dcgAtK": 8.892789,
+          "idcgAtK": 9.392789,
+          "ndcgAtK": 0.946768,
+          "provenance": "computed"
+        },
+        "failure": {
+          "label": "MIXED",
+          "firstRelevantRank": 1,
+          "missedIds": [
+            "sample-3"
+          ],
+          "lateIds": [
+            "sample-5"
+          ],
+          "goodIds": [
+            "sample-4"
+          ],
+          "explanation": "Retrieved some relevant evidence but missed ['sample-3']; first relevant at rank 1."
+        },
+        "latencyMs": {
+          "retrieval_ms": 368,
+          "total_ms": 368
+        }
+      },
+      {
+        "queryId": "profile-async",
+        "query": "What NebulaAPI call should I use so profile screens do not freeze under load?",
+        "pipeline": "hybrid-reranked",
+        "k": 3,
+        "retrieved": [
+          {
+            "chunkId": "sample-4",
+            "rank": 1,
+            "relevanceGrade": 3,
+            "isRelevant": true,
+            "title": "NebulaAPI v2.3 asynchronous profile fetches",
+            "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call when many\nUI screens issue profile reads at once. Migration for NebulaAPI v2.3: replace\nsynchronous reads with getUserProfileAsync and handle the Promise. Under high\nconcurrency this avoids freezing the main application thread and is the supported\npath for loading user profiles without blocking the UI."
+          },
+          {
+            "chunkId": "sample-10",
+            "rank": 2,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Caching strategies for user profile data",
+            "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs."
+          },
+          {
+            "chunkId": "sample-3",
+            "rank": 3,
+            "relevanceGrade": 1,
+            "isRelevant": true,
+            "title": "Softening slow backend profile reads",
+            "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern."
+          }
+        ],
+        "metrics": {
+          "recallAtK": 0.666667,
+          "reciprocalRank": 1.0,
+          "firstRelevantRank": 1,
+          "dcgAtK": 7.5,
+          "idcgAtK": 9.392789,
+          "ndcgAtK": 0.798485,
+          "provenance": "computed"
+        },
+        "failure": {
+          "label": "MIXED",
+          "firstRelevantRank": 1,
+          "missedIds": [
+            "sample-5"
+          ],
+          "lateIds": [
+            "sample-3"
+          ],
+          "goodIds": [
+            "sample-4"
+          ],
+          "explanation": "Retrieved some relevant evidence but missed ['sample-5']; first relevant at rank 1."
+        },
+        "latencyMs": {
+          "retrieval_ms": 345,
+          "rerank_ms": 65,
+          "total_ms": 410
+        }
+      },
+      {
+        "queryId": "profile-async",
+        "query": "What NebulaAPI call should I use so profile screens do not freeze under load?",
+        "pipeline": "query-transform",
+        "k": 3,
+        "retrieved": [
+          {
+            "chunkId": "sample-4",
+            "rank": 1,
+            "relevanceGrade": 3,
+            "isRelevant": true,
+            "title": "NebulaAPI v2.3 asynchronous profile fetches",
+            "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call when many\nUI screens issue profile reads at once. Migration for NebulaAPI v2.3: replace\nsynchronous reads with getUserProfileAsync and handle the Promise. Under high\nconcurrency this avoids freezing the main application thread and is the supported\npath for loading user profiles without blocking the UI."
+          },
+          {
+            "chunkId": "sample-10",
+            "rank": 2,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Caching strategies for user profile data",
+            "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs."
+          },
+          {
+            "chunkId": "sample-5",
+            "rank": 3,
+            "relevanceGrade": 2,
+            "isRelevant": true,
+            "title": "NebulaAPI legacy synchronous profile reads",
+            "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call."
+          }
+        ],
+        "metrics": {
+          "recallAtK": 0.666667,
+          "reciprocalRank": 1.0,
+          "firstRelevantRank": 1,
+          "dcgAtK": 8.5,
+          "idcgAtK": 9.392789,
+          "ndcgAtK": 0.90495,
+          "provenance": "computed"
+        },
+        "failure": {
+          "label": "MIXED",
+          "firstRelevantRank": 1,
+          "missedIds": [
+            "sample-3"
+          ],
+          "lateIds": [
+            "sample-5"
+          ],
+          "goodIds": [
+            "sample-4"
+          ],
+          "explanation": "Retrieved some relevant evidence but missed ['sample-3']; first relevant at rank 1."
+        },
+        "latencyMs": {
+          "transform_ms": 1138,
+          "retrieval_ms": 1075,
+          "rerank_ms": 79,
+          "total_ms": 2292
+        }
+      }
+    ],
+    "observedComparison": {
+      "recallAtKByPipeline": {
+        "dense": 0.666667,
+        "hybrid": 0.666667,
+        "hybrid-reranked": 0.666667,
+        "query-transform": 0.666667
+      },
+      "ndcgAtKByPipeline": {
+        "dense": 0.946768,
+        "hybrid": 0.946768,
+        "hybrid-reranked": 0.798485,
+        "query-transform": 0.90495
+      },
+      "firstRelevantRankByPipeline": {
+        "dense": 1,
+        "hybrid": 1,
+        "hybrid-reranked": 1,
+        "query-transform": 1
+      },
+      "provenance": "derived-from-measured"
+    },
+    "steps": [
+      {
+        "id": "evaluation-dataset",
+        "detail": {
+          "queryId": "profile-async",
+          "query": "What NebulaAPI call should I use so profile screens do not freeze under load?",
+          "datasetSize": 8,
+          "description": "Teaching evaluation set for the Acme Edge Platform handbook. Not a production benchmark."
+        }
+      },
+      {
+        "id": "relevance-judgments",
+        "detail": {
+          "relevance": {
+            "sample-4": 3,
+            "sample-5": 2,
+            "sample-3": 1
+          },
+          "rationale": {
+            "sample-4": "Direct answer: getUserProfileAsync is the preferred concurrent profile fetch in NebulaAPI v2.3.",
+            "sample-5": "Documents the deprecated synchronous getUserProfile path and why to migrate away \u2014 strong supporting context.",
+            "sample-3": "General guidance on not blocking the UI during slow profile reads, without naming the NebulaAPI method."
+          },
+          "scheme": {
+            "type": "graded",
+            "levels": {
+              "3": "Directly answers the information need",
+              "2": "Strongly related supporting evidence",
+              "1": "Tangentially related / easy to confuse with the answer",
+              "0": "Not relevant (implicit for unlabeled chunks)"
+            },
+            "binary_threshold": 1
+          }
+        }
+      },
+      {
+        "id": "run-retrieval",
+        "detail": {
+          "pipelines": [
+            "dense",
+            "hybrid",
+            "hybrid-reranked",
+            "query-transform"
+          ],
+          "k": 3,
+          "note": "Judgments attach to the original information need; query-transform may retrieve with alternatives."
+        }
+      },
+      {
+        "id": "inspect-ranked-results",
+        "detail": {
+          "byPipeline": {
+            "dense": [
+              {
+                "chunkId": "sample-4",
+                "rank": 1,
+                "relevanceGrade": 3,
+                "isRelevant": true,
+                "title": "NebulaAPI v2.3 asynchronous profile fetches",
+                "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call when many\nUI screens issue profile reads at once. Migration for NebulaAPI v2.3: replace\nsynchronous reads with getUserProfileAsync and handle the Promise. Under high\nconcurrency this avoids freezing the main application thread and is the supported\npath for loading user profiles without blocking the UI."
+              },
+              {
+                "chunkId": "sample-5",
+                "rank": 2,
+                "relevanceGrade": 2,
+                "isRelevant": true,
+                "title": "NebulaAPI legacy synchronous profile reads",
+                "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call."
+              },
+              {
+                "chunkId": "sample-10",
+                "rank": 3,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Caching strategies for user profile data",
+                "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs."
+              }
+            ],
+            "hybrid": [
+              {
+                "chunkId": "sample-4",
+                "rank": 1,
+                "relevanceGrade": 3,
+                "isRelevant": true,
+                "title": "NebulaAPI v2.3 asynchronous profile fetches",
+                "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call when many\nUI screens issue profile reads at once. Migration for NebulaAPI v2.3: replace\nsynchronous reads with getUserProfileAsync and handle the Promise. Under high\nconcurrency this avoids freezing the main application thread and is the supported\npath for loading user profiles without blocking the UI."
+              },
+              {
+                "chunkId": "sample-5",
+                "rank": 2,
+                "relevanceGrade": 2,
+                "isRelevant": true,
+                "title": "NebulaAPI legacy synchronous profile reads",
+                "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call."
+              },
+              {
+                "chunkId": "sample-10",
+                "rank": 3,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Caching strategies for user profile data",
+                "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs."
+              }
+            ],
+            "hybrid-reranked": [
+              {
+                "chunkId": "sample-4",
+                "rank": 1,
+                "relevanceGrade": 3,
+                "isRelevant": true,
+                "title": "NebulaAPI v2.3 asynchronous profile fetches",
+                "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call when many\nUI screens issue profile reads at once. Migration for NebulaAPI v2.3: replace\nsynchronous reads with getUserProfileAsync and handle the Promise. Under high\nconcurrency this avoids freezing the main application thread and is the supported\npath for loading user profiles without blocking the UI."
+              },
+              {
+                "chunkId": "sample-10",
+                "rank": 2,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Caching strategies for user profile data",
+                "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs."
+              },
+              {
+                "chunkId": "sample-3",
+                "rank": 3,
+                "relevanceGrade": 1,
+                "isRelevant": true,
+                "title": "Softening slow backend profile reads",
+                "text": "## Softening slow backend profile reads\n\nClients should treat remote user data as eventually consistent. Prefer an\noptimistic UI, keep a cached profile snapshot, and retry with backoff when the\nservice is sluggish. Do not freeze the main application thread while waiting on\nthe network. No vendor-specific method names are required for this pattern."
+              }
+            ],
+            "query-transform": [
+              {
+                "chunkId": "sample-4",
+                "rank": 1,
+                "relevanceGrade": 3,
+                "isRelevant": true,
+                "title": "NebulaAPI v2.3 asynchronous profile fetches",
+                "text": "## NebulaAPI v2.3 asynchronous profile fetches\n\nNebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call when many\nUI screens issue profile reads at once. Migration for NebulaAPI v2.3: replace\nsynchronous reads with getUserProfileAsync and handle the Promise. Under high\nconcurrency this avoids freezing the main application thread and is the supported\npath for loading user profiles without blocking the UI."
+              },
+              {
+                "chunkId": "sample-10",
+                "rank": 2,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Caching strategies for user profile data",
+                "text": "## Caching strategies for user profile data\n\nEdge clients may cache NebulaAPI profile payloads for up to five minutes.\nInvalidate the cache after logout or role change. Caching reduces load but does\nnot replace choosing the correct NebulaAPI fetch method for concurrent UIs."
+              },
+              {
+                "chunkId": "sample-5",
+                "rank": 3,
+                "relevanceGrade": 2,
+                "isRelevant": true,
+                "title": "NebulaAPI legacy synchronous profile reads",
+                "text": "## NebulaAPI legacy synchronous profile reads\n\nThe older `getUserProfile` API remains documented for NebulaAPI compatibility\nreview. In v2.3 it is deprecated and may throw under high concurrency. Prefer\nmigrating callers away from getUserProfile rather than increasing thread-pool\nsize around the synchronous call."
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "calculate-recall-at-k",
+        "detail": {
+          "byPipeline": {
+            "dense": 0.666667,
+            "hybrid": 0.666667,
+            "hybrid-reranked": 0.666667,
+            "query-transform": 0.666667
+          },
+          "formula": "Recall@K = |relevant \u2229 top-K| / |relevant|"
+        }
+      },
+      {
+        "id": "calculate-rr-mrr",
+        "detail": {
+          "reciprocalRankByPipeline": {
+            "dense": 1.0,
+            "hybrid": 1.0,
+            "hybrid-reranked": 1.0,
+            "query-transform": 1.0
+          },
+          "firstRelevantRankByPipeline": {
+            "dense": 1,
+            "hybrid": 1,
+            "hybrid-reranked": 1,
+            "query-transform": 1
+          },
+          "formula": "RR = 1/rank(first relevant); MRR = mean RR"
+        }
+      },
+      {
+        "id": "calculate-ndcg-at-k",
+        "detail": {
+          "byPipeline": {
+            "dense": {
+              "dcgAtK": 8.892789,
+              "idcgAtK": 9.392789,
+              "ndcgAtK": 0.946768
+            },
+            "hybrid": {
+              "dcgAtK": 8.892789,
+              "idcgAtK": 9.392789,
+              "ndcgAtK": 0.946768
+            },
+            "hybrid-reranked": {
+              "dcgAtK": 7.5,
+              "idcgAtK": 9.392789,
+              "ndcgAtK": 0.798485
+            },
+            "query-transform": {
+              "dcgAtK": 8.5,
+              "idcgAtK": 9.392789,
+              "ndcgAtK": 0.90495
+            }
+          },
+          "formula": "DCG@K = \u03a3 (2^rel_i - 1) / log2(i+1); nDCG@K = DCG@K / IDCG@K"
+        }
+      },
+      {
+        "id": "compare-pipelines",
+        "detail": {
+          "aggregatesOverFullEvalSet": [
+            {
+              "pipeline": "dense",
+              "k": 3,
+              "queryCount": 8,
+              "meanRecallAtK": 0.916667,
+              "mrr": 0.916667,
+              "meanNdcgAtK": 0.921146,
+              "totalLatencyMs": 4121,
+              "provenance": "computed"
+            },
+            {
+              "pipeline": "hybrid",
+              "k": 3,
+              "queryCount": 8,
+              "meanRecallAtK": 0.791667,
+              "mrr": 0.875,
+              "meanNdcgAtK": 0.858646,
+              "totalLatencyMs": 2866,
+              "provenance": "computed"
+            },
+            {
+              "pipeline": "hybrid-reranked",
+              "k": 3,
+              "queryCount": 8,
+              "meanRecallAtK": 0.75,
+              "mrr": 0.875,
+              "meanNdcgAtK": 0.832424,
+              "totalLatencyMs": 3957,
+              "provenance": "computed"
+            },
+            {
+              "pipeline": "query-transform",
+              "k": 3,
+              "queryCount": 8,
+              "meanRecallAtK": 0.75,
+              "mrr": 0.875,
+              "meanNdcgAtK": 0.845732,
+              "totalLatencyMs": 19176,
+              "provenance": "computed"
+            }
+          ],
+          "thisQuery": {
+            "recallAtK": {
+              "dense": 0.666667,
+              "hybrid": 0.666667,
+              "hybrid-reranked": 0.666667,
+              "query-transform": 0.666667
+            },
+            "ndcgAtK": {
+              "dense": 0.946768,
+              "hybrid": 0.946768,
+              "hybrid-reranked": 0.798485,
+              "query-transform": 0.90495
+            }
+          }
+        }
+      },
+      {
+        "id": "inspect-failures",
+        "detail": {
+          "byPipeline": {
+            "dense": {
+              "label": "MIXED",
+              "firstRelevantRank": 1,
+              "missedIds": [
+                "sample-3"
+              ],
+              "lateIds": [
+                "sample-5"
+              ],
+              "goodIds": [
+                "sample-4"
+              ],
+              "explanation": "Retrieved some relevant evidence but missed ['sample-3']; first relevant at rank 1."
+            },
+            "hybrid": {
+              "label": "MIXED",
+              "firstRelevantRank": 1,
+              "missedIds": [
+                "sample-3"
+              ],
+              "lateIds": [
+                "sample-5"
+              ],
+              "goodIds": [
+                "sample-4"
+              ],
+              "explanation": "Retrieved some relevant evidence but missed ['sample-3']; first relevant at rank 1."
+            },
+            "hybrid-reranked": {
+              "label": "MIXED",
+              "firstRelevantRank": 1,
+              "missedIds": [
+                "sample-5"
+              ],
+              "lateIds": [
+                "sample-3"
+              ],
+              "goodIds": [
+                "sample-4"
+              ],
+              "explanation": "Retrieved some relevant evidence but missed ['sample-5']; first relevant at rank 1."
+            },
+            "query-transform": {
+              "label": "MIXED",
+              "firstRelevantRank": 1,
+              "missedIds": [
+                "sample-3"
+              ],
+              "lateIds": [
+                "sample-5"
+              ],
+              "goodIds": [
+                "sample-4"
+              ],
+              "explanation": "Retrieved some relevant evidence but missed ['sample-3']; first relevant at rank 1."
+            }
+          }
+        }
+      },
+      {
+        "id": "evaluation-summary",
+        "detail": {
+          "teachingClass": "RANKING_SENSITIVITY",
+          "selectionNote": "Measured: Recall@3 stays 0.667 across pipelines (primary sample-4 at rank 1), while nDCG@3 moves (~0.947 \u2192 ~0.798) when secondary graded evidence is reordered. Not a ranking improvement \u2014 ranking sensitivity: same Recall, different nDCG.",
+          "disclaimer": "Small teaching evaluation set \u2014 not a production benchmark of retrieval systems."
+        }
+      }
+    ],
+    "fullEvaluationAggregates": [
+      {
+        "pipeline": "dense",
+        "k": 3,
+        "queryCount": 8,
+        "meanRecallAtK": 0.916667,
+        "mrr": 0.916667,
+        "meanNdcgAtK": 0.921146,
+        "totalLatencyMs": 4121,
+        "provenance": "computed"
+      },
+      {
+        "pipeline": "hybrid",
+        "k": 3,
+        "queryCount": 8,
+        "meanRecallAtK": 0.791667,
+        "mrr": 0.875,
+        "meanNdcgAtK": 0.858646,
+        "totalLatencyMs": 2866,
+        "provenance": "computed"
+      },
+      {
+        "pipeline": "hybrid-reranked",
+        "k": 3,
+        "queryCount": 8,
+        "meanRecallAtK": 0.75,
+        "mrr": 0.875,
+        "meanNdcgAtK": 0.832424,
+        "totalLatencyMs": 3957,
+        "provenance": "computed"
+      },
+      {
+        "pipeline": "query-transform",
+        "k": 3,
+        "queryCount": 8,
+        "meanRecallAtK": 0.75,
+        "mrr": 0.875,
+        "meanNdcgAtK": 0.845732,
+        "totalLatencyMs": 19176,
+        "provenance": "computed"
+      }
+    ],
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 4488,
+      "bm25IndexMs": 1,
+      "rerankerLoadMs": 45798,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "recall-at-k",
+      "mrr",
+      "ndcg",
+      "bm25",
+      "rrf",
+      "cross-encoder"
+    ],
+    "relatedContent": [
+      "rag",
+      "retrieval-evaluation",
+      "hybrid-retrieval",
+      "query-transformation"
+    ],
+    "cookbook": {
+      "path": "examples/rag/05-retrieval-evaluation"
+    }
+  },
+  {
+    "labId": "retrieval-evaluation",
+    "traceId": "regression-econn-42-remediation",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-05T05:35:46Z",
+    "metricsProvenance": "measured",
+    "teachingClass": "REGRESSION",
+    "selectionNote": "Measured: dense/hybrid Recall@3=0.667 (sample-2 + sample-8); hybrid-reranked/query-transform drop to 0.333 and lower nDCG while RR stays 1.0. An advanced pipeline can regress a specific information need on this teaching case.",
+    "input": {
+      "queryId": "econn-42-remediation",
+      "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+      "k": 3,
+      "relevanceJudgments": {
+        "sample-2": 3,
+        "sample-6": 1,
+        "sample-8": 1
+      },
+      "rationale": {
+        "sample-2": "Primary remediation playbook for E_CONN_42 (rotate gateway client certificate, reachability, session flush).",
+        "sample-6": "Calendar TLS rotation is related certificate maintenance but explicitly is not the live E_CONN_42 fix.",
+        "sample-8": "General intermittent TLS troubleshooting; points to E_CONN_42 section when that code appears, but is not the remediation itself."
+      },
+      "config": {
+        "chunkSize": 520,
+        "chunkOverlap": 40,
+        "denseTopK": 8,
+        "lexicalTopK": 8,
+        "candidateK": 5,
+        "evalK": 3,
+        "rrfK": 60,
+        "maxAlternativeQueries": 2,
+        "embeddingModel": "text-embedding-3-small",
+        "rerankerModel": "cross-encoder/ms-marco-MiniLM-L6-v2",
+        "queryTransformerModel": "gpt-4o-mini"
+      }
+    },
+    "corpus": {
+      "source": "data/sample.md",
+      "chunkCount": 24
+    },
+    "relevantChunks": [
+      {
+        "chunkId": "sample-2",
+        "grade": 3,
+        "rationale": "Primary remediation playbook for E_CONN_42 (rotate gateway client certificate, reachability, session flush).",
+        "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation."
+      },
+      {
+        "chunkId": "sample-6",
+        "grade": 1,
+        "rationale": "Calendar TLS rotation is related certificate maintenance but explicitly is not the live E_CONN_42 fix.",
+        "text": "## Gateway TLS certificate rotation schedule\n\nProduction EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar. Operators schedule the rotation window, stage the next certificate in\n`/etc/acme/gateway/certs/next`, and promote it with `edgectl cert promote`.\nCalendar rotation is preventive maintenance. It is not the remediation procedure\nfor live E_CONN_42 handshake failures."
+      },
+      {
+        "chunkId": "sample-8",
+        "grade": 1,
+        "rationale": "General intermittent TLS troubleshooting; points to E_CONN_42 section when that code appears, but is not the remediation itself.",
+        "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist."
+      }
+    ],
+    "pipelines": [
+      {
+        "queryId": "econn-42-remediation",
+        "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+        "pipeline": "dense",
+        "k": 3,
+        "retrieved": [
+          {
+            "chunkId": "sample-2",
+            "rank": 1,
+            "relevanceGrade": 3,
+            "isRelevant": true,
+            "title": "Error code E_CONN_42",
+            "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation."
+          },
+          {
+            "chunkId": "sample-7",
+            "rank": 2,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "EdgeGateway timeout configuration",
+            "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42."
+          },
+          {
+            "chunkId": "sample-8",
+            "rank": 3,
+            "relevanceGrade": 1,
+            "isRelevant": true,
+            "title": "Troubleshooting intermittent TLS handshake failures",
+            "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist."
+          }
+        ],
+        "metrics": {
+          "recallAtK": 0.666667,
+          "reciprocalRank": 1.0,
+          "firstRelevantRank": 1,
+          "dcgAtK": 7.5,
+          "idcgAtK": 8.13093,
+          "ndcgAtK": 0.922404,
+          "provenance": "computed"
+        },
+        "failure": {
+          "label": "MIXED",
+          "firstRelevantRank": 1,
+          "missedIds": [
+            "sample-6"
+          ],
+          "lateIds": [
+            "sample-8"
+          ],
+          "goodIds": [
+            "sample-2"
+          ],
+          "explanation": "Retrieved some relevant evidence but missed ['sample-6']; first relevant at rank 1."
+        },
+        "latencyMs": {
+          "retrieval_ms": 361,
+          "total_ms": 361
+        }
+      },
+      {
+        "queryId": "econn-42-remediation",
+        "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+        "pipeline": "hybrid",
+        "k": 3,
+        "retrieved": [
+          {
+            "chunkId": "sample-2",
+            "rank": 1,
+            "relevanceGrade": 3,
+            "isRelevant": true,
+            "title": "Error code E_CONN_42",
+            "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation."
+          },
+          {
+            "chunkId": "sample-7",
+            "rank": 2,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "EdgeGateway timeout configuration",
+            "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42."
+          },
+          {
+            "chunkId": "sample-8",
+            "rank": 3,
+            "relevanceGrade": 1,
+            "isRelevant": true,
+            "title": "Troubleshooting intermittent TLS handshake failures",
+            "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist."
+          }
+        ],
+        "metrics": {
+          "recallAtK": 0.666667,
+          "reciprocalRank": 1.0,
+          "firstRelevantRank": 1,
+          "dcgAtK": 7.5,
+          "idcgAtK": 8.13093,
+          "ndcgAtK": 0.922404,
+          "provenance": "computed"
+        },
+        "failure": {
+          "label": "MIXED",
+          "firstRelevantRank": 1,
+          "missedIds": [
+            "sample-6"
+          ],
+          "lateIds": [
+            "sample-8"
+          ],
+          "goodIds": [
+            "sample-2"
+          ],
+          "explanation": "Retrieved some relevant evidence but missed ['sample-6']; first relevant at rank 1."
+        },
+        "latencyMs": {
+          "retrieval_ms": 361,
+          "total_ms": 361
+        }
+      },
+      {
+        "queryId": "econn-42-remediation",
+        "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+        "pipeline": "hybrid-reranked",
+        "k": 3,
+        "retrieved": [
+          {
+            "chunkId": "sample-2",
+            "rank": 1,
+            "relevanceGrade": 3,
+            "isRelevant": true,
+            "title": "Error code E_CONN_42",
+            "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation."
+          },
+          {
+            "chunkId": "sample-7",
+            "rank": 2,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "EdgeGateway timeout configuration",
+            "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42."
+          },
+          {
+            "chunkId": "sample-11",
+            "rank": 3,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Relay idle session keepalive termination",
+            "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss."
+          }
+        ],
+        "metrics": {
+          "recallAtK": 0.333333,
+          "reciprocalRank": 1.0,
+          "firstRelevantRank": 1,
+          "dcgAtK": 7.0,
+          "idcgAtK": 8.13093,
+          "ndcgAtK": 0.86091,
+          "provenance": "computed"
+        },
+        "failure": {
+          "label": "MIXED",
+          "firstRelevantRank": 1,
+          "missedIds": [
+            "sample-6",
+            "sample-8"
+          ],
+          "lateIds": [],
+          "goodIds": [
+            "sample-2"
+          ],
+          "explanation": "Retrieved some relevant evidence but missed ['sample-6', 'sample-8']; first relevant at rank 1."
+        },
+        "latencyMs": {
+          "retrieval_ms": 362,
+          "rerank_ms": 52,
+          "total_ms": 414
+        }
+      },
+      {
+        "queryId": "econn-42-remediation",
+        "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+        "pipeline": "query-transform",
+        "k": 3,
+        "retrieved": [
+          {
+            "chunkId": "sample-2",
+            "rank": 1,
+            "relevanceGrade": 3,
+            "isRelevant": true,
+            "title": "Error code E_CONN_42",
+            "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation."
+          },
+          {
+            "chunkId": "sample-7",
+            "rank": 2,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "EdgeGateway timeout configuration",
+            "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42."
+          },
+          {
+            "chunkId": "sample-11",
+            "rank": 3,
+            "relevanceGrade": 0,
+            "isRelevant": false,
+            "title": "Relay idle session keepalive termination",
+            "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss."
+          }
+        ],
+        "metrics": {
+          "recallAtK": 0.333333,
+          "reciprocalRank": 1.0,
+          "firstRelevantRank": 1,
+          "dcgAtK": 7.0,
+          "idcgAtK": 8.13093,
+          "ndcgAtK": 0.86091,
+          "provenance": "computed"
+        },
+        "failure": {
+          "label": "MIXED",
+          "firstRelevantRank": 1,
+          "missedIds": [
+            "sample-6",
+            "sample-8"
+          ],
+          "lateIds": [],
+          "goodIds": [
+            "sample-2"
+          ],
+          "explanation": "Retrieved some relevant evidence but missed ['sample-6', 'sample-8']; first relevant at rank 1."
+        },
+        "latencyMs": {
+          "transform_ms": 1306,
+          "retrieval_ms": 1025,
+          "rerank_ms": 63,
+          "total_ms": 2394
+        }
+      }
+    ],
+    "observedComparison": {
+      "recallAtKByPipeline": {
+        "dense": 0.666667,
+        "hybrid": 0.666667,
+        "hybrid-reranked": 0.333333,
+        "query-transform": 0.333333
+      },
+      "ndcgAtKByPipeline": {
+        "dense": 0.922404,
+        "hybrid": 0.922404,
+        "hybrid-reranked": 0.86091,
+        "query-transform": 0.86091
+      },
+      "firstRelevantRankByPipeline": {
+        "dense": 1,
+        "hybrid": 1,
+        "hybrid-reranked": 1,
+        "query-transform": 1
+      },
+      "provenance": "derived-from-measured"
+    },
+    "steps": [
+      {
+        "id": "evaluation-dataset",
+        "detail": {
+          "queryId": "econn-42-remediation",
+          "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+          "datasetSize": 8,
+          "description": "Teaching evaluation set for the Acme Edge Platform handbook. Not a production benchmark."
+        }
+      },
+      {
+        "id": "relevance-judgments",
+        "detail": {
+          "relevance": {
+            "sample-2": 3,
+            "sample-6": 1,
+            "sample-8": 1
+          },
+          "rationale": {
+            "sample-2": "Primary remediation playbook for E_CONN_42 (rotate gateway client certificate, reachability, session flush).",
+            "sample-6": "Calendar TLS rotation is related certificate maintenance but explicitly is not the live E_CONN_42 fix.",
+            "sample-8": "General intermittent TLS troubleshooting; points to E_CONN_42 section when that code appears, but is not the remediation itself."
+          },
+          "scheme": {
+            "type": "graded",
+            "levels": {
+              "3": "Directly answers the information need",
+              "2": "Strongly related supporting evidence",
+              "1": "Tangentially related / easy to confuse with the answer",
+              "0": "Not relevant (implicit for unlabeled chunks)"
+            },
+            "binary_threshold": 1
+          }
+        }
+      },
+      {
+        "id": "run-retrieval",
+        "detail": {
+          "pipelines": [
+            "dense",
+            "hybrid",
+            "hybrid-reranked",
+            "query-transform"
+          ],
+          "k": 3,
+          "note": "Judgments attach to the original information need; query-transform may retrieve with alternatives."
+        }
+      },
+      {
+        "id": "inspect-ranked-results",
+        "detail": {
+          "byPipeline": {
+            "dense": [
+              {
+                "chunkId": "sample-2",
+                "rank": 1,
+                "relevanceGrade": 3,
+                "isRelevant": true,
+                "title": "Error code E_CONN_42",
+                "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation."
+              },
+              {
+                "chunkId": "sample-7",
+                "rank": 2,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "EdgeGateway timeout configuration",
+                "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42."
+              },
+              {
+                "chunkId": "sample-8",
+                "rank": 3,
+                "relevanceGrade": 1,
+                "isRelevant": true,
+                "title": "Troubleshooting intermittent TLS handshake failures",
+                "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist."
+              }
+            ],
+            "hybrid": [
+              {
+                "chunkId": "sample-2",
+                "rank": 1,
+                "relevanceGrade": 3,
+                "isRelevant": true,
+                "title": "Error code E_CONN_42",
+                "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation."
+              },
+              {
+                "chunkId": "sample-7",
+                "rank": 2,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "EdgeGateway timeout configuration",
+                "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42."
+              },
+              {
+                "chunkId": "sample-8",
+                "rank": 3,
+                "relevanceGrade": 1,
+                "isRelevant": true,
+                "title": "Troubleshooting intermittent TLS handshake failures",
+                "text": "## Troubleshooting intermittent TLS handshake failures\n\nWhen TLS handshakes fail intermittently without a stable error code, capture\npacket traces, verify NTP clock skew under 2 seconds, and confirm intermediate\nCA bundles are complete. This playbook covers undiagnosed handshake flakiness.\nIf the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation\ninstead of this general checklist."
+              }
+            ],
+            "hybrid-reranked": [
+              {
+                "chunkId": "sample-2",
+                "rank": 1,
+                "relevanceGrade": 3,
+                "isRelevant": true,
+                "title": "Error code E_CONN_42",
+                "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation."
+              },
+              {
+                "chunkId": "sample-7",
+                "rank": 2,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "EdgeGateway timeout configuration",
+                "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42."
+              },
+              {
+                "chunkId": "sample-11",
+                "rank": 3,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Relay idle session keepalive termination",
+                "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss."
+              }
+            ],
+            "query-transform": [
+              {
+                "chunkId": "sample-2",
+                "rank": 1,
+                "relevanceGrade": 3,
+                "isRelevant": true,
+                "title": "Error code E_CONN_42",
+                "text": "## Error code E_CONN_42\n\nE_CONN_42. EdgeGateway. TLS handshake against regional relay failed.\nRemediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process; confirm relay-west.acme.internal is reachable on port\n8443; run `edgectl session flush`. Do not treat E_CONN_42 as a generic timeout,\npacket-loss incident, or routine certificate calendar rotation."
+              },
+              {
+                "chunkId": "sample-7",
+                "rank": 2,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "EdgeGateway timeout configuration",
+                "text": "## EdgeGateway timeout configuration\n\nEdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000). Raise these values only when\nlatency to relay-west.acme.internal is known to be high. Timeout configuration\ndoes not fix certificate mismatch errors and should not be used as the first\nresponse to E_CONN_42."
+              },
+              {
+                "chunkId": "sample-11",
+                "rank": 3,
+                "relevanceGrade": 0,
+                "isRelevant": false,
+                "title": "Relay idle session keepalive termination",
+                "text": "## Relay idle session keepalive termination\n\nRegional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail (default 3).\nOperators typically observe TCP `RST` or `ECONNRESET` against\nrelay-west.acme.internal after long idle periods with no application traffic.\nRemediation: set `relay_keepalive_interval_ms` to 15000 or lower, confirm UDP\n4500 is not filtered, and review `edgectl relay probe --keepalive`. This\nplaybook addresses idle keepalive termination only \u2014 not E_CONN_42 certificate\nfailures and not customer LAN packet loss."
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "calculate-recall-at-k",
+        "detail": {
+          "byPipeline": {
+            "dense": 0.666667,
+            "hybrid": 0.666667,
+            "hybrid-reranked": 0.333333,
+            "query-transform": 0.333333
+          },
+          "formula": "Recall@K = |relevant \u2229 top-K| / |relevant|"
+        }
+      },
+      {
+        "id": "calculate-rr-mrr",
+        "detail": {
+          "reciprocalRankByPipeline": {
+            "dense": 1.0,
+            "hybrid": 1.0,
+            "hybrid-reranked": 1.0,
+            "query-transform": 1.0
+          },
+          "firstRelevantRankByPipeline": {
+            "dense": 1,
+            "hybrid": 1,
+            "hybrid-reranked": 1,
+            "query-transform": 1
+          },
+          "formula": "RR = 1/rank(first relevant); MRR = mean RR"
+        }
+      },
+      {
+        "id": "calculate-ndcg-at-k",
+        "detail": {
+          "byPipeline": {
+            "dense": {
+              "dcgAtK": 7.5,
+              "idcgAtK": 8.13093,
+              "ndcgAtK": 0.922404
+            },
+            "hybrid": {
+              "dcgAtK": 7.5,
+              "idcgAtK": 8.13093,
+              "ndcgAtK": 0.922404
+            },
+            "hybrid-reranked": {
+              "dcgAtK": 7.0,
+              "idcgAtK": 8.13093,
+              "ndcgAtK": 0.86091
+            },
+            "query-transform": {
+              "dcgAtK": 7.0,
+              "idcgAtK": 8.13093,
+              "ndcgAtK": 0.86091
+            }
+          },
+          "formula": "DCG@K = \u03a3 (2^rel_i - 1) / log2(i+1); nDCG@K = DCG@K / IDCG@K"
+        }
+      },
+      {
+        "id": "compare-pipelines",
+        "detail": {
+          "aggregatesOverFullEvalSet": [
+            {
+              "pipeline": "dense",
+              "k": 3,
+              "queryCount": 8,
+              "meanRecallAtK": 0.916667,
+              "mrr": 0.916667,
+              "meanNdcgAtK": 0.921146,
+              "totalLatencyMs": 4121,
+              "provenance": "computed"
+            },
+            {
+              "pipeline": "hybrid",
+              "k": 3,
+              "queryCount": 8,
+              "meanRecallAtK": 0.791667,
+              "mrr": 0.875,
+              "meanNdcgAtK": 0.858646,
+              "totalLatencyMs": 2866,
+              "provenance": "computed"
+            },
+            {
+              "pipeline": "hybrid-reranked",
+              "k": 3,
+              "queryCount": 8,
+              "meanRecallAtK": 0.75,
+              "mrr": 0.875,
+              "meanNdcgAtK": 0.832424,
+              "totalLatencyMs": 3957,
+              "provenance": "computed"
+            },
+            {
+              "pipeline": "query-transform",
+              "k": 3,
+              "queryCount": 8,
+              "meanRecallAtK": 0.75,
+              "mrr": 0.875,
+              "meanNdcgAtK": 0.845732,
+              "totalLatencyMs": 19176,
+              "provenance": "computed"
+            }
+          ],
+          "thisQuery": {
+            "recallAtK": {
+              "dense": 0.666667,
+              "hybrid": 0.666667,
+              "hybrid-reranked": 0.333333,
+              "query-transform": 0.333333
+            },
+            "ndcgAtK": {
+              "dense": 0.922404,
+              "hybrid": 0.922404,
+              "hybrid-reranked": 0.86091,
+              "query-transform": 0.86091
+            }
+          }
+        }
+      },
+      {
+        "id": "inspect-failures",
+        "detail": {
+          "byPipeline": {
+            "dense": {
+              "label": "MIXED",
+              "firstRelevantRank": 1,
+              "missedIds": [
+                "sample-6"
+              ],
+              "lateIds": [
+                "sample-8"
+              ],
+              "goodIds": [
+                "sample-2"
+              ],
+              "explanation": "Retrieved some relevant evidence but missed ['sample-6']; first relevant at rank 1."
+            },
+            "hybrid": {
+              "label": "MIXED",
+              "firstRelevantRank": 1,
+              "missedIds": [
+                "sample-6"
+              ],
+              "lateIds": [
+                "sample-8"
+              ],
+              "goodIds": [
+                "sample-2"
+              ],
+              "explanation": "Retrieved some relevant evidence but missed ['sample-6']; first relevant at rank 1."
+            },
+            "hybrid-reranked": {
+              "label": "MIXED",
+              "firstRelevantRank": 1,
+              "missedIds": [
+                "sample-6",
+                "sample-8"
+              ],
+              "lateIds": [],
+              "goodIds": [
+                "sample-2"
+              ],
+              "explanation": "Retrieved some relevant evidence but missed ['sample-6', 'sample-8']; first relevant at rank 1."
+            },
+            "query-transform": {
+              "label": "MIXED",
+              "firstRelevantRank": 1,
+              "missedIds": [
+                "sample-6",
+                "sample-8"
+              ],
+              "lateIds": [],
+              "goodIds": [
+                "sample-2"
+              ],
+              "explanation": "Retrieved some relevant evidence but missed ['sample-6', 'sample-8']; first relevant at rank 1."
+            }
+          }
+        }
+      },
+      {
+        "id": "evaluation-summary",
+        "detail": {
+          "teachingClass": "REGRESSION",
+          "selectionNote": "Measured: dense/hybrid Recall@3=0.667 (sample-2 + sample-8); hybrid-reranked/query-transform drop to 0.333 and lower nDCG while RR stays 1.0. An advanced pipeline can regress a specific information need on this teaching case.",
+          "disclaimer": "Small teaching evaluation set \u2014 not a production benchmark of retrieval systems."
+        }
+      }
+    ],
+    "fullEvaluationAggregates": [
+      {
+        "pipeline": "dense",
+        "k": 3,
+        "queryCount": 8,
+        "meanRecallAtK": 0.916667,
+        "mrr": 0.916667,
+        "meanNdcgAtK": 0.921146,
+        "totalLatencyMs": 4121,
+        "provenance": "computed"
+      },
+      {
+        "pipeline": "hybrid",
+        "k": 3,
+        "queryCount": 8,
+        "meanRecallAtK": 0.791667,
+        "mrr": 0.875,
+        "meanNdcgAtK": 0.858646,
+        "totalLatencyMs": 2866,
+        "provenance": "computed"
+      },
+      {
+        "pipeline": "hybrid-reranked",
+        "k": 3,
+        "queryCount": 8,
+        "meanRecallAtK": 0.75,
+        "mrr": 0.875,
+        "meanNdcgAtK": 0.832424,
+        "totalLatencyMs": 3957,
+        "provenance": "computed"
+      },
+      {
+        "pipeline": "query-transform",
+        "k": 3,
+        "queryCount": 8,
+        "meanRecallAtK": 0.75,
+        "mrr": 0.875,
+        "meanNdcgAtK": 0.845732,
+        "totalLatencyMs": 19176,
+        "provenance": "computed"
+      }
+    ],
+    "metrics": {
+      "chunkingMs": 0,
+      "corpusEmbeddingMs": 4488,
+      "bm25IndexMs": 1,
+      "rerankerLoadMs": 45798,
+      "provenance": "measured"
+    },
+    "relatedEntities": [
+      "recall-at-k",
+      "mrr",
+      "ndcg",
+      "bm25",
+      "rrf",
+      "cross-encoder"
+    ],
+    "relatedContent": [
+      "rag",
+      "retrieval-evaluation",
+      "hybrid-retrieval",
+      "query-transformation"
+    ],
+    "cookbook": {
+      "path": "examples/rag/05-retrieval-evaluation"
+    }
+  }
+]
