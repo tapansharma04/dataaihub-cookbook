@@ -1,0 +1,918 @@
+{
+  "recordedAt": "2026-08-06T05:31:55Z",
+  "k": 3,
+  "queryCount": 10,
+  "embeddingModel": "text-embedding-3-small",
+  "retrieval": "dense-cosine",
+  "chunkSizeUnit": "characters",
+  "strategyConfig": {
+    "fixed": {
+      "name": "fixed",
+      "label": "Fixed-size",
+      "chunk_size": 400,
+      "chunk_overlap": 50,
+      "size_unit": "characters"
+    },
+    "recursive": {
+      "name": "recursive",
+      "label": "Recursive",
+      "target_size": 400,
+      "chunk_overlap": 50,
+      "size_unit": "characters",
+      "separators": [
+        "\n## ",
+        "\n\n",
+        "\n",
+        ". ",
+        " ",
+        ""
+      ]
+    },
+    "structure": {
+      "name": "structure",
+      "label": "Structure-aware",
+      "boundary": "markdown ## headings (section = chunk)",
+      "size_unit": "characters",
+      "note": "No fixed length target; preserves heading + section body. Section lengths vary with the source handbook."
+    }
+  },
+  "strategies": [
+    "fixed",
+    "recursive",
+    "structure"
+  ],
+  "chunkStats": {
+    "fixed": {
+      "strategy": "fixed",
+      "chunk_count": 24,
+      "avg_chunk_length": 398.625,
+      "min_chunk_length": 371,
+      "max_chunk_length": 400,
+      "total_indexed_chars": 9567,
+      "source_chars": 8422,
+      "overlap_extra_chars": 1145,
+      "evidence_unit_count": 16,
+      "fragmented_evidence_count": 6,
+      "evidence_fragmentation_rate": 0.375
+    },
+    "recursive": {
+      "strategy": "recursive",
+      "chunk_count": 47,
+      "avg_chunk_length": 205.12765957446808,
+      "min_chunk_length": 43,
+      "max_chunk_length": 440,
+      "total_indexed_chars": 9641,
+      "source_chars": 8422,
+      "overlap_extra_chars": 1219,
+      "evidence_unit_count": 16,
+      "fragmented_evidence_count": 3,
+      "evidence_fragmentation_rate": 0.1875
+    },
+    "structure": {
+      "strategy": "structure",
+      "chunk_count": 24,
+      "avg_chunk_length": 348.9583333333333,
+      "min_chunk_length": 221,
+      "max_chunk_length": 593,
+      "total_indexed_chars": 8375,
+      "source_chars": 8422,
+      "overlap_extra_chars": 0,
+      "evidence_unit_count": 16,
+      "fragmented_evidence_count": 0,
+      "evidence_fragmentation_rate": 0.0
+    }
+  },
+  "timingsMs": {
+    "fixed": {
+      "chunking_ms": 0,
+      "embedding_ms": 1494,
+      "index_ms": 1,
+      "embed_index_ms": 1495
+    },
+    "recursive": {
+      "chunking_ms": 1,
+      "embedding_ms": 498,
+      "index_ms": 1,
+      "embed_index_ms": 499
+    },
+    "structure": {
+      "chunking_ms": 0,
+      "embedding_ms": 760,
+      "index_ms": 1,
+      "embed_index_ms": 761
+    }
+  },
+  "aggregates": [
+    {
+      "strategy": "fixed",
+      "k": 3,
+      "queryCount": 10,
+      "meanRecallAtK": 0.775,
+      "mrr": 1.0,
+      "meanNdcgAtK": 0.813931,
+      "meanEvidenceCoverage": 0.816667,
+      "totalRetrievalMs": 3648,
+      "provenance": "computed"
+    },
+    {
+      "strategy": "recursive",
+      "k": 3,
+      "queryCount": 10,
+      "meanRecallAtK": 0.753333,
+      "mrr": 0.9,
+      "meanNdcgAtK": 0.777521,
+      "meanEvidenceCoverage": 0.866667,
+      "totalRetrievalMs": 3584,
+      "provenance": "computed"
+    },
+    {
+      "strategy": "structure",
+      "k": 3,
+      "queryCount": 10,
+      "meanRecallAtK": 0.933333,
+      "mrr": 0.933333,
+      "meanNdcgAtK": 0.936917,
+      "meanEvidenceCoverage": 0.941667,
+      "totalRetrievalMs": 3424,
+      "provenance": "computed"
+    }
+  ],
+  "exampleCases": [
+    {
+      "traceId": "boundary-auth-idle-timeout",
+      "queryId": "auth-idle-timeout",
+      "exampleClass": "BOUNDARY",
+      "selectionNote": "Measured: structure evidence_coverage=1.000 Recall@K=1.000 vs fixed coverage=0.500 Recall@K=0.500. Chunk boundaries changed which evidence units stayed intact."
+    },
+    {
+      "traceId": "context-auth-vs-sso",
+      "queryId": "auth-vs-sso",
+      "exampleClass": "CONTEXT_PRESERVED",
+      "selectionNote": "Measured: structure RR=1.0 while fixed RR=1.000, recursive RR=0.500. Keeping heading+body together ranked primary evidence first."
+    },
+    {
+      "traceId": "equivalent-dns-relay",
+      "queryId": "dns-relay",
+      "exampleClass": "EQUIVALENT",
+      "selectionNote": "Measured: Recall@K identical (1.000) and nDCG@K within 0.05 across strategies ({'fixed': 1.0, 'recursive': 1.0, 'structure': 1.0}). Different chunk texts, equivalent retrieval quality."
+    }
+  ],
+  "perQuery": {
+    "fixed": {
+      "auth-idle-timeout": {
+        "retrievedIds": [
+          "fixed-0014",
+          "fixed-0021",
+          "fixed-0022"
+        ],
+        "grades": [
+          1,
+          0,
+          0
+        ],
+        "scores": [
+          0.285231,
+          0.278633,
+          0.274154
+        ],
+        "recallAtK": 0.5,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 0.131046,
+        "evidenceCoverage": 0.5,
+        "latencyMs": {
+          "retrieval_ms": 359,
+          "total_ms": 359
+        }
+      },
+      "econn-42-remediation": {
+        "retrievedIds": [
+          "fixed-0002",
+          "fixed-0003",
+          "fixed-0007"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.744771,
+          0.546085,
+          0.525127
+        ],
+        "recallAtK": 0.333333,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 0.86091,
+        "evidenceCoverage": 0.5,
+        "latencyMs": {
+          "retrieval_ms": 334,
+          "total_ms": 334
+        }
+      },
+      "profile-async": {
+        "retrievedIds": [
+          "fixed-0004",
+          "fixed-0005",
+          "fixed-0010"
+        ],
+        "grades": [
+          3,
+          2,
+          0
+        ],
+        "scores": [
+          0.677555,
+          0.641017,
+          0.466726
+        ],
+        "recallAtK": 0.5,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 0.946768,
+        "evidenceCoverage": 0.666667,
+        "latencyMs": {
+          "retrieval_ms": 331,
+          "total_ms": 331
+        }
+      },
+      "keepalive-rst": {
+        "retrievedIds": [
+          "fixed-0011",
+          "fixed-0012",
+          "fixed-0007"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.57216,
+          0.555649,
+          0.514761
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 373,
+          "total_ms": 373
+        }
+      },
+      "dns-relay": {
+        "retrievedIds": [
+          "fixed-0017",
+          "fixed-0018",
+          "fixed-0011"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.661196,
+          0.546893,
+          0.443706
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 351,
+          "total_ms": 351
+        }
+      },
+      "rate-limit": {
+        "retrievedIds": [
+          "fixed-0016",
+          "fixed-0013",
+          "fixed-0005"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.537128,
+          0.447228,
+          0.436556
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 367,
+          "total_ms": 367
+        }
+      },
+      "sso-idp-outage": {
+        "retrievedIds": [
+          "fixed-0020",
+          "fixed-0021",
+          "fixed-0009"
+        ],
+        "grades": [
+          1,
+          1,
+          0
+        ],
+        "scores": [
+          0.457194,
+          0.454481,
+          0.312854
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 409,
+          "total_ms": 409
+        }
+      },
+      "nx-sku-mount": {
+        "retrievedIds": [
+          "fixed-0010",
+          "fixed-0009",
+          "fixed-0014"
+        ],
+        "grades": [
+          1,
+          1,
+          1
+        ],
+        "scores": [
+          0.696805,
+          0.541735,
+          0.423784
+        ],
+        "recallAtK": 0.75,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 409,
+          "total_ms": 409
+        }
+      },
+      "timeout-defaults": {
+        "retrievedIds": [
+          "fixed-0007",
+          "fixed-0008",
+          "fixed-0002"
+        ],
+        "grades": [
+          1,
+          1,
+          0
+        ],
+        "scores": [
+          0.66935,
+          0.63889,
+          0.585801
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 347,
+          "total_ms": 347
+        }
+      },
+      "auth-vs-sso": {
+        "retrievedIds": [
+          "fixed-0021",
+          "fixed-0020",
+          "fixed-0014"
+        ],
+        "grades": [
+          1,
+          1,
+          0
+        ],
+        "scores": [
+          0.557025,
+          0.52991,
+          0.385153
+        ],
+        "recallAtK": 0.666667,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 0.200583,
+        "evidenceCoverage": 0.5,
+        "latencyMs": {
+          "retrieval_ms": 368,
+          "total_ms": 368
+        }
+      }
+    },
+    "recursive": {
+      "auth-idle-timeout": {
+        "retrievedIds": [
+          "recursive-0030",
+          "recursive-0035",
+          "recursive-0024"
+        ],
+        "grades": [
+          1,
+          0,
+          0
+        ],
+        "scores": [
+          0.34364,
+          0.310221,
+          0.301378
+        ],
+        "recallAtK": 0.2,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 0.106465,
+        "evidenceCoverage": 0.5,
+        "latencyMs": {
+          "retrieval_ms": 408,
+          "total_ms": 408
+        }
+      },
+      "econn-42-remediation": {
+        "retrievedIds": [
+          "recursive-0008",
+          "recursive-0014",
+          "recursive-0020"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.719446,
+          0.596732,
+          0.519317
+        ],
+        "recallAtK": 0.333333,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 0.86091,
+        "evidenceCoverage": 0.5,
+        "latencyMs": {
+          "retrieval_ms": 335,
+          "total_ms": 335
+        }
+      },
+      "profile-async": {
+        "retrievedIds": [
+          "recursive-0010",
+          "recursive-0011",
+          "recursive-0012"
+        ],
+        "grades": [
+          0,
+          3,
+          2
+        ],
+        "scores": [
+          0.712174,
+          0.671677,
+          0.6463
+        ],
+        "recallAtK": 0.666667,
+        "reciprocalRank": 0.5,
+        "ndcgAtK": 0.629899,
+        "evidenceCoverage": 0.666667,
+        "latencyMs": {
+          "retrieval_ms": 314,
+          "total_ms": 314
+        }
+      },
+      "keepalive-rst": {
+        "retrievedIds": [
+          "recursive-0020",
+          "recursive-0021",
+          "recursive-0023"
+        ],
+        "grades": [
+          1,
+          1,
+          0
+        ],
+        "scores": [
+          0.723802,
+          0.683278,
+          0.638593
+        ],
+        "recallAtK": 0.666667,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 0.765361,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 376,
+          "total_ms": 376
+        }
+      },
+      "dns-relay": {
+        "retrievedIds": [
+          "recursive-0039",
+          "recursive-0014",
+          "recursive-0021"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.796395,
+          0.477357,
+          0.413992
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 408,
+          "total_ms": 408
+        }
+      },
+      "rate-limit": {
+        "retrievedIds": [
+          "recursive-0038",
+          "recursive-0010",
+          "recursive-0012"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.715441,
+          0.5457,
+          0.465249
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 331,
+          "total_ms": 331
+        }
+      },
+      "sso-idp-outage": {
+        "retrievedIds": [
+          "recursive-0043",
+          "recursive-0034",
+          "recursive-0035"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.674741,
+          0.394081,
+          0.389468
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 389,
+          "total_ms": 389
+        }
+      },
+      "nx-sku-mount": {
+        "retrievedIds": [
+          "recursive-0017",
+          "recursive-0036",
+          "recursive-0046"
+        ],
+        "grades": [
+          3,
+          1,
+          0
+        ],
+        "scores": [
+          0.787259,
+          0.536811,
+          0.447667
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 331,
+          "total_ms": 331
+        }
+      },
+      "timeout-defaults": {
+        "retrievedIds": [
+          "recursive-0014",
+          "recursive-0021",
+          "recursive-0020"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.809647,
+          0.699941,
+          0.656321
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 339,
+          "total_ms": 339
+        }
+      },
+      "auth-vs-sso": {
+        "retrievedIds": [
+          "recursive-0034",
+          "recursive-0043",
+          "recursive-0030"
+        ],
+        "grades": [
+          0,
+          3,
+          1
+        ],
+        "scores": [
+          0.656782,
+          0.64072,
+          0.506549
+        ],
+        "recallAtK": 0.666667,
+        "reciprocalRank": 0.5,
+        "ndcgAtK": 0.41258,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 353,
+          "total_ms": 353
+        }
+      }
+    },
+    "structure": {
+      "auth-idle-timeout": {
+        "retrievedIds": [
+          "structure-0021",
+          "structure-0010",
+          "structure-0012"
+        ],
+        "grades": [
+          0,
+          0,
+          3
+        ],
+        "scores": [
+          0.27786,
+          0.258624,
+          0.255352
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 0.333333,
+        "ndcgAtK": 0.5,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 346,
+          "total_ms": 346
+        }
+      },
+      "econn-42-remediation": {
+        "retrievedIds": [
+          "structure-0002",
+          "structure-0007",
+          "structure-0008"
+        ],
+        "grades": [
+          3,
+          0,
+          1
+        ],
+        "scores": [
+          0.77506,
+          0.59669,
+          0.489892
+        ],
+        "recallAtK": 0.666667,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 0.922404,
+        "evidenceCoverage": 0.75,
+        "latencyMs": {
+          "retrieval_ms": 317,
+          "total_ms": 317
+        }
+      },
+      "profile-async": {
+        "retrievedIds": [
+          "structure-0004",
+          "structure-0005",
+          "structure-0010"
+        ],
+        "grades": [
+          3,
+          2,
+          0
+        ],
+        "scores": [
+          0.671637,
+          0.646307,
+          0.587038
+        ],
+        "recallAtK": 0.666667,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 0.946768,
+        "evidenceCoverage": 0.666667,
+        "latencyMs": {
+          "retrieval_ms": 358,
+          "total_ms": 358
+        }
+      },
+      "keepalive-rst": {
+        "retrievedIds": [
+          "structure-0011",
+          "structure-0007",
+          "structure-0001"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.635238,
+          0.559345,
+          0.501157
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 338,
+          "total_ms": 338
+        }
+      },
+      "dns-relay": {
+        "retrievedIds": [
+          "structure-0016",
+          "structure-0007",
+          "structure-0002"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.796486,
+          0.477404,
+          0.407032
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 331,
+          "total_ms": 331
+        }
+      },
+      "rate-limit": {
+        "retrievedIds": [
+          "structure-0015",
+          "structure-0005",
+          "structure-0010"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.715441,
+          0.46526,
+          0.454139
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 345,
+          "total_ms": 345
+        }
+      },
+      "sso-idp-outage": {
+        "retrievedIds": [
+          "structure-0020",
+          "structure-0008",
+          "structure-0003"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.669883,
+          0.364753,
+          0.275347
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 340,
+          "total_ms": 340
+        }
+      },
+      "nx-sku-mount": {
+        "retrievedIds": [
+          "structure-0009",
+          "structure-0013",
+          "structure-0023"
+        ],
+        "grades": [
+          3,
+          1,
+          0
+        ],
+        "scores": [
+          0.787234,
+          0.552304,
+          0.447676
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 330,
+          "total_ms": 330
+        }
+      },
+      "timeout-defaults": {
+        "retrievedIds": [
+          "structure-0007",
+          "structure-0002",
+          "structure-0011"
+        ],
+        "grades": [
+          3,
+          0,
+          0
+        ],
+        "scores": [
+          0.809635,
+          0.640891,
+          0.640582
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 369,
+          "total_ms": 369
+        }
+      },
+      "auth-vs-sso": {
+        "retrievedIds": [
+          "structure-0020",
+          "structure-0012",
+          "structure-0008"
+        ],
+        "grades": [
+          3,
+          3,
+          0
+        ],
+        "scores": [
+          0.643695,
+          0.405741,
+          0.330329
+        ],
+        "recallAtK": 1.0,
+        "reciprocalRank": 1.0,
+        "ndcgAtK": 1.0,
+        "evidenceCoverage": 1.0,
+        "latencyMs": {
+          "retrieval_ms": 350,
+          "total_ms": 350
+        }
+      }
+    }
+  }
+}

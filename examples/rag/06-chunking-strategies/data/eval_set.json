@@ -1,0 +1,222 @@
+{
+  "description": "Evaluation set for comparing chunking strategies on the Acme Edge Platform handbook. Relevance is frozen against source evidence spans — not strategy-specific chunk IDs. Not a production benchmark.",
+  "corpus": "data/sample.md",
+  "relevance_scheme": {
+    "type": "evidence-derived-graded",
+    "levels": {
+      "3": "Chunk fully contains primary evidence for the information need",
+      "2": "Chunk fully contains substantial supporting evidence",
+      "1": "Chunk fully contains tangential evidence, OR partially overlaps primary/supporting evidence",
+      "0": "No overlap with labeled evidence (implicit)"
+    },
+    "binary_threshold": 1,
+    "grading_rules": [
+      "Full containment of evidence E → chunk grade = evidence_grades[E]",
+      "Partial overlap with labeled evidence → chunk grade at least 1",
+      "Chunk grade = max over applicable evidence rules",
+      "Recall@K / RR use binary relevance: grade >= binary_threshold",
+      "nDCG@K uses the derived graded relevance map for that strategy's chunks"
+    ]
+  },
+  "k_default": 3,
+  "evidence_units": [
+    {
+      "id": "ev-auth-ttl",
+      "section": "NebulaAuth token TTL and silent credential refresh",
+      "anchor": "NebulaAuth access tokens expire after eight hours of inactivity"
+    },
+    {
+      "id": "ev-auth-refresh",
+      "section": "NebulaAuth token TTL and silent credential refresh",
+      "anchor": "Enable silent\ncredential refresh with `nebula auth refresh --background`"
+    },
+    {
+      "id": "ev-econn42-code",
+      "section": "Error code E_CONN_42",
+      "anchor": "E_CONN_42. EdgeGateway. TLS handshake against regional relay failed."
+    },
+    {
+      "id": "ev-econn42-remediation",
+      "section": "Error code E_CONN_42",
+      "anchor": "Remediation for E_CONN_42: rotate the gateway client certificate used by the\nEdgeGateway process"
+    },
+    {
+      "id": "ev-tls-calendar",
+      "section": "Gateway TLS certificate rotation schedule",
+      "anchor": "Production EdgeGateway fleets rotate TLS client certificates on a 90-day\ncalendar"
+    },
+    {
+      "id": "ev-tls-intermittent-pointer",
+      "section": "Troubleshooting intermittent TLS handshake failures",
+      "anchor": "If the gateway logs E_CONN_42 specifically, follow the E_CONN_42 remediation"
+    },
+    {
+      "id": "ev-profile-async",
+      "section": "NebulaAPI v2.3 asynchronous profile fetches",
+      "anchor": "NebulaAPI v2.3 introduces `getUserProfileAsync` as the preferred call"
+    },
+    {
+      "id": "ev-profile-sync-legacy",
+      "section": "NebulaAPI legacy synchronous profile reads",
+      "anchor": "The older `getUserProfile` API remains documented for NebulaAPI compatibility"
+    },
+    {
+      "id": "ev-profile-general",
+      "section": "Softening slow backend profile reads",
+      "anchor": "Clients should treat remote user data as eventually consistent"
+    },
+    {
+      "id": "ev-keepalive",
+      "section": "Relay idle session keepalive termination",
+      "anchor": "Regional relays tear down idle EdgeGateway tunnels when\n`relay_keepalive_miss_threshold` consecutive keepalive probes fail"
+    },
+    {
+      "id": "ev-dns",
+      "section": "DNS resolver settings for edge sites",
+      "anchor": "Edge sites must pin recursive resolvers to the Acme anycast pair\n`dns-a.acme.internal` / `dns-b.acme.internal`"
+    },
+    {
+      "id": "ev-rate-limit",
+      "section": "Rate limits for NebulaAPI public endpoints",
+      "anchor": "Public NebulaAPI endpoints enforce 120 requests per minute per client key"
+    },
+    {
+      "id": "ev-sso-idp",
+      "section": "SSO identity-provider outage runbook",
+      "anchor": "When the corporate IdP is unreachable, interactive SSO sign-in fails with a\nbrowser error page"
+    },
+    {
+      "id": "ev-nx-sku",
+      "section": "Product SKU NX-4400-PRO",
+      "anchor": "NX-4400-PRO ships with dual power supplies. Rack mounting requires NX-RAIL-2.\nSupported firmware baseline for NX-4400-PRO is 14.2.1 or newer"
+    },
+    {
+      "id": "ev-fw-drift",
+      "section": "Firmware baseline drift on NX series appliances",
+      "anchor": "NX-series appliances that fall more than two minor versions behind the fleet\nbaseline emit `FW_DRIFT_WARN`"
+    },
+    {
+      "id": "ev-timeouts",
+      "section": "EdgeGateway timeout configuration",
+      "anchor": "EdgeGateway exposes `relay_connect_timeout_ms` (default 5000) and\n`relay_handshake_timeout_ms` (default 8000)"
+    }
+  ],
+  "queries": [
+    {
+      "id": "auth-idle-timeout",
+      "query": "Why does everyone have to unlock the app again after being idle half a day?",
+      "evidence_grades": {
+        "ev-auth-ttl": 3,
+        "ev-auth-refresh": 2
+      },
+      "rationale": {
+        "ev-auth-ttl": "Primary: eight-hour inactivity TTL explains the idle re-auth symptom.",
+        "ev-auth-refresh": "Supporting remediation: silent credential refresh avoids the prompt."
+      }
+    },
+    {
+      "id": "econn-42-remediation",
+      "query": "How do I fix error E_CONN_42 on the EdgeGateway?",
+      "evidence_grades": {
+        "ev-econn42-remediation": 3,
+        "ev-econn42-code": 2,
+        "ev-tls-calendar": 1,
+        "ev-tls-intermittent-pointer": 1
+      },
+      "rationale": {
+        "ev-econn42-remediation": "Primary remediation steps for E_CONN_42.",
+        "ev-econn42-code": "Defines the error; strong supporting context.",
+        "ev-tls-calendar": "Related certificate maintenance; explicitly not the live fix.",
+        "ev-tls-intermittent-pointer": "Points to E_CONN_42 section; not the remediation itself."
+      }
+    },
+    {
+      "id": "profile-async",
+      "query": "What NebulaAPI call should I use so profile screens do not freeze under load?",
+      "evidence_grades": {
+        "ev-profile-async": 3,
+        "ev-profile-sync-legacy": 2,
+        "ev-profile-general": 1
+      },
+      "rationale": {
+        "ev-profile-async": "Direct answer: getUserProfileAsync.",
+        "ev-profile-sync-legacy": "Documents deprecated sync path and why to migrate.",
+        "ev-profile-general": "General non-blocking guidance without naming the API."
+      }
+    },
+    {
+      "id": "keepalive-rst",
+      "query": "Why do idle EdgeGateway tunnels get RST after long quiet periods?",
+      "evidence_grades": {
+        "ev-keepalive": 3
+      },
+      "rationale": {
+        "ev-keepalive": "Direct answer: keepalive miss threshold tears down idle tunnels."
+      }
+    },
+    {
+      "id": "dns-relay",
+      "query": "Which DNS resolvers should edge sites use so relay hostnames resolve?",
+      "evidence_grades": {
+        "ev-dns": 3
+      },
+      "rationale": {
+        "ev-dns": "Direct answer: pin to dns-a/dns-b.acme.internal."
+      }
+    },
+    {
+      "id": "rate-limit",
+      "query": "What happens when a client exceeds NebulaAPI public request limits?",
+      "evidence_grades": {
+        "ev-rate-limit": 3
+      },
+      "rationale": {
+        "ev-rate-limit": "Direct answer: 120 req/min per client key."
+      }
+    },
+    {
+      "id": "sso-idp-outage",
+      "query": "Interactive SSO sign-in shows a browser error page — what runbook do I follow?",
+      "evidence_grades": {
+        "ev-sso-idp": 3
+      },
+      "rationale": {
+        "ev-sso-idp": "Direct answer: corporate IdP unreachable runbook."
+      }
+    },
+    {
+      "id": "nx-sku-mount",
+      "query": "What rack mount and firmware baseline does the NX-4400-PRO require?",
+      "evidence_grades": {
+        "ev-nx-sku": 3,
+        "ev-fw-drift": 1
+      },
+      "rationale": {
+        "ev-nx-sku": "Direct SKU facts: NX-RAIL-2 and firmware 14.2.1+.",
+        "ev-fw-drift": "Related NX-series firmware maintenance context."
+      }
+    },
+    {
+      "id": "timeout-defaults",
+      "query": "What are the default EdgeGateway relay connect and handshake timeouts?",
+      "evidence_grades": {
+        "ev-timeouts": 3
+      },
+      "rationale": {
+        "ev-timeouts": "Direct answer: relay_connect_timeout_ms=5000, relay_handshake_timeout_ms=8000."
+      }
+    },
+    {
+      "id": "auth-vs-sso",
+      "query": "Is AUTH_TOKEN_EXPIRED the same problem as an IdP outage during SSO sign-in?",
+      "evidence_grades": {
+        "ev-auth-ttl": 3,
+        "ev-sso-idp": 3
+      },
+      "rationale": {
+        "ev-auth-ttl": "Defines AUTH_TOKEN_EXPIRED on already-authenticated Edge clients.",
+        "ev-sso-idp": "Defines IdP outage for interactive SSO — explicitly distinct."
+      }
+    }
+  ]
+}
