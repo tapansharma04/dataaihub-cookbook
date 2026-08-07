@@ -28,6 +28,7 @@ Cookbook →  "How is it implemented?"
 | `reranking` | [`examples/rag/03-reranking`](examples/rag/03-reranking) | Hybrid candidates → cross-encoder → generate |
 | `query-transformation` | [`examples/rag/04-query-transformation`](examples/rag/04-query-transformation) | Multi-query retrieval aggregation → rerank → generate |
 | `retrieval-evaluation` | [`examples/rag/05-retrieval-evaluation`](examples/rag/05-retrieval-evaluation) | Measure retrieval with Recall@K, MRR, and nDCG@K against golden judgments |
+| `chunking-strategies` | [`examples/rag/06-chunking-strategies`](examples/rag/06-chunking-strategies) | Compare fixed-size, recursive, and structure-aware chunking under the same retrieval evaluation setup |
 
 More examples will be added as the RAG path progresses.
 
@@ -54,7 +55,8 @@ dataaihub-cookbook/
 │       ├── 02-hybrid-rag/
 │       ├── 03-reranking/
 │       ├── 04-query-transformation/
-│       └── 05-retrieval-evaluation/
+│       ├── 05-retrieval-evaluation/
+│       └── 06-chunking-strategies/
 ├── shared/
 ├── docs/
 └── scripts/
