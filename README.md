@@ -21,6 +21,8 @@ Cookbook →  "How is it implemented?"
 
 ## Examples
 
+### RAG
+
 | ID | Path | Concept |
 |----|------|---------|
 | `basic-rag` | [`examples/rag/01-basic-rag`](examples/rag/01-basic-rag) | Chunk → embed → retrieve → generate |
@@ -30,7 +32,13 @@ Cookbook →  "How is it implemented?"
 | `retrieval-evaluation` | [`examples/rag/05-retrieval-evaluation`](examples/rag/05-retrieval-evaluation) | Measure retrieval with Recall@K, MRR, and nDCG@K against golden judgments |
 | `chunking-strategies` | [`examples/rag/06-chunking-strategies`](examples/rag/06-chunking-strategies) | Compare fixed-size, recursive, and structure-aware chunking under the same retrieval evaluation setup |
 
-More examples will be added as the RAG path progresses.
+### AI Agents
+
+| ID | Path | Concept |
+|----|------|---------|
+| `tool-calling` | [`examples/agents/01-tool-calling`](examples/agents/01-tool-calling) | Model ↔ tool interaction loop (select → execute → observe → answer) |
+
+More examples will be added as each learning path progresses.
 
 ## Quick start
 
@@ -50,13 +58,15 @@ dataaihub-cookbook/
 ├── README.md
 ├── LICENSE
 ├── examples/
-│   └── rag/
-│       ├── 01-basic-rag/
-│       ├── 02-hybrid-rag/
-│       ├── 03-reranking/
-│       ├── 04-query-transformation/
-│       ├── 05-retrieval-evaluation/
-│       └── 06-chunking-strategies/
+│   ├── rag/
+│   │   ├── 01-basic-rag/
+│   │   ├── 02-hybrid-rag/
+│   │   ├── 03-reranking/
+│   │   ├── 04-query-transformation/
+│   │   ├── 05-retrieval-evaluation/
+│   │   └── 06-chunking-strategies/
+│   └── agents/
+│       └── 01-tool-calling/
 ├── shared/
 ├── docs/
 └── scripts/
