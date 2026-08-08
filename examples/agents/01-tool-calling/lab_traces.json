@@ -1,0 +1,1795 @@
+[
+  {
+    "labId": "tool-calling",
+    "traceId": "direct-answer",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-08T07:52:15Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "case-harness",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "DIRECT_ANSWER",
+    "selectionNote": "Measured case: model finalizes without tool calls. Demonstrates User \u2192 Model \u2192 Answer when no external action is required.",
+    "architecture": {
+      "layout": "tool-calling-loop",
+      "stages": [
+        "user-request",
+        "model-decide",
+        "tool-call",
+        "observation",
+        "next-action",
+        "final-answer"
+      ]
+    },
+    "input": {
+      "request": "In one sentence, what is the difference between a calculator and a weather lookup when answering a user question?",
+      "config": {
+        "chatModel": "case-harness",
+        "modelDriver": "case-harness",
+        "maxModelTurns": 6,
+        "maxToolCallsPerTurn": 4,
+        "toolTimeoutMs": 2000
+      }
+    },
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical service name (billing, payments, or auth).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "service": {
+              "type": "string",
+              "description": "Canonical service name: billing, payments, auth"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "get_user_profile",
+        "description": "Return a user profile by user id (e.g. u-1001).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "description": "User id such as u-1001"
+            }
+          },
+          "required": [
+            "user_id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "search_documentation",
+        "description": "Search internal documentation snippets by keyword query.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Keyword query over internal docs"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "user_request",
+        "turn": null,
+        "detail": {
+          "request": "In one sentence, what is the difference between a calculator and a weather lookup when answering a user question?"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_turn",
+        "turn": 1,
+        "detail": {
+          "decision": "final_answer",
+          "content": "A calculator can be answered from general knowledge, while a weather lookup needs a live tool because conditions change.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 1,
+        "detail": {
+          "answer": "A calculator can be answered from general knowledge, while a weather lookup needs a live tool because conditions change."
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "In one sentence, what is the difference between a calculator and a weather lookup when answering a user question?"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-model_turn",
+        "type": "llm",
+        "title": "Model decide",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "A calculator can be answered from general knowledge, while a weather lookup needs a live tool because conditions change.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-3-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "A calculator can be answered from general knowledge, while a weather lookup needs a live tool because conditions change."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "A calculator can be answered from general knowledge, while a weather lookup needs a live tool because conditions change."
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "modelMs": 0,
+      "toolMs": 0,
+      "modelTurns": 1,
+      "toolCalls": 0,
+      "successfulToolCalls": 0,
+      "failedToolCalls": 0,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable model/tool events for the THINK/DECIDE \u2192 TOOL \u2192 OBSERVE \u2192 NEXT \u2192 ANSWER view. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "USER_REQUEST",
+          "request": "In one sentence, what is the difference between a calculator and a weather lookup when answering a user question?"
+        },
+        {
+          "phase": "THINK_DECIDE",
+          "turn": 1,
+          "decision": "final_answer",
+          "content": "A calculator can be answered from general knowledge, while a weather lookup needs a live tool because conditions change.",
+          "toolCalls": [],
+          "latencyMs": 0,
+          "note": "Observable model output only \u2014 no hidden chain-of-thought."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "skipped": true,
+          "reason": "Model answered without selecting a tool"
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 1,
+          "answer": "A calculator can be answered from general knowledge, while a weather lookup needs a live tool because conditions change.",
+          "toolCallsUsed": false
+        }
+      ]
+    },
+    "relatedEntities": [],
+    "relatedContent": [
+      "agents",
+      "tool-calling"
+    ],
+    "cookbook": {
+      "path": "examples/agents/01-tool-calling"
+    }
+  },
+  {
+    "labId": "tool-calling",
+    "traceId": "single-tool-service-status",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-08T07:52:15Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "case-harness",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "SINGLE_TOOL",
+    "selectionNote": "Measured case: one get_service_status call, then a final answer grounded in the tool observation.",
+    "architecture": {
+      "layout": "tool-calling-loop",
+      "stages": [
+        "user-request",
+        "model-decide",
+        "tool-call",
+        "observation",
+        "next-action",
+        "final-answer"
+      ]
+    },
+    "input": {
+      "request": "What is the current status of the billing service?",
+      "config": {
+        "chatModel": "case-harness",
+        "modelDriver": "case-harness",
+        "maxModelTurns": 6,
+        "maxToolCallsPerTurn": 4,
+        "toolTimeoutMs": 2000
+      }
+    },
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical service name (billing, payments, or auth).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "service": {
+              "type": "string",
+              "description": "Canonical service name: billing, payments, auth"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "get_user_profile",
+        "description": "Return a user profile by user id (e.g. u-1001).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "description": "User id such as u-1001"
+            }
+          },
+          "required": [
+            "user_id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "search_documentation",
+        "description": "Search internal documentation snippets by keyword query.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Keyword query over internal docs"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "user_request",
+        "turn": null,
+        "detail": {
+          "request": "What is the current status of the billing service?"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_turn",
+        "turn": 1,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_billing_1",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"billing\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 1,
+        "detail": {
+          "callId": "call_billing_1",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing"
+          },
+          "validatedArguments": {
+            "service": "billing"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 1,
+        "detail": {
+          "callId": "call_billing_1",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "billing",
+              "status": "operational",
+              "region": "us-east-1",
+              "latencyP99Ms": 120,
+              "incident": null
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_turn",
+        "turn": 2,
+        "detail": {
+          "decision": "final_answer",
+          "content": "Billing is operational in us-east-1 (p99 latency 120ms, no active incident).",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 2,
+        "detail": {
+          "answer": "Billing is operational in us-east-1 (p99 latency 120ms, no active incident)."
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "What is the current status of the billing service?"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-model_turn",
+        "type": "llm",
+        "title": "Model decide",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_billing_1",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"billing\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-3-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_billing_1",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing"
+          },
+          "validatedArguments": {
+            "service": "billing"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-observation",
+        "type": "observation",
+        "title": "Tool observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_billing_1",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "billing",
+              "status": "operational",
+              "region": "us-east-1",
+              "latencyP99Ms": 120,
+              "incident": null
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-model_turn",
+        "type": "llm",
+        "title": "Model decide",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Billing is operational in us-east-1 (p99 latency 120ms, no active incident).",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-6-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Billing is operational in us-east-1 (p99 latency 120ms, no active incident)."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "Billing is operational in us-east-1 (p99 latency 120ms, no active incident)."
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "modelMs": 0,
+      "toolMs": 0,
+      "modelTurns": 2,
+      "toolCalls": 1,
+      "successfulToolCalls": 1,
+      "failedToolCalls": 0,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable model/tool events for the THINK/DECIDE \u2192 TOOL \u2192 OBSERVE \u2192 NEXT \u2192 ANSWER view. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "USER_REQUEST",
+          "request": "What is the current status of the billing service?"
+        },
+        {
+          "phase": "THINK_DECIDE",
+          "turn": 1,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_billing_1",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"billing\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "Observable model output only \u2014 no hidden chain-of-thought."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 1,
+          "callId": "call_billing_1",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing"
+          },
+          "validatedArguments": {
+            "service": "billing"
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 1,
+          "callId": "call_billing_1",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "billing",
+              "status": "operational",
+              "region": "us-east-1",
+              "latencyP99Ms": 120,
+              "incident": null
+            }
+          },
+          "error": null,
+          "latencyMs": 0
+        },
+        {
+          "phase": "NEXT_ACTION",
+          "turn": 1,
+          "fromCallId": "call_billing_1",
+          "awaiting": "model_turn"
+        },
+        {
+          "phase": "THINK_DECIDE",
+          "turn": 2,
+          "decision": "final_answer",
+          "content": "Billing is operational in us-east-1 (p99 latency 120ms, no active incident).",
+          "toolCalls": [],
+          "latencyMs": 0,
+          "note": "Observable model output only \u2014 no hidden chain-of-thought."
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 2,
+          "answer": "Billing is operational in us-east-1 (p99 latency 120ms, no active incident).",
+          "toolCallsUsed": true
+        }
+      ]
+    },
+    "relatedEntities": [],
+    "relatedContent": [
+      "agents",
+      "tool-calling"
+    ],
+    "cookbook": {
+      "path": "examples/agents/01-tool-calling"
+    }
+  },
+  {
+    "labId": "tool-calling",
+    "traceId": "multi-step-user-and-payments",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-08T07:52:15Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "case-harness",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "MULTI_STEP",
+    "selectionNote": "Measured case: get_user_profile then get_service_status, then a final answer that combines both observations.",
+    "architecture": {
+      "layout": "tool-calling-loop",
+      "stages": [
+        "user-request",
+        "model-decide",
+        "tool-call",
+        "observation",
+        "next-action",
+        "final-answer"
+      ]
+    },
+    "input": {
+      "request": "For user u-1001, report their plan/region and whether the payments service issue might affect them. Use tools; do not guess.",
+      "config": {
+        "chatModel": "case-harness",
+        "modelDriver": "case-harness",
+        "maxModelTurns": 6,
+        "maxToolCallsPerTurn": 4,
+        "toolTimeoutMs": 2000
+      }
+    },
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical service name (billing, payments, or auth).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "service": {
+              "type": "string",
+              "description": "Canonical service name: billing, payments, auth"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "get_user_profile",
+        "description": "Return a user profile by user id (e.g. u-1001).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "description": "User id such as u-1001"
+            }
+          },
+          "required": [
+            "user_id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "search_documentation",
+        "description": "Search internal documentation snippets by keyword query.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Keyword query over internal docs"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "user_request",
+        "turn": null,
+        "detail": {
+          "request": "For user u-1001, report their plan/region and whether the payments service issue might affect them. Use tools; do not guess."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_turn",
+        "turn": 1,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_user_1",
+              "name": "get_user_profile",
+              "argumentsJson": "{\"user_id\": \"u-1001\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 1,
+        "detail": {
+          "callId": "call_user_1",
+          "name": "get_user_profile",
+          "arguments": {
+            "user_id": "u-1001"
+          },
+          "validatedArguments": {
+            "user_id": "u-1001"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 1,
+        "detail": {
+          "callId": "call_user_1",
+          "name": "get_user_profile",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "profile": {
+              "userId": "u-1001",
+              "displayName": "Ada Lovelace",
+              "plan": "enterprise",
+              "region": "us-east-1",
+              "roles": [
+                "operator",
+                "billing-viewer"
+              ]
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_turn",
+        "turn": 2,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_1",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 2,
+        "detail": {
+          "callId": "call_payments_1",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 2,
+        "detail": {
+          "callId": "call_payments_1",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_turn",
+        "turn": 3,
+        "detail": {
+          "decision": "final_answer",
+          "content": "User u-1001 (Ada Lovelace) is on the enterprise plan in us-east-1. Payments is degraded there (PAY-2041: elevated card-auth latency), so checkout confirmations may be slower for this user.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 3,
+        "detail": {
+          "answer": "User u-1001 (Ada Lovelace) is on the enterprise plan in us-east-1. Payments is degraded there (PAY-2041: elevated card-auth latency), so checkout confirmations may be slower for this user."
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "For user u-1001, report their plan/region and whether the payments service issue might affect them. Use tools; do not guess."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-model_turn",
+        "type": "llm",
+        "title": "Model decide",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_user_1",
+              "name": "get_user_profile",
+              "argumentsJson": "{\"user_id\": \"u-1001\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-3-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_user_1",
+          "name": "get_user_profile",
+          "arguments": {
+            "user_id": "u-1001"
+          },
+          "validatedArguments": {
+            "user_id": "u-1001"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-observation",
+        "type": "observation",
+        "title": "Tool observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_user_1",
+          "name": "get_user_profile",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "profile": {
+              "userId": "u-1001",
+              "displayName": "Ada Lovelace",
+              "plan": "enterprise",
+              "region": "us-east-1",
+              "roles": [
+                "operator",
+                "billing-viewer"
+              ]
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-model_turn",
+        "type": "llm",
+        "title": "Model decide",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_1",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-6-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_1",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-observation",
+        "type": "observation",
+        "title": "Tool observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_1",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-model_turn",
+        "type": "llm",
+        "title": "Model decide",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "User u-1001 (Ada Lovelace) is on the enterprise plan in us-east-1. Payments is degraded there (PAY-2041: elevated card-auth latency), so checkout confirmations may be slower for this user.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-9-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "User u-1001 (Ada Lovelace) is on the enterprise plan in us-east-1. Payments is degraded there (PAY-2041: elevated card-auth latency), so checkout confirmations may be slower for this user."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "User u-1001 (Ada Lovelace) is on the enterprise plan in us-east-1. Payments is degraded there (PAY-2041: elevated card-auth latency), so checkout confirmations may be slower for this user."
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "modelMs": 0,
+      "toolMs": 0,
+      "modelTurns": 3,
+      "toolCalls": 2,
+      "successfulToolCalls": 2,
+      "failedToolCalls": 0,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable model/tool events for the THINK/DECIDE \u2192 TOOL \u2192 OBSERVE \u2192 NEXT \u2192 ANSWER view. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "USER_REQUEST",
+          "request": "For user u-1001, report their plan/region and whether the payments service issue might affect them. Use tools; do not guess."
+        },
+        {
+          "phase": "THINK_DECIDE",
+          "turn": 1,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_user_1",
+              "name": "get_user_profile",
+              "argumentsJson": "{\"user_id\": \"u-1001\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "Observable model output only \u2014 no hidden chain-of-thought."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 1,
+          "callId": "call_user_1",
+          "name": "get_user_profile",
+          "arguments": {
+            "user_id": "u-1001"
+          },
+          "validatedArguments": {
+            "user_id": "u-1001"
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 1,
+          "callId": "call_user_1",
+          "name": "get_user_profile",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "profile": {
+              "userId": "u-1001",
+              "displayName": "Ada Lovelace",
+              "plan": "enterprise",
+              "region": "us-east-1",
+              "roles": [
+                "operator",
+                "billing-viewer"
+              ]
+            }
+          },
+          "error": null,
+          "latencyMs": 0
+        },
+        {
+          "phase": "NEXT_ACTION",
+          "turn": 1,
+          "fromCallId": "call_user_1",
+          "awaiting": "model_turn"
+        },
+        {
+          "phase": "THINK_DECIDE",
+          "turn": 2,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_payments_1",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "Observable model output only \u2014 no hidden chain-of-thought."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 2,
+          "callId": "call_payments_1",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 2,
+          "callId": "call_payments_1",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "latencyMs": 0
+        },
+        {
+          "phase": "NEXT_ACTION",
+          "turn": 2,
+          "fromCallId": "call_payments_1",
+          "awaiting": "model_turn"
+        },
+        {
+          "phase": "THINK_DECIDE",
+          "turn": 3,
+          "decision": "final_answer",
+          "content": "User u-1001 (Ada Lovelace) is on the enterprise plan in us-east-1. Payments is degraded there (PAY-2041: elevated card-auth latency), so checkout confirmations may be slower for this user.",
+          "toolCalls": [],
+          "latencyMs": 0,
+          "note": "Observable model output only \u2014 no hidden chain-of-thought."
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 3,
+          "answer": "User u-1001 (Ada Lovelace) is on the enterprise plan in us-east-1. Payments is degraded there (PAY-2041: elevated card-auth latency), so checkout confirmations may be slower for this user.",
+          "toolCallsUsed": true
+        }
+      ]
+    },
+    "relatedEntities": [],
+    "relatedContent": [
+      "agents",
+      "tool-calling"
+    ],
+    "cookbook": {
+      "path": "examples/agents/01-tool-calling"
+    }
+  },
+  {
+    "labId": "tool-calling",
+    "traceId": "recovery-invalid-service-name",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-08T07:52:15Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "case-harness",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "ERROR_RECOVERY",
+    "selectionNote": "Measured case: first tool call uses invalid service name 'billing-api' and fails; second call uses canonical 'billing' and succeeds. Demonstrates an error \u2192 corrected tool-call loop; the correction is supplied by the reproducible case harness \u2014 not a claim that a live model independently discovered it. Failure is preserved in the trace.",
+    "architecture": {
+      "layout": "tool-calling-loop",
+      "stages": [
+        "user-request",
+        "model-decide",
+        "tool-call",
+        "observation",
+        "next-action",
+        "final-answer"
+      ]
+    },
+    "input": {
+      "request": "Check status for billing-api and tell me if it is healthy.",
+      "config": {
+        "chatModel": "case-harness",
+        "modelDriver": "case-harness",
+        "maxModelTurns": 6,
+        "maxToolCallsPerTurn": 4,
+        "toolTimeoutMs": 2000
+      }
+    },
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical service name (billing, payments, or auth).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "service": {
+              "type": "string",
+              "description": "Canonical service name: billing, payments, auth"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "get_user_profile",
+        "description": "Return a user profile by user id (e.g. u-1001).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "description": "User id such as u-1001"
+            }
+          },
+          "required": [
+            "user_id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "search_documentation",
+        "description": "Search internal documentation snippets by keyword query.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Keyword query over internal docs"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "user_request",
+        "turn": null,
+        "detail": {
+          "request": "Check status for billing-api and tell me if it is healthy."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_turn",
+        "turn": 1,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_bad_1",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"billing-api\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 1,
+        "detail": {
+          "callId": "call_bad_1",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing-api"
+          },
+          "validatedArguments": {
+            "service": "billing-api"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 1,
+        "detail": {
+          "callId": "call_bad_1",
+          "name": "get_service_status",
+          "ok": false,
+          "result": {
+            "ok": false,
+            "error": {
+              "code": "unknown_service",
+              "message": "Unknown service 'billing-api'",
+              "validServices": [
+                "auth",
+                "billing",
+                "payments"
+              ]
+            }
+          },
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'billing-api'",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_turn",
+        "turn": 2,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_ok_1",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"billing\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 2,
+        "detail": {
+          "callId": "call_ok_1",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing"
+          },
+          "validatedArguments": {
+            "service": "billing"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 2,
+        "detail": {
+          "callId": "call_ok_1",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "billing",
+              "status": "operational",
+              "region": "us-east-1",
+              "latencyP99Ms": 120,
+              "incident": null
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_turn",
+        "turn": 3,
+        "detail": {
+          "decision": "final_answer",
+          "content": "The name 'billing-api' is invalid. Using canonical service 'billing', status is operational in us-east-1.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 3,
+        "detail": {
+          "answer": "The name 'billing-api' is invalid. Using canonical service 'billing', status is operational in us-east-1."
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "Check status for billing-api and tell me if it is healthy."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-model_turn",
+        "type": "llm",
+        "title": "Model decide",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_bad_1",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"billing-api\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-3-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_bad_1",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing-api"
+          },
+          "validatedArguments": {
+            "service": "billing-api"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-observation",
+        "type": "observation",
+        "title": "Tool observation",
+        "status": "error",
+        "detail": {
+          "callId": "call_bad_1",
+          "name": "get_service_status",
+          "ok": false,
+          "result": {
+            "ok": false,
+            "error": {
+              "code": "unknown_service",
+              "message": "Unknown service 'billing-api'",
+              "validServices": [
+                "auth",
+                "billing",
+                "payments"
+              ]
+            }
+          },
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'billing-api'",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-model_turn",
+        "type": "llm",
+        "title": "Model decide",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_ok_1",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"billing\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-6-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_ok_1",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing"
+          },
+          "validatedArguments": {
+            "service": "billing"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-observation",
+        "type": "observation",
+        "title": "Tool observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_ok_1",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "billing",
+              "status": "operational",
+              "region": "us-east-1",
+              "latencyP99Ms": 120,
+              "incident": null
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-model_turn",
+        "type": "llm",
+        "title": "Model decide",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "The name 'billing-api' is invalid. Using canonical service 'billing', status is operational in us-east-1.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-9-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "The name 'billing-api' is invalid. Using canonical service 'billing', status is operational in us-east-1."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "The name 'billing-api' is invalid. Using canonical service 'billing', status is operational in us-east-1."
+    },
+    "errors": [
+      {
+        "callId": "call_bad_1",
+        "name": "get_service_status",
+        "error": {
+          "code": "unknown_service",
+          "message": "Unknown service 'billing-api'",
+          "validServices": [
+            "auth",
+            "billing",
+            "payments"
+          ]
+        }
+      }
+    ],
+    "metrics": {
+      "totalMs": 0,
+      "modelMs": 0,
+      "toolMs": 0,
+      "modelTurns": 3,
+      "toolCalls": 2,
+      "successfulToolCalls": 1,
+      "failedToolCalls": 1,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable model/tool events for the THINK/DECIDE \u2192 TOOL \u2192 OBSERVE \u2192 NEXT \u2192 ANSWER view. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "USER_REQUEST",
+          "request": "Check status for billing-api and tell me if it is healthy."
+        },
+        {
+          "phase": "THINK_DECIDE",
+          "turn": 1,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_bad_1",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"billing-api\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "Observable model output only \u2014 no hidden chain-of-thought."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 1,
+          "callId": "call_bad_1",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing-api"
+          },
+          "validatedArguments": {
+            "service": "billing-api"
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 1,
+          "callId": "call_bad_1",
+          "name": "get_service_status",
+          "ok": false,
+          "result": {
+            "ok": false,
+            "error": {
+              "code": "unknown_service",
+              "message": "Unknown service 'billing-api'",
+              "validServices": [
+                "auth",
+                "billing",
+                "payments"
+              ]
+            }
+          },
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'billing-api'",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "NEXT_ACTION",
+          "turn": 1,
+          "fromCallId": "call_bad_1",
+          "awaiting": "model_turn"
+        },
+        {
+          "phase": "THINK_DECIDE",
+          "turn": 2,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_ok_1",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"billing\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "Observable model output only \u2014 no hidden chain-of-thought."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 2,
+          "callId": "call_ok_1",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing"
+          },
+          "validatedArguments": {
+            "service": "billing"
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 2,
+          "callId": "call_ok_1",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "billing",
+              "status": "operational",
+              "region": "us-east-1",
+              "latencyP99Ms": 120,
+              "incident": null
+            }
+          },
+          "error": null,
+          "latencyMs": 0
+        },
+        {
+          "phase": "NEXT_ACTION",
+          "turn": 2,
+          "fromCallId": "call_ok_1",
+          "awaiting": "model_turn"
+        },
+        {
+          "phase": "THINK_DECIDE",
+          "turn": 3,
+          "decision": "final_answer",
+          "content": "The name 'billing-api' is invalid. Using canonical service 'billing', status is operational in us-east-1.",
+          "toolCalls": [],
+          "latencyMs": 0,
+          "note": "Observable model output only \u2014 no hidden chain-of-thought."
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 3,
+          "answer": "The name 'billing-api' is invalid. Using canonical service 'billing', status is operational in us-east-1.",
+          "toolCallsUsed": true
+        }
+      ],
+      "errorRecoveryNote": "The trace demonstrates an error \u2192 corrected tool-call loop; the correction is supplied by the reproducible case harness."
+    },
+    "relatedEntities": [],
+    "relatedContent": [
+      "agents",
+      "tool-calling"
+    ],
+    "cookbook": {
+      "path": "examples/agents/01-tool-calling"
+    }
+  }
+]
