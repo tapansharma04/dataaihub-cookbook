@@ -37,6 +37,7 @@ Cookbook →  "How is it implemented?"
 | ID | Path | Concept |
 |----|------|---------|
 | `tool-calling` | [`examples/agents/01-tool-calling`](examples/agents/01-tool-calling) | Model ↔ tool interaction loop (select → execute → observe → answer) |
+| `agent-loop` | [`examples/agents/02-agent-loop`](examples/agents/02-agent-loop) | Application-owned runtime loop (state → decide → act → observe → terminate) |
 
 More examples will be added as each learning path progresses.
 
@@ -66,7 +67,8 @@ dataaihub-cookbook/
 │   │   ├── 05-retrieval-evaluation/
 │   │   └── 06-chunking-strategies/
 │   └── agents/
-│       └── 01-tool-calling/
+│       ├── 01-tool-calling/
+│       └── 02-agent-loop/
 ├── shared/
 ├── docs/
 └── scripts/
