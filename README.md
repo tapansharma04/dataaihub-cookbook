@@ -38,6 +38,7 @@ Cookbook →  "How is it implemented?"
 |----|------|---------|
 | `tool-calling` | [`examples/agents/01-tool-calling`](examples/agents/01-tool-calling) | Model ↔ tool interaction loop (select → execute → observe → answer) |
 | `agent-loop` | [`examples/agents/02-agent-loop`](examples/agents/02-agent-loop) | Application-owned runtime loop (state → decide → act → observe → terminate) |
+| `agent-evaluation` | [`examples/agents/03-agent-evaluation`](examples/agents/03-agent-evaluation) | Outcome + trajectory evaluation of a measured agent run under explicit constraints |
 
 More examples will be added as each learning path progresses.
 
@@ -68,7 +69,8 @@ dataaihub-cookbook/
 │   │   └── 06-chunking-strategies/
 │   └── agents/
 │       ├── 01-tool-calling/
-│       └── 02-agent-loop/
+│       ├── 02-agent-loop/
+│       └── 03-agent-evaluation/
 ├── shared/
 ├── docs/
 └── scripts/

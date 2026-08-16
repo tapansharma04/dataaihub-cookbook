@@ -1,0 +1,23 @@
+{
+  "u-1001": {
+    "userId": "u-1001",
+    "displayName": "Ada Lovelace",
+    "plan": "enterprise",
+    "region": "us-east-1",
+    "roles": ["operator", "billing-viewer"]
+  },
+  "u-1002": {
+    "userId": "u-1002",
+    "displayName": "Grace Hopper",
+    "plan": "team",
+    "region": "us-west-2",
+    "roles": ["viewer"]
+  },
+  "u-1003": {
+    "userId": "u-1003",
+    "displayName": "Alan Turing",
+    "plan": "starter",
+    "region": "eu-west-1",
+    "roles": ["viewer"]
+  }
+}

@@ -1,0 +1,4033 @@
+[
+  {
+    "labId": "agent-evaluation",
+    "traceId": "task-success-payments-docs",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-16T17:08:57Z",
+    "metricsProvenance": "measured",
+    "evaluationProvenance": "computed",
+    "provenance": {
+      "model": "case-harness",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "TASK_SUCCESS",
+    "selectionNote": "Measured case: status check, documentation lookup, then a final answer that uses both observations. Outcome and trajectory both satisfy the case criteria.",
+    "architecture": {
+      "layout": "agent-evaluation",
+      "stages": [
+        "user-request",
+        "model-decision",
+        "tool-call",
+        "observation",
+        "final-answer",
+        "termination",
+        "evaluation"
+      ]
+    },
+    "input": {
+      "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know.",
+      "criteria": {
+        "requiredTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "requiredArguments": [
+          {
+            "tool": "get_service_status",
+            "arguments": {
+              "service": "payments"
+            },
+            "argumentContains": {}
+          },
+          {
+            "tool": "search_documentation",
+            "arguments": {},
+            "argumentContains": {
+              "query": "payment"
+            }
+          }
+        ],
+        "requiredAnswerFacts": [
+          "degraded",
+          "PAY-2041",
+          "checkout"
+        ],
+        "forbiddenAnswerFacts": [],
+        "maxUsefulToolCalls": 2,
+        "recoveryExpected": false
+      },
+      "config": {
+        "chatModel": "case-harness",
+        "modelDriver": "case-harness",
+        "maxTurns": 6,
+        "maxToolCallsPerTurn": 4,
+        "toolTimeoutMs": 2000
+      }
+    },
+    "state": {
+      "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know.",
+      "currentTurn": 3,
+      "maxTurns": 6,
+      "decisions": [
+        {
+          "turn": 1,
+          "decision": "tool_call",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_payments_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "finish_reason": "tool_calls",
+          "latency_ms": 0
+        },
+        {
+          "turn": 2,
+          "decision": "tool_call",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "finish_reason": "tool_calls",
+          "latency_ms": 0
+        },
+        {
+          "turn": 3,
+          "decision": "final_answer",
+          "content": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "tool_calls": [],
+          "finish_reason": "stop",
+          "latency_ms": 0
+        }
+      ],
+      "toolCalls": [
+        {
+          "turn": 1,
+          "call_id": "call_payments_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validated_arguments": {
+            "service": "payments"
+          },
+          "latency_ms": 0
+        },
+        {
+          "turn": 2,
+          "call_id": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validated_arguments": {
+            "query": "payments degradation"
+          },
+          "latency_ms": 0
+        }
+      ],
+      "observations": [
+        {
+          "turn": 1,
+          "call_id": "call_payments_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "latency_ms": 0
+        },
+        {
+          "turn": 2,
+          "call_id": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null,
+          "latency_ms": 0
+        }
+      ],
+      "finalAnswer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+      "terminationReason": "final_answer",
+      "errors": [],
+      "messageCount": 6
+    },
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical service name (billing, payments, or auth).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "service": {
+              "type": "string",
+              "description": "Canonical service name: billing, payments, auth"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "get_user_profile",
+        "description": "Return a user profile by user id (e.g. u-1001).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "description": "User id such as u-1001"
+            }
+          },
+          "required": [
+            "user_id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "search_documentation",
+        "description": "Search internal documentation snippets by keyword query.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Keyword query over internal docs"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "user_request",
+        "turn": null,
+        "detail": {
+          "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 1,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 1,
+        "detail": {
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 1,
+        "detail": {
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_decision",
+        "turn": 2,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 2,
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validatedArguments": {
+            "query": "payments degradation"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 2,
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_decision",
+        "turn": 3,
+        "detail": {
+          "decision": "final_answer",
+          "content": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 3,
+        "detail": {
+          "answer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "turn": 3,
+        "detail": {
+          "reason": "final_answer"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-3-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-observation",
+        "type": "observation",
+        "title": "Observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-6-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validatedArguments": {
+            "query": "payments degradation"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-observation",
+        "type": "observation",
+        "title": "Observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-9-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "final_answer"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+      "terminationReason": "final_answer"
+    },
+    "evaluation": {
+      "caseId": "task-success-payments-docs",
+      "provenance": "computed",
+      "taskSuccess": true,
+      "finalAnswerCorrect": true,
+      "trajectorySuccess": true,
+      "toolSelection": {
+        "passed": true,
+        "note": "Required tools were selected.",
+        "requiredTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "observedTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "missingTools": []
+      },
+      "toolArguments": {
+        "passed": true,
+        "note": "Required tool arguments were satisfied by at least one call each.",
+        "checks": [
+          {
+            "tool": "get_service_status",
+            "arguments": {
+              "service": "payments"
+            },
+            "argumentContains": {},
+            "matched": true
+          },
+          {
+            "tool": "search_documentation",
+            "arguments": {},
+            "argumentContains": {
+              "query": "payment"
+            },
+            "matched": true
+          }
+        ],
+        "failedTools": []
+      },
+      "toolExecution": {
+        "passed": true,
+        "note": "Required tools produced at least one successful observation each.",
+        "successfulTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "failedToolNames": [],
+        "missingSuccessfulTools": []
+      },
+      "resultInterpretation": {
+        "passed": true,
+        "note": "Final answer reflects the payments status observation.",
+        "paymentsStatusObserved": "degraded",
+        "statusReflectedInAnswer": true
+      },
+      "stepEfficiency": {
+        "status": "pass",
+        "observedToolCalls": 2,
+        "maxUsefulToolCalls": 2,
+        "note": "Observed 2 tool call(s); case constraint allows at most 2 useful tool call(s)."
+      },
+      "recovery": {
+        "status": "not_applicable",
+        "attempted": false,
+        "succeeded": false,
+        "failures": 0,
+        "recoveredFailures": 0,
+        "errorRecoveryRate": null,
+        "note": "No tool-call failures occurred; recovery is not applicable."
+      },
+      "constraintsSatisfied": [
+        "tool_selection",
+        "tool_arguments",
+        "tool_execution",
+        "result_interpretation",
+        "step_efficiency",
+        "error_recovery",
+        "final_answer_correct",
+        "task_success",
+        "trajectory_success"
+      ],
+      "constraintsViolated": []
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "modelMs": 0,
+      "toolMs": 0,
+      "modelTurns": 3,
+      "toolCalls": 2,
+      "successfulToolCalls": 2,
+      "failedToolCalls": 0,
+      "terminationReason": "final_answer",
+      "maxTurns": 6,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable agent events plus computed evaluation. Evaluation is not a new measurement of the run and is not mixed into operational metrics.",
+      "signatureView": [
+        {
+          "phase": "USER_REQUEST",
+          "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 1,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_payments_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 1,
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          },
+          "latencyMs": 0,
+          "note": "The application validates and executes the requested tool."
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 1,
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "latencyMs": 0,
+          "note": "The result becomes state available to the next model decision."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 2,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 2,
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validatedArguments": {
+            "query": "payments degradation"
+          },
+          "latencyMs": 0,
+          "note": "The application validates and executes the requested tool."
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 2,
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null,
+          "latencyMs": 0,
+          "note": "The result becomes state available to the next model decision."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 3,
+          "decision": "final_answer",
+          "content": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "toolCalls": [],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 3,
+          "answer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "note": "The model produces an observable final answer."
+        },
+        {
+          "phase": "TERMINATION",
+          "turn": 3,
+          "reason": "final_answer",
+          "detail": {
+            "reason": "final_answer"
+          },
+          "note": "The runtime stops when the task is complete or a safety boundary is reached."
+        },
+        {
+          "phase": "EVALUATION",
+          "taskSuccess": true,
+          "finalAnswerCorrect": true,
+          "trajectorySuccess": true,
+          "note": "A separate evaluator scores outcome and trajectory against explicit case criteria. Evaluation does not change the measured run."
+        }
+      ],
+      "stageNotes": {
+        "MODEL_DECISION": "The model proposes the next observable action.",
+        "TOOL_CALL": "The application validates and executes the requested tool.",
+        "OBSERVATION": "The result becomes state available to the next model decision.",
+        "FINAL_ANSWER": "The model produces an observable final answer.",
+        "TERMINATION": "The runtime stops when the task is complete or a safety boundary is reached.",
+        "EVALUATION": "A separate evaluator scores outcome and trajectory against explicit case criteria. Evaluation does not change the measured run.",
+        "SECURITY": "The model proposes tools and arguments; the application enforces validation, allowlists, authorization, timeouts, and turn limits."
+      },
+      "securityNote": "The model proposes tools and arguments; the application enforces validation, allowlists, authorization, timeouts, and turn limits.",
+      "evaluationNote": "A separate evaluator scores outcome and trajectory against explicit case criteria. Evaluation does not change the measured run."
+    },
+    "relatedEntities": [],
+    "relatedContent": [
+      "agents",
+      "agent-evaluation",
+      "agent-loop",
+      "tool-calling"
+    ],
+    "cookbook": {
+      "path": "examples/agents/03-agent-evaluation"
+    }
+  },
+  {
+    "labId": "agent-evaluation",
+    "traceId": "partial-success-extra-profile",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-16T17:08:57Z",
+    "metricsProvenance": "measured",
+    "evaluationProvenance": "computed",
+    "provenance": {
+      "model": "case-harness",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "PARTIAL_SUCCESS",
+    "selectionNote": "Measured case: the agent reaches a correct answer after an unnecessary get_user_profile call. Teaches that a correct outcome does not necessarily mean a good trajectory. Case constraint: expected maximum useful tool calls is 2.",
+    "architecture": {
+      "layout": "agent-evaluation",
+      "stages": [
+        "user-request",
+        "model-decision",
+        "tool-call",
+        "observation",
+        "final-answer",
+        "termination",
+        "evaluation"
+      ]
+    },
+    "input": {
+      "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know.",
+      "criteria": {
+        "requiredTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "requiredArguments": [
+          {
+            "tool": "get_service_status",
+            "arguments": {
+              "service": "payments"
+            },
+            "argumentContains": {}
+          },
+          {
+            "tool": "search_documentation",
+            "arguments": {},
+            "argumentContains": {
+              "query": "payment"
+            }
+          }
+        ],
+        "requiredAnswerFacts": [
+          "degraded",
+          "PAY-2041",
+          "checkout"
+        ],
+        "forbiddenAnswerFacts": [],
+        "maxUsefulToolCalls": 2,
+        "recoveryExpected": false
+      },
+      "config": {
+        "chatModel": "case-harness",
+        "modelDriver": "case-harness",
+        "maxTurns": 6,
+        "maxToolCallsPerTurn": 4,
+        "toolTimeoutMs": 2000
+      }
+    },
+    "state": {
+      "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know.",
+      "currentTurn": 4,
+      "maxTurns": 6,
+      "decisions": [
+        {
+          "turn": 1,
+          "decision": "tool_call",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_payments_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "finish_reason": "tool_calls",
+          "latency_ms": 0
+        },
+        {
+          "turn": 2,
+          "decision": "tool_call",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "finish_reason": "tool_calls",
+          "latency_ms": 0
+        },
+        {
+          "turn": 3,
+          "decision": "tool_call",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_extra_profile",
+              "name": "get_user_profile",
+              "argumentsJson": "{\"user_id\": \"u-1001\"}"
+            }
+          ],
+          "finish_reason": "tool_calls",
+          "latency_ms": 0
+        },
+        {
+          "turn": 4,
+          "decision": "final_answer",
+          "content": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "tool_calls": [],
+          "finish_reason": "stop",
+          "latency_ms": 0
+        }
+      ],
+      "toolCalls": [
+        {
+          "turn": 1,
+          "call_id": "call_payments_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validated_arguments": {
+            "service": "payments"
+          },
+          "latency_ms": 0
+        },
+        {
+          "turn": 2,
+          "call_id": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validated_arguments": {
+            "query": "payments degradation"
+          },
+          "latency_ms": 0
+        },
+        {
+          "turn": 3,
+          "call_id": "call_extra_profile",
+          "name": "get_user_profile",
+          "arguments": {
+            "user_id": "u-1001"
+          },
+          "validated_arguments": {
+            "user_id": "u-1001"
+          },
+          "latency_ms": 0
+        }
+      ],
+      "observations": [
+        {
+          "turn": 1,
+          "call_id": "call_payments_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "latency_ms": 0
+        },
+        {
+          "turn": 2,
+          "call_id": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null,
+          "latency_ms": 0
+        },
+        {
+          "turn": 3,
+          "call_id": "call_extra_profile",
+          "name": "get_user_profile",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "profile": {
+              "userId": "u-1001",
+              "displayName": "Ada Lovelace",
+              "plan": "enterprise",
+              "region": "us-east-1",
+              "roles": [
+                "operator",
+                "billing-viewer"
+              ]
+            }
+          },
+          "error": null,
+          "latency_ms": 0
+        }
+      ],
+      "finalAnswer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+      "terminationReason": "final_answer",
+      "errors": [],
+      "messageCount": 8
+    },
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical service name (billing, payments, or auth).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "service": {
+              "type": "string",
+              "description": "Canonical service name: billing, payments, auth"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "get_user_profile",
+        "description": "Return a user profile by user id (e.g. u-1001).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "description": "User id such as u-1001"
+            }
+          },
+          "required": [
+            "user_id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "search_documentation",
+        "description": "Search internal documentation snippets by keyword query.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Keyword query over internal docs"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "user_request",
+        "turn": null,
+        "detail": {
+          "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 1,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 1,
+        "detail": {
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 1,
+        "detail": {
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_decision",
+        "turn": 2,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 2,
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validatedArguments": {
+            "query": "payments degradation"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 2,
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_decision",
+        "turn": 3,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_extra_profile",
+              "name": "get_user_profile",
+              "argumentsJson": "{\"user_id\": \"u-1001\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 3,
+        "detail": {
+          "callId": "call_extra_profile",
+          "name": "get_user_profile",
+          "arguments": {
+            "user_id": "u-1001"
+          },
+          "validatedArguments": {
+            "user_id": "u-1001"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 3,
+        "detail": {
+          "callId": "call_extra_profile",
+          "name": "get_user_profile",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "profile": {
+              "userId": "u-1001",
+              "displayName": "Ada Lovelace",
+              "plan": "enterprise",
+              "region": "us-east-1",
+              "roles": [
+                "operator",
+                "billing-viewer"
+              ]
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_decision",
+        "turn": 4,
+        "detail": {
+          "decision": "final_answer",
+          "content": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 4,
+        "detail": {
+          "answer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "turn": 4,
+        "detail": {
+          "reason": "final_answer"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-3-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-observation",
+        "type": "observation",
+        "title": "Observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-6-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validatedArguments": {
+            "query": "payments degradation"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-observation",
+        "type": "observation",
+        "title": "Observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_extra_profile",
+              "name": "get_user_profile",
+              "argumentsJson": "{\"user_id\": \"u-1001\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-9-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_extra_profile",
+          "name": "get_user_profile",
+          "arguments": {
+            "user_id": "u-1001"
+          },
+          "validatedArguments": {
+            "user_id": "u-1001"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-observation",
+        "type": "observation",
+        "title": "Observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_extra_profile",
+          "name": "get_user_profile",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "profile": {
+              "userId": "u-1001",
+              "displayName": "Ada Lovelace",
+              "plan": "enterprise",
+              "region": "us-east-1",
+              "roles": [
+                "operator",
+                "billing-viewer"
+              ]
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-12-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "final_answer"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+      "terminationReason": "final_answer"
+    },
+    "evaluation": {
+      "caseId": "partial-success-extra-profile",
+      "provenance": "computed",
+      "taskSuccess": true,
+      "finalAnswerCorrect": true,
+      "trajectorySuccess": false,
+      "toolSelection": {
+        "passed": true,
+        "note": "Required tools were selected.",
+        "requiredTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "observedTools": [
+          "get_service_status",
+          "search_documentation",
+          "get_user_profile"
+        ],
+        "missingTools": []
+      },
+      "toolArguments": {
+        "passed": true,
+        "note": "Required tool arguments were satisfied by at least one call each.",
+        "checks": [
+          {
+            "tool": "get_service_status",
+            "arguments": {
+              "service": "payments"
+            },
+            "argumentContains": {},
+            "matched": true
+          },
+          {
+            "tool": "search_documentation",
+            "arguments": {},
+            "argumentContains": {
+              "query": "payment"
+            },
+            "matched": true
+          }
+        ],
+        "failedTools": []
+      },
+      "toolExecution": {
+        "passed": true,
+        "note": "Required tools produced at least one successful observation each.",
+        "successfulTools": [
+          "get_service_status",
+          "get_user_profile",
+          "search_documentation"
+        ],
+        "failedToolNames": [],
+        "missingSuccessfulTools": []
+      },
+      "resultInterpretation": {
+        "passed": true,
+        "note": "Final answer reflects the payments status observation.",
+        "paymentsStatusObserved": "degraded",
+        "statusReflectedInAnswer": true
+      },
+      "stepEfficiency": {
+        "status": "fail",
+        "observedToolCalls": 3,
+        "maxUsefulToolCalls": 2,
+        "note": "Observed 3 tool call(s), which exceeds the case constraint of at most 2 useful tool call(s)."
+      },
+      "recovery": {
+        "status": "not_applicable",
+        "attempted": false,
+        "succeeded": false,
+        "failures": 0,
+        "recoveredFailures": 0,
+        "errorRecoveryRate": null,
+        "note": "No tool-call failures occurred; recovery is not applicable."
+      },
+      "constraintsSatisfied": [
+        "tool_selection",
+        "tool_arguments",
+        "tool_execution",
+        "result_interpretation",
+        "error_recovery",
+        "final_answer_correct",
+        "task_success"
+      ],
+      "constraintsViolated": [
+        "step_efficiency",
+        "trajectory_success"
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "modelMs": 0,
+      "toolMs": 0,
+      "modelTurns": 4,
+      "toolCalls": 3,
+      "successfulToolCalls": 3,
+      "failedToolCalls": 0,
+      "terminationReason": "final_answer",
+      "maxTurns": 6,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable agent events plus computed evaluation. Evaluation is not a new measurement of the run and is not mixed into operational metrics.",
+      "signatureView": [
+        {
+          "phase": "USER_REQUEST",
+          "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 1,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_payments_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 1,
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          },
+          "latencyMs": 0,
+          "note": "The application validates and executes the requested tool."
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 1,
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "latencyMs": 0,
+          "note": "The result becomes state available to the next model decision."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 2,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 2,
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validatedArguments": {
+            "query": "payments degradation"
+          },
+          "latencyMs": 0,
+          "note": "The application validates and executes the requested tool."
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 2,
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null,
+          "latencyMs": 0,
+          "note": "The result becomes state available to the next model decision."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 3,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_extra_profile",
+              "name": "get_user_profile",
+              "argumentsJson": "{\"user_id\": \"u-1001\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 3,
+          "callId": "call_extra_profile",
+          "name": "get_user_profile",
+          "arguments": {
+            "user_id": "u-1001"
+          },
+          "validatedArguments": {
+            "user_id": "u-1001"
+          },
+          "latencyMs": 0,
+          "note": "The application validates and executes the requested tool."
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 3,
+          "callId": "call_extra_profile",
+          "name": "get_user_profile",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "profile": {
+              "userId": "u-1001",
+              "displayName": "Ada Lovelace",
+              "plan": "enterprise",
+              "region": "us-east-1",
+              "roles": [
+                "operator",
+                "billing-viewer"
+              ]
+            }
+          },
+          "error": null,
+          "latencyMs": 0,
+          "note": "The result becomes state available to the next model decision."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 4,
+          "decision": "final_answer",
+          "content": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "toolCalls": [],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 4,
+          "answer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "note": "The model produces an observable final answer."
+        },
+        {
+          "phase": "TERMINATION",
+          "turn": 4,
+          "reason": "final_answer",
+          "detail": {
+            "reason": "final_answer"
+          },
+          "note": "The runtime stops when the task is complete or a safety boundary is reached."
+        },
+        {
+          "phase": "EVALUATION",
+          "taskSuccess": true,
+          "finalAnswerCorrect": true,
+          "trajectorySuccess": false,
+          "note": "A separate evaluator scores outcome and trajectory against explicit case criteria. Evaluation does not change the measured run."
+        }
+      ],
+      "stageNotes": {
+        "MODEL_DECISION": "The model proposes the next observable action.",
+        "TOOL_CALL": "The application validates and executes the requested tool.",
+        "OBSERVATION": "The result becomes state available to the next model decision.",
+        "FINAL_ANSWER": "The model produces an observable final answer.",
+        "TERMINATION": "The runtime stops when the task is complete or a safety boundary is reached.",
+        "EVALUATION": "A separate evaluator scores outcome and trajectory against explicit case criteria. Evaluation does not change the measured run.",
+        "SECURITY": "The model proposes tools and arguments; the application enforces validation, allowlists, authorization, timeouts, and turn limits."
+      },
+      "securityNote": "The model proposes tools and arguments; the application enforces validation, allowlists, authorization, timeouts, and turn limits.",
+      "evaluationNote": "A separate evaluator scores outcome and trajectory against explicit case criteria. Evaluation does not change the measured run."
+    },
+    "relatedEntities": [],
+    "relatedContent": [
+      "agents",
+      "agent-evaluation",
+      "agent-loop",
+      "tool-calling"
+    ],
+    "cookbook": {
+      "path": "examples/agents/03-agent-evaluation"
+    }
+  },
+  {
+    "labId": "agent-evaluation",
+    "traceId": "tool-error-recovery-payments",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-16T17:08:57Z",
+    "metricsProvenance": "measured",
+    "evaluationProvenance": "computed",
+    "provenance": {
+      "model": "case-harness",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "TOOL_ERROR_RECOVERY",
+    "selectionNote": "Measured case: first get_service_status uses invalid name 'payments-api' and fails; the next call uses canonical 'payments' and succeeds, then documentation is inspected. The trace preserves the failure. Task success does not treat the recovered failure as an overall task failure.",
+    "architecture": {
+      "layout": "agent-evaluation",
+      "stages": [
+        "user-request",
+        "model-decision",
+        "tool-call",
+        "observation",
+        "final-answer",
+        "termination",
+        "evaluation"
+      ]
+    },
+    "input": {
+      "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know.",
+      "criteria": {
+        "requiredTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "requiredArguments": [
+          {
+            "tool": "get_service_status",
+            "arguments": {
+              "service": "payments"
+            },
+            "argumentContains": {}
+          },
+          {
+            "tool": "search_documentation",
+            "arguments": {},
+            "argumentContains": {
+              "query": "payment"
+            }
+          }
+        ],
+        "requiredAnswerFacts": [
+          "degraded",
+          "PAY-2041",
+          "checkout"
+        ],
+        "forbiddenAnswerFacts": [],
+        "maxUsefulToolCalls": 3,
+        "recoveryExpected": true
+      },
+      "config": {
+        "chatModel": "case-harness",
+        "modelDriver": "case-harness",
+        "maxTurns": 6,
+        "maxToolCallsPerTurn": 4,
+        "toolTimeoutMs": 2000
+      }
+    },
+    "state": {
+      "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know.",
+      "currentTurn": 4,
+      "maxTurns": 6,
+      "decisions": [
+        {
+          "turn": 1,
+          "decision": "tool_call",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_bad_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments-api\"}"
+            }
+          ],
+          "finish_reason": "tool_calls",
+          "latency_ms": 0
+        },
+        {
+          "turn": 2,
+          "decision": "tool_call",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_ok_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "finish_reason": "tool_calls",
+          "latency_ms": 0
+        },
+        {
+          "turn": 3,
+          "decision": "tool_call",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "finish_reason": "tool_calls",
+          "latency_ms": 0
+        },
+        {
+          "turn": 4,
+          "decision": "final_answer",
+          "content": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "tool_calls": [],
+          "finish_reason": "stop",
+          "latency_ms": 0
+        }
+      ],
+      "toolCalls": [
+        {
+          "turn": 1,
+          "call_id": "call_bad_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments-api"
+          },
+          "validated_arguments": {
+            "service": "payments-api"
+          },
+          "latency_ms": 0
+        },
+        {
+          "turn": 2,
+          "call_id": "call_ok_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validated_arguments": {
+            "service": "payments"
+          },
+          "latency_ms": 0
+        },
+        {
+          "turn": 3,
+          "call_id": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validated_arguments": {
+            "query": "payments degradation"
+          },
+          "latency_ms": 0
+        }
+      ],
+      "observations": [
+        {
+          "turn": 1,
+          "call_id": "call_bad_status",
+          "name": "get_service_status",
+          "ok": false,
+          "result": {
+            "ok": false,
+            "error": {
+              "code": "unknown_service",
+              "message": "Unknown service 'payments-api'",
+              "validServices": [
+                "auth",
+                "billing",
+                "payments"
+              ]
+            }
+          },
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'payments-api'",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          },
+          "latency_ms": 0
+        },
+        {
+          "turn": 2,
+          "call_id": "call_ok_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "latency_ms": 0
+        },
+        {
+          "turn": 3,
+          "call_id": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null,
+          "latency_ms": 0
+        }
+      ],
+      "finalAnswer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+      "terminationReason": "final_answer",
+      "errors": [
+        {
+          "callId": "call_bad_status",
+          "name": "get_service_status",
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'payments-api'",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          }
+        }
+      ],
+      "messageCount": 8
+    },
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical service name (billing, payments, or auth).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "service": {
+              "type": "string",
+              "description": "Canonical service name: billing, payments, auth"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "get_user_profile",
+        "description": "Return a user profile by user id (e.g. u-1001).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "description": "User id such as u-1001"
+            }
+          },
+          "required": [
+            "user_id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "search_documentation",
+        "description": "Search internal documentation snippets by keyword query.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Keyword query over internal docs"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "user_request",
+        "turn": null,
+        "detail": {
+          "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 1,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_bad_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments-api\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 1,
+        "detail": {
+          "callId": "call_bad_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments-api"
+          },
+          "validatedArguments": {
+            "service": "payments-api"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 1,
+        "detail": {
+          "callId": "call_bad_status",
+          "name": "get_service_status",
+          "ok": false,
+          "result": {
+            "ok": false,
+            "error": {
+              "code": "unknown_service",
+              "message": "Unknown service 'payments-api'",
+              "validServices": [
+                "auth",
+                "billing",
+                "payments"
+              ]
+            }
+          },
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'payments-api'",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_decision",
+        "turn": 2,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_ok_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 2,
+        "detail": {
+          "callId": "call_ok_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 2,
+        "detail": {
+          "callId": "call_ok_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_decision",
+        "turn": 3,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 3,
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validatedArguments": {
+            "query": "payments degradation"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 3,
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_decision",
+        "turn": 4,
+        "detail": {
+          "decision": "final_answer",
+          "content": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 4,
+        "detail": {
+          "answer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "turn": 4,
+        "detail": {
+          "reason": "final_answer"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_bad_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments-api\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-3-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_bad_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments-api"
+          },
+          "validatedArguments": {
+            "service": "payments-api"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-observation",
+        "type": "observation",
+        "title": "Observation",
+        "status": "error",
+        "detail": {
+          "callId": "call_bad_status",
+          "name": "get_service_status",
+          "ok": false,
+          "result": {
+            "ok": false,
+            "error": {
+              "code": "unknown_service",
+              "message": "Unknown service 'payments-api'",
+              "validServices": [
+                "auth",
+                "billing",
+                "payments"
+              ]
+            }
+          },
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'payments-api'",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_ok_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-6-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_ok_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-observation",
+        "type": "observation",
+        "title": "Observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_ok_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-9-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validatedArguments": {
+            "query": "payments degradation"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-observation",
+        "type": "observation",
+        "title": "Observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-12-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "final_answer"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+      "terminationReason": "final_answer"
+    },
+    "evaluation": {
+      "caseId": "tool-error-recovery-payments",
+      "provenance": "computed",
+      "taskSuccess": true,
+      "finalAnswerCorrect": true,
+      "trajectorySuccess": true,
+      "toolSelection": {
+        "passed": true,
+        "note": "Required tools were selected.",
+        "requiredTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "observedTools": [
+          "get_service_status",
+          "get_service_status",
+          "search_documentation"
+        ],
+        "missingTools": []
+      },
+      "toolArguments": {
+        "passed": true,
+        "note": "Required tool arguments were satisfied by at least one call each.",
+        "checks": [
+          {
+            "tool": "get_service_status",
+            "arguments": {
+              "service": "payments"
+            },
+            "argumentContains": {},
+            "matched": true
+          },
+          {
+            "tool": "search_documentation",
+            "arguments": {},
+            "argumentContains": {
+              "query": "payment"
+            },
+            "matched": true
+          }
+        ],
+        "failedTools": []
+      },
+      "toolExecution": {
+        "passed": true,
+        "note": "Required tools produced at least one successful observation each.",
+        "successfulTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "failedToolNames": [
+          "get_service_status"
+        ],
+        "missingSuccessfulTools": []
+      },
+      "resultInterpretation": {
+        "passed": true,
+        "note": "Final answer reflects the payments status observation.",
+        "paymentsStatusObserved": "degraded",
+        "statusReflectedInAnswer": true
+      },
+      "stepEfficiency": {
+        "status": "pass",
+        "observedToolCalls": 3,
+        "maxUsefulToolCalls": 3,
+        "note": "Observed 3 tool call(s); case constraint allows at most 3 useful tool call(s)."
+      },
+      "recovery": {
+        "status": "recovered",
+        "attempted": true,
+        "succeeded": true,
+        "failures": 1,
+        "recoveredFailures": 1,
+        "errorRecoveryRate": 1.0,
+        "note": "Recovered failures / failures = 1/1. This is a single-case ratio, not a production estimate."
+      },
+      "constraintsSatisfied": [
+        "tool_selection",
+        "tool_arguments",
+        "tool_execution",
+        "result_interpretation",
+        "step_efficiency",
+        "error_recovery",
+        "final_answer_correct",
+        "task_success",
+        "trajectory_success"
+      ],
+      "constraintsViolated": []
+    },
+    "errors": [
+      {
+        "callId": "call_bad_status",
+        "name": "get_service_status",
+        "error": {
+          "code": "unknown_service",
+          "message": "Unknown service 'payments-api'",
+          "validServices": [
+            "auth",
+            "billing",
+            "payments"
+          ]
+        }
+      }
+    ],
+    "metrics": {
+      "totalMs": 0,
+      "modelMs": 0,
+      "toolMs": 0,
+      "modelTurns": 4,
+      "toolCalls": 3,
+      "successfulToolCalls": 2,
+      "failedToolCalls": 1,
+      "terminationReason": "final_answer",
+      "maxTurns": 6,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable agent events plus computed evaluation. Evaluation is not a new measurement of the run and is not mixed into operational metrics.",
+      "signatureView": [
+        {
+          "phase": "USER_REQUEST",
+          "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 1,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_bad_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments-api\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 1,
+          "callId": "call_bad_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments-api"
+          },
+          "validatedArguments": {
+            "service": "payments-api"
+          },
+          "latencyMs": 0,
+          "note": "The application validates and executes the requested tool."
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 1,
+          "callId": "call_bad_status",
+          "name": "get_service_status",
+          "ok": false,
+          "result": {
+            "ok": false,
+            "error": {
+              "code": "unknown_service",
+              "message": "Unknown service 'payments-api'",
+              "validServices": [
+                "auth",
+                "billing",
+                "payments"
+              ]
+            }
+          },
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'payments-api'",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          },
+          "latencyMs": 0,
+          "note": "The result becomes state available to the next model decision."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 2,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_ok_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 2,
+          "callId": "call_ok_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          },
+          "latencyMs": 0,
+          "note": "The application validates and executes the requested tool."
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 2,
+          "callId": "call_ok_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "latencyMs": 0,
+          "note": "The result becomes state available to the next model decision."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 3,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 3,
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validatedArguments": {
+            "query": "payments degradation"
+          },
+          "latencyMs": 0,
+          "note": "The application validates and executes the requested tool."
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 3,
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null,
+          "latencyMs": 0,
+          "note": "The result becomes state available to the next model decision."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 4,
+          "decision": "final_answer",
+          "content": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "toolCalls": [],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 4,
+          "answer": "Payments is degraded in us-east-1 (PAY-2041: elevated card-auth latency). Per the payments degradation runbook, enterprise operators may see slower checkout confirmations.",
+          "note": "The model produces an observable final answer."
+        },
+        {
+          "phase": "TERMINATION",
+          "turn": 4,
+          "reason": "final_answer",
+          "detail": {
+            "reason": "final_answer"
+          },
+          "note": "The runtime stops when the task is complete or a safety boundary is reached."
+        },
+        {
+          "phase": "EVALUATION",
+          "taskSuccess": true,
+          "finalAnswerCorrect": true,
+          "trajectorySuccess": true,
+          "note": "A separate evaluator scores outcome and trajectory against explicit case criteria. Evaluation does not change the measured run."
+        }
+      ],
+      "stageNotes": {
+        "MODEL_DECISION": "The model proposes the next observable action.",
+        "TOOL_CALL": "The application validates and executes the requested tool.",
+        "OBSERVATION": "The result becomes state available to the next model decision.",
+        "FINAL_ANSWER": "The model produces an observable final answer.",
+        "TERMINATION": "The runtime stops when the task is complete or a safety boundary is reached.",
+        "EVALUATION": "A separate evaluator scores outcome and trajectory against explicit case criteria. Evaluation does not change the measured run.",
+        "SECURITY": "The model proposes tools and arguments; the application enforces validation, allowlists, authorization, timeouts, and turn limits."
+      },
+      "securityNote": "The model proposes tools and arguments; the application enforces validation, allowlists, authorization, timeouts, and turn limits.",
+      "evaluationNote": "A separate evaluator scores outcome and trajectory against explicit case criteria. Evaluation does not change the measured run."
+    },
+    "relatedEntities": [],
+    "relatedContent": [
+      "agents",
+      "agent-evaluation",
+      "agent-loop",
+      "tool-calling"
+    ],
+    "cookbook": {
+      "path": "examples/agents/03-agent-evaluation"
+    }
+  },
+  {
+    "labId": "agent-evaluation",
+    "traceId": "goal-miss-wrong-answer",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-16T17:08:57Z",
+    "metricsProvenance": "measured",
+    "evaluationProvenance": "computed",
+    "provenance": {
+      "model": "case-harness",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "GOAL_MISS",
+    "selectionNote": "Measured case: the agent gathers the required evidence and terminates with a final answer, but the answer does not satisfy the task. Teaches that final-answer presence is not task success, and that a normal termination can still fail evaluation.",
+    "architecture": {
+      "layout": "agent-evaluation",
+      "stages": [
+        "user-request",
+        "model-decision",
+        "tool-call",
+        "observation",
+        "final-answer",
+        "termination",
+        "evaluation"
+      ]
+    },
+    "input": {
+      "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know.",
+      "criteria": {
+        "requiredTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "requiredArguments": [
+          {
+            "tool": "get_service_status",
+            "arguments": {
+              "service": "payments"
+            },
+            "argumentContains": {}
+          },
+          {
+            "tool": "search_documentation",
+            "arguments": {},
+            "argumentContains": {
+              "query": "payment"
+            }
+          }
+        ],
+        "requiredAnswerFacts": [
+          "degraded",
+          "PAY-2041",
+          "checkout"
+        ],
+        "forbiddenAnswerFacts": [],
+        "maxUsefulToolCalls": 2,
+        "recoveryExpected": false
+      },
+      "config": {
+        "chatModel": "case-harness",
+        "modelDriver": "case-harness",
+        "maxTurns": 6,
+        "maxToolCallsPerTurn": 4,
+        "toolTimeoutMs": 2000
+      }
+    },
+    "state": {
+      "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know.",
+      "currentTurn": 3,
+      "maxTurns": 6,
+      "decisions": [
+        {
+          "turn": 1,
+          "decision": "tool_call",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_payments_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "finish_reason": "tool_calls",
+          "latency_ms": 0
+        },
+        {
+          "turn": 2,
+          "decision": "tool_call",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "finish_reason": "tool_calls",
+          "latency_ms": 0
+        },
+        {
+          "turn": 3,
+          "decision": "final_answer",
+          "content": "The payments service is operational in us-east-1. Users are unaffected and no further action is needed.",
+          "tool_calls": [],
+          "finish_reason": "stop",
+          "latency_ms": 0
+        }
+      ],
+      "toolCalls": [
+        {
+          "turn": 1,
+          "call_id": "call_payments_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validated_arguments": {
+            "service": "payments"
+          },
+          "latency_ms": 0
+        },
+        {
+          "turn": 2,
+          "call_id": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validated_arguments": {
+            "query": "payments degradation"
+          },
+          "latency_ms": 0
+        }
+      ],
+      "observations": [
+        {
+          "turn": 1,
+          "call_id": "call_payments_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "latency_ms": 0
+        },
+        {
+          "turn": 2,
+          "call_id": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null,
+          "latency_ms": 0
+        }
+      ],
+      "finalAnswer": "The payments service is operational in us-east-1. Users are unaffected and no further action is needed.",
+      "terminationReason": "final_answer",
+      "errors": [],
+      "messageCount": 6
+    },
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical service name (billing, payments, or auth).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "service": {
+              "type": "string",
+              "description": "Canonical service name: billing, payments, auth"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "get_user_profile",
+        "description": "Return a user profile by user id (e.g. u-1001).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "description": "User id such as u-1001"
+            }
+          },
+          "required": [
+            "user_id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "search_documentation",
+        "description": "Search internal documentation snippets by keyword query.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Keyword query over internal docs"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "user_request",
+        "turn": null,
+        "detail": {
+          "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 1,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 1,
+        "detail": {
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 1,
+        "detail": {
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_decision",
+        "turn": 2,
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call",
+        "turn": 2,
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validatedArguments": {
+            "query": "payments degradation"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "observation",
+        "turn": 2,
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_decision",
+        "turn": 3,
+        "detail": {
+          "decision": "final_answer",
+          "content": "The payments service is operational in us-east-1. Users are unaffected and no further action is needed.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 3,
+        "detail": {
+          "answer": "The payments service is operational in us-east-1. Users are unaffected and no further action is needed."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "turn": 3,
+        "detail": {
+          "reason": "final_answer"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-3-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-observation",
+        "type": "observation",
+        "title": "Observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "tool_call",
+          "content": null,
+          "finishReason": "tool_calls",
+          "toolCalls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-6-tool_call",
+        "type": "tool_call",
+        "title": "Tool call",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validatedArguments": {
+            "query": "payments degradation"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-observation",
+        "type": "observation",
+        "title": "Observation",
+        "status": "ok",
+        "detail": {
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "The payments service is operational in us-east-1. Users are unaffected and no further action is needed.",
+          "finishReason": "stop",
+          "toolCalls": [],
+          "promptTokens": null,
+          "completionTokens": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-9-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "The payments service is operational in us-east-1. Users are unaffected and no further action is needed."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "final_answer"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "The payments service is operational in us-east-1. Users are unaffected and no further action is needed.",
+      "terminationReason": "final_answer"
+    },
+    "evaluation": {
+      "caseId": "goal-miss-wrong-answer",
+      "provenance": "computed",
+      "taskSuccess": false,
+      "finalAnswerCorrect": false,
+      "trajectorySuccess": true,
+      "toolSelection": {
+        "passed": true,
+        "note": "Required tools were selected.",
+        "requiredTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "observedTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "missingTools": []
+      },
+      "toolArguments": {
+        "passed": true,
+        "note": "Required tool arguments were satisfied by at least one call each.",
+        "checks": [
+          {
+            "tool": "get_service_status",
+            "arguments": {
+              "service": "payments"
+            },
+            "argumentContains": {},
+            "matched": true
+          },
+          {
+            "tool": "search_documentation",
+            "arguments": {},
+            "argumentContains": {
+              "query": "payment"
+            },
+            "matched": true
+          }
+        ],
+        "failedTools": []
+      },
+      "toolExecution": {
+        "passed": true,
+        "note": "Required tools produced at least one successful observation each.",
+        "successfulTools": [
+          "get_service_status",
+          "search_documentation"
+        ],
+        "failedToolNames": [],
+        "missingSuccessfulTools": []
+      },
+      "resultInterpretation": {
+        "passed": false,
+        "note": "Final answer does not reflect observed payments status 'degraded'.",
+        "paymentsStatusObserved": "degraded",
+        "statusReflectedInAnswer": false
+      },
+      "stepEfficiency": {
+        "status": "pass",
+        "observedToolCalls": 2,
+        "maxUsefulToolCalls": 2,
+        "note": "Observed 2 tool call(s); case constraint allows at most 2 useful tool call(s)."
+      },
+      "recovery": {
+        "status": "not_applicable",
+        "attempted": false,
+        "succeeded": false,
+        "failures": 0,
+        "recoveredFailures": 0,
+        "errorRecoveryRate": null,
+        "note": "No tool-call failures occurred; recovery is not applicable."
+      },
+      "constraintsSatisfied": [
+        "tool_selection",
+        "tool_arguments",
+        "tool_execution",
+        "step_efficiency",
+        "error_recovery",
+        "trajectory_success"
+      ],
+      "constraintsViolated": [
+        "result_interpretation",
+        "final_answer_correct",
+        "task_success"
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "modelMs": 0,
+      "toolMs": 0,
+      "modelTurns": 3,
+      "toolCalls": 2,
+      "successfulToolCalls": 2,
+      "failedToolCalls": 0,
+      "terminationReason": "final_answer",
+      "maxTurns": 6,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable agent events plus computed evaluation. Evaluation is not a new measurement of the run and is not mixed into operational metrics.",
+      "signatureView": [
+        {
+          "phase": "USER_REQUEST",
+          "request": "Check the payments service. If it is degraded, inspect the relevant documentation and summarize what the user should know."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 1,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_payments_status",
+              "name": "get_service_status",
+              "argumentsJson": "{\"service\": \"payments\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 1,
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          },
+          "validatedArguments": {
+            "service": "payments"
+          },
+          "latencyMs": 0,
+          "note": "The application validates and executes the requested tool."
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 1,
+          "callId": "call_payments_status",
+          "name": "get_service_status",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "latencyMs": 0,
+          "note": "The result becomes state available to the next model decision."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 2,
+          "decision": "tool_call",
+          "content": null,
+          "toolCalls": [
+            {
+              "id": "call_payments_docs",
+              "name": "search_documentation",
+              "argumentsJson": "{\"query\": \"payments degradation\"}"
+            }
+          ],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "TOOL_CALL",
+          "turn": 2,
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          },
+          "validatedArguments": {
+            "query": "payments degradation"
+          },
+          "latencyMs": 0,
+          "note": "The application validates and executes the requested tool."
+        },
+        {
+          "phase": "OBSERVATION",
+          "turn": 2,
+          "callId": "call_payments_docs",
+          "name": "search_documentation",
+          "ok": true,
+          "result": {
+            "ok": true,
+            "query": "payments degradation",
+            "hitCount": 2,
+            "hits": [
+              {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                "score": 2
+              },
+              {
+                "id": "doc-service-names",
+                "title": "Canonical service names",
+                "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                "score": 1
+              }
+            ]
+          },
+          "error": null,
+          "latencyMs": 0,
+          "note": "The result becomes state available to the next model decision."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 3,
+          "decision": "final_answer",
+          "content": "The payments service is operational in us-east-1. Users are unaffected and no further action is needed.",
+          "toolCalls": [],
+          "latencyMs": 0,
+          "note": "The model proposes the next observable action."
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 3,
+          "answer": "The payments service is operational in us-east-1. Users are unaffected and no further action is needed.",
+          "note": "The model produces an observable final answer."
+        },
+        {
+          "phase": "TERMINATION",
+          "turn": 3,
+          "reason": "final_answer",
+          "detail": {
+            "reason": "final_answer"
+          },
+          "note": "The runtime stops when the task is complete or a safety boundary is reached."
+        },
+        {
+          "phase": "EVALUATION",
+          "taskSuccess": false,
+          "finalAnswerCorrect": false,
+          "trajectorySuccess": true,
+          "note": "A separate evaluator scores outcome and trajectory against explicit case criteria. Evaluation does not change the measured run."
+        }
+      ],
+      "stageNotes": {
+        "MODEL_DECISION": "The model proposes the next observable action.",
+        "TOOL_CALL": "The application validates and executes the requested tool.",
+        "OBSERVATION": "The result becomes state available to the next model decision.",
+        "FINAL_ANSWER": "The model produces an observable final answer.",
+        "TERMINATION": "The runtime stops when the task is complete or a safety boundary is reached.",
+        "EVALUATION": "A separate evaluator scores outcome and trajectory against explicit case criteria. Evaluation does not change the measured run.",
+        "SECURITY": "The model proposes tools and arguments; the application enforces validation, allowlists, authorization, timeouts, and turn limits."
+      },
+      "securityNote": "The model proposes tools and arguments; the application enforces validation, allowlists, authorization, timeouts, and turn limits.",
+      "evaluationNote": "A separate evaluator scores outcome and trajectory against explicit case criteria. Evaluation does not change the measured run."
+    },
+    "relatedEntities": [],
+    "relatedContent": [
+      "agents",
+      "agent-evaluation",
+      "agent-loop",
+      "tool-calling"
+    ],
+    "cookbook": {
+      "path": "examples/agents/03-agent-evaluation"
+    }
+  }
+]
