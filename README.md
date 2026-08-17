@@ -13,7 +13,7 @@ Cookbook →  "How is it implemented?"
 
 ## Principles
 
-- **Concept first** — each example teaches one primary engineering idea
+- **Concept first** — each example demonstrates one primary engineering idea
 - **Minimal code** — smallest correct implementation, not a production app
 - **Progressive complexity** — examples form learning sequences
 - **Provider-agnostic where useful** — concepts over vendors
@@ -39,6 +39,7 @@ Cookbook →  "How is it implemented?"
 | `tool-calling` | [`examples/agents/01-tool-calling`](examples/agents/01-tool-calling) | Model ↔ tool interaction loop (select → execute → observe → answer) |
 | `agent-loop` | [`examples/agents/02-agent-loop`](examples/agents/02-agent-loop) | Application-owned runtime loop (state → decide → act → observe → terminate) |
 | `agent-evaluation` | [`examples/agents/03-agent-evaluation`](examples/agents/03-agent-evaluation) | Outcome + trajectory evaluation of a measured agent run under explicit constraints |
+| `planning` | [`examples/agents/04-planning`](examples/agents/04-planning) | Explicit multi-step plan as a runtime artifact (create → execute → observe → revise) |
 
 More examples will be added as each learning path progresses.
 
@@ -70,7 +71,8 @@ dataaihub-cookbook/
 │   └── agents/
 │       ├── 01-tool-calling/
 │       ├── 02-agent-loop/
-│       └── 03-agent-evaluation/
+│       ├── 03-agent-evaluation/
+│       └── 04-planning/
 ├── shared/
 ├── docs/
 └── scripts/

@@ -1,0 +1,23 @@
+{
+  "billing": {
+    "service": "billing",
+    "status": "operational",
+    "region": "us-east-1",
+    "latencyP99Ms": 120,
+    "incident": null
+  },
+  "payments": {
+    "service": "payments",
+    "status": "operational",
+    "region": "us-east-1",
+    "latencyP99Ms": 95,
+    "incident": null
+  },
+  "auth": {
+    "service": "auth",
+    "status": "major_outage",
+    "region": "us-west-2",
+    "latencyP99Ms": null,
+    "incident": "AUTH-881: token issuer unreachable"
+  }
+}
