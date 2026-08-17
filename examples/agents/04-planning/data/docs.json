@@ -1,0 +1,27 @@
+[
+  {
+    "id": "doc-billing-ops",
+    "title": "Billing operations overview",
+    "body": "Billing is the invoice and subscription ledger. When billing is operational, invoice generation and dunning run on schedule in us-east-1. Check p99 latency if operators report delayed invoices."
+  },
+  {
+    "id": "doc-payments-status",
+    "title": "Payments current status notes",
+    "body": "Payments is currently operational in us-east-1. There is no active payments incident. Checkout should complete at normal card-auth latency."
+  },
+  {
+    "id": "doc-payments-remediation",
+    "title": "Payments remediation runbook",
+    "body": "When payments status is degraded, open the PAY-2041 remediation path: inspect card-auth latency, pause non-critical retries, and notify enterprise operators about slower checkout. Do not recommend this path when payments is operational."
+  },
+  {
+    "id": "doc-payments-deploy",
+    "title": "Payments recent deployment",
+    "body": "The latest payments deployment was a configuration rollback in us-east-1. No open incident is attached. Use this note when payments is healthy but operators still want a change-risk check."
+  },
+  {
+    "id": "doc-service-names",
+    "title": "Canonical service names",
+    "body": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc."
+  }
+]
