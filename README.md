@@ -40,6 +40,7 @@ Cookbook →  "How is it implemented?"
 | `agent-loop` | [`examples/agents/02-agent-loop`](examples/agents/02-agent-loop) | Application-owned runtime loop (state → decide → act → observe → terminate) |
 | `agent-evaluation` | [`examples/agents/03-agent-evaluation`](examples/agents/03-agent-evaluation) | Outcome + trajectory evaluation of a measured agent run under explicit constraints |
 | `planning` | [`examples/agents/04-planning`](examples/agents/04-planning) | Explicit multi-step plan as a runtime artifact (create → execute → observe → revise) |
+| `agent-memory` | [`examples/agents/05-memory`](examples/agents/05-memory) | Application-owned memory across interactions (store → retrieve → use, including miss and stale) |
 
 More examples will be added as each learning path progresses.
 
@@ -72,7 +73,8 @@ dataaihub-cookbook/
 │       ├── 01-tool-calling/
 │       ├── 02-agent-loop/
 │       ├── 03-agent-evaluation/
-│       └── 04-planning/
+│       ├── 04-planning/
+│       └── 05-memory/
 ├── shared/
 ├── docs/
 └── scripts/
