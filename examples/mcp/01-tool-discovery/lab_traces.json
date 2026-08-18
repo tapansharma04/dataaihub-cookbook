@@ -1,0 +1,2170 @@
+[
+  {
+    "labId": "mcp-tool-discovery",
+    "traceId": "discovery",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-18T17:22:55Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "DISCOVERY",
+    "selectionNote": "Measured case: client initializes with the server and discovers available tool contracts through tools/list without invoking a tool.",
+    "architecture": {
+      "layout": "mcp-tool-discovery",
+      "stages": [
+        "initialize",
+        "tools-list",
+        "tool-contract",
+        "tools-call",
+        "structured-result"
+      ]
+    },
+    "input": {
+      "case": "discovery",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy"
+      }
+    },
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical service name.",
+        "inputSchema": {
+          "properties": {
+            "service": {
+              "description": "Canonical service name: billing, payments, auth",
+              "title": "Service",
+              "type": "string"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "type": "object",
+          "title": "get_service_statusArguments"
+        }
+      },
+      {
+        "name": "get_user_profile",
+        "description": "Return a user profile by user id.",
+        "inputSchema": {
+          "properties": {
+            "user_id": {
+              "description": "User id, e.g. u-1001",
+              "title": "User Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "user_id"
+          ],
+          "type": "object",
+          "title": "get_user_profileArguments"
+        }
+      },
+      {
+        "name": "search_documentation",
+        "description": "Search internal documentation snippets by keyword query.",
+        "inputSchema": {
+          "properties": {
+            "query": {
+              "description": "Short keyword query over internal docs",
+              "title": "Query",
+              "type": "string"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "type": "object",
+          "title": "search_documentationArguments"
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-fixtures",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 4
+      },
+      {
+        "kind": "tools_list_request",
+        "detail": {
+          "method": "tools/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "tools_list_response",
+        "detail": {
+          "method": "tools/list",
+          "tools": [
+            {
+              "name": "get_service_status",
+              "description": "Return the current status for a canonical service name.",
+              "inputSchema": {
+                "properties": {
+                  "service": {
+                    "description": "Canonical service name: billing, payments, auth",
+                    "title": "Service",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "service"
+                ],
+                "type": "object",
+                "title": "get_service_statusArguments"
+              }
+            },
+            {
+              "name": "get_user_profile",
+              "description": "Return a user profile by user id.",
+              "inputSchema": {
+                "properties": {
+                  "user_id": {
+                    "description": "User id, e.g. u-1001",
+                    "title": "User Id",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "user_id"
+                ],
+                "type": "object",
+                "title": "get_user_profileArguments"
+              }
+            },
+            {
+              "name": "search_documentation",
+              "description": "Search internal documentation snippets by keyword query.",
+              "inputSchema": {
+                "properties": {
+                  "query": {
+                    "description": "Short keyword query over internal docs",
+                    "title": "Query",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "query"
+                ],
+                "type": "object",
+                "title": "search_documentationArguments"
+              }
+            }
+          ],
+          "toolCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-fixtures",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 4,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-tools_list_request",
+        "type": "protocol",
+        "title": "Tools list request",
+        "status": "ok",
+        "detail": {
+          "method": "tools/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-tools_list_response",
+        "type": "protocol",
+        "title": "Tools list response",
+        "status": "ok",
+        "detail": {
+          "method": "tools/list",
+          "tools": [
+            {
+              "name": "get_service_status",
+              "description": "Return the current status for a canonical service name.",
+              "inputSchema": {
+                "properties": {
+                  "service": {
+                    "description": "Canonical service name: billing, payments, auth",
+                    "title": "Service",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "service"
+                ],
+                "type": "object",
+                "title": "get_service_statusArguments"
+              }
+            },
+            {
+              "name": "get_user_profile",
+              "description": "Return a user profile by user id.",
+              "inputSchema": {
+                "properties": {
+                  "user_id": {
+                    "description": "User id, e.g. u-1001",
+                    "title": "User Id",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "user_id"
+                ],
+                "type": "object",
+                "title": "get_user_profileArguments"
+              }
+            },
+            {
+              "name": "search_documentation",
+              "description": "Search internal documentation snippets by keyword query.",
+              "inputSchema": {
+                "properties": {
+                  "query": {
+                    "description": "Short keyword query over internal docs",
+                    "title": "Query",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "query"
+                ],
+                "type": "object",
+                "title": "search_documentationArguments"
+              }
+            }
+          ],
+          "toolCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "discoveredTools": [
+        "get_service_status",
+        "get_user_profile",
+        "search_documentation"
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 5,
+      "initializeMs": 4,
+      "discoveryMs": 0,
+      "toolCallMs": 0,
+      "toolCalls": 0,
+      "toolsDiscovered": 3,
+      "successfulToolCalls": 0,
+      "failedToolCalls": 0,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            }
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-fixtures",
+            "version": ""
+          },
+          "latencyMs": 4
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "tools/list"
+        },
+        {
+          "phase": "TOOLS",
+          "toolCount": 3,
+          "tools": [
+            "get_service_status",
+            "get_user_profile",
+            "search_documentation"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 DISCOVER \u2192 TOOLS"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "tool-discovery"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/01-tool-discovery"
+    }
+  },
+  {
+    "labId": "mcp-tool-discovery",
+    "traceId": "single-tool-service-status",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-18T17:22:55Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "SINGLE_TOOL_CALL",
+    "selectionNote": "Measured case: after discovery, the client invokes get_service_status with a deterministic fixture argument and receives a structured result.",
+    "architecture": {
+      "layout": "mcp-tool-discovery",
+      "stages": [
+        "initialize",
+        "tools-list",
+        "tool-contract",
+        "tools-call",
+        "structured-result"
+      ]
+    },
+    "input": {
+      "case": "single-tool-service-status",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy"
+      }
+    },
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical service name.",
+        "inputSchema": {
+          "properties": {
+            "service": {
+              "description": "Canonical service name: billing, payments, auth",
+              "title": "Service",
+              "type": "string"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "type": "object",
+          "title": "get_service_statusArguments"
+        }
+      },
+      {
+        "name": "get_user_profile",
+        "description": "Return a user profile by user id.",
+        "inputSchema": {
+          "properties": {
+            "user_id": {
+              "description": "User id, e.g. u-1001",
+              "title": "User Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "user_id"
+          ],
+          "type": "object",
+          "title": "get_user_profileArguments"
+        }
+      },
+      {
+        "name": "search_documentation",
+        "description": "Search internal documentation snippets by keyword query.",
+        "inputSchema": {
+          "properties": {
+            "query": {
+              "description": "Short keyword query over internal docs",
+              "title": "Query",
+              "type": "string"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "type": "object",
+          "title": "search_documentationArguments"
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-fixtures",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 1
+      },
+      {
+        "kind": "tools_list_request",
+        "detail": {
+          "method": "tools/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "tools_list_response",
+        "detail": {
+          "method": "tools/list",
+          "tools": [
+            {
+              "name": "get_service_status",
+              "description": "Return the current status for a canonical service name.",
+              "inputSchema": {
+                "properties": {
+                  "service": {
+                    "description": "Canonical service name: billing, payments, auth",
+                    "title": "Service",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "service"
+                ],
+                "type": "object",
+                "title": "get_service_statusArguments"
+              }
+            },
+            {
+              "name": "get_user_profile",
+              "description": "Return a user profile by user id.",
+              "inputSchema": {
+                "properties": {
+                  "user_id": {
+                    "description": "User id, e.g. u-1001",
+                    "title": "User Id",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "user_id"
+                ],
+                "type": "object",
+                "title": "get_user_profileArguments"
+              }
+            },
+            {
+              "name": "search_documentation",
+              "description": "Search internal documentation snippets by keyword query.",
+              "inputSchema": {
+                "properties": {
+                  "query": {
+                    "description": "Short keyword query over internal docs",
+                    "title": "Query",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "query"
+                ],
+                "type": "object",
+                "title": "search_documentationArguments"
+              }
+            }
+          ],
+          "toolCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call_request",
+        "detail": {
+          "method": "tools/call",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "tool_call_response",
+        "detail": {
+          "method": "tools/call",
+          "name": "get_service_status",
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"service\": {\n    \"service\": \"payments\",\n    \"status\": \"degraded\",\n    \"region\": \"us-east-1\",\n    \"latencyP99Ms\": 890,\n    \"incident\": \"PAY-2041: elevated card-auth latency\"\n  }\n}",
+                "annotations": null,
+                "meta": null
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            }
+          }
+        },
+        "latencyMs": 1
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-fixtures",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-tools_list_request",
+        "type": "protocol",
+        "title": "Tools list request",
+        "status": "ok",
+        "detail": {
+          "method": "tools/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-tools_list_response",
+        "type": "protocol",
+        "title": "Tools list response",
+        "status": "ok",
+        "detail": {
+          "method": "tools/list",
+          "tools": [
+            {
+              "name": "get_service_status",
+              "description": "Return the current status for a canonical service name.",
+              "inputSchema": {
+                "properties": {
+                  "service": {
+                    "description": "Canonical service name: billing, payments, auth",
+                    "title": "Service",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "service"
+                ],
+                "type": "object",
+                "title": "get_service_statusArguments"
+              }
+            },
+            {
+              "name": "get_user_profile",
+              "description": "Return a user profile by user id.",
+              "inputSchema": {
+                "properties": {
+                  "user_id": {
+                    "description": "User id, e.g. u-1001",
+                    "title": "User Id",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "user_id"
+                ],
+                "type": "object",
+                "title": "get_user_profileArguments"
+              }
+            },
+            {
+              "name": "search_documentation",
+              "description": "Search internal documentation snippets by keyword query.",
+              "inputSchema": {
+                "properties": {
+                  "query": {
+                    "description": "Short keyword query over internal docs",
+                    "title": "Query",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "query"
+                ],
+                "type": "object",
+                "title": "search_documentationArguments"
+              }
+            }
+          ],
+          "toolCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-tool_call_request",
+        "type": "protocol",
+        "title": "Tool call request",
+        "status": "ok",
+        "detail": {
+          "method": "tools/call",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-tool_call_response",
+        "type": "protocol",
+        "title": "Tool call response",
+        "status": "ok",
+        "detail": {
+          "method": "tools/call",
+          "name": "get_service_status",
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"service\": {\n    \"service\": \"payments\",\n    \"status\": \"degraded\",\n    \"region\": \"us-east-1\",\n    \"latencyP99Ms\": 890,\n    \"incident\": \"PAY-2041: elevated card-auth latency\"\n  }\n}",
+                "annotations": null,
+                "meta": null
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "discoveredTools": [
+        "get_service_status",
+        "get_user_profile",
+        "search_documentation"
+      ],
+      "invocation": {
+        "tool": "get_service_status",
+        "arguments": {
+          "service": "payments"
+        },
+        "isError": false,
+        "result": {
+          "ok": true,
+          "service": {
+            "service": "payments",
+            "status": "degraded",
+            "region": "us-east-1",
+            "latencyP99Ms": 890,
+            "incident": "PAY-2041: elevated card-auth latency"
+          }
+        }
+      }
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 4,
+      "initializeMs": 1,
+      "discoveryMs": 0,
+      "toolCallMs": 1,
+      "toolCalls": 1,
+      "toolsDiscovered": 3,
+      "successfulToolCalls": 1,
+      "failedToolCalls": 0,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            }
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-fixtures",
+            "version": ""
+          },
+          "latencyMs": 1
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "tools/list"
+        },
+        {
+          "phase": "TOOLS",
+          "toolCount": 3,
+          "tools": [
+            "get_service_status",
+            "get_user_profile",
+            "search_documentation"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "INVOKE",
+          "tool": "get_service_status",
+          "arguments": {
+            "service": "payments"
+          }
+        },
+        {
+          "phase": "RESULT",
+          "tool": "get_service_status",
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"service\": {\n    \"service\": \"payments\",\n    \"status\": \"degraded\",\n    \"region\": \"us-east-1\",\n    \"latencyP99Ms\": 890,\n    \"incident\": \"PAY-2041: elevated card-auth latency\"\n  }\n}",
+                "annotations": null,
+                "meta": null
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            }
+          },
+          "latencyMs": 1
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 DISCOVER \u2192 INVOKE \u2192 RESULT"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "tool-discovery"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/01-tool-discovery"
+    }
+  },
+  {
+    "labId": "mcp-tool-discovery",
+    "traceId": "multi-tool-search-docs",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-18T17:22:55Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "MULTI_TOOL_DISCOVERY",
+    "selectionNote": "Measured case: client discovers all server tools, then explicitly selects search_documentation (not autonomous agent reasoning).",
+    "architecture": {
+      "layout": "mcp-tool-discovery",
+      "stages": [
+        "initialize",
+        "tools-list",
+        "tool-contract",
+        "tools-call",
+        "structured-result"
+      ]
+    },
+    "input": {
+      "case": "multi-tool-search-docs",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy"
+      }
+    },
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical service name.",
+        "inputSchema": {
+          "properties": {
+            "service": {
+              "description": "Canonical service name: billing, payments, auth",
+              "title": "Service",
+              "type": "string"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "type": "object",
+          "title": "get_service_statusArguments"
+        }
+      },
+      {
+        "name": "get_user_profile",
+        "description": "Return a user profile by user id.",
+        "inputSchema": {
+          "properties": {
+            "user_id": {
+              "description": "User id, e.g. u-1001",
+              "title": "User Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "user_id"
+          ],
+          "type": "object",
+          "title": "get_user_profileArguments"
+        }
+      },
+      {
+        "name": "search_documentation",
+        "description": "Search internal documentation snippets by keyword query.",
+        "inputSchema": {
+          "properties": {
+            "query": {
+              "description": "Short keyword query over internal docs",
+              "title": "Query",
+              "type": "string"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "type": "object",
+          "title": "search_documentationArguments"
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-fixtures",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 1
+      },
+      {
+        "kind": "tools_list_request",
+        "detail": {
+          "method": "tools/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "tools_list_response",
+        "detail": {
+          "method": "tools/list",
+          "tools": [
+            {
+              "name": "get_service_status",
+              "description": "Return the current status for a canonical service name.",
+              "inputSchema": {
+                "properties": {
+                  "service": {
+                    "description": "Canonical service name: billing, payments, auth",
+                    "title": "Service",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "service"
+                ],
+                "type": "object",
+                "title": "get_service_statusArguments"
+              }
+            },
+            {
+              "name": "get_user_profile",
+              "description": "Return a user profile by user id.",
+              "inputSchema": {
+                "properties": {
+                  "user_id": {
+                    "description": "User id, e.g. u-1001",
+                    "title": "User Id",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "user_id"
+                ],
+                "type": "object",
+                "title": "get_user_profileArguments"
+              }
+            },
+            {
+              "name": "search_documentation",
+              "description": "Search internal documentation snippets by keyword query.",
+              "inputSchema": {
+                "properties": {
+                  "query": {
+                    "description": "Short keyword query over internal docs",
+                    "title": "Query",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "query"
+                ],
+                "type": "object",
+                "title": "search_documentationArguments"
+              }
+            }
+          ],
+          "toolCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call_request",
+        "detail": {
+          "method": "tools/call",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "tool_call_response",
+        "detail": {
+          "method": "tools/call",
+          "name": "search_documentation",
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"query\": \"payments degradation\",\n  \"hitCount\": 2,\n  \"hits\": [\n    {\n      \"id\": \"doc-payments-runbook\",\n      \"title\": \"Payments degradation runbook\",\n      \"snippet\": \"When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.\",\n      \"score\": 2\n    },\n    {\n      \"id\": \"doc-service-names\",\n      \"title\": \"Canonical service names\",\n      \"snippet\": \"Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.\",\n      \"score\": 1\n    }\n  ]\n}",
+                "annotations": null,
+                "meta": null
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "query": "payments degradation",
+              "hitCount": 2,
+              "hits": [
+                {
+                  "id": "doc-payments-runbook",
+                  "title": "Payments degradation runbook",
+                  "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                  "score": 2
+                },
+                {
+                  "id": "doc-service-names",
+                  "title": "Canonical service names",
+                  "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                  "score": 1
+                }
+              ]
+            }
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-fixtures",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-tools_list_request",
+        "type": "protocol",
+        "title": "Tools list request",
+        "status": "ok",
+        "detail": {
+          "method": "tools/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-tools_list_response",
+        "type": "protocol",
+        "title": "Tools list response",
+        "status": "ok",
+        "detail": {
+          "method": "tools/list",
+          "tools": [
+            {
+              "name": "get_service_status",
+              "description": "Return the current status for a canonical service name.",
+              "inputSchema": {
+                "properties": {
+                  "service": {
+                    "description": "Canonical service name: billing, payments, auth",
+                    "title": "Service",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "service"
+                ],
+                "type": "object",
+                "title": "get_service_statusArguments"
+              }
+            },
+            {
+              "name": "get_user_profile",
+              "description": "Return a user profile by user id.",
+              "inputSchema": {
+                "properties": {
+                  "user_id": {
+                    "description": "User id, e.g. u-1001",
+                    "title": "User Id",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "user_id"
+                ],
+                "type": "object",
+                "title": "get_user_profileArguments"
+              }
+            },
+            {
+              "name": "search_documentation",
+              "description": "Search internal documentation snippets by keyword query.",
+              "inputSchema": {
+                "properties": {
+                  "query": {
+                    "description": "Short keyword query over internal docs",
+                    "title": "Query",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "query"
+                ],
+                "type": "object",
+                "title": "search_documentationArguments"
+              }
+            }
+          ],
+          "toolCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-tool_call_request",
+        "type": "protocol",
+        "title": "Tool call request",
+        "status": "ok",
+        "detail": {
+          "method": "tools/call",
+          "name": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-tool_call_response",
+        "type": "protocol",
+        "title": "Tool call response",
+        "status": "ok",
+        "detail": {
+          "method": "tools/call",
+          "name": "search_documentation",
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"query\": \"payments degradation\",\n  \"hitCount\": 2,\n  \"hits\": [\n    {\n      \"id\": \"doc-payments-runbook\",\n      \"title\": \"Payments degradation runbook\",\n      \"snippet\": \"When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.\",\n      \"score\": 2\n    },\n    {\n      \"id\": \"doc-service-names\",\n      \"title\": \"Canonical service names\",\n      \"snippet\": \"Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.\",\n      \"score\": 1\n    }\n  ]\n}",
+                "annotations": null,
+                "meta": null
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "query": "payments degradation",
+              "hitCount": 2,
+              "hits": [
+                {
+                  "id": "doc-payments-runbook",
+                  "title": "Payments degradation runbook",
+                  "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                  "score": 2
+                },
+                {
+                  "id": "doc-service-names",
+                  "title": "Canonical service names",
+                  "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                  "score": 1
+                }
+              ]
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "discoveredTools": [
+        "get_service_status",
+        "get_user_profile",
+        "search_documentation"
+      ],
+      "invocation": {
+        "tool": "search_documentation",
+        "arguments": {
+          "query": "payments degradation"
+        },
+        "isError": false,
+        "result": {
+          "ok": true,
+          "query": "payments degradation",
+          "hitCount": 2,
+          "hits": [
+            {
+              "id": "doc-payments-runbook",
+              "title": "Payments degradation runbook",
+              "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+              "score": 2
+            },
+            {
+              "id": "doc-service-names",
+              "title": "Canonical service names",
+              "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+              "score": 1
+            }
+          ]
+        }
+      }
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 3,
+      "initializeMs": 1,
+      "discoveryMs": 0,
+      "toolCallMs": 0,
+      "toolCalls": 1,
+      "toolsDiscovered": 3,
+      "successfulToolCalls": 1,
+      "failedToolCalls": 0,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            }
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-fixtures",
+            "version": ""
+          },
+          "latencyMs": 1
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "tools/list"
+        },
+        {
+          "phase": "TOOLS",
+          "toolCount": 3,
+          "tools": [
+            "get_service_status",
+            "get_user_profile",
+            "search_documentation"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "INVOKE",
+          "tool": "search_documentation",
+          "arguments": {
+            "query": "payments degradation"
+          }
+        },
+        {
+          "phase": "RESULT",
+          "tool": "search_documentation",
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"query\": \"payments degradation\",\n  \"hitCount\": 2,\n  \"hits\": [\n    {\n      \"id\": \"doc-payments-runbook\",\n      \"title\": \"Payments degradation runbook\",\n      \"snippet\": \"When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.\",\n      \"score\": 2\n    },\n    {\n      \"id\": \"doc-service-names\",\n      \"title\": \"Canonical service names\",\n      \"snippet\": \"Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.\",\n      \"score\": 1\n    }\n  ]\n}",
+                "annotations": null,
+                "meta": null
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "query": "payments degradation",
+              "hitCount": 2,
+              "hits": [
+                {
+                  "id": "doc-payments-runbook",
+                  "title": "Payments degradation runbook",
+                  "snippet": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.",
+                  "score": 2
+                },
+                {
+                  "id": "doc-service-names",
+                  "title": "Canonical service names",
+                  "snippet": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc.",
+                  "score": 1
+                }
+              ]
+            }
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 DISCOVER \u2192 INVOKE \u2192 RESULT"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "tool-discovery"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/01-tool-discovery"
+    }
+  },
+  {
+    "labId": "mcp-tool-discovery",
+    "traceId": "invalid-arguments-service-type",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-18T17:22:55Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "INVALID_ARGUMENTS",
+    "selectionNote": "Measured case: client discovers get_service_status, then calls it with an invalid argument type. The server rejects the request at the MCP tool boundary with a structured protocol-visible error.",
+    "architecture": {
+      "layout": "mcp-tool-discovery",
+      "stages": [
+        "initialize",
+        "tools-list",
+        "tool-contract",
+        "tools-call",
+        "structured-result"
+      ]
+    },
+    "input": {
+      "case": "invalid-arguments-service-type",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy"
+      }
+    },
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical service name.",
+        "inputSchema": {
+          "properties": {
+            "service": {
+              "description": "Canonical service name: billing, payments, auth",
+              "title": "Service",
+              "type": "string"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "type": "object",
+          "title": "get_service_statusArguments"
+        }
+      },
+      {
+        "name": "get_user_profile",
+        "description": "Return a user profile by user id.",
+        "inputSchema": {
+          "properties": {
+            "user_id": {
+              "description": "User id, e.g. u-1001",
+              "title": "User Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "user_id"
+          ],
+          "type": "object",
+          "title": "get_user_profileArguments"
+        }
+      },
+      {
+        "name": "search_documentation",
+        "description": "Search internal documentation snippets by keyword query.",
+        "inputSchema": {
+          "properties": {
+            "query": {
+              "description": "Short keyword query over internal docs",
+              "title": "Query",
+              "type": "string"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "type": "object",
+          "title": "search_documentationArguments"
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-fixtures",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 2
+      },
+      {
+        "kind": "tools_list_request",
+        "detail": {
+          "method": "tools/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "tools_list_response",
+        "detail": {
+          "method": "tools/list",
+          "tools": [
+            {
+              "name": "get_service_status",
+              "description": "Return the current status for a canonical service name.",
+              "inputSchema": {
+                "properties": {
+                  "service": {
+                    "description": "Canonical service name: billing, payments, auth",
+                    "title": "Service",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "service"
+                ],
+                "type": "object",
+                "title": "get_service_statusArguments"
+              }
+            },
+            {
+              "name": "get_user_profile",
+              "description": "Return a user profile by user id.",
+              "inputSchema": {
+                "properties": {
+                  "user_id": {
+                    "description": "User id, e.g. u-1001",
+                    "title": "User Id",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "user_id"
+                ],
+                "type": "object",
+                "title": "get_user_profileArguments"
+              }
+            },
+            {
+              "name": "search_documentation",
+              "description": "Search internal documentation snippets by keyword query.",
+              "inputSchema": {
+                "properties": {
+                  "query": {
+                    "description": "Short keyword query over internal docs",
+                    "title": "Query",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "query"
+                ],
+                "type": "object",
+                "title": "search_documentationArguments"
+              }
+            }
+          ],
+          "toolCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call_request",
+        "detail": {
+          "method": "tools/call",
+          "name": "get_service_status",
+          "arguments": {
+            "service": 123
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "tool_call_response",
+        "detail": {
+          "method": "tools/call",
+          "name": "get_service_status",
+          "isError": true,
+          "result": {
+            "isError": true,
+            "content": [
+              {
+                "type": "text",
+                "text": "Error executing tool get_service_status: 1 validation error for get_service_statusArguments\nservice\n  Input should be a valid string [type=string_type, input_value=123, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type",
+                "annotations": null,
+                "meta": null
+              }
+            ],
+            "text": "Error executing tool get_service_status: 1 validation error for get_service_statusArguments\nservice\n  Input should be a valid string [type=string_type, input_value=123, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type"
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-fixtures",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 2,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-tools_list_request",
+        "type": "protocol",
+        "title": "Tools list request",
+        "status": "ok",
+        "detail": {
+          "method": "tools/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-tools_list_response",
+        "type": "protocol",
+        "title": "Tools list response",
+        "status": "ok",
+        "detail": {
+          "method": "tools/list",
+          "tools": [
+            {
+              "name": "get_service_status",
+              "description": "Return the current status for a canonical service name.",
+              "inputSchema": {
+                "properties": {
+                  "service": {
+                    "description": "Canonical service name: billing, payments, auth",
+                    "title": "Service",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "service"
+                ],
+                "type": "object",
+                "title": "get_service_statusArguments"
+              }
+            },
+            {
+              "name": "get_user_profile",
+              "description": "Return a user profile by user id.",
+              "inputSchema": {
+                "properties": {
+                  "user_id": {
+                    "description": "User id, e.g. u-1001",
+                    "title": "User Id",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "user_id"
+                ],
+                "type": "object",
+                "title": "get_user_profileArguments"
+              }
+            },
+            {
+              "name": "search_documentation",
+              "description": "Search internal documentation snippets by keyword query.",
+              "inputSchema": {
+                "properties": {
+                  "query": {
+                    "description": "Short keyword query over internal docs",
+                    "title": "Query",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "query"
+                ],
+                "type": "object",
+                "title": "search_documentationArguments"
+              }
+            }
+          ],
+          "toolCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-tool_call_request",
+        "type": "protocol",
+        "title": "Tool call request",
+        "status": "ok",
+        "detail": {
+          "method": "tools/call",
+          "name": "get_service_status",
+          "arguments": {
+            "service": 123
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-tool_call_response",
+        "type": "protocol",
+        "title": "Tool call response",
+        "status": "error",
+        "detail": {
+          "method": "tools/call",
+          "name": "get_service_status",
+          "isError": true,
+          "result": {
+            "isError": true,
+            "content": [
+              {
+                "type": "text",
+                "text": "Error executing tool get_service_status: 1 validation error for get_service_statusArguments\nservice\n  Input should be a valid string [type=string_type, input_value=123, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type",
+                "annotations": null,
+                "meta": null
+              }
+            ],
+            "text": "Error executing tool get_service_status: 1 validation error for get_service_statusArguments\nservice\n  Input should be a valid string [type=string_type, input_value=123, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type"
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "discoveredTools": [
+        "get_service_status",
+        "get_user_profile",
+        "search_documentation"
+      ],
+      "invocation": {
+        "tool": "get_service_status",
+        "arguments": {
+          "service": 123
+        },
+        "isError": true,
+        "result": {
+          "isError": true,
+          "content": [
+            {
+              "type": "text",
+              "text": "Error executing tool get_service_status: 1 validation error for get_service_statusArguments\nservice\n  Input should be a valid string [type=string_type, input_value=123, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type",
+              "annotations": null,
+              "meta": null
+            }
+          ],
+          "text": "Error executing tool get_service_status: 1 validation error for get_service_statusArguments\nservice\n  Input should be a valid string [type=string_type, input_value=123, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type"
+        }
+      }
+    },
+    "errors": [
+      {
+        "stage": "tools/call",
+        "tool": "get_service_status",
+        "isError": true,
+        "detail": {
+          "isError": true,
+          "content": [
+            {
+              "type": "text",
+              "text": "Error executing tool get_service_status: 1 validation error for get_service_statusArguments\nservice\n  Input should be a valid string [type=string_type, input_value=123, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type",
+              "annotations": null,
+              "meta": null
+            }
+          ],
+          "text": "Error executing tool get_service_status: 1 validation error for get_service_statusArguments\nservice\n  Input should be a valid string [type=string_type, input_value=123, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type"
+        }
+      }
+    ],
+    "metrics": {
+      "totalMs": 4,
+      "initializeMs": 2,
+      "discoveryMs": 0,
+      "toolCallMs": 0,
+      "toolCalls": 1,
+      "toolsDiscovered": 3,
+      "successfulToolCalls": 0,
+      "failedToolCalls": 1,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            }
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-fixtures",
+            "version": ""
+          },
+          "latencyMs": 2
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "tools/list"
+        },
+        {
+          "phase": "TOOLS",
+          "toolCount": 3,
+          "tools": [
+            "get_service_status",
+            "get_user_profile",
+            "search_documentation"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "INVOKE",
+          "tool": "get_service_status",
+          "arguments": {
+            "service": 123
+          }
+        },
+        {
+          "phase": "REJECTED",
+          "tool": "get_service_status",
+          "isError": true,
+          "result": {
+            "isError": true,
+            "content": [
+              {
+                "type": "text",
+                "text": "Error executing tool get_service_status: 1 validation error for get_service_statusArguments\nservice\n  Input should be a valid string [type=string_type, input_value=123, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type",
+                "annotations": null,
+                "meta": null
+              }
+            ],
+            "text": "Error executing tool get_service_status: 1 validation error for get_service_statusArguments\nservice\n  Input should be a valid string [type=string_type, input_value=123, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type"
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 DISCOVER \u2192 INVOKE \u2192 REJECTED"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "tool-discovery"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/01-tool-discovery"
+    }
+  }
+]
