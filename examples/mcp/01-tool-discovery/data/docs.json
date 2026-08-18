@@ -1,0 +1,22 @@
+[
+  {
+    "id": "doc-rate-limits",
+    "title": "NebulaAPI rate limits",
+    "body": "Public NebulaAPI endpoints enforce 120 requests per minute per client key. Responses include Retry-After when RATE_LIMIT_EXCEEDED is returned."
+  },
+  {
+    "id": "doc-auth-ttl",
+    "title": "NebulaAuth token TTL",
+    "body": "NebulaAuth access tokens expire after eight hours of inactivity. Enable silent credential refresh so tokens renew without interactive prompts."
+  },
+  {
+    "id": "doc-payments-runbook",
+    "title": "Payments degradation runbook",
+    "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+  },
+  {
+    "id": "doc-service-names",
+    "title": "Canonical service names",
+    "body": "Status tooling accepts canonical service names only: billing, payments, auth. Do not use aliases such as billing-api or billing-svc."
+  }
+]

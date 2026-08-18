@@ -42,6 +42,12 @@ Cookbook →  "How is it implemented?"
 | `planning` | [`examples/agents/04-planning`](examples/agents/04-planning) | Explicit multi-step plan as a runtime artifact (create → execute → observe → revise) |
 | `agent-memory` | [`examples/agents/05-memory`](examples/agents/05-memory) | Application-owned memory across interactions (store → retrieve → use, including miss and stale) |
 
+### MCP
+
+| ID | Path | Concept |
+|----|------|---------|
+| `mcp-tool-discovery` | [`examples/mcp/01-tool-discovery`](examples/mcp/01-tool-discovery) | MCP client/server protocol lifecycle (initialize → tools/list → tools/call) |
+
 More examples will be added as each learning path progresses.
 
 ## Quick start
@@ -69,12 +75,14 @@ dataaihub-cookbook/
 │   │   ├── 04-query-transformation/
 │   │   ├── 05-retrieval-evaluation/
 │   │   └── 06-chunking-strategies/
-│   └── agents/
-│       ├── 01-tool-calling/
-│       ├── 02-agent-loop/
-│       ├── 03-agent-evaluation/
-│       ├── 04-planning/
-│       └── 05-memory/
+│   ├── agents/
+│   │   ├── 01-tool-calling/
+│   │   ├── 02-agent-loop/
+│   │   ├── 03-agent-evaluation/
+│   │   ├── 04-planning/
+│   │   └── 05-memory/
+│   └── mcp/
+│       └── 01-tool-discovery/
 ├── shared/
 ├── docs/
 └── scripts/
