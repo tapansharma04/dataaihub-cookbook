@@ -1,0 +1,10 @@
+{
+  "u-1003": {
+    "notification_channel": {
+      "channel": "sms",
+      "version": 2,
+      "updatedAt": "2026-08-18T09:00:00Z",
+      "source": "system"
+    }
+  }
+}

@@ -1,0 +1,3070 @@
+[
+  {
+    "labId": "agent-memory",
+    "traceId": "no-memory-notification-preference",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-18T05:49:14Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "case-harness",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "NO_MEMORY",
+    "selectionNote": "Measured case: a later request asks for a notification preference that was never stored. Memory lookup returns no record. The agent reports the miss and does not invent a channel. A miss is a normal observable state, not a memory system failure.",
+    "architecture": {
+      "layout": "agent-memory",
+      "stages": [
+        "user-request",
+        "memory-write-requested",
+        "memory-stored",
+        "memory-retrieval-requested",
+        "memory-retrieved",
+        "memory-not-found",
+        "observation",
+        "final-answer",
+        "termination"
+      ]
+    },
+    "input": {
+      "scope": "u-1002",
+      "request": "How should I be notified about the next incident?",
+      "interactions": [
+        {
+          "id": "interaction-1",
+          "request": "How should I be notified about the next incident?"
+        }
+      ],
+      "config": {
+        "chatModel": "case-harness",
+        "modelDriver": "case-harness",
+        "maxTurns": 6,
+        "toolTimeoutMs": 2000
+      }
+    },
+    "state": {
+      "scope": "u-1002",
+      "currentTurn": 2,
+      "maxTurns": 6,
+      "currentInteractionId": "interaction-1",
+      "interactions": [
+        {
+          "id": "interaction-1",
+          "request": "How should I be notified about the next incident?",
+          "finalAnswer": "No stored notification preference exists for this user. I will not invent a channel. Ask the user which channel to use, or store a preference first."
+        }
+      ],
+      "decisions": [
+        {
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "decision": "retrieve_memory",
+          "content": "retrieve notification preference",
+          "memoryWrite": null,
+          "memoryRead": {
+            "scope": "u-1002",
+            "key": "notification_channel"
+          },
+          "finishReason": "stop",
+          "latencyMs": 0
+        },
+        {
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "decision": "final_answer",
+          "content": "No stored notification preference exists for this user. I will not invent a channel. Ask the user which channel to use, or store a preference first.",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "finishReason": "stop",
+          "latencyMs": 0
+        }
+      ],
+      "memoryWrites": [],
+      "memoryReads": [
+        {
+          "scope": "u-1002",
+          "key": "notification_channel",
+          "found": false,
+          "record": null,
+          "interactionId": "interaction-1"
+        }
+      ],
+      "freshness": [],
+      "finalAnswer": "No stored notification preference exists for this user. I will not invent a channel. Ask the user which channel to use, or store a preference first.",
+      "terminationReason": "final_answer",
+      "errors": [],
+      "messageCount": 3,
+      "memoryRecords": []
+    },
+    "tools": [
+      {
+        "name": "store_memory",
+        "description": "Propose storing a user-provided fact in application memory. The application validates scope, key, value, and provenance and performs the write.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scope": {
+              "type": "string",
+              "description": "Memory owner, typically a user id such as u-1001"
+            },
+            "key": {
+              "type": "string",
+              "description": "Allowlisted memory key, e.g. notification_channel"
+            },
+            "value": {
+              "type": "object",
+              "description": "Stored content, e.g. {\"channel\": \"email\"}"
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "user",
+                "system",
+                "tool",
+                "application"
+              ],
+              "description": "Provenance of the information to store"
+            }
+          },
+          "required": [
+            "key",
+            "value",
+            "source"
+          ]
+        }
+      },
+      {
+        "name": "retrieve_memory",
+        "description": "Propose retrieving a memory record by key. The application enforces the session scope and returns a miss explicitly when no record exists.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scope": {
+              "type": "string",
+              "description": "Memory owner, typically a user id such as u-1001"
+            },
+            "key": {
+              "type": "string",
+              "description": "Allowlisted memory key, e.g. notification_channel"
+            }
+          },
+          "required": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "user_request",
+        "turn": null,
+        "interactionId": "interaction-1",
+        "detail": {
+          "request": "How should I be notified about the next incident?",
+          "scope": "u-1002",
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 1,
+        "interactionId": "interaction-1",
+        "detail": {
+          "decision": "retrieve_memory",
+          "content": "retrieve notification preference",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": {
+            "scope": "u-1002",
+            "key": "notification_channel"
+          },
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "memory_retrieval_requested",
+        "turn": 1,
+        "interactionId": "interaction-1",
+        "detail": {
+          "scope": "u-1002",
+          "key": "notification_channel",
+          "sessionScope": "u-1002",
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "memory_not_found",
+        "turn": 1,
+        "interactionId": "interaction-1",
+        "detail": {
+          "scope": "u-1002",
+          "key": "notification_channel",
+          "found": false,
+          "record": null,
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 2,
+        "interactionId": "interaction-1",
+        "detail": {
+          "decision": "final_answer",
+          "content": "No stored notification preference exists for this user. I will not invent a channel. Ask the user which channel to use, or store a preference first.",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 2,
+        "interactionId": "interaction-1",
+        "detail": {
+          "answer": "No stored notification preference exists for this user. I will not invent a channel. Ask the user which channel to use, or store a preference first.",
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "turn": 2,
+        "interactionId": "interaction-1",
+        "detail": {
+          "reason": "final_answer",
+          "interactionId": "interaction-1",
+          "scope": "u-1002"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "How should I be notified about the next incident?",
+          "scope": "u-1002",
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "retrieve_memory",
+          "content": "retrieve notification preference",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": {
+            "scope": "u-1002",
+            "key": "notification_channel"
+          },
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-3-memory_retrieval_requested",
+        "type": "memory_retrieval_requested",
+        "title": "Memory retrieval requested",
+        "status": "ok",
+        "detail": {
+          "scope": "u-1002",
+          "key": "notification_channel",
+          "sessionScope": "u-1002",
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-memory_not_found",
+        "type": "memory_not_found",
+        "title": "Memory not found",
+        "status": "ok",
+        "detail": {
+          "scope": "u-1002",
+          "key": "notification_channel",
+          "found": false,
+          "record": null,
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "No stored notification preference exists for this user. I will not invent a channel. Ask the user which channel to use, or store a preference first.",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-6-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "No stored notification preference exists for this user. I will not invent a channel. Ask the user which channel to use, or store a preference first.",
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "final_answer",
+          "interactionId": "interaction-1",
+          "scope": "u-1002"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "No stored notification preference exists for this user. I will not invent a channel. Ask the user which channel to use, or store a preference first.",
+      "terminationReason": "final_answer",
+      "memoryScope": "u-1002",
+      "memoryVersion": null,
+      "staleMemoryDetected": false
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "modelMs": 0,
+      "toolMs": 0,
+      "modelTurns": 2,
+      "toolCalls": 0,
+      "successfulToolCalls": 0,
+      "failedToolCalls": 0,
+      "terminationReason": "final_answer",
+      "maxTurns": 6,
+      "memoryWrites": 0,
+      "memoryReads": 1,
+      "memoryHits": 0,
+      "memoryMisses": 1,
+      "memoryScope": "u-1002",
+      "memoryVersion": null,
+      "staleMemoryDetected": false,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable memory events for STORE \u2192 RETRIEVE \u2192 USE, including MEMORY_MISS and MEMORY_STALE. Not a new measurement. Does not score memory quality.",
+      "signatureView": [
+        {
+          "phase": "USER_REQUEST",
+          "interactionId": "interaction-1",
+          "request": "How should I be notified about the next incident?",
+          "scope": "u-1002"
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "decision": "retrieve_memory",
+          "content": "retrieve notification preference",
+          "latencyMs": 0
+        },
+        {
+          "phase": "MEMORY_RETRIEVE_REQUESTED",
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "scope": "u-1002",
+          "key": "notification_channel"
+        },
+        {
+          "phase": "MEMORY_MISS",
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "scope": "u-1002",
+          "key": "notification_channel",
+          "found": false,
+          "note": "No matching record exists for this scope and key. A miss is a normal observable state, not a memory system failure."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "decision": "final_answer",
+          "content": "No stored notification preference exists for this user. I will not invent a channel. Ask the user which channel to use, or store a preference first.",
+          "latencyMs": 0
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "answer": "No stored notification preference exists for this user. I will not invent a channel. Ask the user which channel to use, or store a preference first.",
+          "note": "The runtime records the observable final answer."
+        },
+        {
+          "phase": "TERMINATION",
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "reason": "final_answer",
+          "detail": {
+            "reason": "final_answer",
+            "interactionId": "interaction-1",
+            "scope": "u-1002"
+          },
+          "note": "The runtime stops when the session completes or a safety boundary is reached."
+        }
+      ],
+      "stageNotes": {
+        "MEMORY_WRITE": "The application validates and stores a memory record. Information does not persist automatically just because the model saw it.",
+        "MEMORY_RETRIEVE": "The runtime retrieves a scoped memory record for a later interaction.",
+        "MEMORY_MISS": "No matching record exists for this scope and key. A miss is a normal observable state, not a memory system failure.",
+        "MEMORY_STALE": "Stored memory exists but differs from the current authoritative source. The current source is preferred.",
+        "CURRENT_SOURCE": "The current authoritative preference, distinct from stored memory.",
+        "MEMORY_USED": "The later answer uses information that originated in stored memory.",
+        "INTERACTION_BOUNDARY": "A later interaction starts. Conversation history is not carried forward; recalled information comes from the memory store.",
+        "FINAL_ANSWER": "The runtime records the observable final answer.",
+        "TERMINATION": "The runtime stops when the session completes or a safety boundary is reached.",
+        "SECURITY": "The model proposes store or retrieve operations; the application validates scope, key, value, provenance, and performs the write or read. Memory from one scope never leaks into another."
+      },
+      "securityNote": "The model proposes store or retrieve operations; the application validates scope, key, value, provenance, and performs the write or read. Memory from one scope never leaks into another.",
+      "memoryRecords": [],
+      "interactions": [
+        {
+          "id": "interaction-1",
+          "request": "How should I be notified about the next incident?",
+          "finalAnswer": "No stored notification preference exists for this user. I will not invent a channel. Ask the user which channel to use, or store a preference first."
+        }
+      ],
+      "freshness": [],
+      "missNote": "No matching record exists for this scope and key. A miss is a normal observable state, not a memory system failure."
+    },
+    "relatedEntities": [],
+    "relatedContent": [
+      "agents",
+      "agent-memory",
+      "agent-planning",
+      "agent-loop",
+      "tool-calling"
+    ],
+    "cookbook": {
+      "path": "examples/agents/05-memory"
+    }
+  },
+  {
+    "labId": "agent-memory",
+    "traceId": "store-email-notification-preference",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-18T05:49:14Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "case-harness",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "STORE",
+    "selectionNote": "Measured case: the user explicitly provides a notification preference. The application validates the write and stores a scoped memory record. Information does not persist just because the model saw it; persistence begins with an explicit application-owned write.",
+    "architecture": {
+      "layout": "agent-memory",
+      "stages": [
+        "user-request",
+        "memory-write-requested",
+        "memory-stored",
+        "memory-retrieval-requested",
+        "memory-retrieved",
+        "memory-not-found",
+        "observation",
+        "final-answer",
+        "termination"
+      ]
+    },
+    "input": {
+      "scope": "u-1001",
+      "request": "I prefer email notifications for service incidents.",
+      "interactions": [
+        {
+          "id": "interaction-1",
+          "request": "I prefer email notifications for service incidents."
+        }
+      ],
+      "config": {
+        "chatModel": "case-harness",
+        "modelDriver": "case-harness",
+        "maxTurns": 6,
+        "toolTimeoutMs": 2000
+      }
+    },
+    "state": {
+      "scope": "u-1001",
+      "currentTurn": 2,
+      "maxTurns": 6,
+      "currentInteractionId": "interaction-1",
+      "interactions": [
+        {
+          "id": "interaction-1",
+          "request": "I prefer email notifications for service incidents.",
+          "finalAnswer": "Stored email as the notification channel for this user. The record is scoped to u-1001 with provenance user and version 1."
+        }
+      ],
+      "decisions": [
+        {
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "decision": "store_memory",
+          "content": "store email notification preference",
+          "memoryWrite": {
+            "scope": "u-1001",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "source": "user"
+          },
+          "memoryRead": null,
+          "finishReason": "stop",
+          "latencyMs": 0
+        },
+        {
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "decision": "final_answer",
+          "content": "Stored email as the notification channel for this user. The record is scoped to u-1001 with provenance user and version 1.",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "finishReason": "stop",
+          "latencyMs": 0
+        }
+      ],
+      "memoryWrites": [
+        {
+          "id": "mem-u-1001-notification_channel-v1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1
+        }
+      ],
+      "memoryReads": [],
+      "freshness": [],
+      "finalAnswer": "Stored email as the notification channel for this user. The record is scoped to u-1001 with provenance user and version 1.",
+      "terminationReason": "final_answer",
+      "errors": [],
+      "messageCount": 3,
+      "memoryRecords": [
+        {
+          "id": "mem-u-1001-notification_channel-v1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1
+        }
+      ]
+    },
+    "tools": [
+      {
+        "name": "store_memory",
+        "description": "Propose storing a user-provided fact in application memory. The application validates scope, key, value, and provenance and performs the write.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scope": {
+              "type": "string",
+              "description": "Memory owner, typically a user id such as u-1001"
+            },
+            "key": {
+              "type": "string",
+              "description": "Allowlisted memory key, e.g. notification_channel"
+            },
+            "value": {
+              "type": "object",
+              "description": "Stored content, e.g. {\"channel\": \"email\"}"
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "user",
+                "system",
+                "tool",
+                "application"
+              ],
+              "description": "Provenance of the information to store"
+            }
+          },
+          "required": [
+            "key",
+            "value",
+            "source"
+          ]
+        }
+      },
+      {
+        "name": "retrieve_memory",
+        "description": "Propose retrieving a memory record by key. The application enforces the session scope and returns a miss explicitly when no record exists.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scope": {
+              "type": "string",
+              "description": "Memory owner, typically a user id such as u-1001"
+            },
+            "key": {
+              "type": "string",
+              "description": "Allowlisted memory key, e.g. notification_channel"
+            }
+          },
+          "required": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "user_request",
+        "turn": null,
+        "interactionId": "interaction-1",
+        "detail": {
+          "request": "I prefer email notifications for service incidents.",
+          "scope": "u-1001",
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 1,
+        "interactionId": "interaction-1",
+        "detail": {
+          "decision": "store_memory",
+          "content": "store email notification preference",
+          "finishReason": "stop",
+          "memoryWrite": {
+            "scope": "u-1001",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "source": "user"
+          },
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "memory_write_requested",
+        "turn": 1,
+        "interactionId": "interaction-1",
+        "detail": {
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "source": "user",
+          "sessionScope": "u-1001",
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "memory_stored",
+        "turn": 1,
+        "interactionId": "interaction-1",
+        "detail": {
+          "id": "mem-u-1001-notification_channel-v1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1,
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 2,
+        "interactionId": "interaction-1",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Stored email as the notification channel for this user. The record is scoped to u-1001 with provenance user and version 1.",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 2,
+        "interactionId": "interaction-1",
+        "detail": {
+          "answer": "Stored email as the notification channel for this user. The record is scoped to u-1001 with provenance user and version 1.",
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "turn": 2,
+        "interactionId": "interaction-1",
+        "detail": {
+          "reason": "final_answer",
+          "interactionId": "interaction-1",
+          "scope": "u-1001"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "I prefer email notifications for service incidents.",
+          "scope": "u-1001",
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "store_memory",
+          "content": "store email notification preference",
+          "finishReason": "stop",
+          "memoryWrite": {
+            "scope": "u-1001",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "source": "user"
+          },
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-3-memory_write_requested",
+        "type": "memory_write_requested",
+        "title": "Memory write requested",
+        "status": "ok",
+        "detail": {
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "source": "user",
+          "sessionScope": "u-1001",
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-memory_stored",
+        "type": "memory_stored",
+        "title": "Memory stored",
+        "status": "ok",
+        "detail": {
+          "id": "mem-u-1001-notification_channel-v1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1,
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Stored email as the notification channel for this user. The record is scoped to u-1001 with provenance user and version 1.",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-6-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Stored email as the notification channel for this user. The record is scoped to u-1001 with provenance user and version 1.",
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "final_answer",
+          "interactionId": "interaction-1",
+          "scope": "u-1001"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "Stored email as the notification channel for this user. The record is scoped to u-1001 with provenance user and version 1.",
+      "terminationReason": "final_answer",
+      "memoryScope": "u-1001",
+      "memoryVersion": 1,
+      "staleMemoryDetected": false
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "modelMs": 0,
+      "toolMs": 0,
+      "modelTurns": 2,
+      "toolCalls": 0,
+      "successfulToolCalls": 0,
+      "failedToolCalls": 0,
+      "terminationReason": "final_answer",
+      "maxTurns": 6,
+      "memoryWrites": 1,
+      "memoryReads": 0,
+      "memoryHits": 0,
+      "memoryMisses": 0,
+      "memoryScope": "u-1001",
+      "memoryVersion": 1,
+      "staleMemoryDetected": false,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable memory events for STORE \u2192 RETRIEVE \u2192 USE, including MEMORY_MISS and MEMORY_STALE. Not a new measurement. Does not score memory quality.",
+      "signatureView": [
+        {
+          "phase": "USER_REQUEST",
+          "interactionId": "interaction-1",
+          "request": "I prefer email notifications for service incidents.",
+          "scope": "u-1001"
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "decision": "store_memory",
+          "content": "store email notification preference",
+          "latencyMs": 0
+        },
+        {
+          "phase": "MEMORY_WRITE_REQUESTED",
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "source": "user"
+        },
+        {
+          "phase": "MEMORY_WRITE",
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "id": "mem-u-1001-notification_channel-v1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "source": "user",
+          "version": 1,
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "note": "The application validates and stores a memory record. Information does not persist automatically just because the model saw it."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "decision": "final_answer",
+          "content": "Stored email as the notification channel for this user. The record is scoped to u-1001 with provenance user and version 1.",
+          "latencyMs": 0
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "answer": "Stored email as the notification channel for this user. The record is scoped to u-1001 with provenance user and version 1.",
+          "note": "The runtime records the observable final answer."
+        },
+        {
+          "phase": "TERMINATION",
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "reason": "final_answer",
+          "detail": {
+            "reason": "final_answer",
+            "interactionId": "interaction-1",
+            "scope": "u-1001"
+          },
+          "note": "The runtime stops when the session completes or a safety boundary is reached."
+        }
+      ],
+      "stageNotes": {
+        "MEMORY_WRITE": "The application validates and stores a memory record. Information does not persist automatically just because the model saw it.",
+        "MEMORY_RETRIEVE": "The runtime retrieves a scoped memory record for a later interaction.",
+        "MEMORY_MISS": "No matching record exists for this scope and key. A miss is a normal observable state, not a memory system failure.",
+        "MEMORY_STALE": "Stored memory exists but differs from the current authoritative source. The current source is preferred.",
+        "CURRENT_SOURCE": "The current authoritative preference, distinct from stored memory.",
+        "MEMORY_USED": "The later answer uses information that originated in stored memory.",
+        "INTERACTION_BOUNDARY": "A later interaction starts. Conversation history is not carried forward; recalled information comes from the memory store.",
+        "FINAL_ANSWER": "The runtime records the observable final answer.",
+        "TERMINATION": "The runtime stops when the session completes or a safety boundary is reached.",
+        "SECURITY": "The model proposes store or retrieve operations; the application validates scope, key, value, provenance, and performs the write or read. Memory from one scope never leaks into another."
+      },
+      "securityNote": "The model proposes store or retrieve operations; the application validates scope, key, value, provenance, and performs the write or read. Memory from one scope never leaks into another.",
+      "memoryRecords": [
+        {
+          "id": "mem-u-1001-notification_channel-v1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1
+        }
+      ],
+      "interactions": [
+        {
+          "id": "interaction-1",
+          "request": "I prefer email notifications for service incidents.",
+          "finalAnswer": "Stored email as the notification channel for this user. The record is scoped to u-1001 with provenance user and version 1."
+        }
+      ],
+      "freshness": []
+    },
+    "relatedEntities": [],
+    "relatedContent": [
+      "agents",
+      "agent-memory",
+      "agent-planning",
+      "agent-loop",
+      "tool-calling"
+    ],
+    "cookbook": {
+      "path": "examples/agents/05-memory"
+    }
+  },
+  {
+    "labId": "agent-memory",
+    "traceId": "recall-email-notification-preference",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-18T05:49:14Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "case-harness",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "RECALL",
+    "selectionNote": "Measured case: interaction 1 stores a user-provided email preference. Interaction 2 asks how the user should be notified and does not repeat the channel. The runtime retrieves the stored record and the answer uses that recalled information.",
+    "architecture": {
+      "layout": "agent-memory",
+      "stages": [
+        "user-request",
+        "memory-write-requested",
+        "memory-stored",
+        "memory-retrieval-requested",
+        "memory-retrieved",
+        "memory-not-found",
+        "observation",
+        "final-answer",
+        "termination"
+      ]
+    },
+    "input": {
+      "scope": "u-1001",
+      "request": "How should I be notified about the next incident?",
+      "interactions": [
+        {
+          "id": "interaction-1",
+          "request": "I prefer email notifications for service incidents."
+        },
+        {
+          "id": "interaction-2",
+          "request": "How should I be notified about the next incident?"
+        }
+      ],
+      "config": {
+        "chatModel": "case-harness",
+        "modelDriver": "case-harness",
+        "maxTurns": 6,
+        "toolTimeoutMs": 2000
+      }
+    },
+    "state": {
+      "scope": "u-1001",
+      "currentTurn": 4,
+      "maxTurns": 6,
+      "currentInteractionId": "interaction-2",
+      "interactions": [
+        {
+          "id": "interaction-1",
+          "request": "I prefer email notifications for service incidents.",
+          "finalAnswer": "Stored email as the notification channel for this user."
+        },
+        {
+          "id": "interaction-2",
+          "request": "How should I be notified about the next incident?",
+          "finalAnswer": "Notify this user by email, using the stored notification preference for u-1001."
+        }
+      ],
+      "decisions": [
+        {
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "decision": "store_memory",
+          "content": "store email notification preference",
+          "memoryWrite": {
+            "scope": "u-1001",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "source": "user"
+          },
+          "memoryRead": null,
+          "finishReason": "stop",
+          "latencyMs": 0
+        },
+        {
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "decision": "final_answer",
+          "content": "Stored email as the notification channel for this user.",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "finishReason": "stop",
+          "latencyMs": 0
+        },
+        {
+          "turn": 3,
+          "interactionId": "interaction-2",
+          "decision": "retrieve_memory",
+          "content": "retrieve notification preference",
+          "memoryWrite": null,
+          "memoryRead": {
+            "scope": "u-1001",
+            "key": "notification_channel"
+          },
+          "finishReason": "stop",
+          "latencyMs": 0
+        },
+        {
+          "turn": 4,
+          "interactionId": "interaction-2",
+          "decision": "final_answer",
+          "content": "Notify this user by email, using the stored notification preference for u-1001.",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "finishReason": "stop",
+          "latencyMs": 0
+        }
+      ],
+      "memoryWrites": [
+        {
+          "id": "mem-u-1001-notification_channel-v1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1
+        }
+      ],
+      "memoryReads": [
+        {
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "found": true,
+          "record": {
+            "id": "mem-u-1001-notification_channel-v1",
+            "scope": "u-1001",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "createdAt": "2026-08-01T12:00:00Z",
+            "updatedAt": "2026-08-01T12:00:00Z",
+            "source": "user",
+            "version": 1
+          },
+          "interactionId": "interaction-2"
+        }
+      ],
+      "freshness": [
+        {
+          "stale": false,
+          "resolution": "memory_used",
+          "memoryVersion": 1,
+          "currentSourceVersion": null,
+          "memoryValue": {
+            "channel": "email"
+          },
+          "currentValue": null,
+          "interactionId": "interaction-2"
+        }
+      ],
+      "finalAnswer": "Notify this user by email, using the stored notification preference for u-1001.",
+      "terminationReason": "final_answer",
+      "errors": [],
+      "messageCount": 3,
+      "memoryRecords": [
+        {
+          "id": "mem-u-1001-notification_channel-v1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1
+        }
+      ]
+    },
+    "tools": [
+      {
+        "name": "store_memory",
+        "description": "Propose storing a user-provided fact in application memory. The application validates scope, key, value, and provenance and performs the write.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scope": {
+              "type": "string",
+              "description": "Memory owner, typically a user id such as u-1001"
+            },
+            "key": {
+              "type": "string",
+              "description": "Allowlisted memory key, e.g. notification_channel"
+            },
+            "value": {
+              "type": "object",
+              "description": "Stored content, e.g. {\"channel\": \"email\"}"
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "user",
+                "system",
+                "tool",
+                "application"
+              ],
+              "description": "Provenance of the information to store"
+            }
+          },
+          "required": [
+            "key",
+            "value",
+            "source"
+          ]
+        }
+      },
+      {
+        "name": "retrieve_memory",
+        "description": "Propose retrieving a memory record by key. The application enforces the session scope and returns a miss explicitly when no record exists.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scope": {
+              "type": "string",
+              "description": "Memory owner, typically a user id such as u-1001"
+            },
+            "key": {
+              "type": "string",
+              "description": "Allowlisted memory key, e.g. notification_channel"
+            }
+          },
+          "required": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "user_request",
+        "turn": null,
+        "interactionId": "interaction-1",
+        "detail": {
+          "request": "I prefer email notifications for service incidents.",
+          "scope": "u-1001",
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 1,
+        "interactionId": "interaction-1",
+        "detail": {
+          "decision": "store_memory",
+          "content": "store email notification preference",
+          "finishReason": "stop",
+          "memoryWrite": {
+            "scope": "u-1001",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "source": "user"
+          },
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "memory_write_requested",
+        "turn": 1,
+        "interactionId": "interaction-1",
+        "detail": {
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "source": "user",
+          "sessionScope": "u-1001",
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "memory_stored",
+        "turn": 1,
+        "interactionId": "interaction-1",
+        "detail": {
+          "id": "mem-u-1001-notification_channel-v1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1,
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 2,
+        "interactionId": "interaction-1",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Stored email as the notification channel for this user.",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 2,
+        "interactionId": "interaction-1",
+        "detail": {
+          "answer": "Stored email as the notification channel for this user.",
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "user_request",
+        "turn": null,
+        "interactionId": "interaction-2",
+        "detail": {
+          "request": "How should I be notified about the next incident?",
+          "scope": "u-1001",
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 3,
+        "interactionId": "interaction-2",
+        "detail": {
+          "decision": "retrieve_memory",
+          "content": "retrieve notification preference",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": {
+            "scope": "u-1001",
+            "key": "notification_channel"
+          },
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "memory_retrieval_requested",
+        "turn": 3,
+        "interactionId": "interaction-2",
+        "detail": {
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "sessionScope": "u-1001",
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "memory_retrieved",
+        "turn": 3,
+        "interactionId": "interaction-2",
+        "detail": {
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "found": true,
+          "record": {
+            "id": "mem-u-1001-notification_channel-v1",
+            "scope": "u-1001",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "createdAt": "2026-08-01T12:00:00Z",
+            "updatedAt": "2026-08-01T12:00:00Z",
+            "source": "user",
+            "version": 1
+          },
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 4,
+        "interactionId": "interaction-2",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Notify this user by email, using the stored notification preference for u-1001.",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 4,
+        "interactionId": "interaction-2",
+        "detail": {
+          "answer": "Notify this user by email, using the stored notification preference for u-1001.",
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "turn": 4,
+        "interactionId": "interaction-2",
+        "detail": {
+          "reason": "final_answer",
+          "interactionId": "interaction-2",
+          "scope": "u-1001"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "I prefer email notifications for service incidents.",
+          "scope": "u-1001",
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "store_memory",
+          "content": "store email notification preference",
+          "finishReason": "stop",
+          "memoryWrite": {
+            "scope": "u-1001",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "source": "user"
+          },
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-3-memory_write_requested",
+        "type": "memory_write_requested",
+        "title": "Memory write requested",
+        "status": "ok",
+        "detail": {
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "source": "user",
+          "sessionScope": "u-1001",
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-memory_stored",
+        "type": "memory_stored",
+        "title": "Memory stored",
+        "status": "ok",
+        "detail": {
+          "id": "mem-u-1001-notification_channel-v1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1,
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Stored email as the notification channel for this user.",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-6-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Stored email as the notification channel for this user.",
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "How should I be notified about the next incident?",
+          "scope": "u-1001",
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "retrieve_memory",
+          "content": "retrieve notification preference",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": {
+            "scope": "u-1001",
+            "key": "notification_channel"
+          },
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-9-memory_retrieval_requested",
+        "type": "memory_retrieval_requested",
+        "title": "Memory retrieval requested",
+        "status": "ok",
+        "detail": {
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "sessionScope": "u-1001",
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-memory_retrieved",
+        "type": "memory_retrieved",
+        "title": "Memory retrieved",
+        "status": "ok",
+        "detail": {
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "found": true,
+          "record": {
+            "id": "mem-u-1001-notification_channel-v1",
+            "scope": "u-1001",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "createdAt": "2026-08-01T12:00:00Z",
+            "updatedAt": "2026-08-01T12:00:00Z",
+            "source": "user",
+            "version": 1
+          },
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Notify this user by email, using the stored notification preference for u-1001.",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-12-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Notify this user by email, using the stored notification preference for u-1001.",
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "final_answer",
+          "interactionId": "interaction-2",
+          "scope": "u-1001"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "Notify this user by email, using the stored notification preference for u-1001.",
+      "terminationReason": "final_answer",
+      "memoryScope": "u-1001",
+      "memoryVersion": 1,
+      "staleMemoryDetected": false
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "modelMs": 0,
+      "toolMs": 0,
+      "modelTurns": 4,
+      "toolCalls": 0,
+      "successfulToolCalls": 0,
+      "failedToolCalls": 0,
+      "terminationReason": "final_answer",
+      "maxTurns": 6,
+      "memoryWrites": 1,
+      "memoryReads": 1,
+      "memoryHits": 1,
+      "memoryMisses": 0,
+      "memoryScope": "u-1001",
+      "memoryVersion": 1,
+      "staleMemoryDetected": false,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable memory events for STORE \u2192 RETRIEVE \u2192 USE, including MEMORY_MISS and MEMORY_STALE. Not a new measurement. Does not score memory quality.",
+      "signatureView": [
+        {
+          "phase": "USER_REQUEST",
+          "interactionId": "interaction-1",
+          "request": "I prefer email notifications for service incidents.",
+          "scope": "u-1001"
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "decision": "store_memory",
+          "content": "store email notification preference",
+          "latencyMs": 0
+        },
+        {
+          "phase": "MEMORY_WRITE_REQUESTED",
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "source": "user"
+        },
+        {
+          "phase": "MEMORY_WRITE",
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "id": "mem-u-1001-notification_channel-v1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "source": "user",
+          "version": 1,
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "note": "The application validates and stores a memory record. Information does not persist automatically just because the model saw it."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "decision": "final_answer",
+          "content": "Stored email as the notification channel for this user.",
+          "latencyMs": 0
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "answer": "Stored email as the notification channel for this user.",
+          "note": "The runtime records the observable final answer."
+        },
+        {
+          "phase": "INTERACTION_BOUNDARY",
+          "interactionId": "interaction-2",
+          "note": "A later interaction starts. Conversation history is not carried forward; recalled information comes from the memory store."
+        },
+        {
+          "phase": "USER_REQUEST",
+          "interactionId": "interaction-2",
+          "request": "How should I be notified about the next incident?",
+          "scope": "u-1001"
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 3,
+          "interactionId": "interaction-2",
+          "decision": "retrieve_memory",
+          "content": "retrieve notification preference",
+          "latencyMs": 0
+        },
+        {
+          "phase": "MEMORY_RETRIEVE_REQUESTED",
+          "turn": 3,
+          "interactionId": "interaction-2",
+          "scope": "u-1001",
+          "key": "notification_channel"
+        },
+        {
+          "phase": "MEMORY_RETRIEVE",
+          "turn": 3,
+          "interactionId": "interaction-2",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "record": {
+            "id": "mem-u-1001-notification_channel-v1",
+            "scope": "u-1001",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "createdAt": "2026-08-01T12:00:00Z",
+            "updatedAt": "2026-08-01T12:00:00Z",
+            "source": "user",
+            "version": 1
+          },
+          "note": "The runtime retrieves a scoped memory record for a later interaction."
+        },
+        {
+          "phase": "MEMORY_USED",
+          "turn": 3,
+          "interactionId": "interaction-2",
+          "record": {
+            "id": "mem-u-1001-notification_channel-v1",
+            "scope": "u-1001",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "createdAt": "2026-08-01T12:00:00Z",
+            "updatedAt": "2026-08-01T12:00:00Z",
+            "source": "user",
+            "version": 1
+          },
+          "note": "The later answer uses information that originated in stored memory."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 4,
+          "interactionId": "interaction-2",
+          "decision": "final_answer",
+          "content": "Notify this user by email, using the stored notification preference for u-1001.",
+          "latencyMs": 0
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 4,
+          "interactionId": "interaction-2",
+          "answer": "Notify this user by email, using the stored notification preference for u-1001.",
+          "note": "The runtime records the observable final answer."
+        },
+        {
+          "phase": "TERMINATION",
+          "turn": 4,
+          "interactionId": "interaction-2",
+          "reason": "final_answer",
+          "detail": {
+            "reason": "final_answer",
+            "interactionId": "interaction-2",
+            "scope": "u-1001"
+          },
+          "note": "The runtime stops when the session completes or a safety boundary is reached."
+        }
+      ],
+      "stageNotes": {
+        "MEMORY_WRITE": "The application validates and stores a memory record. Information does not persist automatically just because the model saw it.",
+        "MEMORY_RETRIEVE": "The runtime retrieves a scoped memory record for a later interaction.",
+        "MEMORY_MISS": "No matching record exists for this scope and key. A miss is a normal observable state, not a memory system failure.",
+        "MEMORY_STALE": "Stored memory exists but differs from the current authoritative source. The current source is preferred.",
+        "CURRENT_SOURCE": "The current authoritative preference, distinct from stored memory.",
+        "MEMORY_USED": "The later answer uses information that originated in stored memory.",
+        "INTERACTION_BOUNDARY": "A later interaction starts. Conversation history is not carried forward; recalled information comes from the memory store.",
+        "FINAL_ANSWER": "The runtime records the observable final answer.",
+        "TERMINATION": "The runtime stops when the session completes or a safety boundary is reached.",
+        "SECURITY": "The model proposes store or retrieve operations; the application validates scope, key, value, provenance, and performs the write or read. Memory from one scope never leaks into another."
+      },
+      "securityNote": "The model proposes store or retrieve operations; the application validates scope, key, value, provenance, and performs the write or read. Memory from one scope never leaks into another.",
+      "memoryRecords": [
+        {
+          "id": "mem-u-1001-notification_channel-v1",
+          "scope": "u-1001",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1
+        }
+      ],
+      "interactions": [
+        {
+          "id": "interaction-1",
+          "request": "I prefer email notifications for service incidents.",
+          "finalAnswer": "Stored email as the notification channel for this user."
+        },
+        {
+          "id": "interaction-2",
+          "request": "How should I be notified about the next incident?",
+          "finalAnswer": "Notify this user by email, using the stored notification preference for u-1001."
+        }
+      ],
+      "freshness": [
+        {
+          "stale": false,
+          "resolution": "memory_used",
+          "memoryVersion": 1,
+          "currentSourceVersion": null,
+          "memoryValue": {
+            "channel": "email"
+          },
+          "currentValue": null,
+          "interactionId": "interaction-2"
+        }
+      ],
+      "recallNote": "The later answer uses information that originated in stored memory."
+    },
+    "relatedEntities": [],
+    "relatedContent": [
+      "agents",
+      "agent-memory",
+      "agent-planning",
+      "agent-loop",
+      "tool-calling"
+    ],
+    "cookbook": {
+      "path": "examples/agents/05-memory"
+    }
+  },
+  {
+    "labId": "agent-memory",
+    "traceId": "stale-memory-notification-preference",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-18T05:49:14Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "case-harness",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "STALE_MEMORY",
+    "selectionNote": "Measured case: interaction 1 stores an email preference. Interaction 2 retrieves that record, then observes the current authoritative source (SMS, version 2). The stored record is stale. The final answer uses the current source. Stale memory is not a store failure.",
+    "architecture": {
+      "layout": "agent-memory",
+      "stages": [
+        "user-request",
+        "memory-write-requested",
+        "memory-stored",
+        "memory-retrieval-requested",
+        "memory-retrieved",
+        "memory-not-found",
+        "observation",
+        "final-answer",
+        "termination"
+      ]
+    },
+    "input": {
+      "scope": "u-1003",
+      "request": "How should I be notified about the next incident?",
+      "interactions": [
+        {
+          "id": "interaction-1",
+          "request": "I prefer email notifications for service incidents."
+        },
+        {
+          "id": "interaction-2",
+          "request": "How should I be notified about the next incident?"
+        }
+      ],
+      "config": {
+        "chatModel": "case-harness",
+        "modelDriver": "case-harness",
+        "maxTurns": 6,
+        "toolTimeoutMs": 2000
+      }
+    },
+    "state": {
+      "scope": "u-1003",
+      "currentTurn": 4,
+      "maxTurns": 6,
+      "currentInteractionId": "interaction-2",
+      "interactions": [
+        {
+          "id": "interaction-1",
+          "request": "I prefer email notifications for service incidents.",
+          "finalAnswer": "Stored email as the notification channel for this user."
+        },
+        {
+          "id": "interaction-2",
+          "request": "How should I be notified about the next incident?",
+          "finalAnswer": "Stored memory is email at version 1, but the current source of record is SMS at version 2. Notify this user by SMS. Memory is context, not the latest source of truth."
+        }
+      ],
+      "decisions": [
+        {
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "decision": "store_memory",
+          "content": "store email notification preference",
+          "memoryWrite": {
+            "scope": "u-1003",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "source": "user"
+          },
+          "memoryRead": null,
+          "finishReason": "stop",
+          "latencyMs": 0
+        },
+        {
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "decision": "final_answer",
+          "content": "Stored email as the notification channel for this user.",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "finishReason": "stop",
+          "latencyMs": 0
+        },
+        {
+          "turn": 3,
+          "interactionId": "interaction-2",
+          "decision": "retrieve_memory",
+          "content": "retrieve notification preference",
+          "memoryWrite": null,
+          "memoryRead": {
+            "scope": "u-1003",
+            "key": "notification_channel"
+          },
+          "finishReason": "stop",
+          "latencyMs": 0
+        },
+        {
+          "turn": 4,
+          "interactionId": "interaction-2",
+          "decision": "final_answer",
+          "content": "Stored memory is email at version 1, but the current source of record is SMS at version 2. Notify this user by SMS. Memory is context, not the latest source of truth.",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "finishReason": "stop",
+          "latencyMs": 0
+        }
+      ],
+      "memoryWrites": [
+        {
+          "id": "mem-u-1003-notification_channel-v1",
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1
+        }
+      ],
+      "memoryReads": [
+        {
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "found": true,
+          "record": {
+            "id": "mem-u-1003-notification_channel-v1",
+            "scope": "u-1003",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "createdAt": "2026-08-01T12:00:00Z",
+            "updatedAt": "2026-08-01T12:00:00Z",
+            "source": "user",
+            "version": 1
+          },
+          "interactionId": "interaction-2"
+        }
+      ],
+      "freshness": [
+        {
+          "stale": true,
+          "resolution": "current_source_preferred",
+          "memoryVersion": 1,
+          "currentSourceVersion": 2,
+          "memoryValue": {
+            "channel": "email"
+          },
+          "currentValue": {
+            "channel": "sms"
+          },
+          "interactionId": "interaction-2"
+        }
+      ],
+      "finalAnswer": "Stored memory is email at version 1, but the current source of record is SMS at version 2. Notify this user by SMS. Memory is context, not the latest source of truth.",
+      "terminationReason": "final_answer",
+      "errors": [],
+      "messageCount": 3,
+      "memoryRecords": [
+        {
+          "id": "mem-u-1003-notification_channel-v1",
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1
+        }
+      ]
+    },
+    "tools": [
+      {
+        "name": "store_memory",
+        "description": "Propose storing a user-provided fact in application memory. The application validates scope, key, value, and provenance and performs the write.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scope": {
+              "type": "string",
+              "description": "Memory owner, typically a user id such as u-1001"
+            },
+            "key": {
+              "type": "string",
+              "description": "Allowlisted memory key, e.g. notification_channel"
+            },
+            "value": {
+              "type": "object",
+              "description": "Stored content, e.g. {\"channel\": \"email\"}"
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "user",
+                "system",
+                "tool",
+                "application"
+              ],
+              "description": "Provenance of the information to store"
+            }
+          },
+          "required": [
+            "key",
+            "value",
+            "source"
+          ]
+        }
+      },
+      {
+        "name": "retrieve_memory",
+        "description": "Propose retrieving a memory record by key. The application enforces the session scope and returns a miss explicitly when no record exists.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scope": {
+              "type": "string",
+              "description": "Memory owner, typically a user id such as u-1001"
+            },
+            "key": {
+              "type": "string",
+              "description": "Allowlisted memory key, e.g. notification_channel"
+            }
+          },
+          "required": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "user_request",
+        "turn": null,
+        "interactionId": "interaction-1",
+        "detail": {
+          "request": "I prefer email notifications for service incidents.",
+          "scope": "u-1003",
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 1,
+        "interactionId": "interaction-1",
+        "detail": {
+          "decision": "store_memory",
+          "content": "store email notification preference",
+          "finishReason": "stop",
+          "memoryWrite": {
+            "scope": "u-1003",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "source": "user"
+          },
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "memory_write_requested",
+        "turn": 1,
+        "interactionId": "interaction-1",
+        "detail": {
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "source": "user",
+          "sessionScope": "u-1003",
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "memory_stored",
+        "turn": 1,
+        "interactionId": "interaction-1",
+        "detail": {
+          "id": "mem-u-1003-notification_channel-v1",
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1,
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 2,
+        "interactionId": "interaction-1",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Stored email as the notification channel for this user.",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 2,
+        "interactionId": "interaction-1",
+        "detail": {
+          "answer": "Stored email as the notification channel for this user.",
+          "interactionId": "interaction-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "user_request",
+        "turn": null,
+        "interactionId": "interaction-2",
+        "detail": {
+          "request": "How should I be notified about the next incident?",
+          "scope": "u-1003",
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 3,
+        "interactionId": "interaction-2",
+        "detail": {
+          "decision": "retrieve_memory",
+          "content": "retrieve notification preference",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": {
+            "scope": "u-1003",
+            "key": "notification_channel"
+          },
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "memory_retrieval_requested",
+        "turn": 3,
+        "interactionId": "interaction-2",
+        "detail": {
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "sessionScope": "u-1003",
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "memory_retrieved",
+        "turn": 3,
+        "interactionId": "interaction-2",
+        "detail": {
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "found": true,
+          "record": {
+            "id": "mem-u-1003-notification_channel-v1",
+            "scope": "u-1003",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "createdAt": "2026-08-01T12:00:00Z",
+            "updatedAt": "2026-08-01T12:00:00Z",
+            "source": "user",
+            "version": 1
+          },
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "observation",
+        "turn": 3,
+        "interactionId": "interaction-2",
+        "detail": {
+          "kind": "current_source",
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "current": {
+            "scope": "u-1003",
+            "key": "notification_channel",
+            "channel": "sms",
+            "version": 2,
+            "updatedAt": "2026-08-18T09:00:00Z",
+            "source": "system"
+          },
+          "freshness": {
+            "stale": true,
+            "resolution": "current_source_preferred",
+            "memoryVersion": 1,
+            "currentSourceVersion": 2,
+            "memoryValue": {
+              "channel": "email"
+            },
+            "currentValue": {
+              "channel": "sms"
+            },
+            "interactionId": "interaction-2"
+          },
+          "staleMemoryDetected": true,
+          "resolution": "current_source_preferred",
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_decision",
+        "turn": 4,
+        "interactionId": "interaction-2",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Stored memory is email at version 1, but the current source of record is SMS at version 2. Notify this user by SMS. Memory is context, not the latest source of truth.",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "final_answer",
+        "turn": 4,
+        "interactionId": "interaction-2",
+        "detail": {
+          "answer": "Stored memory is email at version 1, but the current source of record is SMS at version 2. Notify this user by SMS. Memory is context, not the latest source of truth.",
+          "interactionId": "interaction-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "turn": 4,
+        "interactionId": "interaction-2",
+        "detail": {
+          "reason": "final_answer",
+          "interactionId": "interaction-2",
+          "scope": "u-1003"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "I prefer email notifications for service incidents.",
+          "scope": "u-1003",
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "store_memory",
+          "content": "store email notification preference",
+          "finishReason": "stop",
+          "memoryWrite": {
+            "scope": "u-1003",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "source": "user"
+          },
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-3-memory_write_requested",
+        "type": "memory_write_requested",
+        "title": "Memory write requested",
+        "status": "ok",
+        "detail": {
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "source": "user",
+          "sessionScope": "u-1003",
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-memory_stored",
+        "type": "memory_stored",
+        "title": "Memory stored",
+        "status": "ok",
+        "detail": {
+          "id": "mem-u-1003-notification_channel-v1",
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1,
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Stored email as the notification channel for this user.",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-6-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Stored email as the notification channel for this user.",
+          "interactionId": "interaction-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-user_request",
+        "type": "input",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "request": "How should I be notified about the next incident?",
+          "scope": "u-1003",
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "retrieve_memory",
+          "content": "retrieve notification preference",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": {
+            "scope": "u-1003",
+            "key": "notification_channel"
+          },
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-9-memory_retrieval_requested",
+        "type": "memory_retrieval_requested",
+        "title": "Memory retrieval requested",
+        "status": "ok",
+        "detail": {
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "sessionScope": "u-1003",
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-memory_retrieved",
+        "type": "memory_retrieved",
+        "title": "Memory retrieved",
+        "status": "ok",
+        "detail": {
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "found": true,
+          "record": {
+            "id": "mem-u-1003-notification_channel-v1",
+            "scope": "u-1003",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "createdAt": "2026-08-01T12:00:00Z",
+            "updatedAt": "2026-08-01T12:00:00Z",
+            "source": "user",
+            "version": 1
+          },
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-observation",
+        "type": "observation",
+        "title": "Observation",
+        "status": "ok",
+        "detail": {
+          "kind": "current_source",
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "current": {
+            "scope": "u-1003",
+            "key": "notification_channel",
+            "channel": "sms",
+            "version": 2,
+            "updatedAt": "2026-08-18T09:00:00Z",
+            "source": "system"
+          },
+          "freshness": {
+            "stale": true,
+            "resolution": "current_source_preferred",
+            "memoryVersion": 1,
+            "currentSourceVersion": 2,
+            "memoryValue": {
+              "channel": "email"
+            },
+            "currentValue": {
+              "channel": "sms"
+            },
+            "interactionId": "interaction-2"
+          },
+          "staleMemoryDetected": true,
+          "resolution": "current_source_preferred",
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-model_decision",
+        "type": "llm",
+        "title": "Model decision",
+        "status": "ok",
+        "detail": {
+          "decision": "final_answer",
+          "content": "Stored memory is email at version 1, but the current source of record is SMS at version 2. Notify this user by SMS. Memory is context, not the latest source of truth.",
+          "finishReason": "stop",
+          "memoryWrite": null,
+          "memoryRead": null,
+          "promptTokens": null,
+          "completionTokens": null,
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "case-harness"
+        }
+      },
+      {
+        "id": "step-13-final_answer",
+        "type": "output",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Stored memory is email at version 1, but the current source of record is SMS at version 2. Notify this user by SMS. Memory is context, not the latest source of truth.",
+          "interactionId": "interaction-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "final_answer",
+          "interactionId": "interaction-2",
+          "scope": "u-1003"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "answer": "Stored memory is email at version 1, but the current source of record is SMS at version 2. Notify this user by SMS. Memory is context, not the latest source of truth.",
+      "terminationReason": "final_answer",
+      "memoryScope": "u-1003",
+      "memoryVersion": 1,
+      "staleMemoryDetected": true
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "modelMs": 0,
+      "toolMs": 0,
+      "modelTurns": 4,
+      "toolCalls": 0,
+      "successfulToolCalls": 0,
+      "failedToolCalls": 0,
+      "terminationReason": "final_answer",
+      "maxTurns": 6,
+      "memoryWrites": 1,
+      "memoryReads": 1,
+      "memoryHits": 1,
+      "memoryMisses": 0,
+      "memoryScope": "u-1003",
+      "memoryVersion": 1,
+      "staleMemoryDetected": true,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable memory events for STORE \u2192 RETRIEVE \u2192 USE, including MEMORY_MISS and MEMORY_STALE. Not a new measurement. Does not score memory quality.",
+      "signatureView": [
+        {
+          "phase": "USER_REQUEST",
+          "interactionId": "interaction-1",
+          "request": "I prefer email notifications for service incidents.",
+          "scope": "u-1003"
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "decision": "store_memory",
+          "content": "store email notification preference",
+          "latencyMs": 0
+        },
+        {
+          "phase": "MEMORY_WRITE_REQUESTED",
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "source": "user"
+        },
+        {
+          "phase": "MEMORY_WRITE",
+          "turn": 1,
+          "interactionId": "interaction-1",
+          "id": "mem-u-1003-notification_channel-v1",
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "source": "user",
+          "version": 1,
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "note": "The application validates and stores a memory record. Information does not persist automatically just because the model saw it."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "decision": "final_answer",
+          "content": "Stored email as the notification channel for this user.",
+          "latencyMs": 0
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 2,
+          "interactionId": "interaction-1",
+          "answer": "Stored email as the notification channel for this user.",
+          "note": "The runtime records the observable final answer."
+        },
+        {
+          "phase": "INTERACTION_BOUNDARY",
+          "interactionId": "interaction-2",
+          "note": "A later interaction starts. Conversation history is not carried forward; recalled information comes from the memory store."
+        },
+        {
+          "phase": "USER_REQUEST",
+          "interactionId": "interaction-2",
+          "request": "How should I be notified about the next incident?",
+          "scope": "u-1003"
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 3,
+          "interactionId": "interaction-2",
+          "decision": "retrieve_memory",
+          "content": "retrieve notification preference",
+          "latencyMs": 0
+        },
+        {
+          "phase": "MEMORY_RETRIEVE_REQUESTED",
+          "turn": 3,
+          "interactionId": "interaction-2",
+          "scope": "u-1003",
+          "key": "notification_channel"
+        },
+        {
+          "phase": "MEMORY_RETRIEVE",
+          "turn": 3,
+          "interactionId": "interaction-2",
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "record": {
+            "id": "mem-u-1003-notification_channel-v1",
+            "scope": "u-1003",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "createdAt": "2026-08-01T12:00:00Z",
+            "updatedAt": "2026-08-01T12:00:00Z",
+            "source": "user",
+            "version": 1
+          },
+          "note": "The runtime retrieves a scoped memory record for a later interaction."
+        },
+        {
+          "phase": "MEMORY_USED",
+          "turn": 3,
+          "interactionId": "interaction-2",
+          "record": {
+            "id": "mem-u-1003-notification_channel-v1",
+            "scope": "u-1003",
+            "key": "notification_channel",
+            "value": {
+              "channel": "email"
+            },
+            "createdAt": "2026-08-01T12:00:00Z",
+            "updatedAt": "2026-08-01T12:00:00Z",
+            "source": "user",
+            "version": 1
+          },
+          "note": "The later answer uses information that originated in stored memory."
+        },
+        {
+          "phase": "CURRENT_SOURCE",
+          "turn": 3,
+          "interactionId": "interaction-2",
+          "current": {
+            "scope": "u-1003",
+            "key": "notification_channel",
+            "channel": "sms",
+            "version": 2,
+            "updatedAt": "2026-08-18T09:00:00Z",
+            "source": "system"
+          },
+          "freshness": {
+            "stale": true,
+            "resolution": "current_source_preferred",
+            "memoryVersion": 1,
+            "currentSourceVersion": 2,
+            "memoryValue": {
+              "channel": "email"
+            },
+            "currentValue": {
+              "channel": "sms"
+            },
+            "interactionId": "interaction-2"
+          },
+          "note": "The current authoritative preference, distinct from stored memory."
+        },
+        {
+          "phase": "MEMORY_STALE",
+          "turn": 3,
+          "interactionId": "interaction-2",
+          "freshness": {
+            "stale": true,
+            "resolution": "current_source_preferred",
+            "memoryVersion": 1,
+            "currentSourceVersion": 2,
+            "memoryValue": {
+              "channel": "email"
+            },
+            "currentValue": {
+              "channel": "sms"
+            },
+            "interactionId": "interaction-2"
+          },
+          "resolution": "current_source_preferred",
+          "note": "Stored memory exists but differs from the current authoritative source. The current source is preferred."
+        },
+        {
+          "phase": "MODEL_DECISION",
+          "turn": 4,
+          "interactionId": "interaction-2",
+          "decision": "final_answer",
+          "content": "Stored memory is email at version 1, but the current source of record is SMS at version 2. Notify this user by SMS. Memory is context, not the latest source of truth.",
+          "latencyMs": 0
+        },
+        {
+          "phase": "FINAL_ANSWER",
+          "turn": 4,
+          "interactionId": "interaction-2",
+          "answer": "Stored memory is email at version 1, but the current source of record is SMS at version 2. Notify this user by SMS. Memory is context, not the latest source of truth.",
+          "note": "The runtime records the observable final answer."
+        },
+        {
+          "phase": "TERMINATION",
+          "turn": 4,
+          "interactionId": "interaction-2",
+          "reason": "final_answer",
+          "detail": {
+            "reason": "final_answer",
+            "interactionId": "interaction-2",
+            "scope": "u-1003"
+          },
+          "note": "The runtime stops when the session completes or a safety boundary is reached."
+        }
+      ],
+      "stageNotes": {
+        "MEMORY_WRITE": "The application validates and stores a memory record. Information does not persist automatically just because the model saw it.",
+        "MEMORY_RETRIEVE": "The runtime retrieves a scoped memory record for a later interaction.",
+        "MEMORY_MISS": "No matching record exists for this scope and key. A miss is a normal observable state, not a memory system failure.",
+        "MEMORY_STALE": "Stored memory exists but differs from the current authoritative source. The current source is preferred.",
+        "CURRENT_SOURCE": "The current authoritative preference, distinct from stored memory.",
+        "MEMORY_USED": "The later answer uses information that originated in stored memory.",
+        "INTERACTION_BOUNDARY": "A later interaction starts. Conversation history is not carried forward; recalled information comes from the memory store.",
+        "FINAL_ANSWER": "The runtime records the observable final answer.",
+        "TERMINATION": "The runtime stops when the session completes or a safety boundary is reached.",
+        "SECURITY": "The model proposes store or retrieve operations; the application validates scope, key, value, provenance, and performs the write or read. Memory from one scope never leaks into another."
+      },
+      "securityNote": "The model proposes store or retrieve operations; the application validates scope, key, value, provenance, and performs the write or read. Memory from one scope never leaks into another.",
+      "memoryRecords": [
+        {
+          "id": "mem-u-1003-notification_channel-v1",
+          "scope": "u-1003",
+          "key": "notification_channel",
+          "value": {
+            "channel": "email"
+          },
+          "createdAt": "2026-08-01T12:00:00Z",
+          "updatedAt": "2026-08-01T12:00:00Z",
+          "source": "user",
+          "version": 1
+        }
+      ],
+      "interactions": [
+        {
+          "id": "interaction-1",
+          "request": "I prefer email notifications for service incidents.",
+          "finalAnswer": "Stored email as the notification channel for this user."
+        },
+        {
+          "id": "interaction-2",
+          "request": "How should I be notified about the next incident?",
+          "finalAnswer": "Stored memory is email at version 1, but the current source of record is SMS at version 2. Notify this user by SMS. Memory is context, not the latest source of truth."
+        }
+      ],
+      "freshness": [
+        {
+          "stale": true,
+          "resolution": "current_source_preferred",
+          "memoryVersion": 1,
+          "currentSourceVersion": 2,
+          "memoryValue": {
+            "channel": "email"
+          },
+          "currentValue": {
+            "channel": "sms"
+          },
+          "interactionId": "interaction-2"
+        }
+      ],
+      "staleNote": "Stored memory exists but differs from the current authoritative source. The current source is preferred."
+    },
+    "relatedEntities": [],
+    "relatedContent": [
+      "agents",
+      "agent-memory",
+      "agent-planning",
+      "agent-loop",
+      "tool-calling"
+    ],
+    "cookbook": {
+      "path": "examples/agents/05-memory"
+    }
+  }
+]
