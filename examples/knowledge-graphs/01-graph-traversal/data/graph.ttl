@@ -1,0 +1,33 @@
+@prefix ex: <https://dataaihub.co/example/kg/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ex:acmeAI a ex:Company ;
+    rdfs:label "Acme AI" ;
+    ex:employs ex:alice, ex:bob, ex:carol .
+
+ex:alice a ex:Person ;
+    rdfs:label "Alice" ;
+    ex:worksOn ex:knowledgePlatform .
+
+ex:bob a ex:Person ;
+    rdfs:label "Bob" ;
+    ex:worksOn ex:knowledgePlatform .
+
+ex:carol a ex:Person ;
+    rdfs:label "Carol" ;
+    ex:worksOn ex:billingPortal .
+
+ex:knowledgePlatform a ex:Project ;
+    rdfs:label "Knowledge Platform" ;
+    ex:uses ex:postgresql .
+
+ex:billingPortal a ex:Project ;
+    rdfs:label "Billing Portal" ;
+    ex:uses ex:redis .
+
+ex:postgresql a ex:Technology ;
+    rdfs:label "PostgreSQL" .
+
+ex:redis a ex:Technology ;
+    rdfs:label "Redis" .
