@@ -1,0 +1,2547 @@
+[
+  {
+    "labId": "graph-traversal",
+    "traceId": "direct-relationship-employs",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-19T15:04:23Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "DIRECT_RELATIONSHIP",
+    "selectionNote": "Measured case: one outgoing employs hop from Acme AI. Direct neighbors are Alice, Bob, and Carol.",
+    "architecture": {
+      "layout": "graph-traversal",
+      "graphModel": "rdf",
+      "stages": [
+        "entity",
+        "relationship",
+        "rdf-graph",
+        "traversal",
+        "evidence"
+      ]
+    },
+    "input": {
+      "case": "direct-relationship-employs",
+      "question": "Who does Acme AI employ?",
+      "startId": "https://dataaihub.co/example/kg/acmeAI",
+      "hops": [
+        {
+          "predicate": "employs",
+          "direction": "outgoing"
+        }
+      ],
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxTraversalDepth": 8,
+        "modelDriver": "not_used"
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 8,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "question": "Who does Acme AI employ?",
+          "startId": "https://dataaihub.co/example/kg/acmeAI",
+          "hops": [
+            {
+              "predicate": "employs",
+              "direction": "outgoing"
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "graph_lookup",
+        "detail": {
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/acmeAI",
+            "label": "Acme AI",
+            "type": "Company"
+          },
+          "found": true
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_started",
+        "detail": {
+          "start": {
+            "id": "https://dataaihub.co/example/kg/acmeAI",
+            "label": "Acme AI",
+            "type": "Company"
+          },
+          "hopCount": 1,
+          "maxDepth": 8
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_step",
+        "detail": {
+          "depth": 1,
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/employs",
+            "label": "employs"
+          },
+          "direction": "outgoing",
+          "frontierIds": [
+            "https://dataaihub.co/example/kg/acmeAI"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "relationship_match",
+        "detail": {
+          "depth": 1,
+          "direction": "outgoing",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/acmeAI",
+              "label": "Acme AI",
+              "type": "Company"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/employs",
+              "label": "employs"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/acmeAI",
+            "label": "Acme AI",
+            "type": "Company"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "relationship_match",
+        "detail": {
+          "depth": 1,
+          "direction": "outgoing",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/acmeAI",
+              "label": "Acme AI",
+              "type": "Company"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/employs",
+              "label": "employs"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/bob",
+              "label": "Bob",
+              "type": "Person"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/acmeAI",
+            "label": "Acme AI",
+            "type": "Company"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/bob",
+            "label": "Bob",
+            "type": "Person"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "relationship_match",
+        "detail": {
+          "depth": 1,
+          "direction": "outgoing",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/acmeAI",
+              "label": "Acme AI",
+              "type": "Company"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/employs",
+              "label": "employs"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/carol",
+              "label": "Carol",
+              "type": "Person"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/acmeAI",
+            "label": "Acme AI",
+            "type": "Company"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/carol",
+            "label": "Carol",
+            "type": "Person"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_completed",
+        "detail": {
+          "pathFound": true,
+          "pathCount": 3,
+          "depthReached": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "result",
+        "detail": {
+          "pathFound": true,
+          "answerIds": [
+            "https://dataaihub.co/example/kg/alice",
+            "https://dataaihub.co/example/kg/bob",
+            "https://dataaihub.co/example/kg/carol"
+          ],
+          "answers": [
+            {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/bob",
+              "label": "Bob",
+              "type": "Person"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/carol",
+              "label": "Carol",
+              "type": "Person"
+            }
+          ],
+          "pathCount": 3
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "question": "Who does Acme AI employ?",
+          "startId": "https://dataaihub.co/example/kg/acmeAI",
+          "hops": [
+            {
+              "predicate": "employs",
+              "direction": "outgoing"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-graph_lookup",
+        "type": "graph_lookup",
+        "title": "Graph lookup",
+        "status": "ok",
+        "detail": {
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/acmeAI",
+            "label": "Acme AI",
+            "type": "Company"
+          },
+          "found": true
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-traversal_started",
+        "type": "traversal_started",
+        "title": "Traversal started",
+        "status": "ok",
+        "detail": {
+          "start": {
+            "id": "https://dataaihub.co/example/kg/acmeAI",
+            "label": "Acme AI",
+            "type": "Company"
+          },
+          "hopCount": 1,
+          "maxDepth": 8
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-traversal_step",
+        "type": "traversal_step",
+        "title": "Traversal step",
+        "status": "ok",
+        "detail": {
+          "depth": 1,
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/employs",
+            "label": "employs"
+          },
+          "direction": "outgoing",
+          "frontierIds": [
+            "https://dataaihub.co/example/kg/acmeAI"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-relationship_match",
+        "type": "relationship_match",
+        "title": "Relationship match",
+        "status": "ok",
+        "detail": {
+          "depth": 1,
+          "direction": "outgoing",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/acmeAI",
+              "label": "Acme AI",
+              "type": "Company"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/employs",
+              "label": "employs"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/acmeAI",
+            "label": "Acme AI",
+            "type": "Company"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-relationship_match",
+        "type": "relationship_match",
+        "title": "Relationship match",
+        "status": "ok",
+        "detail": {
+          "depth": 1,
+          "direction": "outgoing",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/acmeAI",
+              "label": "Acme AI",
+              "type": "Company"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/employs",
+              "label": "employs"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/bob",
+              "label": "Bob",
+              "type": "Person"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/acmeAI",
+            "label": "Acme AI",
+            "type": "Company"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/bob",
+            "label": "Bob",
+            "type": "Person"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-relationship_match",
+        "type": "relationship_match",
+        "title": "Relationship match",
+        "status": "ok",
+        "detail": {
+          "depth": 1,
+          "direction": "outgoing",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/acmeAI",
+              "label": "Acme AI",
+              "type": "Company"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/employs",
+              "label": "employs"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/carol",
+              "label": "Carol",
+              "type": "Person"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/acmeAI",
+            "label": "Acme AI",
+            "type": "Company"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/carol",
+            "label": "Carol",
+            "type": "Person"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-traversal_completed",
+        "type": "traversal_completed",
+        "title": "Traversal completed",
+        "status": "ok",
+        "detail": {
+          "pathFound": true,
+          "pathCount": 3,
+          "depthReached": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-result",
+        "type": "result",
+        "title": "Result",
+        "status": "ok",
+        "detail": {
+          "pathFound": true,
+          "answerIds": [
+            "https://dataaihub.co/example/kg/alice",
+            "https://dataaihub.co/example/kg/bob",
+            "https://dataaihub.co/example/kg/carol"
+          ],
+          "answers": [
+            {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/bob",
+              "label": "Bob",
+              "type": "Person"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/carol",
+              "label": "Carol",
+              "type": "Person"
+            }
+          ],
+          "pathCount": 3
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "question": "Who does Acme AI employ?",
+      "pathFound": true,
+      "answers": [
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        }
+      ],
+      "paths": [
+        {
+          "depth": 1,
+          "entities": [
+            {
+              "id": "https://dataaihub.co/example/kg/acmeAI",
+              "label": "Acme AI",
+              "type": "Company"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            }
+          ],
+          "relationships": [
+            {
+              "subject": "https://dataaihub.co/example/kg/acmeAI",
+              "predicate": {
+                "id": "https://dataaihub.co/example/kg/employs",
+                "label": "employs"
+              },
+              "object": "https://dataaihub.co/example/kg/alice"
+            }
+          ]
+        },
+        {
+          "depth": 1,
+          "entities": [
+            {
+              "id": "https://dataaihub.co/example/kg/acmeAI",
+              "label": "Acme AI",
+              "type": "Company"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/bob",
+              "label": "Bob",
+              "type": "Person"
+            }
+          ],
+          "relationships": [
+            {
+              "subject": "https://dataaihub.co/example/kg/acmeAI",
+              "predicate": {
+                "id": "https://dataaihub.co/example/kg/employs",
+                "label": "employs"
+              },
+              "object": "https://dataaihub.co/example/kg/bob"
+            }
+          ]
+        },
+        {
+          "depth": 1,
+          "entities": [
+            {
+              "id": "https://dataaihub.co/example/kg/acmeAI",
+              "label": "Acme AI",
+              "type": "Company"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/carol",
+              "label": "Carol",
+              "type": "Person"
+            }
+          ],
+          "relationships": [
+            {
+              "subject": "https://dataaihub.co/example/kg/acmeAI",
+              "predicate": {
+                "id": "https://dataaihub.co/example/kg/employs",
+                "label": "employs"
+              },
+              "object": "https://dataaihub.co/example/kg/carol"
+            }
+          ]
+        }
+      ],
+      "terminationReason": "completed"
+    },
+    "errors": [],
+    "metrics": {
+      "entitiesVisited": 4,
+      "relationshipsVisited": 3,
+      "traversalDepth": 1,
+      "matchedRelationships": 3,
+      "pathFound": true,
+      "executionMs": 1,
+      "terminationReason": "completed",
+      "maxDepth": 8,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable graph operations. Not a new measurement.",
+      "signatureFlow": "ENTITY \u2192 RELATIONSHIP \u2192 ENTITY",
+      "signatureView": [
+        {
+          "phase": "ENTITY",
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/acmeAI",
+            "label": "Acme AI",
+            "type": "Company"
+          }
+        },
+        {
+          "phase": "RELATIONSHIP",
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/employs",
+            "label": "employs"
+          },
+          "direction": "outgoing",
+          "triple": {
+            "subject": "https://dataaihub.co/example/kg/acmeAI",
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/employs",
+              "label": "employs"
+            },
+            "object": "https://dataaihub.co/example/kg/alice"
+          }
+        },
+        {
+          "phase": "ENTITY",
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          }
+        },
+        {
+          "phase": "RESULT",
+          "pathFound": true,
+          "answerIds": [
+            "https://dataaihub.co/example/kg/alice",
+            "https://dataaihub.co/example/kg/bob",
+            "https://dataaihub.co/example/kg/carol"
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "graph-traversal"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/01-graph-traversal"
+    }
+  },
+  {
+    "labId": "graph-traversal",
+    "traceId": "multi-hop-alice-technologies",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-19T15:04:23Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "MULTI_HOP_TRAVERSAL",
+    "selectionNote": "Measured case: two explicit hops from Alice (worksOn then uses). PostgreSQL is reached only because both RDF triples exist.",
+    "architecture": {
+      "layout": "graph-traversal",
+      "graphModel": "rdf",
+      "stages": [
+        "entity",
+        "relationship",
+        "rdf-graph",
+        "traversal",
+        "evidence"
+      ]
+    },
+    "input": {
+      "case": "multi-hop-alice-technologies",
+      "question": "Which technologies are used by projects that Alice works on?",
+      "startId": "https://dataaihub.co/example/kg/alice",
+      "hops": [
+        {
+          "predicate": "worksOn",
+          "direction": "outgoing"
+        },
+        {
+          "predicate": "uses",
+          "direction": "outgoing"
+        }
+      ],
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxTraversalDepth": 8,
+        "modelDriver": "not_used"
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 8,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "question": "Which technologies are used by projects that Alice works on?",
+          "startId": "https://dataaihub.co/example/kg/alice",
+          "hops": [
+            {
+              "predicate": "worksOn",
+              "direction": "outgoing"
+            },
+            {
+              "predicate": "uses",
+              "direction": "outgoing"
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "graph_lookup",
+        "detail": {
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          },
+          "found": true
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_started",
+        "detail": {
+          "start": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          },
+          "hopCount": 2,
+          "maxDepth": 8
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_step",
+        "detail": {
+          "depth": 1,
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/worksOn",
+            "label": "worksOn"
+          },
+          "direction": "outgoing",
+          "frontierIds": [
+            "https://dataaihub.co/example/kg/alice"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "relationship_match",
+        "detail": {
+          "depth": 1,
+          "direction": "outgoing",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/worksOn",
+              "label": "worksOn"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "type": "Project"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_step",
+        "detail": {
+          "depth": 2,
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/uses",
+            "label": "uses"
+          },
+          "direction": "outgoing",
+          "frontierIds": [
+            "https://dataaihub.co/example/kg/knowledgePlatform"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "relationship_match",
+        "detail": {
+          "depth": 2,
+          "direction": "outgoing",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "type": "Project"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/uses",
+              "label": "uses"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/postgresql",
+              "label": "PostgreSQL",
+              "type": "Technology"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL",
+            "type": "Technology"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_completed",
+        "detail": {
+          "pathFound": true,
+          "pathCount": 1,
+          "depthReached": 2
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "result",
+        "detail": {
+          "pathFound": true,
+          "answerIds": [
+            "https://dataaihub.co/example/kg/postgresql"
+          ],
+          "answers": [
+            {
+              "id": "https://dataaihub.co/example/kg/postgresql",
+              "label": "PostgreSQL",
+              "type": "Technology"
+            }
+          ],
+          "pathCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "question": "Which technologies are used by projects that Alice works on?",
+          "startId": "https://dataaihub.co/example/kg/alice",
+          "hops": [
+            {
+              "predicate": "worksOn",
+              "direction": "outgoing"
+            },
+            {
+              "predicate": "uses",
+              "direction": "outgoing"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-graph_lookup",
+        "type": "graph_lookup",
+        "title": "Graph lookup",
+        "status": "ok",
+        "detail": {
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          },
+          "found": true
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-traversal_started",
+        "type": "traversal_started",
+        "title": "Traversal started",
+        "status": "ok",
+        "detail": {
+          "start": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          },
+          "hopCount": 2,
+          "maxDepth": 8
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-traversal_step",
+        "type": "traversal_step",
+        "title": "Traversal step",
+        "status": "ok",
+        "detail": {
+          "depth": 1,
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/worksOn",
+            "label": "worksOn"
+          },
+          "direction": "outgoing",
+          "frontierIds": [
+            "https://dataaihub.co/example/kg/alice"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-relationship_match",
+        "type": "relationship_match",
+        "title": "Relationship match",
+        "status": "ok",
+        "detail": {
+          "depth": 1,
+          "direction": "outgoing",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/worksOn",
+              "label": "worksOn"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "type": "Project"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-traversal_step",
+        "type": "traversal_step",
+        "title": "Traversal step",
+        "status": "ok",
+        "detail": {
+          "depth": 2,
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/uses",
+            "label": "uses"
+          },
+          "direction": "outgoing",
+          "frontierIds": [
+            "https://dataaihub.co/example/kg/knowledgePlatform"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-relationship_match",
+        "type": "relationship_match",
+        "title": "Relationship match",
+        "status": "ok",
+        "detail": {
+          "depth": 2,
+          "direction": "outgoing",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "type": "Project"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/uses",
+              "label": "uses"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/postgresql",
+              "label": "PostgreSQL",
+              "type": "Technology"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL",
+            "type": "Technology"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-traversal_completed",
+        "type": "traversal_completed",
+        "title": "Traversal completed",
+        "status": "ok",
+        "detail": {
+          "pathFound": true,
+          "pathCount": 1,
+          "depthReached": 2
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-result",
+        "type": "result",
+        "title": "Result",
+        "status": "ok",
+        "detail": {
+          "pathFound": true,
+          "answerIds": [
+            "https://dataaihub.co/example/kg/postgresql"
+          ],
+          "answers": [
+            {
+              "id": "https://dataaihub.co/example/kg/postgresql",
+              "label": "PostgreSQL",
+              "type": "Technology"
+            }
+          ],
+          "pathCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "question": "Which technologies are used by projects that Alice works on?",
+      "pathFound": true,
+      "answers": [
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        }
+      ],
+      "paths": [
+        {
+          "depth": 2,
+          "entities": [
+            {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "type": "Project"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/postgresql",
+              "label": "PostgreSQL",
+              "type": "Technology"
+            }
+          ],
+          "relationships": [
+            {
+              "subject": "https://dataaihub.co/example/kg/alice",
+              "predicate": {
+                "id": "https://dataaihub.co/example/kg/worksOn",
+                "label": "worksOn"
+              },
+              "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+            },
+            {
+              "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate": {
+                "id": "https://dataaihub.co/example/kg/uses",
+                "label": "uses"
+              },
+              "object": "https://dataaihub.co/example/kg/postgresql"
+            }
+          ]
+        }
+      ],
+      "terminationReason": "completed"
+    },
+    "errors": [],
+    "metrics": {
+      "entitiesVisited": 3,
+      "relationshipsVisited": 2,
+      "traversalDepth": 2,
+      "matchedRelationships": 2,
+      "pathFound": true,
+      "executionMs": 3,
+      "terminationReason": "completed",
+      "maxDepth": 8,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable graph operations. Not a new measurement.",
+      "signatureFlow": "ENTITY \u2192 RELATIONSHIP \u2192 ENTITY \u2192 RELATIONSHIP \u2192 ENTITY",
+      "signatureView": [
+        {
+          "phase": "ENTITY",
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          }
+        },
+        {
+          "phase": "RELATIONSHIP",
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/worksOn",
+            "label": "worksOn"
+          },
+          "direction": "outgoing",
+          "triple": {
+            "subject": "https://dataaihub.co/example/kg/alice",
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/worksOn",
+              "label": "worksOn"
+            },
+            "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+          }
+        },
+        {
+          "phase": "ENTITY",
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          }
+        },
+        {
+          "phase": "RELATIONSHIP",
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/uses",
+            "label": "uses"
+          },
+          "direction": "outgoing",
+          "triple": {
+            "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/uses",
+              "label": "uses"
+            },
+            "object": "https://dataaihub.co/example/kg/postgresql"
+          }
+        },
+        {
+          "phase": "ENTITY",
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL",
+            "type": "Technology"
+          }
+        },
+        {
+          "phase": "RESULT",
+          "pathFound": true,
+          "answerIds": [
+            "https://dataaihub.co/example/kg/postgresql"
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "graph-traversal"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/01-graph-traversal"
+    }
+  },
+  {
+    "labId": "graph-traversal",
+    "traceId": "relationship-filter-project-people",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-19T15:04:23Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "RELATIONSHIP_FILTER",
+    "selectionNote": "Measured case: incoming worksOn edges into Knowledge Platform. The stored RDF triple remains Alice --worksOn--> Knowledge Platform; only the walk direction is incoming. Carol is excluded because she works on Billing Portal.",
+    "architecture": {
+      "layout": "graph-traversal",
+      "graphModel": "rdf",
+      "stages": [
+        "entity",
+        "relationship",
+        "rdf-graph",
+        "traversal",
+        "evidence"
+      ]
+    },
+    "input": {
+      "case": "relationship-filter-project-people",
+      "question": "Which people work on the Knowledge Platform project?",
+      "startId": "https://dataaihub.co/example/kg/knowledgePlatform",
+      "hops": [
+        {
+          "predicate": "worksOn",
+          "direction": "incoming"
+        }
+      ],
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxTraversalDepth": 8,
+        "modelDriver": "not_used"
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 8,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "question": "Which people work on the Knowledge Platform project?",
+          "startId": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "hops": [
+            {
+              "predicate": "worksOn",
+              "direction": "incoming"
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "graph_lookup",
+        "detail": {
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          },
+          "found": true
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_started",
+        "detail": {
+          "start": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          },
+          "hopCount": 1,
+          "maxDepth": 8
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_step",
+        "detail": {
+          "depth": 1,
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/worksOn",
+            "label": "worksOn"
+          },
+          "direction": "incoming",
+          "frontierIds": [
+            "https://dataaihub.co/example/kg/knowledgePlatform"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "relationship_match",
+        "detail": {
+          "depth": 1,
+          "direction": "incoming",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/worksOn",
+              "label": "worksOn"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "type": "Project"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "relationship_match",
+        "detail": {
+          "depth": 1,
+          "direction": "incoming",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/bob",
+              "label": "Bob",
+              "type": "Person"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/worksOn",
+              "label": "worksOn"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "type": "Project"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/bob",
+            "label": "Bob",
+            "type": "Person"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_completed",
+        "detail": {
+          "pathFound": true,
+          "pathCount": 2,
+          "depthReached": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "result",
+        "detail": {
+          "pathFound": true,
+          "answerIds": [
+            "https://dataaihub.co/example/kg/alice",
+            "https://dataaihub.co/example/kg/bob"
+          ],
+          "answers": [
+            {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/bob",
+              "label": "Bob",
+              "type": "Person"
+            }
+          ],
+          "pathCount": 2
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "question": "Which people work on the Knowledge Platform project?",
+          "startId": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "hops": [
+            {
+              "predicate": "worksOn",
+              "direction": "incoming"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-graph_lookup",
+        "type": "graph_lookup",
+        "title": "Graph lookup",
+        "status": "ok",
+        "detail": {
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          },
+          "found": true
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-traversal_started",
+        "type": "traversal_started",
+        "title": "Traversal started",
+        "status": "ok",
+        "detail": {
+          "start": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          },
+          "hopCount": 1,
+          "maxDepth": 8
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-traversal_step",
+        "type": "traversal_step",
+        "title": "Traversal step",
+        "status": "ok",
+        "detail": {
+          "depth": 1,
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/worksOn",
+            "label": "worksOn"
+          },
+          "direction": "incoming",
+          "frontierIds": [
+            "https://dataaihub.co/example/kg/knowledgePlatform"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-relationship_match",
+        "type": "relationship_match",
+        "title": "Relationship match",
+        "status": "ok",
+        "detail": {
+          "depth": 1,
+          "direction": "incoming",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/worksOn",
+              "label": "worksOn"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "type": "Project"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-relationship_match",
+        "type": "relationship_match",
+        "title": "Relationship match",
+        "status": "ok",
+        "detail": {
+          "depth": 1,
+          "direction": "incoming",
+          "triple": {
+            "subject": {
+              "id": "https://dataaihub.co/example/kg/bob",
+              "label": "Bob",
+              "type": "Person"
+            },
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/worksOn",
+              "label": "worksOn"
+            },
+            "object": {
+              "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "type": "Project"
+            }
+          },
+          "from": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          },
+          "to": {
+            "id": "https://dataaihub.co/example/kg/bob",
+            "label": "Bob",
+            "type": "Person"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-traversal_completed",
+        "type": "traversal_completed",
+        "title": "Traversal completed",
+        "status": "ok",
+        "detail": {
+          "pathFound": true,
+          "pathCount": 2,
+          "depthReached": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-result",
+        "type": "result",
+        "title": "Result",
+        "status": "ok",
+        "detail": {
+          "pathFound": true,
+          "answerIds": [
+            "https://dataaihub.co/example/kg/alice",
+            "https://dataaihub.co/example/kg/bob"
+          ],
+          "answers": [
+            {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/bob",
+              "label": "Bob",
+              "type": "Person"
+            }
+          ],
+          "pathCount": 2
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "question": "Which people work on the Knowledge Platform project?",
+      "pathFound": true,
+      "answers": [
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        }
+      ],
+      "paths": [
+        {
+          "depth": 1,
+          "entities": [
+            {
+              "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "type": "Project"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "type": "Person"
+            }
+          ],
+          "relationships": [
+            {
+              "subject": "https://dataaihub.co/example/kg/alice",
+              "predicate": {
+                "id": "https://dataaihub.co/example/kg/worksOn",
+                "label": "worksOn"
+              },
+              "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+            }
+          ]
+        },
+        {
+          "depth": 1,
+          "entities": [
+            {
+              "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "type": "Project"
+            },
+            {
+              "id": "https://dataaihub.co/example/kg/bob",
+              "label": "Bob",
+              "type": "Person"
+            }
+          ],
+          "relationships": [
+            {
+              "subject": "https://dataaihub.co/example/kg/bob",
+              "predicate": {
+                "id": "https://dataaihub.co/example/kg/worksOn",
+                "label": "worksOn"
+              },
+              "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+            }
+          ]
+        }
+      ],
+      "terminationReason": "completed"
+    },
+    "errors": [],
+    "metrics": {
+      "entitiesVisited": 3,
+      "relationshipsVisited": 2,
+      "traversalDepth": 1,
+      "matchedRelationships": 2,
+      "pathFound": true,
+      "executionMs": 0,
+      "terminationReason": "completed",
+      "maxDepth": 8,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable graph operations. Not a new measurement.",
+      "signatureFlow": "ENTITY \u2190 RELATIONSHIP \u2190 ENTITY",
+      "signatureView": [
+        {
+          "phase": "ENTITY",
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform",
+            "type": "Project"
+          }
+        },
+        {
+          "phase": "RELATIONSHIP",
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/worksOn",
+            "label": "worksOn"
+          },
+          "direction": "incoming",
+          "triple": {
+            "subject": "https://dataaihub.co/example/kg/alice",
+            "predicate": {
+              "id": "https://dataaihub.co/example/kg/worksOn",
+              "label": "worksOn"
+            },
+            "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+          }
+        },
+        {
+          "phase": "ENTITY",
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          }
+        },
+        {
+          "phase": "RESULT",
+          "pathFound": true,
+          "answerIds": [
+            "https://dataaihub.co/example/kg/alice",
+            "https://dataaihub.co/example/kg/bob"
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "graph-traversal"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/01-graph-traversal"
+    }
+  },
+  {
+    "labId": "graph-traversal",
+    "traceId": "no-path-alice-uses",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-19T15:04:23Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "NO_PATH",
+    "selectionNote": "Measured case: a direct Alice --uses--> Technology triple does not exist. The walker reports no path and does not invent Alice \u2192 Project \u2192 Technology.",
+    "architecture": {
+      "layout": "graph-traversal",
+      "graphModel": "rdf",
+      "stages": [
+        "entity",
+        "relationship",
+        "rdf-graph",
+        "traversal",
+        "evidence"
+      ]
+    },
+    "input": {
+      "case": "no-path-alice-uses",
+      "question": "What technology does Alice use directly?",
+      "startId": "https://dataaihub.co/example/kg/alice",
+      "hops": [
+        {
+          "predicate": "uses",
+          "direction": "outgoing"
+        }
+      ],
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxTraversalDepth": 8,
+        "modelDriver": "not_used"
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 8,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "question": "What technology does Alice use directly?",
+          "startId": "https://dataaihub.co/example/kg/alice",
+          "hops": [
+            {
+              "predicate": "uses",
+              "direction": "outgoing"
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "graph_lookup",
+        "detail": {
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          },
+          "found": true
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_started",
+        "detail": {
+          "start": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          },
+          "hopCount": 1,
+          "maxDepth": 8
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_step",
+        "detail": {
+          "depth": 1,
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/uses",
+            "label": "uses"
+          },
+          "direction": "outgoing",
+          "frontierIds": [
+            "https://dataaihub.co/example/kg/alice"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "traversal_completed",
+        "detail": {
+          "pathFound": false,
+          "pathCount": 0,
+          "depthReached": 0
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "result",
+        "detail": {
+          "pathFound": false,
+          "answerIds": [],
+          "answers": [],
+          "pathCount": 0
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "no_path"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "question": "What technology does Alice use directly?",
+          "startId": "https://dataaihub.co/example/kg/alice",
+          "hops": [
+            {
+              "predicate": "uses",
+              "direction": "outgoing"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-graph_lookup",
+        "type": "graph_lookup",
+        "title": "Graph lookup",
+        "status": "ok",
+        "detail": {
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          },
+          "found": true
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-traversal_started",
+        "type": "traversal_started",
+        "title": "Traversal started",
+        "status": "ok",
+        "detail": {
+          "start": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          },
+          "hopCount": 1,
+          "maxDepth": 8
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-traversal_step",
+        "type": "traversal_step",
+        "title": "Traversal step",
+        "status": "ok",
+        "detail": {
+          "depth": 1,
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/uses",
+            "label": "uses"
+          },
+          "direction": "outgoing",
+          "frontierIds": [
+            "https://dataaihub.co/example/kg/alice"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-traversal_completed",
+        "type": "traversal_completed",
+        "title": "Traversal completed",
+        "status": "ok",
+        "detail": {
+          "pathFound": false,
+          "pathCount": 0,
+          "depthReached": 0
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-result",
+        "type": "result",
+        "title": "Result",
+        "status": "empty",
+        "detail": {
+          "pathFound": false,
+          "answerIds": [],
+          "answers": [],
+          "pathCount": 0
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "no_path"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "question": "What technology does Alice use directly?",
+      "pathFound": false,
+      "answers": [],
+      "paths": [],
+      "terminationReason": "no_path"
+    },
+    "errors": [],
+    "metrics": {
+      "entitiesVisited": 1,
+      "relationshipsVisited": 0,
+      "traversalDepth": 1,
+      "matchedRelationships": 0,
+      "pathFound": false,
+      "executionMs": 0,
+      "terminationReason": "no_path",
+      "maxDepth": 8,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable graph operations. Not a new measurement.",
+      "signatureFlow": "START ENTITY \u2192 SEARCH \u2192 NO PATH",
+      "signatureView": [
+        {
+          "phase": "START_ENTITY",
+          "entity": {
+            "id": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice",
+            "type": "Person"
+          }
+        },
+        {
+          "phase": "SEARCH",
+          "predicate": {
+            "id": "https://dataaihub.co/example/kg/uses",
+            "label": "uses"
+          },
+          "direction": "outgoing"
+        },
+        {
+          "phase": "NO_PATH",
+          "pathFound": false
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "no_path"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "graph-traversal"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/01-graph-traversal"
+    }
+  }
+]

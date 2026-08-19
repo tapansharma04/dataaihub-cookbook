@@ -48,6 +48,12 @@ Cookbook →  "How is it implemented?"
 |----|------|---------|
 | `mcp-tool-discovery` | [`examples/mcp/01-tool-discovery`](examples/mcp/01-tool-discovery) | MCP client/server protocol lifecycle (initialize → tools/list → tools/call) |
 
+### Knowledge Graphs
+
+| ID | Path | Concept |
+|----|------|---------|
+| `graph-traversal` | [`examples/knowledge-graphs/01-graph-traversal`](examples/knowledge-graphs/01-graph-traversal) | RDF triples and graph traversal (entity → relationship → evidence) |
+
 More examples will be added as each learning path progresses.
 
 ## Quick start
@@ -81,8 +87,10 @@ dataaihub-cookbook/
 │   │   ├── 03-agent-evaluation/
 │   │   ├── 04-planning/
 │   │   └── 05-memory/
-│   └── mcp/
-│       └── 01-tool-discovery/
+│   ├── mcp/
+│   │   └── 01-tool-discovery/
+│   └── knowledge-graphs/
+│       └── 01-graph-traversal/
 ├── shared/
 ├── docs/
 └── scripts/
