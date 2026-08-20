@@ -53,6 +53,7 @@ Cookbook →  "How is it implemented?"
 | ID | Path | Concept |
 |----|------|---------|
 | `graph-traversal` | [`examples/knowledge-graphs/01-graph-traversal`](examples/knowledge-graphs/01-graph-traversal) | RDF triples and graph traversal (entity → relationship → evidence) |
+| `sparql-queries` | [`examples/knowledge-graphs/02-sparql-queries`](examples/knowledge-graphs/02-sparql-queries) | SPARQL query patterns over RDF (pattern → bindings → result rows) |
 
 More examples will be added as each learning path progresses.
 
