@@ -1,0 +1,3359 @@
+[
+  {
+    "labId": "sparql-updates",
+    "traceId": "insert-data-billing-portal-redis",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-20T17:08:56Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "INSERT_DATA",
+    "selectionNote": "Measured case: INSERT DATA adds the explicit triple ex:billingPortal ex:uses ex:redis . Billing Portal already uses PostgreSQL in the fixture.",
+    "architecture": {
+      "layout": "sparql-updates",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "before",
+        "sparql-update",
+        "after",
+        "verification"
+      ]
+    },
+    "input": {
+      "case": "insert-data-billing-portal-redis",
+      "question": "Add Redis as a technology used by the Billing Portal.",
+      "updateName": "INSERT_DATA",
+      "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\n  ex:billingPortal ex:uses ex:redis .\n}\n",
+      "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?technologyLabel\n",
+      "prefixes": {
+        "ex": "https://dataaihub.co/example/kg/",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+      },
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxResultRows": 256,
+        "modelDriver": "not_used",
+        "freshGraphPerCase": true
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 9,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "case": "insert-data-billing-portal-redis",
+          "question": "Add Redis as a technology used by the Billing Portal.",
+          "updateName": "INSERT_DATA"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "update_started",
+        "detail": {
+          "updateName": "INSERT_DATA",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\n  ex:billingPortal ex:uses ex:redis .\n}\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "beforeTripleCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "update_executed",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.update",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\n  ex:billingPortal ex:uses ex:redis .\n}\n",
+          "executionMs": 332,
+          "success": true
+        },
+        "latencyMs": 332
+      },
+      {
+        "kind": "graph_state",
+        "detail": {
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "after": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ],
+          "insertedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ],
+          "deletedTriples": [],
+          "beforeTripleCount": 1,
+          "afterTripleCount": 2,
+          "insertedTripleCount": 1,
+          "deletedTripleCount": 0
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "verification_started",
+        "detail": {
+          "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?technologyLabel\n",
+          "variables": [
+            "technology",
+            "technologyLabel"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "verification_result",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.query",
+          "executionMs": 34,
+          "rowCount": 2,
+          "bindings": [
+            {
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            },
+            {
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              },
+              "technologyLabel": {
+                "iri": "Redis",
+                "literal": "Redis"
+              }
+            }
+          ],
+          "success": true
+        },
+        "latencyMs": 34
+      },
+      {
+        "kind": "update_completed",
+        "detail": {
+          "insertedTripleCount": 1,
+          "deletedTripleCount": 0,
+          "verificationRows": 2,
+          "terminationReason": "completed"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "case": "insert-data-billing-portal-redis",
+          "question": "Add Redis as a technology used by the Billing Portal.",
+          "updateName": "INSERT_DATA"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-update_started",
+        "type": "update_started",
+        "title": "Update started",
+        "status": "ok",
+        "detail": {
+          "updateName": "INSERT_DATA",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\n  ex:billingPortal ex:uses ex:redis .\n}\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "beforeTripleCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-update_executed",
+        "type": "update_executed",
+        "title": "Update executed",
+        "status": "ok",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.update",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\n  ex:billingPortal ex:uses ex:redis .\n}\n",
+          "executionMs": 332,
+          "success": true
+        },
+        "metrics": {
+          "latencyMs": 332,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-graph_state",
+        "type": "graph_state",
+        "title": "Graph state",
+        "status": "ok",
+        "detail": {
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "after": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ],
+          "insertedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ],
+          "deletedTriples": [],
+          "beforeTripleCount": 1,
+          "afterTripleCount": 2,
+          "insertedTripleCount": 1,
+          "deletedTripleCount": 0
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-verification_started",
+        "type": "verification_started",
+        "title": "Verification started",
+        "status": "ok",
+        "detail": {
+          "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?technologyLabel\n",
+          "variables": [
+            "technology",
+            "technologyLabel"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-verification_result",
+        "type": "verification_result",
+        "title": "Verification result",
+        "status": "ok",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.query",
+          "executionMs": 34,
+          "rowCount": 2,
+          "bindings": [
+            {
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            },
+            {
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              },
+              "technologyLabel": {
+                "iri": "Redis",
+                "literal": "Redis"
+              }
+            }
+          ],
+          "success": true
+        },
+        "metrics": {
+          "latencyMs": 34,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-update_completed",
+        "type": "update_completed",
+        "title": "Update completed",
+        "status": "ok",
+        "detail": {
+          "insertedTripleCount": 1,
+          "deletedTripleCount": 0,
+          "verificationRows": 2,
+          "terminationReason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "before": [
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/billingPortal",
+            "label": "Billing Portal"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        }
+      ],
+      "after": [
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/billingPortal",
+            "label": "Billing Portal"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        },
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/billingPortal",
+            "label": "Billing Portal"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/redis",
+            "label": "Redis"
+          }
+        }
+      ],
+      "insertedTriples": [
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/billingPortal",
+            "label": "Billing Portal"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/redis",
+            "label": "Redis"
+          }
+        }
+      ],
+      "deletedTriples": [],
+      "verificationBindings": [
+        {
+          "technology": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          },
+          "technologyLabel": {
+            "iri": "PostgreSQL",
+            "literal": "PostgreSQL"
+          }
+        },
+        {
+          "technology": {
+            "iri": "https://dataaihub.co/example/kg/redis",
+            "label": "Redis"
+          },
+          "technologyLabel": {
+            "iri": "Redis",
+            "literal": "Redis"
+          }
+        }
+      ],
+      "verificationRows": 2,
+      "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\n  ex:billingPortal ex:uses ex:redis .\n}\n",
+      "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?technologyLabel\n",
+      "updateName": "INSERT_DATA",
+      "terminationReason": "completed"
+    },
+    "errors": [],
+    "metrics": {
+      "updateExecutionMs": 332,
+      "verificationExecutionMs": 34,
+      "insertedTripleCount": 1,
+      "deletedTripleCount": 0,
+      "beforeTripleCount": 1,
+      "afterTripleCount": 2,
+      "verificationRows": 2,
+      "updateType": "INSERT_DATA",
+      "verificationQueryCount": 1,
+      "terminationReason": "completed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable SPARQL UPDATE operations. Not a new measurement.",
+      "signatureFlow": "BEFORE \u2192 INSERT \u2192 AFTER \u2192 VERIFY",
+      "signatureView": [
+        {
+          "phase": "QUESTION",
+          "text": "Add Redis as a technology used by the Billing Portal."
+        },
+        {
+          "phase": "BEFORE",
+          "triples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "tripleCount": 1
+        },
+        {
+          "phase": "INSERT",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\n  ex:billingPortal ex:uses ex:redis .\n}\n",
+          "insertedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "AFTER",
+          "triples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ],
+          "tripleCount": 2
+        },
+        {
+          "phase": "VERIFY",
+          "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?technologyLabel\n",
+          "rowCount": 2,
+          "bindings": [
+            {
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            },
+            {
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              },
+              "technologyLabel": {
+                "iri": "Redis",
+                "literal": "Redis"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ],
+      "teachingPoint": "INSERT DATA adds explicitly specified RDF triples."
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "sparql-updates"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/03-sparql-updates"
+    }
+  },
+  {
+    "labId": "sparql-updates",
+    "traceId": "insert-where-person-uses-technology",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-20T17:08:56Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "INSERT_WHERE",
+    "selectionNote": "Measured case: INSERT WHERE matches worksOn + uses patterns and inserts derived ex:uses triples for Alice, Bob, and Carol.",
+    "architecture": {
+      "layout": "sparql-updates",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "before",
+        "sparql-update",
+        "after",
+        "verification"
+      ]
+    },
+    "input": {
+      "case": "insert-where-person-uses-technology",
+      "question": "Derive person\u2192uses\u2192technology triples from person\u2192worksOn\u2192project\u2192uses\u2192technology.",
+      "updateName": "INSERT_WHERE",
+      "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT {\n  ?person ex:uses ?technology .\n}\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project ex:uses ?technology .\n}\n",
+      "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?technology ?technologyLabel\nWHERE {\n  ?person a ex:Person .\n  ?person ex:uses ?technology .\n  ?person rdfs:label ?personLabel .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?personLabel ?technologyLabel\n",
+      "prefixes": {
+        "ex": "https://dataaihub.co/example/kg/",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+      },
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxResultRows": 256,
+        "modelDriver": "not_used",
+        "freshGraphPerCase": true
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 11,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "case": "insert-where-person-uses-technology",
+          "question": "Derive person\u2192uses\u2192technology triples from person\u2192worksOn\u2192project\u2192uses\u2192technology.",
+          "updateName": "INSERT_WHERE"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "update_started",
+        "detail": {
+          "updateName": "INSERT_WHERE",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT {\n  ?person ex:uses ?technology .\n}\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project ex:uses ?technology .\n}\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "beforeTripleCount": 2
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "update_executed",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.update",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT {\n  ?person ex:uses ?technology .\n}\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project ex:uses ?technology .\n}\n",
+          "executionMs": 10,
+          "success": true
+        },
+        "latencyMs": 10
+      },
+      {
+        "kind": "graph_state",
+        "detail": {
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "after": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/carol",
+                "label": "Carol"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "insertedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/carol",
+                "label": "Carol"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "deletedTriples": [],
+          "beforeTripleCount": 2,
+          "afterTripleCount": 5,
+          "insertedTripleCount": 3,
+          "deletedTripleCount": 0
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "verification_started",
+        "detail": {
+          "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?technology ?technologyLabel\nWHERE {\n  ?person a ex:Person .\n  ?person ex:uses ?technology .\n  ?person rdfs:label ?personLabel .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?personLabel ?technologyLabel\n",
+          "variables": [
+            "person",
+            "personLabel",
+            "technology",
+            "technologyLabel"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "verification_result",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.query",
+          "executionMs": 16,
+          "rowCount": 3,
+          "bindings": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "personLabel": {
+                "iri": "Bob",
+                "literal": "Bob"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/carol",
+                "label": "Carol"
+              },
+              "personLabel": {
+                "iri": "Carol",
+                "literal": "Carol"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            }
+          ],
+          "success": true
+        },
+        "latencyMs": 16
+      },
+      {
+        "kind": "update_completed",
+        "detail": {
+          "insertedTripleCount": 3,
+          "deletedTripleCount": 0,
+          "verificationRows": 3,
+          "terminationReason": "completed"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "case": "insert-where-person-uses-technology",
+          "question": "Derive person\u2192uses\u2192technology triples from person\u2192worksOn\u2192project\u2192uses\u2192technology.",
+          "updateName": "INSERT_WHERE"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-update_started",
+        "type": "update_started",
+        "title": "Update started",
+        "status": "ok",
+        "detail": {
+          "updateName": "INSERT_WHERE",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT {\n  ?person ex:uses ?technology .\n}\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project ex:uses ?technology .\n}\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "beforeTripleCount": 2
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-update_executed",
+        "type": "update_executed",
+        "title": "Update executed",
+        "status": "ok",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.update",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT {\n  ?person ex:uses ?technology .\n}\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project ex:uses ?technology .\n}\n",
+          "executionMs": 10,
+          "success": true
+        },
+        "metrics": {
+          "latencyMs": 10,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-graph_state",
+        "type": "graph_state",
+        "title": "Graph state",
+        "status": "ok",
+        "detail": {
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "after": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/carol",
+                "label": "Carol"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "insertedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/carol",
+                "label": "Carol"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "deletedTriples": [],
+          "beforeTripleCount": 2,
+          "afterTripleCount": 5,
+          "insertedTripleCount": 3,
+          "deletedTripleCount": 0
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-verification_started",
+        "type": "verification_started",
+        "title": "Verification started",
+        "status": "ok",
+        "detail": {
+          "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?technology ?technologyLabel\nWHERE {\n  ?person a ex:Person .\n  ?person ex:uses ?technology .\n  ?person rdfs:label ?personLabel .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?personLabel ?technologyLabel\n",
+          "variables": [
+            "person",
+            "personLabel",
+            "technology",
+            "technologyLabel"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-verification_result",
+        "type": "verification_result",
+        "title": "Verification result",
+        "status": "ok",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.query",
+          "executionMs": 16,
+          "rowCount": 3,
+          "bindings": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "personLabel": {
+                "iri": "Bob",
+                "literal": "Bob"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/carol",
+                "label": "Carol"
+              },
+              "personLabel": {
+                "iri": "Carol",
+                "literal": "Carol"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            }
+          ],
+          "success": true
+        },
+        "metrics": {
+          "latencyMs": 16,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-update_completed",
+        "type": "update_completed",
+        "title": "Update completed",
+        "status": "ok",
+        "detail": {
+          "insertedTripleCount": 3,
+          "deletedTripleCount": 0,
+          "verificationRows": 3,
+          "terminationReason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "before": [
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/billingPortal",
+            "label": "Billing Portal"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        },
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        }
+      ],
+      "after": [
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        },
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/billingPortal",
+            "label": "Billing Portal"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        },
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/bob",
+            "label": "Bob"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        },
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/carol",
+            "label": "Carol"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        },
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        }
+      ],
+      "insertedTriples": [
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        },
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/bob",
+            "label": "Bob"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        },
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/carol",
+            "label": "Carol"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        }
+      ],
+      "deletedTriples": [],
+      "verificationBindings": [
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice"
+          },
+          "personLabel": {
+            "iri": "Alice",
+            "literal": "Alice"
+          },
+          "technology": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          },
+          "technologyLabel": {
+            "iri": "PostgreSQL",
+            "literal": "PostgreSQL"
+          }
+        },
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/bob",
+            "label": "Bob"
+          },
+          "personLabel": {
+            "iri": "Bob",
+            "literal": "Bob"
+          },
+          "technology": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          },
+          "technologyLabel": {
+            "iri": "PostgreSQL",
+            "literal": "PostgreSQL"
+          }
+        },
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/carol",
+            "label": "Carol"
+          },
+          "personLabel": {
+            "iri": "Carol",
+            "literal": "Carol"
+          },
+          "technology": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          },
+          "technologyLabel": {
+            "iri": "PostgreSQL",
+            "literal": "PostgreSQL"
+          }
+        }
+      ],
+      "verificationRows": 3,
+      "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT {\n  ?person ex:uses ?technology .\n}\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project ex:uses ?technology .\n}\n",
+      "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?technology ?technologyLabel\nWHERE {\n  ?person a ex:Person .\n  ?person ex:uses ?technology .\n  ?person rdfs:label ?personLabel .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?personLabel ?technologyLabel\n",
+      "updateName": "INSERT_WHERE",
+      "terminationReason": "completed"
+    },
+    "errors": [],
+    "metrics": {
+      "updateExecutionMs": 10,
+      "verificationExecutionMs": 16,
+      "insertedTripleCount": 3,
+      "deletedTripleCount": 0,
+      "beforeTripleCount": 2,
+      "afterTripleCount": 5,
+      "verificationRows": 3,
+      "updateType": "INSERT_WHERE",
+      "verificationQueryCount": 1,
+      "terminationReason": "completed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable SPARQL UPDATE operations. Not a new measurement.",
+      "signatureFlow": "PATTERN \u2192 INSERT DERIVED TRIPLES \u2192 AFTER \u2192 VERIFY",
+      "signatureView": [
+        {
+          "phase": "QUESTION",
+          "text": "Derive person\u2192uses\u2192technology triples from person\u2192worksOn\u2192project\u2192uses\u2192technology."
+        },
+        {
+          "phase": "BEFORE",
+          "triples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "tripleCount": 2
+        },
+        {
+          "phase": "PATTERN",
+          "patterns": [
+            "?person ex:worksOn ?project .",
+            "?project ex:uses ?technology ."
+          ]
+        },
+        {
+          "phase": "INSERT_DERIVED_TRIPLES",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT {\n  ?person ex:uses ?technology .\n}\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project ex:uses ?technology .\n}\n",
+          "insertedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/carol",
+                "label": "Carol"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "AFTER",
+          "triples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/carol",
+                "label": "Carol"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "tripleCount": 5
+        },
+        {
+          "phase": "VERIFY",
+          "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?technology ?technologyLabel\nWHERE {\n  ?person a ex:Person .\n  ?person ex:uses ?technology .\n  ?person rdfs:label ?personLabel .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?personLabel ?technologyLabel\n",
+          "rowCount": 3,
+          "bindings": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "personLabel": {
+                "iri": "Bob",
+                "literal": "Bob"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/carol",
+                "label": "Carol"
+              },
+              "personLabel": {
+                "iri": "Carol",
+                "literal": "Carol"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ],
+      "teachingPoint": "INSERT WHERE uses existing graph patterns to create new triples."
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "sparql-updates"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/03-sparql-updates"
+    }
+  },
+  {
+    "labId": "sparql-updates",
+    "traceId": "delete-data-billing-portal-postgresql",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-20T17:08:56Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "DELETE_DATA",
+    "selectionNote": "Measured case: DELETE DATA removes the explicit triple ex:billingPortal ex:uses ex:postgresql .",
+    "architecture": {
+      "layout": "sparql-updates",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "before",
+        "sparql-update",
+        "after",
+        "verification"
+      ]
+    },
+    "input": {
+      "case": "delete-data-billing-portal-postgresql",
+      "question": "Remove PostgreSQL as a technology used by the Billing Portal.",
+      "updateName": "DELETE_DATA",
+      "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE DATA {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+      "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ex:postgresql .\n  ex:postgresql rdfs:label ?technologyLabel .\n  BIND(ex:postgresql AS ?technology)\n}\nORDER BY ?technologyLabel\n",
+      "prefixes": {
+        "ex": "https://dataaihub.co/example/kg/",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+      },
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxResultRows": 256,
+        "modelDriver": "not_used",
+        "freshGraphPerCase": true
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 7,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "case": "delete-data-billing-portal-postgresql",
+          "question": "Remove PostgreSQL as a technology used by the Billing Portal.",
+          "updateName": "DELETE_DATA"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "update_started",
+        "detail": {
+          "updateName": "DELETE_DATA",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE DATA {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "beforeTripleCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "update_executed",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.update",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE DATA {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+          "executionMs": 5,
+          "success": true
+        },
+        "latencyMs": 5
+      },
+      {
+        "kind": "graph_state",
+        "detail": {
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "after": [],
+          "insertedTriples": [],
+          "deletedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "beforeTripleCount": 1,
+          "afterTripleCount": 0,
+          "insertedTripleCount": 0,
+          "deletedTripleCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "verification_started",
+        "detail": {
+          "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ex:postgresql .\n  ex:postgresql rdfs:label ?technologyLabel .\n  BIND(ex:postgresql AS ?technology)\n}\nORDER BY ?technologyLabel\n",
+          "variables": [
+            "technology",
+            "technologyLabel"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "verification_result",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.query",
+          "executionMs": 14,
+          "rowCount": 0,
+          "bindings": [],
+          "success": true
+        },
+        "latencyMs": 14
+      },
+      {
+        "kind": "update_completed",
+        "detail": {
+          "insertedTripleCount": 0,
+          "deletedTripleCount": 1,
+          "verificationRows": 0,
+          "terminationReason": "completed"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "case": "delete-data-billing-portal-postgresql",
+          "question": "Remove PostgreSQL as a technology used by the Billing Portal.",
+          "updateName": "DELETE_DATA"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-update_started",
+        "type": "update_started",
+        "title": "Update started",
+        "status": "ok",
+        "detail": {
+          "updateName": "DELETE_DATA",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE DATA {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "beforeTripleCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-update_executed",
+        "type": "update_executed",
+        "title": "Update executed",
+        "status": "ok",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.update",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE DATA {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+          "executionMs": 5,
+          "success": true
+        },
+        "metrics": {
+          "latencyMs": 5,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-graph_state",
+        "type": "graph_state",
+        "title": "Graph state",
+        "status": "ok",
+        "detail": {
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "after": [],
+          "insertedTriples": [],
+          "deletedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "beforeTripleCount": 1,
+          "afterTripleCount": 0,
+          "insertedTripleCount": 0,
+          "deletedTripleCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-verification_started",
+        "type": "verification_started",
+        "title": "Verification started",
+        "status": "ok",
+        "detail": {
+          "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ex:postgresql .\n  ex:postgresql rdfs:label ?technologyLabel .\n  BIND(ex:postgresql AS ?technology)\n}\nORDER BY ?technologyLabel\n",
+          "variables": [
+            "technology",
+            "technologyLabel"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-verification_result",
+        "type": "verification_result",
+        "title": "Verification result",
+        "status": "empty",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.query",
+          "executionMs": 14,
+          "rowCount": 0,
+          "bindings": [],
+          "success": true
+        },
+        "metrics": {
+          "latencyMs": 14,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-update_completed",
+        "type": "update_completed",
+        "title": "Update completed",
+        "status": "ok",
+        "detail": {
+          "insertedTripleCount": 0,
+          "deletedTripleCount": 1,
+          "verificationRows": 0,
+          "terminationReason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "before": [
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/billingPortal",
+            "label": "Billing Portal"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        }
+      ],
+      "after": [],
+      "insertedTriples": [],
+      "deletedTriples": [
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/billingPortal",
+            "label": "Billing Portal"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        }
+      ],
+      "verificationBindings": [],
+      "verificationRows": 0,
+      "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE DATA {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+      "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ex:postgresql .\n  ex:postgresql rdfs:label ?technologyLabel .\n  BIND(ex:postgresql AS ?technology)\n}\nORDER BY ?technologyLabel\n",
+      "updateName": "DELETE_DATA",
+      "terminationReason": "completed"
+    },
+    "errors": [],
+    "metrics": {
+      "updateExecutionMs": 5,
+      "verificationExecutionMs": 14,
+      "insertedTripleCount": 0,
+      "deletedTripleCount": 1,
+      "beforeTripleCount": 1,
+      "afterTripleCount": 0,
+      "verificationRows": 0,
+      "updateType": "DELETE_DATA",
+      "verificationQueryCount": 1,
+      "terminationReason": "completed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable SPARQL UPDATE operations. Not a new measurement.",
+      "signatureFlow": "BEFORE \u2192 DELETE \u2192 AFTER \u2192 VERIFY",
+      "signatureView": [
+        {
+          "phase": "QUESTION",
+          "text": "Remove PostgreSQL as a technology used by the Billing Portal."
+        },
+        {
+          "phase": "BEFORE",
+          "triples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "tripleCount": 1
+        },
+        {
+          "phase": "DELETE",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE DATA {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+          "deletedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "AFTER",
+          "triples": [],
+          "tripleCount": 0
+        },
+        {
+          "phase": "VERIFY",
+          "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ex:postgresql .\n  ex:postgresql rdfs:label ?technologyLabel .\n  BIND(ex:postgresql AS ?technology)\n}\nORDER BY ?technologyLabel\n",
+          "rowCount": 0,
+          "bindings": []
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ],
+      "teachingPoint": "DELETE DATA removes explicitly specified RDF triples."
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "sparql-updates"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/03-sparql-updates"
+    }
+  },
+  {
+    "labId": "sparql-updates",
+    "traceId": "update-and-verify-billing-portal-technology",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-20T17:08:56Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "UPDATE_AND_VERIFY",
+    "selectionNote": "Measured case: one SPARQL UPDATE deletes ex:billingPortal ex:uses ex:postgresql and inserts ex:billingPortal ex:uses ex:redis when the WHERE pattern matches.",
+    "architecture": {
+      "layout": "sparql-updates",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "before",
+        "sparql-update",
+        "after",
+        "verification"
+      ]
+    },
+    "input": {
+      "case": "update-and-verify-billing-portal-technology",
+      "question": "Change the Billing Portal technology from PostgreSQL to Redis, then verify the new graph state.",
+      "updateName": "UPDATE_AND_VERIFY",
+      "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\nINSERT {\n  ex:billingPortal ex:uses ex:redis .\n}\nWHERE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+      "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?technologyLabel\n",
+      "prefixes": {
+        "ex": "https://dataaihub.co/example/kg/",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+      },
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxResultRows": 256,
+        "modelDriver": "not_used",
+        "freshGraphPerCase": true
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 8,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "case": "update-and-verify-billing-portal-technology",
+          "question": "Change the Billing Portal technology from PostgreSQL to Redis, then verify the new graph state.",
+          "updateName": "UPDATE_AND_VERIFY"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "update_started",
+        "detail": {
+          "updateName": "UPDATE_AND_VERIFY",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\nINSERT {\n  ex:billingPortal ex:uses ex:redis .\n}\nWHERE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "beforeTripleCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "update_executed",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.update",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\nINSERT {\n  ex:billingPortal ex:uses ex:redis .\n}\nWHERE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+          "executionMs": 10,
+          "success": true
+        },
+        "latencyMs": 10
+      },
+      {
+        "kind": "graph_state",
+        "detail": {
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "after": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ],
+          "insertedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ],
+          "deletedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "beforeTripleCount": 1,
+          "afterTripleCount": 1,
+          "insertedTripleCount": 1,
+          "deletedTripleCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "verification_started",
+        "detail": {
+          "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?technologyLabel\n",
+          "variables": [
+            "technology",
+            "technologyLabel"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "verification_result",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.query",
+          "executionMs": 10,
+          "rowCount": 1,
+          "bindings": [
+            {
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              },
+              "technologyLabel": {
+                "iri": "Redis",
+                "literal": "Redis"
+              }
+            }
+          ],
+          "success": true
+        },
+        "latencyMs": 10
+      },
+      {
+        "kind": "update_completed",
+        "detail": {
+          "insertedTripleCount": 1,
+          "deletedTripleCount": 1,
+          "verificationRows": 1,
+          "terminationReason": "completed"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "case": "update-and-verify-billing-portal-technology",
+          "question": "Change the Billing Portal technology from PostgreSQL to Redis, then verify the new graph state.",
+          "updateName": "UPDATE_AND_VERIFY"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-update_started",
+        "type": "update_started",
+        "title": "Update started",
+        "status": "ok",
+        "detail": {
+          "updateName": "UPDATE_AND_VERIFY",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\nINSERT {\n  ex:billingPortal ex:uses ex:redis .\n}\nWHERE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "beforeTripleCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-update_executed",
+        "type": "update_executed",
+        "title": "Update executed",
+        "status": "ok",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.update",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\nINSERT {\n  ex:billingPortal ex:uses ex:redis .\n}\nWHERE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+          "executionMs": 10,
+          "success": true
+        },
+        "metrics": {
+          "latencyMs": 10,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-graph_state",
+        "type": "graph_state",
+        "title": "Graph state",
+        "status": "ok",
+        "detail": {
+          "before": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "after": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ],
+          "insertedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ],
+          "deletedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "beforeTripleCount": 1,
+          "afterTripleCount": 1,
+          "insertedTripleCount": 1,
+          "deletedTripleCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-verification_started",
+        "type": "verification_started",
+        "title": "Verification started",
+        "status": "ok",
+        "detail": {
+          "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?technologyLabel\n",
+          "variables": [
+            "technology",
+            "technologyLabel"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-verification_result",
+        "type": "verification_result",
+        "title": "Verification result",
+        "status": "ok",
+        "detail": {
+          "engine": "rdflib",
+          "method": "Graph.query",
+          "executionMs": 10,
+          "rowCount": 1,
+          "bindings": [
+            {
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              },
+              "technologyLabel": {
+                "iri": "Redis",
+                "literal": "Redis"
+              }
+            }
+          ],
+          "success": true
+        },
+        "metrics": {
+          "latencyMs": 10,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-update_completed",
+        "type": "update_completed",
+        "title": "Update completed",
+        "status": "ok",
+        "detail": {
+          "insertedTripleCount": 1,
+          "deletedTripleCount": 1,
+          "verificationRows": 1,
+          "terminationReason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "before": [
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/billingPortal",
+            "label": "Billing Portal"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        }
+      ],
+      "after": [
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/billingPortal",
+            "label": "Billing Portal"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/redis",
+            "label": "Redis"
+          }
+        }
+      ],
+      "insertedTriples": [
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/billingPortal",
+            "label": "Billing Portal"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/redis",
+            "label": "Redis"
+          }
+        }
+      ],
+      "deletedTriples": [
+        {
+          "subject": {
+            "iri": "https://dataaihub.co/example/kg/billingPortal",
+            "label": "Billing Portal"
+          },
+          "predicate": {
+            "iri": "https://dataaihub.co/example/kg/uses"
+          },
+          "object": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          }
+        }
+      ],
+      "verificationBindings": [
+        {
+          "technology": {
+            "iri": "https://dataaihub.co/example/kg/redis",
+            "label": "Redis"
+          },
+          "technologyLabel": {
+            "iri": "Redis",
+            "literal": "Redis"
+          }
+        }
+      ],
+      "verificationRows": 1,
+      "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\nINSERT {\n  ex:billingPortal ex:uses ex:redis .\n}\nWHERE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+      "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?technologyLabel\n",
+      "updateName": "UPDATE_AND_VERIFY",
+      "terminationReason": "completed"
+    },
+    "errors": [],
+    "metrics": {
+      "updateExecutionMs": 10,
+      "verificationExecutionMs": 10,
+      "insertedTripleCount": 1,
+      "deletedTripleCount": 1,
+      "beforeTripleCount": 1,
+      "afterTripleCount": 1,
+      "verificationRows": 1,
+      "updateType": "UPDATE_AND_VERIFY",
+      "verificationQueryCount": 1,
+      "terminationReason": "completed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable SPARQL UPDATE operations. Not a new measurement.",
+      "signatureFlow": "BEFORE \u2192 DELETE + INSERT \u2192 AFTER \u2192 VERIFY",
+      "signatureView": [
+        {
+          "phase": "QUESTION",
+          "text": "Change the Billing Portal technology from PostgreSQL to Redis, then verify the new graph state."
+        },
+        {
+          "phase": "BEFORE",
+          "triples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "tripleCount": 1
+        },
+        {
+          "phase": "DELETE_PLUS_INSERT",
+          "updateQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nDELETE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\nINSERT {\n  ex:billingPortal ex:uses ex:redis .\n}\nWHERE {\n  ex:billingPortal ex:uses ex:postgresql .\n}\n",
+          "deletedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            }
+          ],
+          "insertedTriples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "AFTER",
+          "triples": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/billingPortal",
+                "label": "Billing Portal"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ],
+          "tripleCount": 1
+        },
+        {
+          "phase": "VERIFY",
+          "verificationQuery": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?technology ?technologyLabel\nWHERE {\n  ex:billingPortal ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n}\nORDER BY ?technologyLabel\n",
+          "rowCount": 1,
+          "bindings": [
+            {
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              },
+              "technologyLabel": {
+                "iri": "Redis",
+                "literal": "Redis"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ],
+      "teachingPoint": "SPARQL UPDATE can delete and insert within one operation, then the resulting graph can be queried to verify the new state."
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "sparql-updates"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/03-sparql-updates"
+    }
+  }
+]

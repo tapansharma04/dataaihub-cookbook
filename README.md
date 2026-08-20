@@ -54,6 +54,7 @@ Cookbook →  "How is it implemented?"
 |----|------|---------|
 | `graph-traversal` | [`examples/knowledge-graphs/01-graph-traversal`](examples/knowledge-graphs/01-graph-traversal) | RDF triples and graph traversal (entity → relationship → evidence) |
 | `sparql-queries` | [`examples/knowledge-graphs/02-sparql-queries`](examples/knowledge-graphs/02-sparql-queries) | SPARQL query patterns over RDF (pattern → bindings → result rows) |
+| `sparql-updates` | [`examples/knowledge-graphs/03-sparql-updates`](examples/knowledge-graphs/03-sparql-updates) | SPARQL Updates: INSERT, DELETE & Graph Mutation |
 
 More examples will be added as each learning path progresses.
 
@@ -91,7 +92,9 @@ dataaihub-cookbook/
 │   ├── mcp/
 │   │   └── 01-tool-discovery/
 │   └── knowledge-graphs/
-│       └── 01-graph-traversal/
+│       ├── 01-graph-traversal/
+│       ├── 02-sparql-queries/
+│       └── 03-sparql-updates/
 ├── shared/
 ├── docs/
 └── scripts/
