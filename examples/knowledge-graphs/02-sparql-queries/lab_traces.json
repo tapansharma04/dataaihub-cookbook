@@ -1,0 +1,2097 @@
+[
+  {
+    "labId": "sparql-queries",
+    "traceId": "basic-select-knowledge-platform-people",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-20T05:47:32Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "BASIC_SELECT",
+    "selectionNote": "Measured case: one triple pattern with a fixed object (ex:knowledgePlatform). Variable ?person binds to Alice and Bob.",
+    "architecture": {
+      "layout": "sparql-queries",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "question",
+        "sparql-query",
+        "triple-pattern",
+        "bindings",
+        "result"
+      ]
+    },
+    "input": {
+      "case": "basic-select-knowledge-platform-people",
+      "question": "Which people work on the Knowledge Platform?",
+      "queryName": "BASIC_SELECT",
+      "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel\nWHERE {\n  ?person ex:worksOn ex:knowledgePlatform .\n  ?person rdfs:label ?personLabel .\n}\nORDER BY ?personLabel\n",
+      "prefixes": {
+        "ex": "https://dataaihub.co/example/kg/",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+      },
+      "patterns": [
+        "?person ex:worksOn ex:knowledgePlatform .",
+        "?person rdfs:label ?personLabel ."
+      ],
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxResultRows": 256,
+        "modelDriver": "not_used"
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 10,
+      "predicates": [
+        "employs",
+        "team",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/team",
+          "object": "billing"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/team",
+          "object": "platform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "case": "basic-select-knowledge-platform-people",
+          "question": "Which people work on the Knowledge Platform?",
+          "queryName": "BASIC_SELECT"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "query_started",
+        "detail": {
+          "queryName": "BASIC_SELECT",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel\nWHERE {\n  ?person ex:worksOn ex:knowledgePlatform .\n  ?person rdfs:label ?personLabel .\n}\nORDER BY ?personLabel\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "patterns": [
+            "?person ex:worksOn ex:knowledgePlatform .",
+            "?person rdfs:label ?personLabel ."
+          ],
+          "triplePatterns": 2,
+          "filterCount": 0
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "query_executed",
+        "detail": {
+          "engine": "rdflib",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel\nWHERE {\n  ?person ex:worksOn ex:knowledgePlatform .\n  ?person rdfs:label ?personLabel .\n}\nORDER BY ?personLabel\n",
+          "executionMs": 72,
+          "success": true
+        },
+        "latencyMs": 72
+      },
+      {
+        "kind": "result_bindings",
+        "detail": {
+          "rowCount": 2,
+          "bindings": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "personLabel": {
+                "iri": "Bob",
+                "literal": "Bob"
+              }
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "query_completed",
+        "detail": {
+          "rowCount": 2,
+          "terminationReason": "completed"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "case": "basic-select-knowledge-platform-people",
+          "question": "Which people work on the Knowledge Platform?",
+          "queryName": "BASIC_SELECT"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-query_started",
+        "type": "query_started",
+        "title": "Query started",
+        "status": "ok",
+        "detail": {
+          "queryName": "BASIC_SELECT",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel\nWHERE {\n  ?person ex:worksOn ex:knowledgePlatform .\n  ?person rdfs:label ?personLabel .\n}\nORDER BY ?personLabel\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "patterns": [
+            "?person ex:worksOn ex:knowledgePlatform .",
+            "?person rdfs:label ?personLabel ."
+          ],
+          "triplePatterns": 2,
+          "filterCount": 0
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-query_executed",
+        "type": "query_executed",
+        "title": "Query executed",
+        "status": "ok",
+        "detail": {
+          "engine": "rdflib",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel\nWHERE {\n  ?person ex:worksOn ex:knowledgePlatform .\n  ?person rdfs:label ?personLabel .\n}\nORDER BY ?personLabel\n",
+          "executionMs": 72,
+          "success": true
+        },
+        "metrics": {
+          "latencyMs": 72,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-result_bindings",
+        "type": "result_bindings",
+        "title": "Result bindings",
+        "status": "ok",
+        "detail": {
+          "rowCount": 2,
+          "bindings": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "personLabel": {
+                "iri": "Bob",
+                "literal": "Bob"
+              }
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-query_completed",
+        "type": "query_completed",
+        "title": "Query completed",
+        "status": "ok",
+        "detail": {
+          "rowCount": 2,
+          "terminationReason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "bindings": [
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice"
+          },
+          "personLabel": {
+            "iri": "Alice",
+            "literal": "Alice"
+          }
+        },
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/bob",
+            "label": "Bob"
+          },
+          "personLabel": {
+            "iri": "Bob",
+            "literal": "Bob"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice"
+          },
+          "personLabel": {
+            "iri": "Alice",
+            "literal": "Alice"
+          }
+        },
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/bob",
+            "label": "Bob"
+          },
+          "personLabel": {
+            "iri": "Bob",
+            "literal": "Bob"
+          }
+        }
+      ],
+      "rowCount": 2,
+      "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel\nWHERE {\n  ?person ex:worksOn ex:knowledgePlatform .\n  ?person rdfs:label ?personLabel .\n}\nORDER BY ?personLabel\n",
+      "queryName": "BASIC_SELECT",
+      "terminationReason": "completed"
+    },
+    "errors": [],
+    "metrics": {
+      "queryExecutionMs": 72,
+      "resultRows": 2,
+      "triplePatterns": 2,
+      "filterCount": 0,
+      "variables": [
+        "person",
+        "personLabel"
+      ],
+      "queryCase": "BASIC_SELECT",
+      "bindingsReturned": 2,
+      "terminationReason": "completed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable SPARQL operations. Not a new measurement.",
+      "signatureFlow": "QUESTION \u2192 QUERY PATTERN \u2192 BINDINGS \u2192 RESULT",
+      "signatureView": [
+        {
+          "phase": "QUESTION",
+          "text": "Which people work on the Knowledge Platform?"
+        },
+        {
+          "phase": "QUERY_PATTERN",
+          "patterns": [
+            "?person ex:worksOn ex:knowledgePlatform .",
+            "?person rdfs:label ?personLabel ."
+          ]
+        },
+        {
+          "phase": "BINDINGS",
+          "rowCount": 2,
+          "bindings": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "personLabel": {
+                "iri": "Bob",
+                "literal": "Bob"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "RESULT",
+          "matches": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "personLabel": {
+                "iri": "Bob",
+                "literal": "Bob"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "sparql-queries"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/02-sparql-queries"
+    }
+  },
+  {
+    "labId": "sparql-queries",
+    "traceId": "multi-pattern-alice-technologies",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-20T05:47:32Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "MULTI_PATTERN_QUERY",
+    "selectionNote": "Measured case: two joined triple patterns share ?project. Alice \u2192 worksOn \u2192 Knowledge Platform \u2192 uses \u2192 PostgreSQL.",
+    "architecture": {
+      "layout": "sparql-queries",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "question",
+        "sparql-query",
+        "triple-pattern",
+        "bindings",
+        "result"
+      ]
+    },
+    "input": {
+      "case": "multi-pattern-alice-technologies",
+      "question": "Which technologies are used by projects Alice works on?",
+      "queryName": "MULTI_PATTERN_QUERY",
+      "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?project ?projectLabel ?technology ?technologyLabel\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project rdfs:label ?projectLabel .\n  ?project ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n  ?person rdfs:label ?personLabel .\n  FILTER(?person = ex:alice)\n}\nORDER BY ?technologyLabel\n",
+      "prefixes": {
+        "ex": "https://dataaihub.co/example/kg/",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+      },
+      "patterns": [
+        "?person ex:worksOn ?project .",
+        "?project rdfs:label ?projectLabel .",
+        "?project ex:uses ?technology .",
+        "?technology rdfs:label ?technologyLabel .",
+        "?person rdfs:label ?personLabel ."
+      ],
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxResultRows": 256,
+        "modelDriver": "not_used"
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 10,
+      "predicates": [
+        "employs",
+        "team",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/team",
+          "object": "billing"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/team",
+          "object": "platform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "case": "multi-pattern-alice-technologies",
+          "question": "Which technologies are used by projects Alice works on?",
+          "queryName": "MULTI_PATTERN_QUERY"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "query_started",
+        "detail": {
+          "queryName": "MULTI_PATTERN_QUERY",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?project ?projectLabel ?technology ?technologyLabel\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project rdfs:label ?projectLabel .\n  ?project ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n  ?person rdfs:label ?personLabel .\n  FILTER(?person = ex:alice)\n}\nORDER BY ?technologyLabel\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "patterns": [
+            "?person ex:worksOn ?project .",
+            "?project rdfs:label ?projectLabel .",
+            "?project ex:uses ?technology .",
+            "?technology rdfs:label ?technologyLabel .",
+            "?person rdfs:label ?personLabel ."
+          ],
+          "triplePatterns": 5,
+          "filterCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "query_executed",
+        "detail": {
+          "engine": "rdflib",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?project ?projectLabel ?technology ?technologyLabel\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project rdfs:label ?projectLabel .\n  ?project ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n  ?person rdfs:label ?personLabel .\n  FILTER(?person = ex:alice)\n}\nORDER BY ?technologyLabel\n",
+          "executionMs": 6,
+          "success": true
+        },
+        "latencyMs": 6
+      },
+      {
+        "kind": "result_bindings",
+        "detail": {
+          "rowCount": 1,
+          "bindings": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              },
+              "project": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "projectLabel": {
+                "iri": "Knowledge Platform",
+                "literal": "Knowledge Platform"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "query_completed",
+        "detail": {
+          "rowCount": 1,
+          "terminationReason": "completed"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "case": "multi-pattern-alice-technologies",
+          "question": "Which technologies are used by projects Alice works on?",
+          "queryName": "MULTI_PATTERN_QUERY"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-query_started",
+        "type": "query_started",
+        "title": "Query started",
+        "status": "ok",
+        "detail": {
+          "queryName": "MULTI_PATTERN_QUERY",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?project ?projectLabel ?technology ?technologyLabel\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project rdfs:label ?projectLabel .\n  ?project ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n  ?person rdfs:label ?personLabel .\n  FILTER(?person = ex:alice)\n}\nORDER BY ?technologyLabel\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "patterns": [
+            "?person ex:worksOn ?project .",
+            "?project rdfs:label ?projectLabel .",
+            "?project ex:uses ?technology .",
+            "?technology rdfs:label ?technologyLabel .",
+            "?person rdfs:label ?personLabel ."
+          ],
+          "triplePatterns": 5,
+          "filterCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-query_executed",
+        "type": "query_executed",
+        "title": "Query executed",
+        "status": "ok",
+        "detail": {
+          "engine": "rdflib",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?project ?projectLabel ?technology ?technologyLabel\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project rdfs:label ?projectLabel .\n  ?project ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n  ?person rdfs:label ?personLabel .\n  FILTER(?person = ex:alice)\n}\nORDER BY ?technologyLabel\n",
+          "executionMs": 6,
+          "success": true
+        },
+        "metrics": {
+          "latencyMs": 6,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-result_bindings",
+        "type": "result_bindings",
+        "title": "Result bindings",
+        "status": "ok",
+        "detail": {
+          "rowCount": 1,
+          "bindings": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              },
+              "project": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "projectLabel": {
+                "iri": "Knowledge Platform",
+                "literal": "Knowledge Platform"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-query_completed",
+        "type": "query_completed",
+        "title": "Query completed",
+        "status": "ok",
+        "detail": {
+          "rowCount": 1,
+          "terminationReason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "bindings": [
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice"
+          },
+          "personLabel": {
+            "iri": "Alice",
+            "literal": "Alice"
+          },
+          "project": {
+            "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform"
+          },
+          "projectLabel": {
+            "iri": "Knowledge Platform",
+            "literal": "Knowledge Platform"
+          },
+          "technology": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          },
+          "technologyLabel": {
+            "iri": "PostgreSQL",
+            "literal": "PostgreSQL"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice"
+          },
+          "personLabel": {
+            "iri": "Alice",
+            "literal": "Alice"
+          },
+          "project": {
+            "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform"
+          },
+          "projectLabel": {
+            "iri": "Knowledge Platform",
+            "literal": "Knowledge Platform"
+          },
+          "technology": {
+            "iri": "https://dataaihub.co/example/kg/postgresql",
+            "label": "PostgreSQL"
+          },
+          "technologyLabel": {
+            "iri": "PostgreSQL",
+            "literal": "PostgreSQL"
+          }
+        }
+      ],
+      "rowCount": 1,
+      "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?project ?projectLabel ?technology ?technologyLabel\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project rdfs:label ?projectLabel .\n  ?project ex:uses ?technology .\n  ?technology rdfs:label ?technologyLabel .\n  ?person rdfs:label ?personLabel .\n  FILTER(?person = ex:alice)\n}\nORDER BY ?technologyLabel\n",
+      "queryName": "MULTI_PATTERN_QUERY",
+      "terminationReason": "completed"
+    },
+    "errors": [],
+    "metrics": {
+      "queryExecutionMs": 6,
+      "resultRows": 1,
+      "triplePatterns": 5,
+      "filterCount": 1,
+      "variables": [
+        "person",
+        "personLabel",
+        "project",
+        "projectLabel",
+        "technology",
+        "technologyLabel"
+      ],
+      "queryCase": "MULTI_PATTERN_QUERY",
+      "bindingsReturned": 1,
+      "terminationReason": "completed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable SPARQL operations. Not a new measurement.",
+      "signatureFlow": "PATTERN 1 \u2192 JOIN \u2192 PATTERN 2 \u2192 BINDINGS \u2192 RESULT",
+      "signatureView": [
+        {
+          "phase": "QUESTION",
+          "text": "Which technologies are used by projects Alice works on?"
+        },
+        {
+          "phase": "PATTERN_1",
+          "pattern": "?person ex:worksOn ?project ."
+        },
+        {
+          "phase": "JOIN",
+          "variable": "project"
+        },
+        {
+          "phase": "PATTERN_2",
+          "pattern": "?project ex:uses ?technology ."
+        },
+        {
+          "phase": "BINDINGS",
+          "rowCount": 1,
+          "bindings": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              },
+              "project": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "projectLabel": {
+                "iri": "Knowledge Platform",
+                "literal": "Knowledge Platform"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "RESULT",
+          "matches": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              },
+              "project": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "projectLabel": {
+                "iri": "Knowledge Platform",
+                "literal": "Knowledge Platform"
+              },
+              "technology": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              },
+              "technologyLabel": {
+                "iri": "PostgreSQL",
+                "literal": "PostgreSQL"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "sparql-queries"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/02-sparql-queries"
+    }
+  },
+  {
+    "labId": "sparql-queries",
+    "traceId": "filter-platform-team-people",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-20T05:47:32Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "FILTER_QUERY",
+    "selectionNote": "Measured case: triple patterns joined on ?project plus FILTER(?team = \"platform\") inside SPARQL. Carol is excluded because Billing Portal has ex:team \"billing\".",
+    "architecture": {
+      "layout": "sparql-queries",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "question",
+        "sparql-query",
+        "triple-pattern",
+        "bindings",
+        "result"
+      ]
+    },
+    "input": {
+      "case": "filter-platform-team-people",
+      "question": "Which people work on platform-team projects?",
+      "queryName": "FILTER_QUERY",
+      "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?project ?projectLabel ?team\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project rdfs:label ?projectLabel .\n  ?project ex:team ?team .\n  ?person rdfs:label ?personLabel .\n  FILTER(?team = \"platform\")\n}\nORDER BY ?personLabel\n",
+      "prefixes": {
+        "ex": "https://dataaihub.co/example/kg/",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+      },
+      "patterns": [
+        "?person ex:worksOn ?project .",
+        "?project rdfs:label ?projectLabel .",
+        "?project ex:team ?team .",
+        "?person rdfs:label ?personLabel ."
+      ],
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxResultRows": 256,
+        "modelDriver": "not_used"
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 10,
+      "predicates": [
+        "employs",
+        "team",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/team",
+          "object": "billing"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/team",
+          "object": "platform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "case": "filter-platform-team-people",
+          "question": "Which people work on platform-team projects?",
+          "queryName": "FILTER_QUERY"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "query_started",
+        "detail": {
+          "queryName": "FILTER_QUERY",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?project ?projectLabel ?team\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project rdfs:label ?projectLabel .\n  ?project ex:team ?team .\n  ?person rdfs:label ?personLabel .\n  FILTER(?team = \"platform\")\n}\nORDER BY ?personLabel\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "patterns": [
+            "?person ex:worksOn ?project .",
+            "?project rdfs:label ?projectLabel .",
+            "?project ex:team ?team .",
+            "?person rdfs:label ?personLabel ."
+          ],
+          "triplePatterns": 4,
+          "filterCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "query_executed",
+        "detail": {
+          "engine": "rdflib",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?project ?projectLabel ?team\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project rdfs:label ?projectLabel .\n  ?project ex:team ?team .\n  ?person rdfs:label ?personLabel .\n  FILTER(?team = \"platform\")\n}\nORDER BY ?personLabel\n",
+          "executionMs": 5,
+          "success": true
+        },
+        "latencyMs": 5
+      },
+      {
+        "kind": "result_bindings",
+        "detail": {
+          "rowCount": 2,
+          "bindings": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              },
+              "project": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "projectLabel": {
+                "iri": "Knowledge Platform",
+                "literal": "Knowledge Platform"
+              },
+              "team": {
+                "iri": "platform",
+                "literal": "platform"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "personLabel": {
+                "iri": "Bob",
+                "literal": "Bob"
+              },
+              "project": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "projectLabel": {
+                "iri": "Knowledge Platform",
+                "literal": "Knowledge Platform"
+              },
+              "team": {
+                "iri": "platform",
+                "literal": "platform"
+              }
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "query_completed",
+        "detail": {
+          "rowCount": 2,
+          "terminationReason": "completed"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "case": "filter-platform-team-people",
+          "question": "Which people work on platform-team projects?",
+          "queryName": "FILTER_QUERY"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-query_started",
+        "type": "query_started",
+        "title": "Query started",
+        "status": "ok",
+        "detail": {
+          "queryName": "FILTER_QUERY",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?project ?projectLabel ?team\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project rdfs:label ?projectLabel .\n  ?project ex:team ?team .\n  ?person rdfs:label ?personLabel .\n  FILTER(?team = \"platform\")\n}\nORDER BY ?personLabel\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "patterns": [
+            "?person ex:worksOn ?project .",
+            "?project rdfs:label ?projectLabel .",
+            "?project ex:team ?team .",
+            "?person rdfs:label ?personLabel ."
+          ],
+          "triplePatterns": 4,
+          "filterCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-query_executed",
+        "type": "query_executed",
+        "title": "Query executed",
+        "status": "ok",
+        "detail": {
+          "engine": "rdflib",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?project ?projectLabel ?team\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project rdfs:label ?projectLabel .\n  ?project ex:team ?team .\n  ?person rdfs:label ?personLabel .\n  FILTER(?team = \"platform\")\n}\nORDER BY ?personLabel\n",
+          "executionMs": 5,
+          "success": true
+        },
+        "metrics": {
+          "latencyMs": 5,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-result_bindings",
+        "type": "result_bindings",
+        "title": "Result bindings",
+        "status": "ok",
+        "detail": {
+          "rowCount": 2,
+          "bindings": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              },
+              "project": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "projectLabel": {
+                "iri": "Knowledge Platform",
+                "literal": "Knowledge Platform"
+              },
+              "team": {
+                "iri": "platform",
+                "literal": "platform"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "personLabel": {
+                "iri": "Bob",
+                "literal": "Bob"
+              },
+              "project": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "projectLabel": {
+                "iri": "Knowledge Platform",
+                "literal": "Knowledge Platform"
+              },
+              "team": {
+                "iri": "platform",
+                "literal": "platform"
+              }
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-query_completed",
+        "type": "query_completed",
+        "title": "Query completed",
+        "status": "ok",
+        "detail": {
+          "rowCount": 2,
+          "terminationReason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "bindings": [
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice"
+          },
+          "personLabel": {
+            "iri": "Alice",
+            "literal": "Alice"
+          },
+          "project": {
+            "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform"
+          },
+          "projectLabel": {
+            "iri": "Knowledge Platform",
+            "literal": "Knowledge Platform"
+          },
+          "team": {
+            "iri": "platform",
+            "literal": "platform"
+          }
+        },
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/bob",
+            "label": "Bob"
+          },
+          "personLabel": {
+            "iri": "Bob",
+            "literal": "Bob"
+          },
+          "project": {
+            "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform"
+          },
+          "projectLabel": {
+            "iri": "Knowledge Platform",
+            "literal": "Knowledge Platform"
+          },
+          "team": {
+            "iri": "platform",
+            "literal": "platform"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/alice",
+            "label": "Alice"
+          },
+          "personLabel": {
+            "iri": "Alice",
+            "literal": "Alice"
+          },
+          "project": {
+            "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform"
+          },
+          "projectLabel": {
+            "iri": "Knowledge Platform",
+            "literal": "Knowledge Platform"
+          },
+          "team": {
+            "iri": "platform",
+            "literal": "platform"
+          }
+        },
+        {
+          "person": {
+            "iri": "https://dataaihub.co/example/kg/bob",
+            "label": "Bob"
+          },
+          "personLabel": {
+            "iri": "Bob",
+            "literal": "Bob"
+          },
+          "project": {
+            "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+            "label": "Knowledge Platform"
+          },
+          "projectLabel": {
+            "iri": "Knowledge Platform",
+            "literal": "Knowledge Platform"
+          },
+          "team": {
+            "iri": "platform",
+            "literal": "platform"
+          }
+        }
+      ],
+      "rowCount": 2,
+      "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel ?project ?projectLabel ?team\nWHERE {\n  ?person ex:worksOn ?project .\n  ?project rdfs:label ?projectLabel .\n  ?project ex:team ?team .\n  ?person rdfs:label ?personLabel .\n  FILTER(?team = \"platform\")\n}\nORDER BY ?personLabel\n",
+      "queryName": "FILTER_QUERY",
+      "terminationReason": "completed"
+    },
+    "errors": [],
+    "metrics": {
+      "queryExecutionMs": 5,
+      "resultRows": 2,
+      "triplePatterns": 4,
+      "filterCount": 1,
+      "variables": [
+        "person",
+        "personLabel",
+        "project",
+        "projectLabel",
+        "team"
+      ],
+      "queryCase": "FILTER_QUERY",
+      "bindingsReturned": 2,
+      "terminationReason": "completed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable SPARQL operations. Not a new measurement.",
+      "signatureFlow": "PATTERNS \u2192 FILTER \u2192 BINDINGS \u2192 RESULT",
+      "signatureView": [
+        {
+          "phase": "QUESTION",
+          "text": "Which people work on platform-team projects?"
+        },
+        {
+          "phase": "PATTERNS",
+          "patterns": [
+            "?person ex:worksOn ?project .",
+            "?project rdfs:label ?projectLabel .",
+            "?project ex:team ?team .",
+            "?person rdfs:label ?personLabel ."
+          ]
+        },
+        {
+          "phase": "FILTER",
+          "expression": "FILTER(?team = \"platform\")"
+        },
+        {
+          "phase": "BINDINGS",
+          "rowCount": 2,
+          "bindings": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              },
+              "project": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "projectLabel": {
+                "iri": "Knowledge Platform",
+                "literal": "Knowledge Platform"
+              },
+              "team": {
+                "iri": "platform",
+                "literal": "platform"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "personLabel": {
+                "iri": "Bob",
+                "literal": "Bob"
+              },
+              "project": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "projectLabel": {
+                "iri": "Knowledge Platform",
+                "literal": "Knowledge Platform"
+              },
+              "team": {
+                "iri": "platform",
+                "literal": "platform"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "RESULT",
+          "matches": [
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "personLabel": {
+                "iri": "Alice",
+                "literal": "Alice"
+              },
+              "project": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "projectLabel": {
+                "iri": "Knowledge Platform",
+                "literal": "Knowledge Platform"
+              },
+              "team": {
+                "iri": "platform",
+                "literal": "platform"
+              }
+            },
+            {
+              "person": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "personLabel": {
+                "iri": "Bob",
+                "literal": "Bob"
+              },
+              "project": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "projectLabel": {
+                "iri": "Knowledge Platform",
+                "literal": "Knowledge Platform"
+              },
+              "team": {
+                "iri": "platform",
+                "literal": "platform"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "sparql-queries"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/02-sparql-queries"
+    }
+  },
+  {
+    "labId": "sparql-queries",
+    "traceId": "no-match-quantum-platform",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-20T05:47:32Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "NO_MATCH",
+    "selectionNote": "Measured case: legitimate query for ex:quantumComputingPlatform which does not exist in the graph. Zero bindings is a valid result.",
+    "architecture": {
+      "layout": "sparql-queries",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "question",
+        "sparql-query",
+        "triple-pattern",
+        "bindings",
+        "result"
+      ]
+    },
+    "input": {
+      "case": "no-match-quantum-platform",
+      "question": "Which people work on the Quantum Computing Platform?",
+      "queryName": "NO_MATCH",
+      "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel\nWHERE {\n  ?person ex:worksOn ex:quantumComputingPlatform .\n  ?person rdfs:label ?personLabel .\n}\nORDER BY ?personLabel\n",
+      "prefixes": {
+        "ex": "https://dataaihub.co/example/kg/",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+      },
+      "patterns": [
+        "?person ex:worksOn ex:quantumComputingPlatform .",
+        "?person rdfs:label ?personLabel ."
+      ],
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxResultRows": 256,
+        "modelDriver": "not_used"
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 10,
+      "predicates": [
+        "employs",
+        "team",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/team",
+          "object": "billing"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/team",
+          "object": "platform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "case": "no-match-quantum-platform",
+          "question": "Which people work on the Quantum Computing Platform?",
+          "queryName": "NO_MATCH"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "query_started",
+        "detail": {
+          "queryName": "NO_MATCH",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel\nWHERE {\n  ?person ex:worksOn ex:quantumComputingPlatform .\n  ?person rdfs:label ?personLabel .\n}\nORDER BY ?personLabel\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "patterns": [
+            "?person ex:worksOn ex:quantumComputingPlatform .",
+            "?person rdfs:label ?personLabel ."
+          ],
+          "triplePatterns": 2,
+          "filterCount": 0
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "query_executed",
+        "detail": {
+          "engine": "rdflib",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel\nWHERE {\n  ?person ex:worksOn ex:quantumComputingPlatform .\n  ?person rdfs:label ?personLabel .\n}\nORDER BY ?personLabel\n",
+          "executionMs": 2,
+          "success": true
+        },
+        "latencyMs": 2
+      },
+      {
+        "kind": "result_bindings",
+        "detail": {
+          "rowCount": 0,
+          "bindings": []
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "query_completed",
+        "detail": {
+          "rowCount": 0,
+          "terminationReason": "no_match"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "no_match"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "case": "no-match-quantum-platform",
+          "question": "Which people work on the Quantum Computing Platform?",
+          "queryName": "NO_MATCH"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-query_started",
+        "type": "query_started",
+        "title": "Query started",
+        "status": "ok",
+        "detail": {
+          "queryName": "NO_MATCH",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel\nWHERE {\n  ?person ex:worksOn ex:quantumComputingPlatform .\n  ?person rdfs:label ?personLabel .\n}\nORDER BY ?personLabel\n",
+          "prefixes": {
+            "ex": "https://dataaihub.co/example/kg/",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+          },
+          "patterns": [
+            "?person ex:worksOn ex:quantumComputingPlatform .",
+            "?person rdfs:label ?personLabel ."
+          ],
+          "triplePatterns": 2,
+          "filterCount": 0
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-query_executed",
+        "type": "query_executed",
+        "title": "Query executed",
+        "status": "ok",
+        "detail": {
+          "engine": "rdflib",
+          "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel\nWHERE {\n  ?person ex:worksOn ex:quantumComputingPlatform .\n  ?person rdfs:label ?personLabel .\n}\nORDER BY ?personLabel\n",
+          "executionMs": 2,
+          "success": true
+        },
+        "metrics": {
+          "latencyMs": 2,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-result_bindings",
+        "type": "result_bindings",
+        "title": "Result bindings",
+        "status": "empty",
+        "detail": {
+          "rowCount": 0,
+          "bindings": []
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-query_completed",
+        "type": "query_completed",
+        "title": "Query completed",
+        "status": "ok",
+        "detail": {
+          "rowCount": 0,
+          "terminationReason": "no_match"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "no_match"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "bindings": [],
+      "matches": [],
+      "rowCount": 0,
+      "query": "PREFIX ex: <https://dataaihub.co/example/kg/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?person ?personLabel\nWHERE {\n  ?person ex:worksOn ex:quantumComputingPlatform .\n  ?person rdfs:label ?personLabel .\n}\nORDER BY ?personLabel\n",
+      "queryName": "NO_MATCH",
+      "terminationReason": "no_match"
+    },
+    "errors": [],
+    "metrics": {
+      "queryExecutionMs": 2,
+      "resultRows": 0,
+      "triplePatterns": 2,
+      "filterCount": 0,
+      "variables": [
+        "person",
+        "personLabel"
+      ],
+      "queryCase": "NO_MATCH",
+      "bindingsReturned": 0,
+      "terminationReason": "no_match",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable SPARQL operations. Not a new measurement.",
+      "signatureFlow": "QUERY \u2192 EXECUTED \u2192 0 BINDINGS \u2192 NO MATCH",
+      "signatureView": [
+        {
+          "phase": "QUESTION",
+          "text": "Which people work on the Quantum Computing Platform?"
+        },
+        {
+          "phase": "QUERY",
+          "queryName": "NO_MATCH"
+        },
+        {
+          "phase": "EXECUTED",
+          "success": true
+        },
+        {
+          "phase": "ZERO_BINDINGS",
+          "rowCount": 0
+        },
+        {
+          "phase": "NO_MATCH",
+          "matches": []
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "no_match"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "sparql-queries"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/02-sparql-queries"
+    }
+  }
+]
