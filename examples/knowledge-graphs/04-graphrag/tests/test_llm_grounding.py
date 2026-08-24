@@ -117,7 +117,7 @@ def test_multi_hop_paths_preserved():
         assert len(path.steps) == 2
 
 
-def test_no_relevant_subgraph_does_not_fabricate_context_or_call_llm():
+def test_llm_no_relevant_subgraph_does_not_fabricate_context_or_call_llm():
     store = RdfGraphStore.from_path(GRAPH_PATH)
     mock = MockLLMClient()
     case = next(c for c in CASES if c.example_class == "NO_RELEVANT_SUBGRAPH")
@@ -130,10 +130,41 @@ def test_no_relevant_subgraph_does_not_fabricate_context_or_call_llm():
     )
     assert result.context == []
     assert result.metrics.model_turns == 0
+    assert result.provenance["model"] == "not_used"
     assert mock.last_context == []
     kinds = [event.kind for event in result.sequence]
     assert kinds.index("subgraph_retrieved") < kinds.index("final_answer")
     assert "model_request" not in kinds
+
+
+def test_multi_hop_signature_view_identical_across_modes():
+    store = RdfGraphStore.from_path(GRAPH_PATH)
+    mock = MockLLMClient()
+    case = next(c for c in CASES if c.example_class == "MULTI_HOP_RETRIEVAL")
+    grounded = run_case(case, _settings(), mode="graph_grounded", store=store)
+    llm = run_case(
+        case,
+        _settings(),
+        mode="graphrag_llm",
+        store=store,
+        llm_client=mock,
+    )
+    from graphrag.trace import build_signature_view
+
+    grounded_hops = [
+        item
+        for item in build_signature_view(grounded, example_class=case.example_class)
+        if item["phase"].startswith("HOP_")
+    ]
+    llm_hops = [
+        item
+        for item in build_signature_view(llm, example_class=case.example_class)
+        if item["phase"].startswith("HOP_")
+    ]
+    assert grounded_hops == llm_hops
+    assert [item["phase"] for item in grounded_hops] == ["HOP_1", "HOP_2"]
+    assert len(grounded_hops[0]["steps"]) == 1
+    assert len(grounded_hops[1]["steps"]) == 2
 
 
 def test_llm_mode_occurs_after_context_assembly():

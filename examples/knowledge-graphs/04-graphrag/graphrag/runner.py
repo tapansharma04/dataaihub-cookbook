@@ -237,7 +237,8 @@ def run_case(
             termination=termination,
             sequence=sequence,
             metrics=metrics,
-            provenance=_provenance(mode, model_name),
+            # No LLM call on empty subgraph — even in graphrag_llm mode.
+            provenance=_provenance(mode, model_name, model_used=False),
             model=model_name,
             provider=provider,
             errors=errors,
@@ -389,7 +390,7 @@ def run_case(
         termination=termination,
         sequence=sequence,
         metrics=metrics,
-        provenance=_provenance(mode, model_name),
+        provenance=_provenance(mode, model_name, model_used=model_turns > 0),
         model=model_name,
         provider=provider,
         model_latency_ms=model_latency_ms,
@@ -397,8 +398,14 @@ def run_case(
     )
 
 
-def _provenance(mode: Mode, model_name: str | None) -> dict[str, str]:
-    if mode == "graph_grounded":
+def _provenance(
+    mode: Mode,
+    model_name: str | None,
+    *,
+    model_used: bool = False,
+) -> dict[str, str]:
+    """Record model provenance. Use not_used when no model turn ran."""
+    if mode == "graph_grounded" or not model_used:
         return {"model": "not_used", "tools": "measured", "metrics": "measured"}
     return {
         "model": model_name or "unconfigured",

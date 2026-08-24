@@ -41,14 +41,23 @@ def build_signature_view(
         )
 
     if example_class == "MULTI_HOP_RETRIEVAL" and result.paths:
-        for index, path in enumerate(result.paths[:2], start=1):
-            if path.steps:
-                view.append(
-                    {
-                        "phase": f"HOP_{index}",
-                        "step": path.steps[-1].model_dump(),
-                    }
-                )
+        # Group path steps by measured hop position (not by path index).
+        # Multiple edges at the same hop share one HOP_N phase.
+        hop_count = max((len(path.steps) for path in result.paths), default=0)
+        for hop in range(1, hop_count + 1):
+            steps_at_hop: list[dict[str, Any]] = []
+            seen: set[tuple[str, str, str]] = set()
+            for path in result.paths:
+                if len(path.steps) < hop:
+                    continue
+                step = path.steps[hop - 1]
+                key = (step.subject.iri, step.predicate.iri, step.object.iri)
+                if key in seen:
+                    continue
+                seen.add(key)
+                steps_at_hop.append(step.model_dump())
+            if steps_at_hop:
+                view.append({"phase": f"HOP_{hop}", "steps": steps_at_hop})
 
     if example_class == "RELATIONSHIP_GROUNDED_ANSWER" and result.subgraph:
         view.append(

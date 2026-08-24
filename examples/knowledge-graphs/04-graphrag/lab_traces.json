@@ -3,7 +3,7 @@
     "labId": "graphrag",
     "traceId": "entity-retrieval-knowledge-platform",
     "executionMode": "graph_grounded",
-    "recordedAt": "2026-08-24T05:50:41Z",
+    "recordedAt": "2026-08-24T15:01:47Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "not_used",
@@ -729,7 +729,7 @@
     "labId": "graphrag",
     "traceId": "multi-hop-alice-technologies",
     "executionMode": "graph_grounded",
-    "recordedAt": "2026-08-24T05:50:41Z",
+    "recordedAt": "2026-08-24T15:01:47Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "not_used",
@@ -1530,37 +1530,55 @@
         },
         {
           "phase": "HOP_1",
-          "step": {
-            "subject": {
-              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
-              "label": "Knowledge Platform"
-            },
-            "predicate": {
-              "iri": "https://dataaihub.co/example/kg/uses",
-              "label": "uses"
-            },
-            "object": {
-              "iri": "https://dataaihub.co/example/kg/postgresql",
-              "label": "PostgreSQL"
+          "steps": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
             }
-          }
+          ]
         },
         {
           "phase": "HOP_2",
-          "step": {
-            "subject": {
-              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
-              "label": "Knowledge Platform"
+          "steps": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses",
+                "label": "uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
             },
-            "predicate": {
-              "iri": "https://dataaihub.co/example/kg/uses",
-              "label": "uses"
-            },
-            "object": {
-              "iri": "https://dataaihub.co/example/kg/redis",
-              "label": "Redis"
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses",
+                "label": "uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
             }
-          }
+          ]
         },
         {
           "phase": "SUBGRAPH",
@@ -1644,7 +1662,7 @@
     "labId": "graphrag",
     "traceId": "no-relevant-subgraph-alice-direct-uses",
     "executionMode": "graph_grounded",
-    "recordedAt": "2026-08-24T05:50:41Z",
+    "recordedAt": "2026-08-24T15:01:47Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "not_used",
@@ -2069,7 +2087,7 @@
     "labId": "graphrag",
     "traceId": "relationship-grounded-alice-employer-project",
     "executionMode": "graph_grounded",
-    "recordedAt": "2026-08-24T05:50:41Z",
+    "recordedAt": "2026-08-24T15:01:47Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "not_used",

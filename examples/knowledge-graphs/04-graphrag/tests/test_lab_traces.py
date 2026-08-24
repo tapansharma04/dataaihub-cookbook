@@ -208,6 +208,47 @@ def test_multi_hop_trace_preserves_paths():
     assert len(trace["paths"]) == 2
 
 
+def test_multi_hop_signature_view_groups_by_measured_hop():
+    """Multiple edges at hop 2 must share HOP_2 — not become HOP_1/HOP_2."""
+    settings = Settings(graph_path=GRAPH_PATH, openai_api_key="")
+    store = RdfGraphStore.from_path(GRAPH_PATH)
+    case = get_case("multi-hop-alice-technologies")
+    result = run_case(case, settings, mode="graph_grounded", store=store)
+    view = build_signature_view(result, example_class=case.example_class)
+
+    # Raw retrieval metadata stays hop-accurate.
+    retrieval_steps = result.retrieval["steps"]
+    assert retrieval_steps[0]["hop"] == 1
+    assert retrieval_steps[0]["predicate"] == "worksOn"
+    assert retrieval_steps[1]["hop"] == 2
+    assert retrieval_steps[1]["predicate"] == "uses"
+    assert retrieval_steps[1]["neighborCount"] == 2
+
+    by_phase = {item["phase"]: item for item in view}
+    assert "ENTITY" in by_phase
+    assert "HOP_1" in by_phase
+    assert "HOP_2" in by_phase
+    assert "step" not in by_phase["HOP_1"]
+    assert "step" not in by_phase["HOP_2"]
+
+    hop1 = by_phase["HOP_1"]["steps"]
+    assert len(hop1) == 1
+    assert hop1[0]["subject"]["label"] == "Alice"
+    assert hop1[0]["predicate"]["label"] == "works on"
+    assert hop1[0]["object"]["label"] == "Knowledge Platform"
+
+    hop2 = by_phase["HOP_2"]["steps"]
+    assert len(hop2) == 2
+    hop2_objects = {step["object"]["label"] for step in hop2}
+    assert hop2_objects == {"PostgreSQL", "Redis"}
+    assert all(step["subject"]["label"] == "Knowledge Platform" for step in hop2)
+    assert all(step["predicate"]["label"] == "uses" for step in hop2)
+
+    # Must not present hop-2 technologies as separate hop phases.
+    assert hop1[0]["object"]["label"] != "PostgreSQL"
+    assert {step["object"]["label"] for step in hop1} != {"PostgreSQL", "Redis"}
+
+
 def test_no_relevant_subgraph_trace_shape():
     trace = _build("no-relevant-subgraph-alice-direct-uses")
     assert trace["subgraph"] == []
@@ -215,6 +256,29 @@ def test_no_relevant_subgraph_trace_shape():
     assert trace["termination"] == "no_relevant_subgraph"
     phases = [item["phase"] for item in trace["presentation"]["signatureView"]]
     assert "NO_RELEVANT_SUBGRAPH" in phases
+
+
+def test_llm_no_relevant_subgraph_provenance_is_not_used():
+    """LLM mode skips the model when subgraph is empty — provenance stays not_used."""
+    from graphrag.llm import MockLLMClient
+
+    settings = Settings(graph_path=GRAPH_PATH, openai_api_key="")
+    store = RdfGraphStore.from_path(GRAPH_PATH)
+    case = get_case("no-relevant-subgraph-alice-direct-uses")
+    mock = MockLLMClient()
+    result = run_case(
+        case,
+        settings,
+        mode="graphrag_llm",
+        store=store,
+        llm_client=mock,
+    )
+    assert result.termination == "no_relevant_subgraph"
+    assert result.metrics.model_turns == 0
+    assert result.provenance["model"] == "not_used"
+    assert "model_request" not in [event.kind for event in result.sequence]
+    assert result.answer == "I don't have enough graph evidence to answer that."
+    assert mock.last_context == []
 
 
 def test_signature_view_ends_with_termination():

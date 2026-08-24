@@ -3,7 +3,7 @@
     "labId": "graphrag",
     "traceId": "entity-retrieval-knowledge-platform",
     "executionMode": "graphrag_llm",
-    "recordedAt": "2026-08-24T06:02:48Z",
+    "recordedAt": "2026-08-24T15:01:51Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "gpt-4o-mini",
@@ -395,7 +395,7 @@
           "model": "gpt-4o-mini",
           "provider": "openai"
         },
-        "latencyMs": 3287
+        "latencyMs": 2557
       },
       {
         "kind": "final_answer",
@@ -403,7 +403,7 @@
           "answer": "Alice and Bob work on the Knowledge Platform.",
           "source": "llm"
         },
-        "latencyMs": 3287
+        "latencyMs": 2557
       },
       {
         "kind": "termination",
@@ -615,7 +615,7 @@
           "provider": "openai"
         },
         "metrics": {
-          "latencyMs": 3287,
+          "latencyMs": 2557,
           "provenance": "measured"
         }
       },
@@ -629,7 +629,7 @@
           "source": "llm"
         },
         "metrics": {
-          "latencyMs": 3287,
+          "latencyMs": 2557,
           "provenance": "measured"
         }
       },
@@ -657,8 +657,8 @@
       "contextFactCount": 2,
       "retrievalExecutionMs": 0,
       "contextAssemblyMs": 0,
-      "answerGenerationMs": 3287,
-      "totalMs": 3287,
+      "answerGenerationMs": 2557,
+      "totalMs": 2558,
       "modelTurns": 1,
       "terminationReason": "completed"
     },
@@ -781,13 +781,13 @@
     "errors": [],
     "model": "gpt-4o-mini",
     "provider": "openai",
-    "modelLatencyMs": 3287
+    "modelLatencyMs": 2557
   },
   {
     "labId": "graphrag",
     "traceId": "multi-hop-alice-technologies",
     "executionMode": "graphrag_llm",
-    "recordedAt": "2026-08-24T06:02:50Z",
+    "recordedAt": "2026-08-24T15:01:53Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "gpt-4o-mini",
@@ -1288,7 +1288,7 @@
           "model": "gpt-4o-mini",
           "provider": "openai"
         },
-        "latencyMs": 1320
+        "latencyMs": 2757
       },
       {
         "kind": "final_answer",
@@ -1296,7 +1296,7 @@
           "answer": "The technologies used by projects Alice works on are PostgreSQL and Redis.",
           "source": "llm"
         },
-        "latencyMs": 1320
+        "latencyMs": 2757
       },
       {
         "kind": "termination",
@@ -1572,7 +1572,7 @@
           "provider": "openai"
         },
         "metrics": {
-          "latencyMs": 1320,
+          "latencyMs": 2757,
           "provenance": "measured"
         }
       },
@@ -1586,7 +1586,7 @@
           "source": "llm"
         },
         "metrics": {
-          "latencyMs": 1320,
+          "latencyMs": 2757,
           "provenance": "measured"
         }
       },
@@ -1614,8 +1614,8 @@
       "contextFactCount": 3,
       "retrievalExecutionMs": 1,
       "contextAssemblyMs": 0,
-      "answerGenerationMs": 1320,
-      "totalMs": 1322,
+      "answerGenerationMs": 2757,
+      "totalMs": 2759,
       "modelTurns": 1,
       "terminationReason": "completed"
     },
@@ -1639,37 +1639,55 @@
         },
         {
           "phase": "HOP_1",
-          "step": {
-            "subject": {
-              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
-              "label": "Knowledge Platform"
-            },
-            "predicate": {
-              "iri": "https://dataaihub.co/example/kg/uses",
-              "label": "uses"
-            },
-            "object": {
-              "iri": "https://dataaihub.co/example/kg/postgresql",
-              "label": "PostgreSQL"
+          "steps": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
             }
-          }
+          ]
         },
         {
           "phase": "HOP_2",
-          "step": {
-            "subject": {
-              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
-              "label": "Knowledge Platform"
+          "steps": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses",
+                "label": "uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
             },
-            "predicate": {
-              "iri": "https://dataaihub.co/example/kg/uses",
-              "label": "uses"
-            },
-            "object": {
-              "iri": "https://dataaihub.co/example/kg/redis",
-              "label": "Redis"
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses",
+                "label": "uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
             }
-          }
+          ]
         },
         {
           "phase": "SUBGRAPH",
@@ -1754,16 +1772,16 @@
     "errors": [],
     "model": "gpt-4o-mini",
     "provider": "openai",
-    "modelLatencyMs": 1320
+    "modelLatencyMs": 2757
   },
   {
     "labId": "graphrag",
     "traceId": "no-relevant-subgraph-alice-direct-uses",
     "executionMode": "graphrag_llm",
-    "recordedAt": "2026-08-24T06:02:51Z",
+    "recordedAt": "2026-08-24T15:01:55Z",
     "metricsProvenance": "measured",
     "provenance": {
-      "model": "unconfigured",
+      "model": "not_used",
       "tools": "measured",
       "metrics": "measured"
     },
@@ -2189,7 +2207,7 @@
     "labId": "graphrag",
     "traceId": "relationship-grounded-alice-employer-project",
     "executionMode": "graphrag_llm",
-    "recordedAt": "2026-08-24T06:02:51Z",
+    "recordedAt": "2026-08-24T15:01:55Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "gpt-4o-mini",
@@ -2603,7 +2621,7 @@
           "model": "gpt-4o-mini",
           "provider": "openai"
         },
-        "latencyMs": 1208
+        "latencyMs": 1350
       },
       {
         "kind": "final_answer",
@@ -2611,7 +2629,7 @@
           "answer": "Acme AI employs Alice, and she works on the Knowledge Platform.",
           "source": "llm"
         },
-        "latencyMs": 1208
+        "latencyMs": 1350
       },
       {
         "kind": "termination",
@@ -2844,7 +2862,7 @@
           "provider": "openai"
         },
         "metrics": {
-          "latencyMs": 1208,
+          "latencyMs": 1350,
           "provenance": "measured"
         }
       },
@@ -2858,7 +2876,7 @@
           "source": "llm"
         },
         "metrics": {
-          "latencyMs": 1208,
+          "latencyMs": 1350,
           "provenance": "measured"
         }
       },
@@ -2886,8 +2904,8 @@
       "contextFactCount": 2,
       "retrievalExecutionMs": 0,
       "contextAssemblyMs": 0,
-      "answerGenerationMs": 1208,
-      "totalMs": 1208,
+      "answerGenerationMs": 1350,
+      "totalMs": 1352,
       "modelTurns": 1,
       "terminationReason": "completed"
     },
@@ -3010,6 +3028,6 @@
     "errors": [],
     "model": "gpt-4o-mini",
     "provider": "openai",
-    "modelLatencyMs": 1208
+    "modelLatencyMs": 1350
   }
 ]
