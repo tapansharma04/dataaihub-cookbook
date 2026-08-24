@@ -1,0 +1,3015 @@
+[
+  {
+    "labId": "graphrag",
+    "traceId": "entity-retrieval-knowledge-platform",
+    "executionMode": "graphrag_llm",
+    "recordedAt": "2026-08-24T06:02:48Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "gpt-4o-mini",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "ENTITY_RETRIEVAL",
+    "selectionNote": "Measured case: resolve Knowledge Platform, traverse inverse worksOn to retrieve Alice and Bob before answer generation.",
+    "architecture": {
+      "layout": "graphrag",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "question",
+        "entity-resolution",
+        "graph-retrieval",
+        "subgraph",
+        "context",
+        "llm",
+        "answer"
+      ]
+    },
+    "input": {
+      "case": "entity-retrieval-knowledge-platform",
+      "mode": "graphrag_llm",
+      "question": "Who works on the Knowledge Platform?",
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxHops": 2,
+        "entityResolution": "label-based"
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 9,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "resolvedEntities": [
+      {
+        "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+        "label": "Knowledge Platform",
+        "matchSpan": "Knowledge Platform"
+      }
+    ],
+    "retrieval": {
+      "maxHops": 1,
+      "hopsUsed": 1,
+      "entitiesRetrieved": [
+        "https://dataaihub.co/example/kg/alice",
+        "https://dataaihub.co/example/kg/bob",
+        "https://dataaihub.co/example/kg/knowledgePlatform"
+      ],
+      "relationshipsRetrieved": 2,
+      "steps": [
+        {
+          "hop": 1,
+          "predicate": "worksOn",
+          "direction": "inverse",
+          "from": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "neighborCount": 2
+        }
+      ],
+      "executionMs": 0
+    },
+    "subgraph": [
+      {
+        "subject": {
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice"
+        },
+        "predicate": {
+          "iri": "https://dataaihub.co/example/kg/worksOn",
+          "label": "works on"
+        },
+        "object": {
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform"
+        }
+      },
+      {
+        "subject": {
+          "iri": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob"
+        },
+        "predicate": {
+          "iri": "https://dataaihub.co/example/kg/worksOn",
+          "label": "works on"
+        },
+        "object": {
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform"
+        }
+      }
+    ],
+    "paths": [
+      {
+        "steps": [
+          {
+            "subject": {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice"
+            },
+            "predicate": {
+              "iri": "https://dataaihub.co/example/kg/worksOn",
+              "label": "works on"
+            },
+            "object": {
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform"
+            }
+          }
+        ]
+      },
+      {
+        "steps": [
+          {
+            "subject": {
+              "iri": "https://dataaihub.co/example/kg/bob",
+              "label": "Bob"
+            },
+            "predicate": {
+              "iri": "https://dataaihub.co/example/kg/worksOn",
+              "label": "works on"
+            },
+            "object": {
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform"
+            }
+          }
+        ]
+      }
+    ],
+    "context": [
+      "Alice works on Knowledge Platform.",
+      "Bob works on Knowledge Platform."
+    ],
+    "answer": "Alice and Bob work on the Knowledge Platform.",
+    "termination": "completed",
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "caseId": "entity-retrieval-knowledge-platform",
+          "mode": "graphrag_llm",
+          "question": "Who works on the Knowledge Platform?"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_resolution",
+        "detail": {
+          "method": "label-based",
+          "entityCandidates": 8,
+          "resolvedEntities": [
+            {
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "matchSpan": "Knowledge Platform"
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "retrieval_started",
+        "detail": {
+          "maxHops": 1,
+          "traversalSteps": [
+            {
+              "predicate": "worksOn",
+              "direction": "inverse"
+            }
+          ],
+          "seedEntities": [
+            "https://dataaihub.co/example/kg/knowledgePlatform"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "retrieval_step",
+        "detail": {
+          "hop": 1,
+          "predicate": "worksOn",
+          "direction": "inverse",
+          "from": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "neighborCount": 2
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "subgraph_retrieved",
+        "detail": {
+          "tripleCount": 2,
+          "facts": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            }
+          ],
+          "paths": [
+            {
+              "steps": [
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/alice",
+                    "label": "Alice"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/worksOn",
+                    "label": "works on"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  }
+                }
+              ]
+            },
+            {
+              "steps": [
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/bob",
+                    "label": "Bob"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/worksOn",
+                    "label": "works on"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "context_assembled",
+        "detail": {
+          "factCount": 2,
+          "facts": [
+            "Alice works on Knowledge Platform.",
+            "Bob works on Knowledge Platform."
+          ],
+          "assemblyMs": 0
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_request",
+        "detail": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "contextFactCount": 2,
+          "userPrompt": "Graph context:\n- Alice works on Knowledge Platform.\n- Bob works on Knowledge Platform.\n\nQuestion: Who works on the Knowledge Platform?\n\nAnswer using only the graph context above."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_response",
+        "detail": {
+          "answer": "Alice and Bob work on the Knowledge Platform.",
+          "model": "gpt-4o-mini",
+          "provider": "openai"
+        },
+        "latencyMs": 3287
+      },
+      {
+        "kind": "final_answer",
+        "detail": {
+          "answer": "Alice and Bob work on the Knowledge Platform.",
+          "source": "llm"
+        },
+        "latencyMs": 3287
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "caseId": "entity-retrieval-knowledge-platform",
+          "mode": "graphrag_llm",
+          "question": "Who works on the Knowledge Platform?"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-entity_resolution",
+        "type": "entity_resolution",
+        "title": "Entity resolution",
+        "status": "ok",
+        "detail": {
+          "method": "label-based",
+          "entityCandidates": 8,
+          "resolvedEntities": [
+            {
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "matchSpan": "Knowledge Platform"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-retrieval_started",
+        "type": "retrieval_started",
+        "title": "Retrieval started",
+        "status": "ok",
+        "detail": {
+          "maxHops": 1,
+          "traversalSteps": [
+            {
+              "predicate": "worksOn",
+              "direction": "inverse"
+            }
+          ],
+          "seedEntities": [
+            "https://dataaihub.co/example/kg/knowledgePlatform"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-retrieval_step",
+        "type": "retrieval_step",
+        "title": "Retrieval step",
+        "status": "ok",
+        "detail": {
+          "hop": 1,
+          "predicate": "worksOn",
+          "direction": "inverse",
+          "from": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "neighborCount": 2
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-subgraph_retrieved",
+        "type": "subgraph_retrieved",
+        "title": "Subgraph retrieved",
+        "status": "ok",
+        "detail": {
+          "tripleCount": 2,
+          "facts": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            }
+          ],
+          "paths": [
+            {
+              "steps": [
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/alice",
+                    "label": "Alice"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/worksOn",
+                    "label": "works on"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  }
+                }
+              ]
+            },
+            {
+              "steps": [
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/bob",
+                    "label": "Bob"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/worksOn",
+                    "label": "works on"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-context_assembled",
+        "type": "context_assembled",
+        "title": "Context assembled",
+        "status": "ok",
+        "detail": {
+          "factCount": 2,
+          "facts": [
+            "Alice works on Knowledge Platform.",
+            "Bob works on Knowledge Platform."
+          ],
+          "assemblyMs": 0
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-model_request",
+        "type": "model_request",
+        "title": "Model request",
+        "status": "ok",
+        "detail": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "contextFactCount": 2,
+          "userPrompt": "Graph context:\n- Alice works on Knowledge Platform.\n- Bob works on Knowledge Platform.\n\nQuestion: Who works on the Knowledge Platform?\n\nAnswer using only the graph context above."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-model_response",
+        "type": "model_response",
+        "title": "Model response",
+        "status": "ok",
+        "detail": {
+          "answer": "Alice and Bob work on the Knowledge Platform.",
+          "model": "gpt-4o-mini",
+          "provider": "openai"
+        },
+        "metrics": {
+          "latencyMs": 3287,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-final_answer",
+        "type": "final_answer",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Alice and Bob work on the Knowledge Platform.",
+          "source": "llm"
+        },
+        "metrics": {
+          "latencyMs": 3287,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "metrics": {
+      "entityCandidates": 8,
+      "resolvedEntityCount": 1,
+      "retrievalHops": 1,
+      "entitiesRetrieved": 3,
+      "relationshipsRetrieved": 2,
+      "subgraphTripleCount": 2,
+      "contextFactCount": 2,
+      "retrievalExecutionMs": 0,
+      "contextAssemblyMs": 0,
+      "answerGenerationMs": 3287,
+      "totalMs": 3287,
+      "modelTurns": 1,
+      "terminationReason": "completed"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable GraphRAG operations. Not a new measurement.",
+      "signatureFlow": "QUESTION \u2192 ENTITY \u2192 RELATIONSHIPS \u2192 SUBGRAPH \u2192 CONTEXT \u2192 LLM \u2192 ANSWER",
+      "signatureView": [
+        {
+          "phase": "QUESTION",
+          "text": "Who works on the Knowledge Platform?"
+        },
+        {
+          "phase": "ENTITY",
+          "entities": [
+            {
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform",
+              "matchSpan": "Knowledge Platform"
+            }
+          ]
+        },
+        {
+          "phase": "RELATIONSHIPS",
+          "facts": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "SUBGRAPH",
+          "tripleCount": 2,
+          "facts": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/bob",
+                "label": "Bob"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "CONTEXT",
+          "facts": [
+            "Alice works on Knowledge Platform.",
+            "Bob works on Knowledge Platform."
+          ]
+        },
+        {
+          "phase": "LLM",
+          "model": "gpt-4o-mini"
+        },
+        {
+          "phase": "ANSWER",
+          "text": "Alice and Bob work on the Knowledge Platform."
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "graphrag"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/04-graphrag"
+    },
+    "errors": [],
+    "model": "gpt-4o-mini",
+    "provider": "openai",
+    "modelLatencyMs": 3287
+  },
+  {
+    "labId": "graphrag",
+    "traceId": "multi-hop-alice-technologies",
+    "executionMode": "graphrag_llm",
+    "recordedAt": "2026-08-24T06:02:50Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "gpt-4o-mini",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "MULTI_HOP_RETRIEVAL",
+    "selectionNote": "Measured case: resolve Alice, follow worksOn then uses to retrieve PostgreSQL and Redis through Knowledge Platform.",
+    "architecture": {
+      "layout": "graphrag",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "question",
+        "entity-resolution",
+        "graph-retrieval",
+        "subgraph",
+        "context",
+        "llm",
+        "answer"
+      ]
+    },
+    "input": {
+      "case": "multi-hop-alice-technologies",
+      "mode": "graphrag_llm",
+      "question": "Which technologies are used by projects Alice works on?",
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxHops": 2,
+        "entityResolution": "label-based"
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 9,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "resolvedEntities": [
+      {
+        "iri": "https://dataaihub.co/example/kg/alice",
+        "label": "Alice",
+        "matchSpan": "Alice"
+      }
+    ],
+    "retrieval": {
+      "maxHops": 2,
+      "hopsUsed": 2,
+      "entitiesRetrieved": [
+        "https://dataaihub.co/example/kg/alice",
+        "https://dataaihub.co/example/kg/knowledgePlatform",
+        "https://dataaihub.co/example/kg/postgresql",
+        "https://dataaihub.co/example/kg/redis"
+      ],
+      "relationshipsRetrieved": 3,
+      "steps": [
+        {
+          "hop": 1,
+          "predicate": "worksOn",
+          "direction": "forward",
+          "from": "https://dataaihub.co/example/kg/alice",
+          "neighborCount": 1
+        },
+        {
+          "hop": 2,
+          "predicate": "uses",
+          "direction": "forward",
+          "from": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "neighborCount": 2
+        }
+      ],
+      "executionMs": 1
+    },
+    "subgraph": [
+      {
+        "subject": {
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice"
+        },
+        "predicate": {
+          "iri": "https://dataaihub.co/example/kg/worksOn",
+          "label": "works on"
+        },
+        "object": {
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform"
+        }
+      },
+      {
+        "subject": {
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform"
+        },
+        "predicate": {
+          "iri": "https://dataaihub.co/example/kg/uses",
+          "label": "uses"
+        },
+        "object": {
+          "iri": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL"
+        }
+      },
+      {
+        "subject": {
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform"
+        },
+        "predicate": {
+          "iri": "https://dataaihub.co/example/kg/uses",
+          "label": "uses"
+        },
+        "object": {
+          "iri": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis"
+        }
+      }
+    ],
+    "paths": [
+      {
+        "steps": [
+          {
+            "subject": {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice"
+            },
+            "predicate": {
+              "iri": "https://dataaihub.co/example/kg/worksOn",
+              "label": "works on"
+            },
+            "object": {
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform"
+            }
+          },
+          {
+            "subject": {
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform"
+            },
+            "predicate": {
+              "iri": "https://dataaihub.co/example/kg/uses",
+              "label": "uses"
+            },
+            "object": {
+              "iri": "https://dataaihub.co/example/kg/postgresql",
+              "label": "PostgreSQL"
+            }
+          }
+        ]
+      },
+      {
+        "steps": [
+          {
+            "subject": {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice"
+            },
+            "predicate": {
+              "iri": "https://dataaihub.co/example/kg/worksOn",
+              "label": "works on"
+            },
+            "object": {
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform"
+            }
+          },
+          {
+            "subject": {
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform"
+            },
+            "predicate": {
+              "iri": "https://dataaihub.co/example/kg/uses",
+              "label": "uses"
+            },
+            "object": {
+              "iri": "https://dataaihub.co/example/kg/redis",
+              "label": "Redis"
+            }
+          }
+        ]
+      }
+    ],
+    "context": [
+      "Alice works on Knowledge Platform.",
+      "Knowledge Platform uses PostgreSQL.",
+      "Knowledge Platform uses Redis."
+    ],
+    "answer": "The technologies used by projects Alice works on are PostgreSQL and Redis.",
+    "termination": "completed",
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "caseId": "multi-hop-alice-technologies",
+          "mode": "graphrag_llm",
+          "question": "Which technologies are used by projects Alice works on?"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_resolution",
+        "detail": {
+          "method": "label-based",
+          "entityCandidates": 8,
+          "resolvedEntities": [
+            {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "matchSpan": "Alice"
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "retrieval_started",
+        "detail": {
+          "maxHops": 2,
+          "traversalSteps": [
+            {
+              "predicate": "worksOn",
+              "direction": "forward"
+            },
+            {
+              "predicate": "uses",
+              "direction": "forward"
+            }
+          ],
+          "seedEntities": [
+            "https://dataaihub.co/example/kg/alice"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "retrieval_step",
+        "detail": {
+          "hop": 1,
+          "predicate": "worksOn",
+          "direction": "forward",
+          "from": "https://dataaihub.co/example/kg/alice",
+          "neighborCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "retrieval_step",
+        "detail": {
+          "hop": 2,
+          "predicate": "uses",
+          "direction": "forward",
+          "from": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "neighborCount": 2
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "subgraph_retrieved",
+        "detail": {
+          "tripleCount": 3,
+          "facts": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses",
+                "label": "uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses",
+                "label": "uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ],
+          "paths": [
+            {
+              "steps": [
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/alice",
+                    "label": "Alice"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/worksOn",
+                    "label": "works on"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  }
+                },
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/uses",
+                    "label": "uses"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/postgresql",
+                    "label": "PostgreSQL"
+                  }
+                }
+              ]
+            },
+            {
+              "steps": [
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/alice",
+                    "label": "Alice"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/worksOn",
+                    "label": "works on"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  }
+                },
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/uses",
+                    "label": "uses"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/redis",
+                    "label": "Redis"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "context_assembled",
+        "detail": {
+          "factCount": 3,
+          "facts": [
+            "Alice works on Knowledge Platform.",
+            "Knowledge Platform uses PostgreSQL.",
+            "Knowledge Platform uses Redis."
+          ],
+          "assemblyMs": 0
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_request",
+        "detail": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "contextFactCount": 3,
+          "userPrompt": "Graph context:\n- Alice works on Knowledge Platform.\n- Knowledge Platform uses PostgreSQL.\n- Knowledge Platform uses Redis.\n\nQuestion: Which technologies are used by projects Alice works on?\n\nAnswer using only the graph context above."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_response",
+        "detail": {
+          "answer": "The technologies used by projects Alice works on are PostgreSQL and Redis.",
+          "model": "gpt-4o-mini",
+          "provider": "openai"
+        },
+        "latencyMs": 1320
+      },
+      {
+        "kind": "final_answer",
+        "detail": {
+          "answer": "The technologies used by projects Alice works on are PostgreSQL and Redis.",
+          "source": "llm"
+        },
+        "latencyMs": 1320
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "caseId": "multi-hop-alice-technologies",
+          "mode": "graphrag_llm",
+          "question": "Which technologies are used by projects Alice works on?"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-entity_resolution",
+        "type": "entity_resolution",
+        "title": "Entity resolution",
+        "status": "ok",
+        "detail": {
+          "method": "label-based",
+          "entityCandidates": 8,
+          "resolvedEntities": [
+            {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "matchSpan": "Alice"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-retrieval_started",
+        "type": "retrieval_started",
+        "title": "Retrieval started",
+        "status": "ok",
+        "detail": {
+          "maxHops": 2,
+          "traversalSteps": [
+            {
+              "predicate": "worksOn",
+              "direction": "forward"
+            },
+            {
+              "predicate": "uses",
+              "direction": "forward"
+            }
+          ],
+          "seedEntities": [
+            "https://dataaihub.co/example/kg/alice"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-retrieval_step",
+        "type": "retrieval_step",
+        "title": "Retrieval step",
+        "status": "ok",
+        "detail": {
+          "hop": 1,
+          "predicate": "worksOn",
+          "direction": "forward",
+          "from": "https://dataaihub.co/example/kg/alice",
+          "neighborCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-retrieval_step",
+        "type": "retrieval_step",
+        "title": "Retrieval step",
+        "status": "ok",
+        "detail": {
+          "hop": 2,
+          "predicate": "uses",
+          "direction": "forward",
+          "from": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "neighborCount": 2
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-subgraph_retrieved",
+        "type": "subgraph_retrieved",
+        "title": "Subgraph retrieved",
+        "status": "ok",
+        "detail": {
+          "tripleCount": 3,
+          "facts": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses",
+                "label": "uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses",
+                "label": "uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ],
+          "paths": [
+            {
+              "steps": [
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/alice",
+                    "label": "Alice"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/worksOn",
+                    "label": "works on"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  }
+                },
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/uses",
+                    "label": "uses"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/postgresql",
+                    "label": "PostgreSQL"
+                  }
+                }
+              ]
+            },
+            {
+              "steps": [
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/alice",
+                    "label": "Alice"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/worksOn",
+                    "label": "works on"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  }
+                },
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/uses",
+                    "label": "uses"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/redis",
+                    "label": "Redis"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-context_assembled",
+        "type": "context_assembled",
+        "title": "Context assembled",
+        "status": "ok",
+        "detail": {
+          "factCount": 3,
+          "facts": [
+            "Alice works on Knowledge Platform.",
+            "Knowledge Platform uses PostgreSQL.",
+            "Knowledge Platform uses Redis."
+          ],
+          "assemblyMs": 0
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-model_request",
+        "type": "model_request",
+        "title": "Model request",
+        "status": "ok",
+        "detail": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "contextFactCount": 3,
+          "userPrompt": "Graph context:\n- Alice works on Knowledge Platform.\n- Knowledge Platform uses PostgreSQL.\n- Knowledge Platform uses Redis.\n\nQuestion: Which technologies are used by projects Alice works on?\n\nAnswer using only the graph context above."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-model_response",
+        "type": "model_response",
+        "title": "Model response",
+        "status": "ok",
+        "detail": {
+          "answer": "The technologies used by projects Alice works on are PostgreSQL and Redis.",
+          "model": "gpt-4o-mini",
+          "provider": "openai"
+        },
+        "metrics": {
+          "latencyMs": 1320,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-final_answer",
+        "type": "final_answer",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "The technologies used by projects Alice works on are PostgreSQL and Redis.",
+          "source": "llm"
+        },
+        "metrics": {
+          "latencyMs": 1320,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "metrics": {
+      "entityCandidates": 8,
+      "resolvedEntityCount": 1,
+      "retrievalHops": 2,
+      "entitiesRetrieved": 4,
+      "relationshipsRetrieved": 3,
+      "subgraphTripleCount": 3,
+      "contextFactCount": 3,
+      "retrievalExecutionMs": 1,
+      "contextAssemblyMs": 0,
+      "answerGenerationMs": 1320,
+      "totalMs": 1322,
+      "modelTurns": 1,
+      "terminationReason": "completed"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable GraphRAG operations. Not a new measurement.",
+      "signatureFlow": "QUESTION \u2192 ENTITY \u2192 HOP 1 \u2192 HOP 2 \u2192 SUBGRAPH \u2192 CONTEXT \u2192 LLM \u2192 ANSWER",
+      "signatureView": [
+        {
+          "phase": "QUESTION",
+          "text": "Which technologies are used by projects Alice works on?"
+        },
+        {
+          "phase": "ENTITY",
+          "entities": [
+            {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "matchSpan": "Alice"
+            }
+          ]
+        },
+        {
+          "phase": "HOP_1",
+          "step": {
+            "subject": {
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform"
+            },
+            "predicate": {
+              "iri": "https://dataaihub.co/example/kg/uses",
+              "label": "uses"
+            },
+            "object": {
+              "iri": "https://dataaihub.co/example/kg/postgresql",
+              "label": "PostgreSQL"
+            }
+          }
+        },
+        {
+          "phase": "HOP_2",
+          "step": {
+            "subject": {
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform"
+            },
+            "predicate": {
+              "iri": "https://dataaihub.co/example/kg/uses",
+              "label": "uses"
+            },
+            "object": {
+              "iri": "https://dataaihub.co/example/kg/redis",
+              "label": "Redis"
+            }
+          }
+        },
+        {
+          "phase": "SUBGRAPH",
+          "tripleCount": 3,
+          "facts": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses",
+                "label": "uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/postgresql",
+                "label": "PostgreSQL"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/uses",
+                "label": "uses"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/redis",
+                "label": "Redis"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "CONTEXT",
+          "facts": [
+            "Alice works on Knowledge Platform.",
+            "Knowledge Platform uses PostgreSQL.",
+            "Knowledge Platform uses Redis."
+          ]
+        },
+        {
+          "phase": "LLM",
+          "model": "gpt-4o-mini"
+        },
+        {
+          "phase": "ANSWER",
+          "text": "The technologies used by projects Alice works on are PostgreSQL and Redis."
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "graphrag"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/04-graphrag"
+    },
+    "errors": [],
+    "model": "gpt-4o-mini",
+    "provider": "openai",
+    "modelLatencyMs": 1320
+  },
+  {
+    "labId": "graphrag",
+    "traceId": "no-relevant-subgraph-alice-direct-uses",
+    "executionMode": "graphrag_llm",
+    "recordedAt": "2026-08-24T06:02:51Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "unconfigured",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "NO_RELEVANT_SUBGRAPH",
+    "selectionNote": "Measured case: resolve Alice but require a direct uses relationship. The graph has no Alice \u2192 uses edge, so retrieval returns no subgraph.",
+    "architecture": {
+      "layout": "graphrag",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "question",
+        "entity-resolution",
+        "graph-retrieval",
+        "subgraph",
+        "context",
+        "llm",
+        "answer"
+      ]
+    },
+    "input": {
+      "case": "no-relevant-subgraph-alice-direct-uses",
+      "mode": "graphrag_llm",
+      "question": "What technology does Alice directly use?",
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxHops": 2,
+        "entityResolution": "label-based"
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 9,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "resolvedEntities": [
+      {
+        "iri": "https://dataaihub.co/example/kg/alice",
+        "label": "Alice",
+        "matchSpan": "Alice"
+      }
+    ],
+    "retrieval": {
+      "maxHops": 1,
+      "hopsUsed": 0,
+      "entitiesRetrieved": [],
+      "relationshipsRetrieved": 0,
+      "steps": [
+        {
+          "hop": 1,
+          "predicate": "uses",
+          "direction": "forward",
+          "from": "https://dataaihub.co/example/kg/alice",
+          "neighborCount": 0
+        }
+      ],
+      "executionMs": 0
+    },
+    "subgraph": [],
+    "paths": [],
+    "context": [],
+    "answer": "I don't have enough graph evidence to answer that.",
+    "termination": "no_relevant_subgraph",
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "caseId": "no-relevant-subgraph-alice-direct-uses",
+          "mode": "graphrag_llm",
+          "question": "What technology does Alice directly use?"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_resolution",
+        "detail": {
+          "method": "label-based",
+          "entityCandidates": 8,
+          "resolvedEntities": [
+            {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "matchSpan": "Alice"
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "retrieval_started",
+        "detail": {
+          "maxHops": 1,
+          "traversalSteps": [
+            {
+              "predicate": "uses",
+              "direction": "forward"
+            }
+          ],
+          "seedEntities": [
+            "https://dataaihub.co/example/kg/alice"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "retrieval_step",
+        "detail": {
+          "hop": 1,
+          "predicate": "uses",
+          "direction": "forward",
+          "from": "https://dataaihub.co/example/kg/alice",
+          "neighborCount": 0
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "subgraph_retrieved",
+        "detail": {
+          "tripleCount": 0,
+          "facts": [],
+          "paths": []
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "final_answer",
+        "detail": {
+          "answer": "I don't have enough graph evidence to answer that.",
+          "source": "deterministic"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "no_relevant_subgraph"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "caseId": "no-relevant-subgraph-alice-direct-uses",
+          "mode": "graphrag_llm",
+          "question": "What technology does Alice directly use?"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-entity_resolution",
+        "type": "entity_resolution",
+        "title": "Entity resolution",
+        "status": "ok",
+        "detail": {
+          "method": "label-based",
+          "entityCandidates": 8,
+          "resolvedEntities": [
+            {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "matchSpan": "Alice"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-retrieval_started",
+        "type": "retrieval_started",
+        "title": "Retrieval started",
+        "status": "ok",
+        "detail": {
+          "maxHops": 1,
+          "traversalSteps": [
+            {
+              "predicate": "uses",
+              "direction": "forward"
+            }
+          ],
+          "seedEntities": [
+            "https://dataaihub.co/example/kg/alice"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-retrieval_step",
+        "type": "retrieval_step",
+        "title": "Retrieval step",
+        "status": "ok",
+        "detail": {
+          "hop": 1,
+          "predicate": "uses",
+          "direction": "forward",
+          "from": "https://dataaihub.co/example/kg/alice",
+          "neighborCount": 0
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-subgraph_retrieved",
+        "type": "subgraph_retrieved",
+        "title": "Subgraph retrieved",
+        "status": "ok",
+        "detail": {
+          "tripleCount": 0,
+          "facts": [],
+          "paths": []
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-final_answer",
+        "type": "final_answer",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "I don't have enough graph evidence to answer that.",
+          "source": "deterministic"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "empty",
+        "detail": {
+          "reason": "no_relevant_subgraph"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "metrics": {
+      "entityCandidates": 8,
+      "resolvedEntityCount": 1,
+      "retrievalHops": 0,
+      "entitiesRetrieved": 0,
+      "relationshipsRetrieved": 0,
+      "subgraphTripleCount": 0,
+      "contextFactCount": 0,
+      "retrievalExecutionMs": 0,
+      "contextAssemblyMs": 0,
+      "answerGenerationMs": 0,
+      "totalMs": 0,
+      "modelTurns": 0,
+      "terminationReason": "no_relevant_subgraph"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable GraphRAG operations. Not a new measurement.",
+      "signatureFlow": "QUESTION \u2192 ENTITY \u2192 SEARCH \u2192 NO RELEVANT SUBGRAPH \u2192 NO ANSWER",
+      "signatureView": [
+        {
+          "phase": "QUESTION",
+          "text": "What technology does Alice directly use?"
+        },
+        {
+          "phase": "ENTITY",
+          "entities": [
+            {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "matchSpan": "Alice"
+            }
+          ]
+        },
+        {
+          "phase": "SEARCH",
+          "hopsUsed": 0
+        },
+        {
+          "phase": "NO_RELEVANT_SUBGRAPH",
+          "tripleCount": 0
+        },
+        {
+          "phase": "ANSWER",
+          "text": "I don't have enough graph evidence to answer that."
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "no_relevant_subgraph"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "graphrag"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/04-graphrag"
+    },
+    "errors": [],
+    "model": null,
+    "provider": null,
+    "modelLatencyMs": null
+  },
+  {
+    "labId": "graphrag",
+    "traceId": "relationship-grounded-alice-employer-project",
+    "executionMode": "graphrag_llm",
+    "recordedAt": "2026-08-24T06:02:51Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "gpt-4o-mini",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "RELATIONSHIP_GROUNDED_ANSWER",
+    "selectionNote": "Measured case: resolve Alice, retrieve inverse employs and forward worksOn relationships as explicit graph facts.",
+    "architecture": {
+      "layout": "graphrag",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "question",
+        "entity-resolution",
+        "graph-retrieval",
+        "subgraph",
+        "context",
+        "llm",
+        "answer"
+      ]
+    },
+    "input": {
+      "case": "relationship-grounded-alice-employer-project",
+      "mode": "graphrag_llm",
+      "question": "Which company employs Alice and what project does she work on?",
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "maxHops": 2,
+        "entityResolution": "label-based"
+      }
+    },
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 9,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "resolvedEntities": [
+      {
+        "iri": "https://dataaihub.co/example/kg/alice",
+        "label": "Alice",
+        "matchSpan": "Alice"
+      }
+    ],
+    "retrieval": {
+      "maxHops": 1,
+      "hopsUsed": 1,
+      "entitiesRetrieved": [
+        "https://dataaihub.co/example/kg/acmeAI",
+        "https://dataaihub.co/example/kg/alice",
+        "https://dataaihub.co/example/kg/knowledgePlatform"
+      ],
+      "relationshipsRetrieved": 2,
+      "steps": [
+        {
+          "hop": 1,
+          "predicate": "employs",
+          "direction": "inverse",
+          "from": "https://dataaihub.co/example/kg/alice",
+          "neighborCount": 1
+        },
+        {
+          "hop": 1,
+          "predicate": "worksOn",
+          "direction": "forward",
+          "from": "https://dataaihub.co/example/kg/alice",
+          "neighborCount": 1
+        }
+      ],
+      "executionMs": 0
+    },
+    "subgraph": [
+      {
+        "subject": {
+          "iri": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI"
+        },
+        "predicate": {
+          "iri": "https://dataaihub.co/example/kg/employs",
+          "label": "employs"
+        },
+        "object": {
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice"
+        }
+      },
+      {
+        "subject": {
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice"
+        },
+        "predicate": {
+          "iri": "https://dataaihub.co/example/kg/worksOn",
+          "label": "works on"
+        },
+        "object": {
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform"
+        }
+      }
+    ],
+    "paths": [
+      {
+        "steps": [
+          {
+            "subject": {
+              "iri": "https://dataaihub.co/example/kg/acmeAI",
+              "label": "Acme AI"
+            },
+            "predicate": {
+              "iri": "https://dataaihub.co/example/kg/employs",
+              "label": "employs"
+            },
+            "object": {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice"
+            }
+          }
+        ]
+      },
+      {
+        "steps": [
+          {
+            "subject": {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice"
+            },
+            "predicate": {
+              "iri": "https://dataaihub.co/example/kg/worksOn",
+              "label": "works on"
+            },
+            "object": {
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "label": "Knowledge Platform"
+            }
+          }
+        ]
+      }
+    ],
+    "context": [
+      "Acme AI employs Alice.",
+      "Alice works on Knowledge Platform."
+    ],
+    "answer": "Acme AI employs Alice, and she works on the Knowledge Platform.",
+    "termination": "completed",
+    "sequence": [
+      {
+        "kind": "user_request",
+        "detail": {
+          "caseId": "relationship-grounded-alice-employer-project",
+          "mode": "graphrag_llm",
+          "question": "Which company employs Alice and what project does she work on?"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_resolution",
+        "detail": {
+          "method": "label-based",
+          "entityCandidates": 8,
+          "resolvedEntities": [
+            {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "matchSpan": "Alice"
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "retrieval_started",
+        "detail": {
+          "maxHops": 1,
+          "traversalSteps": [
+            {
+              "predicate": "employs",
+              "direction": "inverse"
+            },
+            {
+              "predicate": "worksOn",
+              "direction": "forward"
+            }
+          ],
+          "seedEntities": [
+            "https://dataaihub.co/example/kg/alice"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "retrieval_step",
+        "detail": {
+          "hop": 1,
+          "predicate": "employs",
+          "direction": "inverse",
+          "from": "https://dataaihub.co/example/kg/alice",
+          "neighborCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "retrieval_step",
+        "detail": {
+          "hop": 1,
+          "predicate": "worksOn",
+          "direction": "forward",
+          "from": "https://dataaihub.co/example/kg/alice",
+          "neighborCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "subgraph_retrieved",
+        "detail": {
+          "tripleCount": 2,
+          "facts": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/acmeAI",
+                "label": "Acme AI"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/employs",
+                "label": "employs"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            }
+          ],
+          "paths": [
+            {
+              "steps": [
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/acmeAI",
+                    "label": "Acme AI"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/employs",
+                    "label": "employs"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/alice",
+                    "label": "Alice"
+                  }
+                }
+              ]
+            },
+            {
+              "steps": [
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/alice",
+                    "label": "Alice"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/worksOn",
+                    "label": "works on"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "context_assembled",
+        "detail": {
+          "factCount": 2,
+          "facts": [
+            "Acme AI employs Alice.",
+            "Alice works on Knowledge Platform."
+          ],
+          "assemblyMs": 0
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "model_request",
+        "detail": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "contextFactCount": 2,
+          "userPrompt": "Graph context:\n- Acme AI employs Alice.\n- Alice works on Knowledge Platform.\n\nQuestion: Which company employs Alice and what project does she work on?\n\nAnswer using only the graph context above."
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "model_response",
+        "detail": {
+          "answer": "Acme AI employs Alice, and she works on the Knowledge Platform.",
+          "model": "gpt-4o-mini",
+          "provider": "openai"
+        },
+        "latencyMs": 1208
+      },
+      {
+        "kind": "final_answer",
+        "detail": {
+          "answer": "Acme AI employs Alice, and she works on the Knowledge Platform.",
+          "source": "llm"
+        },
+        "latencyMs": 1208
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-user_request",
+        "type": "user_request",
+        "title": "User request",
+        "status": "ok",
+        "detail": {
+          "caseId": "relationship-grounded-alice-employer-project",
+          "mode": "graphrag_llm",
+          "question": "Which company employs Alice and what project does she work on?"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-entity_resolution",
+        "type": "entity_resolution",
+        "title": "Entity resolution",
+        "status": "ok",
+        "detail": {
+          "method": "label-based",
+          "entityCandidates": 8,
+          "resolvedEntities": [
+            {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "matchSpan": "Alice"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-retrieval_started",
+        "type": "retrieval_started",
+        "title": "Retrieval started",
+        "status": "ok",
+        "detail": {
+          "maxHops": 1,
+          "traversalSteps": [
+            {
+              "predicate": "employs",
+              "direction": "inverse"
+            },
+            {
+              "predicate": "worksOn",
+              "direction": "forward"
+            }
+          ],
+          "seedEntities": [
+            "https://dataaihub.co/example/kg/alice"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-retrieval_step",
+        "type": "retrieval_step",
+        "title": "Retrieval step",
+        "status": "ok",
+        "detail": {
+          "hop": 1,
+          "predicate": "employs",
+          "direction": "inverse",
+          "from": "https://dataaihub.co/example/kg/alice",
+          "neighborCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-retrieval_step",
+        "type": "retrieval_step",
+        "title": "Retrieval step",
+        "status": "ok",
+        "detail": {
+          "hop": 1,
+          "predicate": "worksOn",
+          "direction": "forward",
+          "from": "https://dataaihub.co/example/kg/alice",
+          "neighborCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-subgraph_retrieved",
+        "type": "subgraph_retrieved",
+        "title": "Subgraph retrieved",
+        "status": "ok",
+        "detail": {
+          "tripleCount": 2,
+          "facts": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/acmeAI",
+                "label": "Acme AI"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/employs",
+                "label": "employs"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            }
+          ],
+          "paths": [
+            {
+              "steps": [
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/acmeAI",
+                    "label": "Acme AI"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/employs",
+                    "label": "employs"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/alice",
+                    "label": "Alice"
+                  }
+                }
+              ]
+            },
+            {
+              "steps": [
+                {
+                  "subject": {
+                    "iri": "https://dataaihub.co/example/kg/alice",
+                    "label": "Alice"
+                  },
+                  "predicate": {
+                    "iri": "https://dataaihub.co/example/kg/worksOn",
+                    "label": "works on"
+                  },
+                  "object": {
+                    "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                    "label": "Knowledge Platform"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-context_assembled",
+        "type": "context_assembled",
+        "title": "Context assembled",
+        "status": "ok",
+        "detail": {
+          "factCount": 2,
+          "facts": [
+            "Acme AI employs Alice.",
+            "Alice works on Knowledge Platform."
+          ],
+          "assemblyMs": 0
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-model_request",
+        "type": "model_request",
+        "title": "Model request",
+        "status": "ok",
+        "detail": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "contextFactCount": 2,
+          "userPrompt": "Graph context:\n- Acme AI employs Alice.\n- Alice works on Knowledge Platform.\n\nQuestion: Which company employs Alice and what project does she work on?\n\nAnswer using only the graph context above."
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-model_response",
+        "type": "model_response",
+        "title": "Model response",
+        "status": "ok",
+        "detail": {
+          "answer": "Acme AI employs Alice, and she works on the Knowledge Platform.",
+          "model": "gpt-4o-mini",
+          "provider": "openai"
+        },
+        "metrics": {
+          "latencyMs": 1208,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-final_answer",
+        "type": "final_answer",
+        "title": "Final answer",
+        "status": "ok",
+        "detail": {
+          "answer": "Acme AI employs Alice, and she works on the Knowledge Platform.",
+          "source": "llm"
+        },
+        "metrics": {
+          "latencyMs": 1208,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "metrics": {
+      "entityCandidates": 8,
+      "resolvedEntityCount": 1,
+      "retrievalHops": 1,
+      "entitiesRetrieved": 3,
+      "relationshipsRetrieved": 2,
+      "subgraphTripleCount": 2,
+      "contextFactCount": 2,
+      "retrievalExecutionMs": 0,
+      "contextAssemblyMs": 0,
+      "answerGenerationMs": 1208,
+      "totalMs": 1208,
+      "modelTurns": 1,
+      "terminationReason": "completed"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable GraphRAG operations. Not a new measurement.",
+      "signatureFlow": "QUESTION \u2192 GRAPH FACTS \u2192 CONTEXT \u2192 CONTEXT \u2192 LLM \u2192 ANSWER",
+      "signatureView": [
+        {
+          "phase": "QUESTION",
+          "text": "Which company employs Alice and what project does she work on?"
+        },
+        {
+          "phase": "ENTITY",
+          "entities": [
+            {
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "label": "Alice",
+              "matchSpan": "Alice"
+            }
+          ]
+        },
+        {
+          "phase": "GRAPH_FACTS",
+          "facts": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/acmeAI",
+                "label": "Acme AI"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/employs",
+                "label": "employs"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "SUBGRAPH",
+          "tripleCount": 2,
+          "facts": [
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/acmeAI",
+                "label": "Acme AI"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/employs",
+                "label": "employs"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              }
+            },
+            {
+              "subject": {
+                "iri": "https://dataaihub.co/example/kg/alice",
+                "label": "Alice"
+              },
+              "predicate": {
+                "iri": "https://dataaihub.co/example/kg/worksOn",
+                "label": "works on"
+              },
+              "object": {
+                "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+                "label": "Knowledge Platform"
+              }
+            }
+          ]
+        },
+        {
+          "phase": "CONTEXT",
+          "facts": [
+            "Acme AI employs Alice.",
+            "Alice works on Knowledge Platform."
+          ]
+        },
+        {
+          "phase": "LLM",
+          "model": "gpt-4o-mini"
+        },
+        {
+          "phase": "ANSWER",
+          "text": "Acme AI employs Alice, and she works on the Knowledge Platform."
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "graphrag"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/04-graphrag"
+    },
+    "errors": [],
+    "model": "gpt-4o-mini",
+    "provider": "openai",
+    "modelLatencyMs": 1208
+  }
+]
