@@ -55,6 +55,7 @@ Cookbook →  "How is it implemented?"
 | `graph-traversal` | [`examples/knowledge-graphs/01-graph-traversal`](examples/knowledge-graphs/01-graph-traversal) | RDF triples and graph traversal (entity → relationship → evidence) |
 | `sparql-queries` | [`examples/knowledge-graphs/02-sparql-queries`](examples/knowledge-graphs/02-sparql-queries) | SPARQL query patterns over RDF (pattern → bindings → result rows) |
 | `sparql-updates` | [`examples/knowledge-graphs/03-sparql-updates`](examples/knowledge-graphs/03-sparql-updates) | SPARQL Updates: INSERT, DELETE & Graph Mutation |
+| `graphrag` | [`examples/knowledge-graphs/04-graphrag`](examples/knowledge-graphs/04-graphrag) | GraphRAG: Graph-Grounded Retrieval & LLM Answering |
 
 More examples will be added as each learning path progresses.
 
