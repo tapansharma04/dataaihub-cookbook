@@ -1,0 +1,108 @@
+{
+  "sources": [
+    {
+      "id": "entity-extraction-alice",
+      "exampleClass": "ENTITY_EXTRACTION",
+      "text": "Alice works on the Knowledge Platform.",
+      "selectionNote": "Measured case: extract entity labels Alice and Knowledge Platform, resolve to stable RDF IRIs, commit type and rdfs:label triples.",
+      "expectedProposal": {
+        "entities": [
+          {"label": "Alice", "entity_type": "Person"},
+          {"label": "Knowledge Platform", "entity_type": "Project"}
+        ],
+        "relationships": []
+      },
+      "expectedResolved": [
+        {"label": "Alice", "iri": "https://dataaihub.co/example/kg/alice"},
+        {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform"
+        }
+      ],
+      "expectedCommittedPredicates": [],
+      "startGraph": "empty",
+      "expectGraphUnchanged": false
+    },
+    {
+      "id": "relationship-extraction-alice-platform",
+      "exampleClass": "RELATIONSHIP_EXTRACTION",
+      "text": "Alice works on the Knowledge Platform.",
+      "selectionNote": "Measured case: propose Alice → worksOn → Knowledge Platform, validate against application vocabulary, commit RDF triple.",
+      "expectedProposal": {
+        "entities": [
+          {"label": "Alice", "entity_type": "Person"},
+          {"label": "Knowledge Platform", "entity_type": "Project"}
+        ],
+        "relationships": [
+          {
+            "subject": "Alice",
+            "predicate": "works_on",
+            "object": "Knowledge Platform"
+          }
+        ]
+      },
+      "expectedResolved": [
+        {"label": "Alice", "iri": "https://dataaihub.co/example/kg/alice"},
+        {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform"
+        }
+      ],
+      "expectedCommittedPredicates": ["worksOn"],
+      "startGraph": "empty",
+      "expectGraphUnchanged": false
+    },
+    {
+      "id": "entity-linking-known-entities",
+      "exampleClass": "ENTITY_LINKING",
+      "text": "Knowledge Platform uses PostgreSQL.",
+      "selectionNote": "Measured case: extract labels Knowledge Platform and PostgreSQL, link to existing stable IRIs via the entity registry, commit uses triple.",
+      "expectedProposal": {
+        "entities": [
+          {"label": "Knowledge Platform", "entity_type": "Project"},
+          {"label": "PostgreSQL", "entity_type": "Technology"}
+        ],
+        "relationships": [
+          {
+            "subject": "Knowledge Platform",
+            "predicate": "uses",
+            "object": "PostgreSQL"
+          }
+        ]
+      },
+      "expectedResolved": [
+        {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {"label": "PostgreSQL", "iri": "https://dataaihub.co/example/kg/postgresql"}
+      ],
+      "expectedCommittedPredicates": ["uses"],
+      "startGraph": "empty",
+      "expectGraphUnchanged": false
+    },
+    {
+      "id": "invalid-fact-unsupported-predicate",
+      "exampleClass": "INVALID_FACT",
+      "text": "Alice supervises the Knowledge Platform.",
+      "selectionNote": "Measured case: propose unsupported predicate supervises; application rejects; graph remains unchanged.",
+      "expectedProposal": {
+        "entities": [
+          {"label": "Alice", "entity_type": "Person"},
+          {"label": "Knowledge Platform", "entity_type": "Project"}
+        ],
+        "relationships": [
+          {
+            "subject": "Alice",
+            "predicate": "supervises",
+            "object": "Knowledge Platform"
+          }
+        ]
+      },
+      "expectedResolved": [],
+      "expectedCommittedPredicates": [],
+      "startGraph": "seed",
+      "expectGraphUnchanged": true
+    }
+  ]
+}
