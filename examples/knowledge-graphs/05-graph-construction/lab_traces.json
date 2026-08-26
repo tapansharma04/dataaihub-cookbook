@@ -1,0 +1,2378 @@
+[
+  {
+    "labId": "graph-construction",
+    "traceId": "entity-extraction-alice",
+    "executionMode": "structured",
+    "recordedAt": "2026-01-01T00:00:00Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "ENTITY_EXTRACTION",
+    "selectionNote": "Measured case: extract entity labels Alice and Knowledge Platform, resolve to stable RDF IRIs, commit type and rdfs:label triples.",
+    "architecture": {
+      "layout": "graph-construction",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "source",
+        "extraction",
+        "validation",
+        "entity-resolution",
+        "rdf-mapping",
+        "graph-commit"
+      ]
+    },
+    "input": {
+      "case": "entity-extraction-alice",
+      "mode": "structured",
+      "sourceText": "Alice works on the Knowledge Platform.",
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "startGraph": "empty",
+        "entityResolution": "registry"
+      }
+    },
+    "proposal": {
+      "entities": [
+        {
+          "label": "Alice",
+          "entity_type": "Person"
+        },
+        {
+          "label": "Knowledge Platform",
+          "entity_type": "Project"
+        }
+      ],
+      "relationships": []
+    },
+    "validation": {
+      "resolvedEntities": [
+        {
+          "label": "Alice",
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "entity_type": "Person"
+        },
+        {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "entity_type": "Project"
+        }
+      ],
+      "unresolvedLabels": [],
+      "acceptedRelationships": [],
+      "rejectedRelationships": [],
+      "entityTypeErrors": []
+    },
+    "triplesCreated": [
+      {
+        "subject": "https://dataaihub.co/example/kg/alice",
+        "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "object": "https://dataaihub.co/example/kg/Person",
+        "kind": "type"
+      },
+      {
+        "subject": "https://dataaihub.co/example/kg/alice",
+        "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+        "object": "Alice",
+        "kind": "label"
+      },
+      {
+        "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+        "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "object": "https://dataaihub.co/example/kg/Project",
+        "kind": "type"
+      },
+      {
+        "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+        "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+        "object": "Knowledge Platform",
+        "kind": "label"
+      }
+    ],
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 2,
+      "relationshipCount": 0,
+      "tripleCount": 4,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        }
+      ],
+      "relationships": []
+    },
+    "graphBeforeCount": 0,
+    "graphAfterCount": 4,
+    "graphUnchanged": false,
+    "termination": "completed",
+    "sequence": [
+      {
+        "kind": "source_loaded",
+        "detail": {
+          "caseId": "entity-extraction-alice",
+          "mode": "structured",
+          "sourceText": "Alice works on the Knowledge Platform.",
+          "sourceCharacters": 38,
+          "startGraph": "empty",
+          "graphTripleCount": 0
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "extraction_started",
+        "detail": {
+          "mode": "structured",
+          "extractor": "structured"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_proposed",
+        "detail": {
+          "label": "Alice",
+          "entityType": "Person"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_proposed",
+        "detail": {
+          "label": "Knowledge Platform",
+          "entityType": "Project"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "validation_started",
+        "detail": {},
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_resolved",
+        "detail": {
+          "label": "Alice",
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "entityType": "Person"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_resolved",
+        "detail": {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "entityType": "Project"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "triple_created",
+        "detail": {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+          "object": "https://dataaihub.co/example/kg/Person",
+          "kind": "type"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "triple_created",
+        "detail": {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+          "object": "Alice",
+          "kind": "label"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "triple_created",
+        "detail": {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+          "object": "https://dataaihub.co/example/kg/Project",
+          "kind": "type"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "triple_created",
+        "detail": {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+          "object": "Knowledge Platform",
+          "kind": "label"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "graph_committed",
+        "detail": {
+          "triplesCreated": 4,
+          "graphTripleCount": 4
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "graph_verified",
+        "detail": {
+          "ok": true,
+          "missing": [],
+          "illicitPredicates": [],
+          "tripleCount": 4,
+          "committedTripleCount": 4
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "result",
+        "detail": {
+          "committed": true,
+          "triplesCreated": [
+            {
+              "subject": "https://dataaihub.co/example/kg/alice",
+              "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+              "object": "https://dataaihub.co/example/kg/Person",
+              "kind": "type"
+            },
+            {
+              "subject": "https://dataaihub.co/example/kg/alice",
+              "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+              "object": "Alice",
+              "kind": "label"
+            },
+            {
+              "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+              "object": "https://dataaihub.co/example/kg/Project",
+              "kind": "type"
+            },
+            {
+              "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+              "object": "Knowledge Platform",
+              "kind": "label"
+            }
+          ],
+          "graphTripleCount": 4
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-source_loaded",
+        "type": "source_loaded",
+        "title": "Source loaded",
+        "status": "ok",
+        "detail": {
+          "caseId": "entity-extraction-alice",
+          "mode": "structured",
+          "sourceText": "Alice works on the Knowledge Platform.",
+          "sourceCharacters": 38,
+          "startGraph": "empty",
+          "graphTripleCount": 0
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-extraction_started",
+        "type": "extraction_started",
+        "title": "Extraction started",
+        "status": "ok",
+        "detail": {
+          "mode": "structured",
+          "extractor": "structured"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-entity_proposed",
+        "type": "entity_proposed",
+        "title": "Entity proposed",
+        "status": "ok",
+        "detail": {
+          "label": "Alice",
+          "entityType": "Person"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-entity_proposed",
+        "type": "entity_proposed",
+        "title": "Entity proposed",
+        "status": "ok",
+        "detail": {
+          "label": "Knowledge Platform",
+          "entityType": "Project"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-validation_started",
+        "type": "validation_started",
+        "title": "Validation started",
+        "status": "ok",
+        "detail": {},
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-entity_resolved",
+        "type": "entity_resolved",
+        "title": "Entity resolved",
+        "status": "ok",
+        "detail": {
+          "label": "Alice",
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "entityType": "Person"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-entity_resolved",
+        "type": "entity_resolved",
+        "title": "Entity resolved",
+        "status": "ok",
+        "detail": {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "entityType": "Project"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-triple_created",
+        "type": "triple_created",
+        "title": "Triple created",
+        "status": "ok",
+        "detail": {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+          "object": "https://dataaihub.co/example/kg/Person",
+          "kind": "type"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-triple_created",
+        "type": "triple_created",
+        "title": "Triple created",
+        "status": "ok",
+        "detail": {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+          "object": "Alice",
+          "kind": "label"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-triple_created",
+        "type": "triple_created",
+        "title": "Triple created",
+        "status": "ok",
+        "detail": {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+          "object": "https://dataaihub.co/example/kg/Project",
+          "kind": "type"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-triple_created",
+        "type": "triple_created",
+        "title": "Triple created",
+        "status": "ok",
+        "detail": {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+          "object": "Knowledge Platform",
+          "kind": "label"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-graph_committed",
+        "type": "graph_committed",
+        "title": "Graph committed",
+        "status": "ok",
+        "detail": {
+          "triplesCreated": 4,
+          "graphTripleCount": 4
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-graph_verified",
+        "type": "graph_verified",
+        "title": "Graph verified",
+        "status": "ok",
+        "detail": {
+          "ok": true,
+          "missing": [],
+          "illicitPredicates": [],
+          "tripleCount": 4,
+          "committedTripleCount": 4
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-result",
+        "type": "result",
+        "title": "Result",
+        "status": "ok",
+        "detail": {
+          "committed": true,
+          "triplesCreated": [
+            {
+              "subject": "https://dataaihub.co/example/kg/alice",
+              "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+              "object": "https://dataaihub.co/example/kg/Person",
+              "kind": "type"
+            },
+            {
+              "subject": "https://dataaihub.co/example/kg/alice",
+              "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+              "object": "Alice",
+              "kind": "label"
+            },
+            {
+              "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+              "object": "https://dataaihub.co/example/kg/Project",
+              "kind": "type"
+            },
+            {
+              "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+              "object": "Knowledge Platform",
+              "kind": "label"
+            }
+          ],
+          "graphTripleCount": 4
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-15-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "metrics": {
+      "sourceCharacters": 38,
+      "entitiesProposed": 2,
+      "entitiesResolved": 2,
+      "relationshipsProposed": 0,
+      "relationshipsAccepted": 0,
+      "relationshipsRejected": 0,
+      "triplesCreated": 4,
+      "triplesRejected": 0,
+      "graphTripleCount": 4,
+      "validationErrors": 0,
+      "modelTurns": 0,
+      "totalMs": 0,
+      "modelMs": 0,
+      "terminationReason": "completed"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable graph-construction operations. Not a new measurement.",
+      "signatureFlow": "SOURCE \u2192 EXTRACTION \u2192 VALIDATION \u2192 ENTITY RESOLUTION \u2192 RDF GRAPH",
+      "signatureView": [
+        {
+          "phase": "SOURCE",
+          "text": "Alice works on the Knowledge Platform."
+        },
+        {
+          "phase": "EXTRACTION",
+          "mode": "structured",
+          "entities": [
+            {
+              "label": "Alice",
+              "entity_type": "Person"
+            },
+            {
+              "label": "Knowledge Platform",
+              "entity_type": "Project"
+            }
+          ],
+          "relationships": []
+        },
+        {
+          "phase": "ENTITY_RESOLUTION",
+          "entities": [
+            {
+              "label": "Alice",
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "entityType": "Person"
+            },
+            {
+              "label": "Knowledge Platform",
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "entityType": "Project"
+            }
+          ]
+        },
+        {
+          "phase": "VALIDATION",
+          "resolvedCount": 2
+        },
+        {
+          "phase": "RDF_GRAPH",
+          "triples": [
+            {
+              "subject": "https://dataaihub.co/example/kg/alice",
+              "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+              "object": "https://dataaihub.co/example/kg/Person",
+              "kind": "type"
+            },
+            {
+              "subject": "https://dataaihub.co/example/kg/alice",
+              "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+              "object": "Alice",
+              "kind": "label"
+            },
+            {
+              "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+              "object": "https://dataaihub.co/example/kg/Project",
+              "kind": "type"
+            },
+            {
+              "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+              "object": "Knowledge Platform",
+              "kind": "label"
+            }
+          ],
+          "tripleCount": 4
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "graph-construction"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/05-graph-construction"
+    },
+    "errors": []
+  },
+  {
+    "labId": "graph-construction",
+    "traceId": "entity-linking-known-entities",
+    "executionMode": "structured",
+    "recordedAt": "2026-01-01T00:00:00Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "ENTITY_LINKING",
+    "selectionNote": "Measured case: extract labels Knowledge Platform and PostgreSQL, link to existing stable IRIs via the entity registry, commit uses triple.",
+    "architecture": {
+      "layout": "graph-construction",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "source",
+        "extraction",
+        "validation",
+        "entity-resolution",
+        "rdf-mapping",
+        "graph-commit"
+      ]
+    },
+    "input": {
+      "case": "entity-linking-known-entities",
+      "mode": "structured",
+      "sourceText": "Knowledge Platform uses PostgreSQL.",
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "startGraph": "empty",
+        "entityResolution": "registry"
+      }
+    },
+    "proposal": {
+      "entities": [
+        {
+          "label": "Knowledge Platform",
+          "entity_type": "Project"
+        },
+        {
+          "label": "PostgreSQL",
+          "entity_type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "Knowledge Platform",
+          "predicate": "uses",
+          "object": "PostgreSQL"
+        }
+      ]
+    },
+    "validation": {
+      "resolvedEntities": [
+        {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "entity_type": "Project"
+        },
+        {
+          "label": "PostgreSQL",
+          "iri": "https://dataaihub.co/example/kg/postgresql",
+          "entity_type": "Technology"
+        }
+      ],
+      "unresolvedLabels": [],
+      "acceptedRelationships": [
+        {
+          "subject_iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate_local": "uses",
+          "predicate_iri": "https://dataaihub.co/example/kg/uses",
+          "object_iri": "https://dataaihub.co/example/kg/postgresql",
+          "subject_label": "Knowledge Platform",
+          "object_label": "PostgreSQL"
+        }
+      ],
+      "rejectedRelationships": [],
+      "entityTypeErrors": []
+    },
+    "triplesCreated": [
+      {
+        "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+        "predicate": "https://dataaihub.co/example/kg/uses",
+        "object": "https://dataaihub.co/example/kg/postgresql",
+        "kind": "relationship"
+      }
+    ],
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 0,
+      "relationshipCount": 1,
+      "tripleCount": 1,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        }
+      ]
+    },
+    "graphBeforeCount": 0,
+    "graphAfterCount": 1,
+    "graphUnchanged": false,
+    "termination": "completed",
+    "sequence": [
+      {
+        "kind": "source_loaded",
+        "detail": {
+          "caseId": "entity-linking-known-entities",
+          "mode": "structured",
+          "sourceText": "Knowledge Platform uses PostgreSQL.",
+          "sourceCharacters": 35,
+          "startGraph": "empty",
+          "graphTripleCount": 0
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "extraction_started",
+        "detail": {
+          "mode": "structured",
+          "extractor": "structured"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_proposed",
+        "detail": {
+          "label": "Knowledge Platform",
+          "entityType": "Project"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_proposed",
+        "detail": {
+          "label": "PostgreSQL",
+          "entityType": "Technology"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "relationship_proposed",
+        "detail": {
+          "subject": "Knowledge Platform",
+          "predicate": "uses",
+          "object": "PostgreSQL"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "validation_started",
+        "detail": {},
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_resolved",
+        "detail": {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "entityType": "Project"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_resolved",
+        "detail": {
+          "label": "PostgreSQL",
+          "iri": "https://dataaihub.co/example/kg/postgresql",
+          "entityType": "Technology"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "validation_passed",
+        "detail": {
+          "acceptedCount": 1,
+          "relationships": [
+            {
+              "subject_iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate_local": "uses",
+              "predicate_iri": "https://dataaihub.co/example/kg/uses",
+              "object_iri": "https://dataaihub.co/example/kg/postgresql",
+              "subject_label": "Knowledge Platform",
+              "object_label": "PostgreSQL"
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "triple_created",
+        "detail": {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql",
+          "kind": "relationship"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "graph_committed",
+        "detail": {
+          "triplesCreated": 1,
+          "graphTripleCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "graph_verified",
+        "detail": {
+          "ok": true,
+          "missing": [],
+          "illicitPredicates": [],
+          "tripleCount": 1,
+          "committedTripleCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "result",
+        "detail": {
+          "committed": true,
+          "triplesCreated": [
+            {
+              "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate": "https://dataaihub.co/example/kg/uses",
+              "object": "https://dataaihub.co/example/kg/postgresql",
+              "kind": "relationship"
+            }
+          ],
+          "graphTripleCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-source_loaded",
+        "type": "source_loaded",
+        "title": "Source loaded",
+        "status": "ok",
+        "detail": {
+          "caseId": "entity-linking-known-entities",
+          "mode": "structured",
+          "sourceText": "Knowledge Platform uses PostgreSQL.",
+          "sourceCharacters": 35,
+          "startGraph": "empty",
+          "graphTripleCount": 0
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-extraction_started",
+        "type": "extraction_started",
+        "title": "Extraction started",
+        "status": "ok",
+        "detail": {
+          "mode": "structured",
+          "extractor": "structured"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-entity_proposed",
+        "type": "entity_proposed",
+        "title": "Entity proposed",
+        "status": "ok",
+        "detail": {
+          "label": "Knowledge Platform",
+          "entityType": "Project"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-entity_proposed",
+        "type": "entity_proposed",
+        "title": "Entity proposed",
+        "status": "ok",
+        "detail": {
+          "label": "PostgreSQL",
+          "entityType": "Technology"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-relationship_proposed",
+        "type": "relationship_proposed",
+        "title": "Relationship proposed",
+        "status": "ok",
+        "detail": {
+          "subject": "Knowledge Platform",
+          "predicate": "uses",
+          "object": "PostgreSQL"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-validation_started",
+        "type": "validation_started",
+        "title": "Validation started",
+        "status": "ok",
+        "detail": {},
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-entity_resolved",
+        "type": "entity_resolved",
+        "title": "Entity resolved",
+        "status": "ok",
+        "detail": {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "entityType": "Project"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-entity_resolved",
+        "type": "entity_resolved",
+        "title": "Entity resolved",
+        "status": "ok",
+        "detail": {
+          "label": "PostgreSQL",
+          "iri": "https://dataaihub.co/example/kg/postgresql",
+          "entityType": "Technology"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-validation_passed",
+        "type": "validation_passed",
+        "title": "Validation passed",
+        "status": "ok",
+        "detail": {
+          "acceptedCount": 1,
+          "relationships": [
+            {
+              "subject_iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate_local": "uses",
+              "predicate_iri": "https://dataaihub.co/example/kg/uses",
+              "object_iri": "https://dataaihub.co/example/kg/postgresql",
+              "subject_label": "Knowledge Platform",
+              "object_label": "PostgreSQL"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-triple_created",
+        "type": "triple_created",
+        "title": "Triple created",
+        "status": "ok",
+        "detail": {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql",
+          "kind": "relationship"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-graph_committed",
+        "type": "graph_committed",
+        "title": "Graph committed",
+        "status": "ok",
+        "detail": {
+          "triplesCreated": 1,
+          "graphTripleCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-graph_verified",
+        "type": "graph_verified",
+        "title": "Graph verified",
+        "status": "ok",
+        "detail": {
+          "ok": true,
+          "missing": [],
+          "illicitPredicates": [],
+          "tripleCount": 1,
+          "committedTripleCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-result",
+        "type": "result",
+        "title": "Result",
+        "status": "ok",
+        "detail": {
+          "committed": true,
+          "triplesCreated": [
+            {
+              "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate": "https://dataaihub.co/example/kg/uses",
+              "object": "https://dataaihub.co/example/kg/postgresql",
+              "kind": "relationship"
+            }
+          ],
+          "graphTripleCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "metrics": {
+      "sourceCharacters": 35,
+      "entitiesProposed": 2,
+      "entitiesResolved": 2,
+      "relationshipsProposed": 1,
+      "relationshipsAccepted": 1,
+      "relationshipsRejected": 0,
+      "triplesCreated": 1,
+      "triplesRejected": 0,
+      "graphTripleCount": 1,
+      "validationErrors": 0,
+      "modelTurns": 0,
+      "totalMs": 0,
+      "modelMs": 0,
+      "terminationReason": "completed"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable graph-construction operations. Not a new measurement.",
+      "signatureFlow": "SOURCE \u2192 EXTRACTION \u2192 LABEL \u2192 STABLE IRI \u2192 RDF TRIPLE \u2192 RDF GRAPH",
+      "signatureView": [
+        {
+          "phase": "SOURCE",
+          "text": "Knowledge Platform uses PostgreSQL."
+        },
+        {
+          "phase": "EXTRACTION",
+          "mode": "structured",
+          "entities": [
+            {
+              "label": "Knowledge Platform",
+              "entity_type": "Project"
+            },
+            {
+              "label": "PostgreSQL",
+              "entity_type": "Technology"
+            }
+          ],
+          "relationships": [
+            {
+              "subject": "Knowledge Platform",
+              "predicate": "uses",
+              "object": "PostgreSQL"
+            }
+          ]
+        },
+        {
+          "phase": "ENTITY_LINKING",
+          "links": [
+            {
+              "label": "Knowledge Platform",
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform"
+            },
+            {
+              "label": "PostgreSQL",
+              "iri": "https://dataaihub.co/example/kg/postgresql"
+            }
+          ]
+        },
+        {
+          "phase": "VALIDATION",
+          "accepted": [
+            {
+              "subject_iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate_local": "uses",
+              "predicate_iri": "https://dataaihub.co/example/kg/uses",
+              "object_iri": "https://dataaihub.co/example/kg/postgresql",
+              "subject_label": "Knowledge Platform",
+              "object_label": "PostgreSQL"
+            }
+          ]
+        },
+        {
+          "phase": "RDF_GRAPH",
+          "triples": [
+            {
+              "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "predicate": "https://dataaihub.co/example/kg/uses",
+              "object": "https://dataaihub.co/example/kg/postgresql",
+              "kind": "relationship"
+            }
+          ],
+          "tripleCount": 1
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "graph-construction"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/05-graph-construction"
+    },
+    "errors": []
+  },
+  {
+    "labId": "graph-construction",
+    "traceId": "invalid-fact-unsupported-predicate",
+    "executionMode": "structured",
+    "recordedAt": "2026-01-01T00:00:00Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "INVALID_FACT",
+    "selectionNote": "Measured case: propose unsupported predicate supervises; application rejects; graph remains unchanged.",
+    "architecture": {
+      "layout": "graph-construction",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "source",
+        "extraction",
+        "validation",
+        "entity-resolution",
+        "rdf-mapping",
+        "graph-commit"
+      ]
+    },
+    "input": {
+      "case": "invalid-fact-unsupported-predicate",
+      "mode": "structured",
+      "sourceText": "Alice supervises the Knowledge Platform.",
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "startGraph": "seed",
+        "entityResolution": "registry"
+      }
+    },
+    "proposal": {
+      "entities": [
+        {
+          "label": "Alice",
+          "entity_type": "Person"
+        },
+        {
+          "label": "Knowledge Platform",
+          "entity_type": "Project"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "Alice",
+          "predicate": "supervises",
+          "object": "Knowledge Platform"
+        }
+      ]
+    },
+    "validation": {
+      "resolvedEntities": [
+        {
+          "label": "Alice",
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "entity_type": "Person"
+        },
+        {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "entity_type": "Project"
+        }
+      ],
+      "unresolvedLabels": [],
+      "acceptedRelationships": [],
+      "rejectedRelationships": [
+        {
+          "subject": "Alice",
+          "predicate": "supervises",
+          "object": "Knowledge Platform",
+          "reason": "unsupported_predicate"
+        }
+      ],
+      "entityTypeErrors": []
+    },
+    "triplesCreated": [],
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 8,
+      "relationshipCount": 8,
+      "tripleCount": 24,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [
+        {
+          "id": "https://dataaihub.co/example/kg/acmeAI",
+          "label": "Acme AI",
+          "type": "Company"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/alice",
+          "label": "Alice",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/billingPortal",
+          "label": "Billing Portal",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/bob",
+          "label": "Bob",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/carol",
+          "label": "Carol",
+          "type": "Person"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "label": "Knowledge Platform",
+          "type": "Project"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/postgresql",
+          "label": "PostgreSQL",
+          "type": "Technology"
+        },
+        {
+          "id": "https://dataaihub.co/example/kg/redis",
+          "label": "Redis",
+          "type": "Technology"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/alice"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/bob"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/acmeAI",
+          "predicate": "https://dataaihub.co/example/kg/employs",
+          "object": "https://dataaihub.co/example/kg/carol"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/billingPortal",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/redis"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "predicate": "https://dataaihub.co/example/kg/uses",
+          "object": "https://dataaihub.co/example/kg/postgresql"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/bob",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        },
+        {
+          "subject": "https://dataaihub.co/example/kg/carol",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/billingPortal"
+        }
+      ]
+    },
+    "graphBeforeCount": 24,
+    "graphAfterCount": 24,
+    "graphUnchanged": true,
+    "termination": "validation_rejected",
+    "sequence": [
+      {
+        "kind": "source_loaded",
+        "detail": {
+          "caseId": "invalid-fact-unsupported-predicate",
+          "mode": "structured",
+          "sourceText": "Alice supervises the Knowledge Platform.",
+          "sourceCharacters": 40,
+          "startGraph": "seed",
+          "graphTripleCount": 24
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "extraction_started",
+        "detail": {
+          "mode": "structured",
+          "extractor": "structured"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_proposed",
+        "detail": {
+          "label": "Alice",
+          "entityType": "Person"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_proposed",
+        "detail": {
+          "label": "Knowledge Platform",
+          "entityType": "Project"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "relationship_proposed",
+        "detail": {
+          "subject": "Alice",
+          "predicate": "supervises",
+          "object": "Knowledge Platform"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "validation_started",
+        "detail": {},
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_resolved",
+        "detail": {
+          "label": "Alice",
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "entityType": "Person"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_resolved",
+        "detail": {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "entityType": "Project"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "validation_rejected",
+        "detail": {
+          "subject": "Alice",
+          "predicate": "supervises",
+          "object": "Knowledge Platform",
+          "reason": "unsupported_predicate"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "graph_verified",
+        "detail": {
+          "ok": true,
+          "tripleCount": 24,
+          "graphUnchanged": true
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "result",
+        "detail": {
+          "committed": false,
+          "rejectedRelationships": [
+            {
+              "subject": "Alice",
+              "predicate": "supervises",
+              "object": "Knowledge Platform",
+              "reason": "unsupported_predicate"
+            }
+          ],
+          "graphUnchanged": true
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "validation_rejected"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-source_loaded",
+        "type": "source_loaded",
+        "title": "Source loaded",
+        "status": "ok",
+        "detail": {
+          "caseId": "invalid-fact-unsupported-predicate",
+          "mode": "structured",
+          "sourceText": "Alice supervises the Knowledge Platform.",
+          "sourceCharacters": 40,
+          "startGraph": "seed",
+          "graphTripleCount": 24
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-extraction_started",
+        "type": "extraction_started",
+        "title": "Extraction started",
+        "status": "ok",
+        "detail": {
+          "mode": "structured",
+          "extractor": "structured"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-entity_proposed",
+        "type": "entity_proposed",
+        "title": "Entity proposed",
+        "status": "ok",
+        "detail": {
+          "label": "Alice",
+          "entityType": "Person"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-entity_proposed",
+        "type": "entity_proposed",
+        "title": "Entity proposed",
+        "status": "ok",
+        "detail": {
+          "label": "Knowledge Platform",
+          "entityType": "Project"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-relationship_proposed",
+        "type": "relationship_proposed",
+        "title": "Relationship proposed",
+        "status": "ok",
+        "detail": {
+          "subject": "Alice",
+          "predicate": "supervises",
+          "object": "Knowledge Platform"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-validation_started",
+        "type": "validation_started",
+        "title": "Validation started",
+        "status": "ok",
+        "detail": {},
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-entity_resolved",
+        "type": "entity_resolved",
+        "title": "Entity resolved",
+        "status": "ok",
+        "detail": {
+          "label": "Alice",
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "entityType": "Person"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-entity_resolved",
+        "type": "entity_resolved",
+        "title": "Entity resolved",
+        "status": "ok",
+        "detail": {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "entityType": "Project"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-validation_rejected",
+        "type": "validation_rejected",
+        "title": "Validation rejected",
+        "status": "rejected",
+        "detail": {
+          "subject": "Alice",
+          "predicate": "supervises",
+          "object": "Knowledge Platform",
+          "reason": "unsupported_predicate"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-graph_verified",
+        "type": "graph_verified",
+        "title": "Graph verified",
+        "status": "ok",
+        "detail": {
+          "ok": true,
+          "tripleCount": 24,
+          "graphUnchanged": true
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-result",
+        "type": "result",
+        "title": "Result",
+        "status": "ok",
+        "detail": {
+          "committed": false,
+          "rejectedRelationships": [
+            {
+              "subject": "Alice",
+              "predicate": "supervises",
+              "object": "Knowledge Platform",
+              "reason": "unsupported_predicate"
+            }
+          ],
+          "graphUnchanged": true
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "empty",
+        "detail": {
+          "reason": "validation_rejected"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "metrics": {
+      "sourceCharacters": 40,
+      "entitiesProposed": 2,
+      "entitiesResolved": 2,
+      "relationshipsProposed": 1,
+      "relationshipsAccepted": 0,
+      "relationshipsRejected": 1,
+      "triplesCreated": 0,
+      "triplesRejected": 1,
+      "graphTripleCount": 24,
+      "validationErrors": 1,
+      "modelTurns": 0,
+      "totalMs": 0,
+      "modelMs": 0,
+      "terminationReason": "validation_rejected"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable graph-construction operations. Not a new measurement.",
+      "signatureFlow": "SOURCE \u2192 EXTRACTION \u2192 VALIDATION REJECTED \u2192 GRAPH UNCHANGED",
+      "signatureView": [
+        {
+          "phase": "SOURCE",
+          "text": "Alice supervises the Knowledge Platform."
+        },
+        {
+          "phase": "EXTRACTION",
+          "mode": "structured",
+          "entities": [
+            {
+              "label": "Alice",
+              "entity_type": "Person"
+            },
+            {
+              "label": "Knowledge Platform",
+              "entity_type": "Project"
+            }
+          ],
+          "relationships": [
+            {
+              "subject": "Alice",
+              "predicate": "supervises",
+              "object": "Knowledge Platform"
+            }
+          ]
+        },
+        {
+          "phase": "ENTITY_RESOLUTION",
+          "entities": [
+            {
+              "label": "Alice",
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "entityType": "Person"
+            },
+            {
+              "label": "Knowledge Platform",
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "entityType": "Project"
+            }
+          ]
+        },
+        {
+          "phase": "VALIDATION_REJECTED",
+          "rejected": [
+            {
+              "subject": "Alice",
+              "predicate": "supervises",
+              "object": "Knowledge Platform",
+              "reason": "unsupported_predicate"
+            }
+          ]
+        },
+        {
+          "phase": "GRAPH_UNCHANGED",
+          "tripleCount": 24,
+          "before": 24,
+          "after": 24
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "validation_rejected"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "graph-construction"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/05-graph-construction"
+    },
+    "errors": []
+  },
+  {
+    "labId": "graph-construction",
+    "traceId": "relationship-extraction-alice-platform",
+    "executionMode": "structured",
+    "recordedAt": "2026-01-01T00:00:00Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "RELATIONSHIP_EXTRACTION",
+    "selectionNote": "Measured case: propose Alice \u2192 worksOn \u2192 Knowledge Platform, validate against application vocabulary, commit RDF triple.",
+    "architecture": {
+      "layout": "graph-construction",
+      "graphModel": "rdf",
+      "executionEngine": "rdflib",
+      "stages": [
+        "source",
+        "extraction",
+        "validation",
+        "entity-resolution",
+        "rdf-mapping",
+        "graph-commit"
+      ]
+    },
+    "input": {
+      "case": "relationship-extraction-alice-platform",
+      "mode": "structured",
+      "sourceText": "Alice works on the Knowledge Platform.",
+      "config": {
+        "graphPath": "data/graph.ttl",
+        "graphFormat": "turtle",
+        "namespace": "https://dataaihub.co/example/kg/",
+        "startGraph": "empty",
+        "entityResolution": "registry"
+      }
+    },
+    "proposal": {
+      "entities": [
+        {
+          "label": "Alice",
+          "entity_type": "Person"
+        },
+        {
+          "label": "Knowledge Platform",
+          "entity_type": "Project"
+        }
+      ],
+      "relationships": [
+        {
+          "subject": "Alice",
+          "predicate": "works_on",
+          "object": "Knowledge Platform"
+        }
+      ]
+    },
+    "validation": {
+      "resolvedEntities": [
+        {
+          "label": "Alice",
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "entity_type": "Person"
+        },
+        {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "entity_type": "Project"
+        }
+      ],
+      "unresolvedLabels": [],
+      "acceptedRelationships": [
+        {
+          "subject_iri": "https://dataaihub.co/example/kg/alice",
+          "predicate_local": "worksOn",
+          "predicate_iri": "https://dataaihub.co/example/kg/worksOn",
+          "object_iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "subject_label": "Alice",
+          "object_label": "Knowledge Platform"
+        }
+      ],
+      "rejectedRelationships": [],
+      "entityTypeErrors": []
+    },
+    "triplesCreated": [
+      {
+        "subject": "https://dataaihub.co/example/kg/alice",
+        "predicate": "https://dataaihub.co/example/kg/worksOn",
+        "object": "https://dataaihub.co/example/kg/knowledgePlatform",
+        "kind": "relationship"
+      }
+    ],
+    "graph": {
+      "format": "rdf",
+      "namespace": "https://dataaihub.co/example/kg/",
+      "entityCount": 0,
+      "relationshipCount": 1,
+      "tripleCount": 1,
+      "predicates": [
+        "employs",
+        "uses",
+        "worksOn"
+      ],
+      "entities": [],
+      "relationships": [
+        {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform"
+        }
+      ]
+    },
+    "graphBeforeCount": 0,
+    "graphAfterCount": 1,
+    "graphUnchanged": false,
+    "termination": "completed",
+    "sequence": [
+      {
+        "kind": "source_loaded",
+        "detail": {
+          "caseId": "relationship-extraction-alice-platform",
+          "mode": "structured",
+          "sourceText": "Alice works on the Knowledge Platform.",
+          "sourceCharacters": 38,
+          "startGraph": "empty",
+          "graphTripleCount": 0
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "extraction_started",
+        "detail": {
+          "mode": "structured",
+          "extractor": "structured"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_proposed",
+        "detail": {
+          "label": "Alice",
+          "entityType": "Person"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_proposed",
+        "detail": {
+          "label": "Knowledge Platform",
+          "entityType": "Project"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "relationship_proposed",
+        "detail": {
+          "subject": "Alice",
+          "predicate": "works_on",
+          "object": "Knowledge Platform"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "validation_started",
+        "detail": {},
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_resolved",
+        "detail": {
+          "label": "Alice",
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "entityType": "Person"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "entity_resolved",
+        "detail": {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "entityType": "Project"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "validation_passed",
+        "detail": {
+          "acceptedCount": 1,
+          "relationships": [
+            {
+              "subject_iri": "https://dataaihub.co/example/kg/alice",
+              "predicate_local": "worksOn",
+              "predicate_iri": "https://dataaihub.co/example/kg/worksOn",
+              "object_iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "subject_label": "Alice",
+              "object_label": "Knowledge Platform"
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "triple_created",
+        "detail": {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "kind": "relationship"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "graph_committed",
+        "detail": {
+          "triplesCreated": 1,
+          "graphTripleCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "graph_verified",
+        "detail": {
+          "ok": true,
+          "missing": [],
+          "illicitPredicates": [],
+          "tripleCount": 1,
+          "committedTripleCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "result",
+        "detail": {
+          "committed": true,
+          "triplesCreated": [
+            {
+              "subject": "https://dataaihub.co/example/kg/alice",
+              "predicate": "https://dataaihub.co/example/kg/worksOn",
+              "object": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "kind": "relationship"
+            }
+          ],
+          "graphTripleCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-source_loaded",
+        "type": "source_loaded",
+        "title": "Source loaded",
+        "status": "ok",
+        "detail": {
+          "caseId": "relationship-extraction-alice-platform",
+          "mode": "structured",
+          "sourceText": "Alice works on the Knowledge Platform.",
+          "sourceCharacters": 38,
+          "startGraph": "empty",
+          "graphTripleCount": 0
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-extraction_started",
+        "type": "extraction_started",
+        "title": "Extraction started",
+        "status": "ok",
+        "detail": {
+          "mode": "structured",
+          "extractor": "structured"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-entity_proposed",
+        "type": "entity_proposed",
+        "title": "Entity proposed",
+        "status": "ok",
+        "detail": {
+          "label": "Alice",
+          "entityType": "Person"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-entity_proposed",
+        "type": "entity_proposed",
+        "title": "Entity proposed",
+        "status": "ok",
+        "detail": {
+          "label": "Knowledge Platform",
+          "entityType": "Project"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-relationship_proposed",
+        "type": "relationship_proposed",
+        "title": "Relationship proposed",
+        "status": "ok",
+        "detail": {
+          "subject": "Alice",
+          "predicate": "works_on",
+          "object": "Knowledge Platform"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-validation_started",
+        "type": "validation_started",
+        "title": "Validation started",
+        "status": "ok",
+        "detail": {},
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-entity_resolved",
+        "type": "entity_resolved",
+        "title": "Entity resolved",
+        "status": "ok",
+        "detail": {
+          "label": "Alice",
+          "iri": "https://dataaihub.co/example/kg/alice",
+          "entityType": "Person"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-entity_resolved",
+        "type": "entity_resolved",
+        "title": "Entity resolved",
+        "status": "ok",
+        "detail": {
+          "label": "Knowledge Platform",
+          "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "entityType": "Project"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-validation_passed",
+        "type": "validation_passed",
+        "title": "Validation passed",
+        "status": "ok",
+        "detail": {
+          "acceptedCount": 1,
+          "relationships": [
+            {
+              "subject_iri": "https://dataaihub.co/example/kg/alice",
+              "predicate_local": "worksOn",
+              "predicate_iri": "https://dataaihub.co/example/kg/worksOn",
+              "object_iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "subject_label": "Alice",
+              "object_label": "Knowledge Platform"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-triple_created",
+        "type": "triple_created",
+        "title": "Triple created",
+        "status": "ok",
+        "detail": {
+          "subject": "https://dataaihub.co/example/kg/alice",
+          "predicate": "https://dataaihub.co/example/kg/worksOn",
+          "object": "https://dataaihub.co/example/kg/knowledgePlatform",
+          "kind": "relationship"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-graph_committed",
+        "type": "graph_committed",
+        "title": "Graph committed",
+        "status": "ok",
+        "detail": {
+          "triplesCreated": 1,
+          "graphTripleCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-graph_verified",
+        "type": "graph_verified",
+        "title": "Graph verified",
+        "status": "ok",
+        "detail": {
+          "ok": true,
+          "missing": [],
+          "illicitPredicates": [],
+          "tripleCount": 1,
+          "committedTripleCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-result",
+        "type": "result",
+        "title": "Result",
+        "status": "ok",
+        "detail": {
+          "committed": true,
+          "triplesCreated": [
+            {
+              "subject": "https://dataaihub.co/example/kg/alice",
+              "predicate": "https://dataaihub.co/example/kg/worksOn",
+              "object": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "kind": "relationship"
+            }
+          ],
+          "graphTripleCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "metrics": {
+      "sourceCharacters": 38,
+      "entitiesProposed": 2,
+      "entitiesResolved": 2,
+      "relationshipsProposed": 1,
+      "relationshipsAccepted": 1,
+      "relationshipsRejected": 0,
+      "triplesCreated": 1,
+      "triplesRejected": 0,
+      "graphTripleCount": 1,
+      "validationErrors": 0,
+      "modelTurns": 0,
+      "totalMs": 0,
+      "modelMs": 0,
+      "terminationReason": "completed"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable graph-construction operations. Not a new measurement.",
+      "signatureFlow": "SOURCE \u2192 EXTRACTION \u2192 VALIDATION \u2192 RDF TRIPLE \u2192 RDF GRAPH",
+      "signatureView": [
+        {
+          "phase": "SOURCE",
+          "text": "Alice works on the Knowledge Platform."
+        },
+        {
+          "phase": "EXTRACTION",
+          "mode": "structured",
+          "entities": [
+            {
+              "label": "Alice",
+              "entity_type": "Person"
+            },
+            {
+              "label": "Knowledge Platform",
+              "entity_type": "Project"
+            }
+          ],
+          "relationships": [
+            {
+              "subject": "Alice",
+              "predicate": "works_on",
+              "object": "Knowledge Platform"
+            }
+          ]
+        },
+        {
+          "phase": "ENTITY_RESOLUTION",
+          "entities": [
+            {
+              "label": "Alice",
+              "iri": "https://dataaihub.co/example/kg/alice",
+              "entityType": "Person"
+            },
+            {
+              "label": "Knowledge Platform",
+              "iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "entityType": "Project"
+            }
+          ]
+        },
+        {
+          "phase": "VALIDATION",
+          "accepted": [
+            {
+              "subject_iri": "https://dataaihub.co/example/kg/alice",
+              "predicate_local": "worksOn",
+              "predicate_iri": "https://dataaihub.co/example/kg/worksOn",
+              "object_iri": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "subject_label": "Alice",
+              "object_label": "Knowledge Platform"
+            }
+          ]
+        },
+        {
+          "phase": "RDF_GRAPH",
+          "triples": [
+            {
+              "subject": "https://dataaihub.co/example/kg/alice",
+              "predicate": "https://dataaihub.co/example/kg/worksOn",
+              "object": "https://dataaihub.co/example/kg/knowledgePlatform",
+              "kind": "relationship"
+            }
+          ],
+          "tripleCount": 1
+        },
+        {
+          "phase": "TERMINATION",
+          "reason": "completed"
+        }
+      ]
+    },
+    "relatedEntities": [
+      "knowledge-graph"
+    ],
+    "relatedContent": [
+      "knowledge-graph",
+      "graph-construction"
+    ],
+    "cookbook": {
+      "path": "examples/knowledge-graphs/05-graph-construction"
+    },
+    "errors": []
+  }
+]
