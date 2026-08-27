@@ -1,0 +1,1747 @@
+[
+  {
+    "labId": "mcp-resources",
+    "traceId": "discovery",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-27T05:58:35Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "DISCOVERY",
+    "selectionNote": "Measured case: client initializes with the server and discovers available resources through resources/list without reading content.",
+    "architecture": {
+      "layout": "mcp-resources",
+      "stages": [
+        "initialize",
+        "resources-list",
+        "resource-identity",
+        "resources-read",
+        "resource-content"
+      ]
+    },
+    "input": {
+      "case": "discovery",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy"
+      },
+      "requestedUris": []
+    },
+    "resources": [
+      {
+        "uri": "acme://docs/knowledge-platform",
+        "name": "knowledge-platform",
+        "description": "Service documentation for the Knowledge Platform.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://docs/billing-portal",
+        "name": "billing-portal",
+        "description": "Service documentation for the Billing Portal.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://status/services",
+        "name": "service-status",
+        "description": "Service statuses for the Acme AI environment.",
+        "mimeType": "application/json"
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-resources",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 2
+      },
+      {
+        "kind": "resources_list_request",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resources_list_response",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-resources",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 2,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-resources_list_request",
+        "type": "protocol",
+        "title": "Resources list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-resources_list_response",
+        "type": "protocol",
+        "title": "Resources list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "discoveredResources": [
+        "acme://docs/knowledge-platform",
+        "acme://docs/billing-portal",
+        "acme://status/services"
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 3,
+      "initializeMs": 2,
+      "discoveryMs": 0,
+      "resourceReadMs": 0,
+      "resourcesDiscovered": 3,
+      "resourcesRead": 0,
+      "successfulReads": 0,
+      "failedReads": 0,
+      "resourceBytes": 0,
+      "modelTurns": 0,
+      "toolCalls": 0,
+      "terminationReason": "session_closed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "interactionId": "initialize",
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            }
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-resources",
+            "version": ""
+          },
+          "latencyMs": 2
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "resources/list"
+        },
+        {
+          "phase": "RESOURCES",
+          "resourceCount": 3,
+          "uris": [
+            "acme://docs/knowledge-platform",
+            "acme://docs/billing-portal",
+            "acme://status/services"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 RESOURCES"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "resources"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/02-resources"
+    }
+  },
+  {
+    "labId": "mcp-resources",
+    "traceId": "single-resource-read-knowledge-platform",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-27T05:58:35Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "SINGLE_RESOURCE_READ",
+    "selectionNote": "Measured case: after discovery, the client explicitly reads acme://docs/knowledge-platform and records the MCP resource content.",
+    "architecture": {
+      "layout": "mcp-resources",
+      "stages": [
+        "initialize",
+        "resources-list",
+        "resource-identity",
+        "resources-read",
+        "resource-content"
+      ]
+    },
+    "input": {
+      "case": "single-resource-read-knowledge-platform",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy"
+      },
+      "requestedUris": [
+        "acme://docs/knowledge-platform"
+      ]
+    },
+    "resources": [
+      {
+        "uri": "acme://docs/knowledge-platform",
+        "name": "knowledge-platform",
+        "description": "Service documentation for the Knowledge Platform.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://docs/billing-portal",
+        "name": "billing-portal",
+        "description": "Service documentation for the Billing Portal.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://status/services",
+        "name": "service-status",
+        "description": "Service statuses for the Acme AI environment.",
+        "mimeType": "application/json"
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-resources",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "resources_list_request",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resources_list_response",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "resource_read_request",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform",
+          "discoveredBeforeRead": true
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resource_read_response",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        "latencyMs": 1
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-resources",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-resources_list_request",
+        "type": "protocol",
+        "title": "Resources list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-resources_list_response",
+        "type": "protocol",
+        "title": "Resources list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-resource_read_request",
+        "type": "protocol",
+        "title": "Resource read request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform",
+          "discoveredBeforeRead": true
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-resource_read_response",
+        "type": "protocol",
+        "title": "Resource read response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "discoveredResources": [
+        "acme://docs/knowledge-platform",
+        "acme://docs/billing-portal",
+        "acme://status/services"
+      ],
+      "reads": [
+        {
+          "requestedUri": "acme://docs/knowledge-platform",
+          "returnedUri": "acme://docs/knowledge-platform",
+          "mimeType": "text/markdown",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        }
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 2,
+      "initializeMs": 0,
+      "discoveryMs": 0,
+      "resourceReadMs": 1,
+      "resourcesDiscovered": 3,
+      "resourcesRead": 1,
+      "successfulReads": 1,
+      "failedReads": 0,
+      "resourceBytes": 599,
+      "modelTurns": 0,
+      "toolCalls": 0,
+      "terminationReason": "session_closed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "interactionId": "initialize",
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            }
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-resources",
+            "version": ""
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "resources/list"
+        },
+        {
+          "phase": "RESOURCES",
+          "resourceCount": 3,
+          "uris": [
+            "acme://docs/knowledge-platform",
+            "acme://docs/billing-portal",
+            "acme://status/services"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "READ",
+          "uri": "acme://docs/knowledge-platform"
+        },
+        {
+          "phase": "CONTENT",
+          "uri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "latencyMs": 1,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 DISCOVER \u2192 READ \u2192 CONTENT"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "resources"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/02-resources"
+    }
+  },
+  {
+    "labId": "mcp-resources",
+    "traceId": "multi-resource-read-services",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-27T05:58:35Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "MULTI_RESOURCE_READ",
+    "selectionNote": "Measured case: after discovery, the client sequentially reads acme://docs/knowledge-platform and acme://status/services.",
+    "architecture": {
+      "layout": "mcp-resources",
+      "stages": [
+        "initialize",
+        "resources-list",
+        "resource-identity",
+        "resources-read",
+        "resource-content"
+      ]
+    },
+    "input": {
+      "case": "multi-resource-read-services",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy"
+      },
+      "requestedUris": [
+        "acme://docs/knowledge-platform",
+        "acme://status/services"
+      ]
+    },
+    "resources": [
+      {
+        "uri": "acme://docs/knowledge-platform",
+        "name": "knowledge-platform",
+        "description": "Service documentation for the Knowledge Platform.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://docs/billing-portal",
+        "name": "billing-portal",
+        "description": "Service documentation for the Billing Portal.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://status/services",
+        "name": "service-status",
+        "description": "Service statuses for the Acme AI environment.",
+        "mimeType": "application/json"
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-resources",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "resources_list_request",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resources_list_response",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "resource_read_request",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform",
+          "discoveredBeforeRead": true
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resource_read_response",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "resource_read_request",
+        "detail": {
+          "interactionId": "resources/read:acme://status/services",
+          "method": "resources/read",
+          "uri": "acme://status/services",
+          "discoveredBeforeRead": true
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resource_read_response",
+        "detail": {
+          "interactionId": "resources/read:acme://status/services",
+          "method": "resources/read",
+          "uri": "acme://status/services",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://status/services",
+              "text": "{\n  \"description\": \"Service statuses for the Acme AI environment.\",\n  \"environment\": \"acme-ai\",\n  \"services\": [\n    {\n      \"detail\": \"Ingest and retrieval are within SLO.\",\n      \"name\": \"knowledge-platform\",\n      \"status\": \"operational\"\n    },\n    {\n      \"detail\": \"Invoice PDF generation is slower than usual.\",\n      \"name\": \"billing-api\",\n      \"status\": \"degraded\"\n    },\n    {\n      \"detail\": \"Authentication and token issue are healthy.\",\n      \"name\": \"identity-api\",\n      \"status\": \"operational\"\n    }\n  ]\n}\n",
+              "mimeType": "application/json"
+            }
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-resources",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-resources_list_request",
+        "type": "protocol",
+        "title": "Resources list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-resources_list_response",
+        "type": "protocol",
+        "title": "Resources list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-resource_read_request",
+        "type": "protocol",
+        "title": "Resource read request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform",
+          "discoveredBeforeRead": true
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-resource_read_response",
+        "type": "protocol",
+        "title": "Resource read response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-resource_read_request",
+        "type": "protocol",
+        "title": "Resource read request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://status/services",
+          "method": "resources/read",
+          "uri": "acme://status/services",
+          "discoveredBeforeRead": true
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-resource_read_response",
+        "type": "protocol",
+        "title": "Resource read response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://status/services",
+          "method": "resources/read",
+          "uri": "acme://status/services",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://status/services",
+              "text": "{\n  \"description\": \"Service statuses for the Acme AI environment.\",\n  \"environment\": \"acme-ai\",\n  \"services\": [\n    {\n      \"detail\": \"Ingest and retrieval are within SLO.\",\n      \"name\": \"knowledge-platform\",\n      \"status\": \"operational\"\n    },\n    {\n      \"detail\": \"Invoice PDF generation is slower than usual.\",\n      \"name\": \"billing-api\",\n      \"status\": \"degraded\"\n    },\n    {\n      \"detail\": \"Authentication and token issue are healthy.\",\n      \"name\": \"identity-api\",\n      \"status\": \"operational\"\n    }\n  ]\n}\n",
+              "mimeType": "application/json"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "discoveredResources": [
+        "acme://docs/knowledge-platform",
+        "acme://docs/billing-portal",
+        "acme://status/services"
+      ],
+      "reads": [
+        {
+          "requestedUri": "acme://docs/knowledge-platform",
+          "returnedUri": "acme://docs/knowledge-platform",
+          "mimeType": "text/markdown",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        {
+          "requestedUri": "acme://status/services",
+          "returnedUri": "acme://status/services",
+          "mimeType": "application/json",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://status/services",
+              "text": "{\n  \"description\": \"Service statuses for the Acme AI environment.\",\n  \"environment\": \"acme-ai\",\n  \"services\": [\n    {\n      \"detail\": \"Ingest and retrieval are within SLO.\",\n      \"name\": \"knowledge-platform\",\n      \"status\": \"operational\"\n    },\n    {\n      \"detail\": \"Invoice PDF generation is slower than usual.\",\n      \"name\": \"billing-api\",\n      \"status\": \"degraded\"\n    },\n    {\n      \"detail\": \"Authentication and token issue are healthy.\",\n      \"name\": \"identity-api\",\n      \"status\": \"operational\"\n    }\n  ]\n}\n",
+              "mimeType": "application/json"
+            }
+          ]
+        }
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 2,
+      "initializeMs": 0,
+      "discoveryMs": 0,
+      "resourceReadMs": 0,
+      "resourcesDiscovered": 3,
+      "resourcesRead": 2,
+      "successfulReads": 2,
+      "failedReads": 0,
+      "resourceBytes": 1120,
+      "modelTurns": 0,
+      "toolCalls": 0,
+      "terminationReason": "session_closed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "interactionId": "initialize",
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            }
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-resources",
+            "version": ""
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "resources/list"
+        },
+        {
+          "phase": "RESOURCES",
+          "resourceCount": 3,
+          "uris": [
+            "acme://docs/knowledge-platform",
+            "acme://docs/billing-portal",
+            "acme://status/services"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "READ",
+          "uri": "acme://docs/knowledge-platform"
+        },
+        {
+          "phase": "CONTENT",
+          "uri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "latencyMs": 0,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        {
+          "phase": "READ",
+          "uri": "acme://status/services"
+        },
+        {
+          "phase": "CONTENT",
+          "uri": "acme://status/services",
+          "isError": false,
+          "latencyMs": 0,
+          "contents": [
+            {
+              "uri": "acme://status/services",
+              "text": "{\n  \"description\": \"Service statuses for the Acme AI environment.\",\n  \"environment\": \"acme-ai\",\n  \"services\": [\n    {\n      \"detail\": \"Ingest and retrieval are within SLO.\",\n      \"name\": \"knowledge-platform\",\n      \"status\": \"operational\"\n    },\n    {\n      \"detail\": \"Invoice PDF generation is slower than usual.\",\n      \"name\": \"billing-api\",\n      \"status\": \"degraded\"\n    },\n    {\n      \"detail\": \"Authentication and token issue are healthy.\",\n      \"name\": \"identity-api\",\n      \"status\": \"operational\"\n    }\n  ]\n}\n",
+              "mimeType": "application/json"
+            }
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 DISCOVER \u2192 READ \u2192 READ \u2192 CONTENT"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "resources"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/02-resources"
+    }
+  },
+  {
+    "labId": "mcp-resources",
+    "traceId": "invalid-resource-uri",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-27T05:58:35Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "INVALID_RESOURCE",
+    "selectionNote": "Measured case: after discovery, the client requests a URI the server does not expose. The failure is recorded from the MCP resources/read boundary.",
+    "architecture": {
+      "layout": "mcp-resources",
+      "stages": [
+        "initialize",
+        "resources-list",
+        "resource-identity",
+        "resources-read",
+        "resource-content"
+      ]
+    },
+    "input": {
+      "case": "invalid-resource-uri",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy"
+      },
+      "requestedUris": [
+        "acme://docs/does-not-exist"
+      ]
+    },
+    "resources": [
+      {
+        "uri": "acme://docs/knowledge-platform",
+        "name": "knowledge-platform",
+        "description": "Service documentation for the Knowledge Platform.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://docs/billing-portal",
+        "name": "billing-portal",
+        "description": "Service documentation for the Billing Portal.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://status/services",
+        "name": "service-status",
+        "description": "Service statuses for the Acme AI environment.",
+        "mimeType": "application/json"
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-resources",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "resources_list_request",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resources_list_response",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "resource_read_request",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/does-not-exist",
+          "method": "resources/read",
+          "uri": "acme://docs/does-not-exist",
+          "discoveredBeforeRead": false
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resource_read_response",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/does-not-exist",
+          "method": "resources/read",
+          "uri": "acme://docs/does-not-exist",
+          "isError": true,
+          "error": {
+            "code": -32602,
+            "message": "Unknown resource: acme://docs/does-not-exist",
+            "data": {
+              "uri": "acme://docs/does-not-exist"
+            }
+          },
+          "exceptionType": "MCPError"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "resource_read_rejected"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-resources",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-resources_list_request",
+        "type": "protocol",
+        "title": "Resources list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-resources_list_response",
+        "type": "protocol",
+        "title": "Resources list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-resource_read_request",
+        "type": "protocol",
+        "title": "Resource read request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/does-not-exist",
+          "method": "resources/read",
+          "uri": "acme://docs/does-not-exist",
+          "discoveredBeforeRead": false
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-resource_read_response",
+        "type": "protocol",
+        "title": "Resource read response",
+        "status": "error",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/does-not-exist",
+          "method": "resources/read",
+          "uri": "acme://docs/does-not-exist",
+          "isError": true,
+          "error": {
+            "code": -32602,
+            "message": "Unknown resource: acme://docs/does-not-exist",
+            "data": {
+              "uri": "acme://docs/does-not-exist"
+            }
+          },
+          "exceptionType": "MCPError"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "resource_read_rejected"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "discoveredResources": [
+        "acme://docs/knowledge-platform",
+        "acme://docs/billing-portal",
+        "acme://status/services"
+      ],
+      "reads": [
+        {
+          "requestedUri": "acme://docs/does-not-exist",
+          "isError": true,
+          "error": {
+            "code": -32602,
+            "message": "Unknown resource: acme://docs/does-not-exist",
+            "data": {
+              "uri": "acme://docs/does-not-exist"
+            }
+          }
+        }
+      ]
+    },
+    "errors": [
+      {
+        "stage": "resources/read",
+        "uri": "acme://docs/does-not-exist",
+        "isError": true,
+        "detail": {
+          "interactionId": "resources/read:acme://docs/does-not-exist",
+          "method": "resources/read",
+          "uri": "acme://docs/does-not-exist",
+          "isError": true,
+          "error": {
+            "code": -32602,
+            "message": "Unknown resource: acme://docs/does-not-exist",
+            "data": {
+              "uri": "acme://docs/does-not-exist"
+            }
+          },
+          "exceptionType": "MCPError"
+        }
+      }
+    ],
+    "metrics": {
+      "totalMs": 1,
+      "initializeMs": 0,
+      "discoveryMs": 0,
+      "resourceReadMs": 0,
+      "resourcesDiscovered": 3,
+      "resourcesRead": 1,
+      "successfulReads": 0,
+      "failedReads": 1,
+      "resourceBytes": 0,
+      "modelTurns": 0,
+      "toolCalls": 0,
+      "terminationReason": "resource_read_rejected",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "interactionId": "initialize",
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            }
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-resources",
+            "version": ""
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "resources/list"
+        },
+        {
+          "phase": "RESOURCES",
+          "resourceCount": 3,
+          "uris": [
+            "acme://docs/knowledge-platform",
+            "acme://docs/billing-portal",
+            "acme://status/services"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "READ",
+          "uri": "acme://docs/does-not-exist"
+        },
+        {
+          "phase": "REJECTED",
+          "uri": "acme://docs/does-not-exist",
+          "isError": true,
+          "latencyMs": 0,
+          "error": {
+            "code": -32602,
+            "message": "Unknown resource: acme://docs/does-not-exist",
+            "data": {
+              "uri": "acme://docs/does-not-exist"
+            }
+          }
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "resource_read_rejected"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 DISCOVER \u2192 READ \u2192 REJECTED"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "resources"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/02-resources"
+    }
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "environment": "acme-ai",
+  "description": "Service statuses for the Acme AI environment.",
+  "services": [
+    {
+      "name": "knowledge-platform",
+      "status": "operational",
+      "detail": "Ingest and retrieval are within SLO."
+    },
+    {
+      "name": "billing-api",
+      "status": "degraded",
+      "detail": "Invoice PDF generation is slower than usual."
+    },
+    {
+      "name": "identity-api",
+      "status": "operational",
+      "detail": "Authentication and token issue are healthy."
+    }
+  ]
+}
