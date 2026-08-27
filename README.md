@@ -47,6 +47,7 @@ Cookbook →  "How is it implemented?"
 | ID | Path | Concept |
 |----|------|---------|
 | `mcp-tool-discovery` | [`examples/mcp/01-tool-discovery`](examples/mcp/01-tool-discovery) | MCP client/server protocol lifecycle (initialize → tools/list → tools/call) |
+| `mcp-resources` | [`examples/mcp/02-resources`](examples/mcp/02-resources) | MCP resource discovery and reading (initialize → resources/list → resources/read) |
 
 ### Knowledge Graphs
 
@@ -92,7 +93,8 @@ dataaihub-cookbook/
 │   │   ├── 04-planning/
 │   │   └── 05-memory/
 │   ├── mcp/
-│   │   └── 01-tool-discovery/
+│   │   ├── 01-tool-discovery/
+│   │   └── 02-resources/
 │   └── knowledge-graphs/
 │       ├── 01-graph-traversal/
 │       ├── 02-sparql-queries/
