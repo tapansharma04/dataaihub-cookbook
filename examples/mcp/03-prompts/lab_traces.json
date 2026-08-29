@@ -1,0 +1,2129 @@
+[
+  {
+    "labId": "mcp-prompts",
+    "traceId": "prompt-discovery",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-29T11:52:23Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "PROMPT_DISCOVERY",
+    "selectionNote": "Measured case: client initializes with the server and discovers available prompt templates through prompts/list without calling prompts/get.",
+    "architecture": {
+      "layout": "mcp-prompts",
+      "stages": [
+        "initialize",
+        "prompts-list",
+        "prompt-identity",
+        "prompts-get",
+        "prompt-messages"
+      ]
+    },
+    "input": {
+      "case": "prompt-discovery",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy"
+      },
+      "requestedPrompt": null,
+      "requestedArguments": {}
+    },
+    "prompts": [
+      {
+        "name": "summarize-service",
+        "description": "Produce a concise service summary tailored to a target audience.",
+        "arguments": [
+          {
+            "name": "service_name",
+            "description": "Canonical Acme service name, e.g. knowledge-platform",
+            "required": true
+          },
+          {
+            "name": "audience",
+            "description": "Target audience for the summary",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "investigate-incident",
+        "description": "Start an incident investigation workflow for an Acme AI service.",
+        "arguments": [
+          {
+            "name": "service",
+            "description": "Affected Acme service name",
+            "required": true
+          },
+          {
+            "name": "incident",
+            "description": "Incident identifier, e.g. INC-2048",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "draft-status-update",
+        "description": "Draft a stakeholder status update for a service.",
+        "arguments": [
+          {
+            "name": "service",
+            "description": "Service receiving the status update",
+            "required": true
+          },
+          {
+            "name": "status",
+            "description": "Current status label: healthy, degraded, or outage",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-prompts",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 4
+      },
+      {
+        "kind": "prompts_list_request",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "prompts_list_response",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list",
+          "prompts": [
+            {
+              "name": "summarize-service",
+              "description": "Produce a concise service summary tailored to a target audience.",
+              "arguments": [
+                {
+                  "name": "service_name",
+                  "description": "Canonical Acme service name, e.g. knowledge-platform",
+                  "required": true
+                },
+                {
+                  "name": "audience",
+                  "description": "Target audience for the summary",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "investigate-incident",
+              "description": "Start an incident investigation workflow for an Acme AI service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Affected Acme service name",
+                  "required": true
+                },
+                {
+                  "name": "incident",
+                  "description": "Incident identifier, e.g. INC-2048",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "name": "draft-status-update",
+              "description": "Draft a stakeholder status update for a service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Service receiving the status update",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "description": "Current status label: healthy, degraded, or outage",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "promptCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-prompts",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 4,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-prompts_list_request",
+        "type": "protocol",
+        "title": "Prompts list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-prompts_list_response",
+        "type": "protocol",
+        "title": "Prompts list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list",
+          "prompts": [
+            {
+              "name": "summarize-service",
+              "description": "Produce a concise service summary tailored to a target audience.",
+              "arguments": [
+                {
+                  "name": "service_name",
+                  "description": "Canonical Acme service name, e.g. knowledge-platform",
+                  "required": true
+                },
+                {
+                  "name": "audience",
+                  "description": "Target audience for the summary",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "investigate-incident",
+              "description": "Start an incident investigation workflow for an Acme AI service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Affected Acme service name",
+                  "required": true
+                },
+                {
+                  "name": "incident",
+                  "description": "Incident identifier, e.g. INC-2048",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "name": "draft-status-update",
+              "description": "Draft a stakeholder status update for a service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Service receiving the status update",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "description": "Current status label: healthy, degraded, or outage",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "promptCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "discoveredPrompts": [
+        "summarize-service",
+        "investigate-incident",
+        "draft-status-update"
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 5,
+      "initializeMs": 4,
+      "discoveryMs": 0,
+      "promptGetMs": 0,
+      "promptsDiscovered": 3,
+      "promptsRequested": 0,
+      "successfulGets": 0,
+      "failedGets": 0,
+      "messageCount": 0,
+      "messageBytes": 0,
+      "modelTurns": 0,
+      "toolCalls": 0,
+      "resourcesRead": 0,
+      "terminationReason": "session_closed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "interactionId": "initialize",
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            }
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-prompts",
+            "version": ""
+          },
+          "latencyMs": 4
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "prompts/list"
+        },
+        {
+          "phase": "PROMPTS",
+          "promptCount": 3,
+          "names": [
+            "summarize-service",
+            "investigate-incident",
+            "draft-status-update"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 DISCOVER \u2192 PROMPTS"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "prompts"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/03-prompts"
+    }
+  },
+  {
+    "labId": "mcp-prompts",
+    "traceId": "single-prompt-get-summarize",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-29T11:52:23Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "SINGLE_PROMPT_GET",
+    "selectionNote": "Measured case: after discovery, the client explicitly retrieves the summarize-service prompt with required arguments and records the MCP-rendered messages.",
+    "architecture": {
+      "layout": "mcp-prompts",
+      "stages": [
+        "initialize",
+        "prompts-list",
+        "prompt-identity",
+        "prompts-get",
+        "prompt-messages"
+      ]
+    },
+    "input": {
+      "case": "single-prompt-get-summarize",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy"
+      },
+      "requestedPrompt": "summarize-service",
+      "requestedArguments": {
+        "service_name": "knowledge-platform"
+      }
+    },
+    "prompts": [
+      {
+        "name": "summarize-service",
+        "description": "Produce a concise service summary tailored to a target audience.",
+        "arguments": [
+          {
+            "name": "service_name",
+            "description": "Canonical Acme service name, e.g. knowledge-platform",
+            "required": true
+          },
+          {
+            "name": "audience",
+            "description": "Target audience for the summary",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "investigate-incident",
+        "description": "Start an incident investigation workflow for an Acme AI service.",
+        "arguments": [
+          {
+            "name": "service",
+            "description": "Affected Acme service name",
+            "required": true
+          },
+          {
+            "name": "incident",
+            "description": "Incident identifier, e.g. INC-2048",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "draft-status-update",
+        "description": "Draft a stakeholder status update for a service.",
+        "arguments": [
+          {
+            "name": "service",
+            "description": "Service receiving the status update",
+            "required": true
+          },
+          {
+            "name": "status",
+            "description": "Current status label: healthy, degraded, or outage",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-prompts",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "prompts_list_request",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "prompts_list_response",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list",
+          "prompts": [
+            {
+              "name": "summarize-service",
+              "description": "Produce a concise service summary tailored to a target audience.",
+              "arguments": [
+                {
+                  "name": "service_name",
+                  "description": "Canonical Acme service name, e.g. knowledge-platform",
+                  "required": true
+                },
+                {
+                  "name": "audience",
+                  "description": "Target audience for the summary",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "investigate-incident",
+              "description": "Start an incident investigation workflow for an Acme AI service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Affected Acme service name",
+                  "required": true
+                },
+                {
+                  "name": "incident",
+                  "description": "Incident identifier, e.g. INC-2048",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "name": "draft-status-update",
+              "description": "Draft a stakeholder status update for a service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Service receiving the status update",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "description": "Current status label: healthy, degraded, or outage",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "promptCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "prompt_get_request",
+        "detail": {
+          "interactionId": "prompts/get:summarize-service",
+          "method": "prompts/get",
+          "name": "summarize-service",
+          "arguments": {
+            "service_name": "knowledge-platform"
+          },
+          "discoveredBeforeGet": true
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "prompt_get_response",
+        "detail": {
+          "interactionId": "prompts/get:summarize-service",
+          "method": "prompts/get",
+          "name": "summarize-service",
+          "arguments": {
+            "service_name": "knowledge-platform"
+          },
+          "isError": false,
+          "description": "Produce a concise service summary tailored to a target audience.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+              }
+            }
+          ]
+        },
+        "latencyMs": 1
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-prompts",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-prompts_list_request",
+        "type": "protocol",
+        "title": "Prompts list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-prompts_list_response",
+        "type": "protocol",
+        "title": "Prompts list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list",
+          "prompts": [
+            {
+              "name": "summarize-service",
+              "description": "Produce a concise service summary tailored to a target audience.",
+              "arguments": [
+                {
+                  "name": "service_name",
+                  "description": "Canonical Acme service name, e.g. knowledge-platform",
+                  "required": true
+                },
+                {
+                  "name": "audience",
+                  "description": "Target audience for the summary",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "investigate-incident",
+              "description": "Start an incident investigation workflow for an Acme AI service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Affected Acme service name",
+                  "required": true
+                },
+                {
+                  "name": "incident",
+                  "description": "Incident identifier, e.g. INC-2048",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "name": "draft-status-update",
+              "description": "Draft a stakeholder status update for a service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Service receiving the status update",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "description": "Current status label: healthy, degraded, or outage",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "promptCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-prompt_get_request",
+        "type": "protocol",
+        "title": "Prompt get request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/get:summarize-service",
+          "method": "prompts/get",
+          "name": "summarize-service",
+          "arguments": {
+            "service_name": "knowledge-platform"
+          },
+          "discoveredBeforeGet": true
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-prompt_get_response",
+        "type": "protocol",
+        "title": "Prompt get response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/get:summarize-service",
+          "method": "prompts/get",
+          "name": "summarize-service",
+          "arguments": {
+            "service_name": "knowledge-platform"
+          },
+          "isError": false,
+          "description": "Produce a concise service summary tailored to a target audience.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+              }
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "discoveredPrompts": [
+        "summarize-service",
+        "investigate-incident",
+        "draft-status-update"
+      ],
+      "gets": [
+        {
+          "requestedPrompt": "summarize-service",
+          "arguments": {
+            "service_name": "knowledge-platform"
+          },
+          "isError": false,
+          "description": "Produce a concise service summary tailored to a target audience.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 3,
+      "initializeMs": 0,
+      "discoveryMs": 0,
+      "promptGetMs": 1,
+      "promptsDiscovered": 3,
+      "promptsRequested": 1,
+      "successfulGets": 1,
+      "failedGets": 0,
+      "messageCount": 1,
+      "messageBytes": 169,
+      "modelTurns": 0,
+      "toolCalls": 0,
+      "resourcesRead": 0,
+      "terminationReason": "session_closed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "interactionId": "initialize",
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            }
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-prompts",
+            "version": ""
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "prompts/list"
+        },
+        {
+          "phase": "PROMPTS",
+          "promptCount": 3,
+          "names": [
+            "summarize-service",
+            "investigate-incident",
+            "draft-status-update"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "GET",
+          "name": "summarize-service"
+        },
+        {
+          "phase": "MESSAGES",
+          "name": "summarize-service",
+          "isError": false,
+          "latencyMs": 1,
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+              }
+            }
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 DISCOVER \u2192 PROMPTS \u2192 GET \u2192 MESSAGES"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "prompts"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/03-prompts"
+    }
+  },
+  {
+    "labId": "mcp-prompts",
+    "traceId": "prompt-with-arguments-investigate",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-29T11:52:23Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "PROMPT_WITH_ARGUMENTS",
+    "selectionNote": "Measured case: after discovery, the client retrieves investigate-incident with multiple arguments. The returned multi-message prompt depends on both service and incident values.",
+    "architecture": {
+      "layout": "mcp-prompts",
+      "stages": [
+        "initialize",
+        "prompts-list",
+        "prompt-identity",
+        "prompts-get",
+        "prompt-messages"
+      ]
+    },
+    "input": {
+      "case": "prompt-with-arguments-investigate",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy"
+      },
+      "requestedPrompt": "investigate-incident",
+      "requestedArguments": {
+        "service": "billing-api",
+        "incident": "INC-2048"
+      }
+    },
+    "prompts": [
+      {
+        "name": "summarize-service",
+        "description": "Produce a concise service summary tailored to a target audience.",
+        "arguments": [
+          {
+            "name": "service_name",
+            "description": "Canonical Acme service name, e.g. knowledge-platform",
+            "required": true
+          },
+          {
+            "name": "audience",
+            "description": "Target audience for the summary",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "investigate-incident",
+        "description": "Start an incident investigation workflow for an Acme AI service.",
+        "arguments": [
+          {
+            "name": "service",
+            "description": "Affected Acme service name",
+            "required": true
+          },
+          {
+            "name": "incident",
+            "description": "Incident identifier, e.g. INC-2048",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "draft-status-update",
+        "description": "Draft a stakeholder status update for a service.",
+        "arguments": [
+          {
+            "name": "service",
+            "description": "Service receiving the status update",
+            "required": true
+          },
+          {
+            "name": "status",
+            "description": "Current status label: healthy, degraded, or outage",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-prompts",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "prompts_list_request",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "prompts_list_response",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list",
+          "prompts": [
+            {
+              "name": "summarize-service",
+              "description": "Produce a concise service summary tailored to a target audience.",
+              "arguments": [
+                {
+                  "name": "service_name",
+                  "description": "Canonical Acme service name, e.g. knowledge-platform",
+                  "required": true
+                },
+                {
+                  "name": "audience",
+                  "description": "Target audience for the summary",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "investigate-incident",
+              "description": "Start an incident investigation workflow for an Acme AI service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Affected Acme service name",
+                  "required": true
+                },
+                {
+                  "name": "incident",
+                  "description": "Incident identifier, e.g. INC-2048",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "name": "draft-status-update",
+              "description": "Draft a stakeholder status update for a service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Service receiving the status update",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "description": "Current status label: healthy, degraded, or outage",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "promptCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "prompt_get_request",
+        "detail": {
+          "interactionId": "prompts/get:investigate-incident",
+          "method": "prompts/get",
+          "name": "investigate-incident",
+          "arguments": {
+            "service": "billing-api",
+            "incident": "INC-2048"
+          },
+          "discoveredBeforeGet": true
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "prompt_get_response",
+        "detail": {
+          "interactionId": "prompts/get:investigate-incident",
+          "method": "prompts/get",
+          "name": "investigate-incident",
+          "arguments": {
+            "service": "billing-api",
+            "incident": "INC-2048"
+          },
+          "isError": false,
+          "description": "Start an incident investigation workflow for an Acme AI service.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Investigate incident INC-2048 affecting the billing-api service in the Acme AI environment."
+              }
+            },
+            {
+              "role": "assistant",
+              "content": {
+                "type": "text",
+                "text": "I will review recent deploys, error-rate dashboards, and dependency health for billing-api."
+              }
+            },
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Prioritize logs and traces tagged with INC-2048 and compare billing-api latency against the prior 24 hours."
+              }
+            }
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-prompts",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-prompts_list_request",
+        "type": "protocol",
+        "title": "Prompts list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-prompts_list_response",
+        "type": "protocol",
+        "title": "Prompts list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list",
+          "prompts": [
+            {
+              "name": "summarize-service",
+              "description": "Produce a concise service summary tailored to a target audience.",
+              "arguments": [
+                {
+                  "name": "service_name",
+                  "description": "Canonical Acme service name, e.g. knowledge-platform",
+                  "required": true
+                },
+                {
+                  "name": "audience",
+                  "description": "Target audience for the summary",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "investigate-incident",
+              "description": "Start an incident investigation workflow for an Acme AI service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Affected Acme service name",
+                  "required": true
+                },
+                {
+                  "name": "incident",
+                  "description": "Incident identifier, e.g. INC-2048",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "name": "draft-status-update",
+              "description": "Draft a stakeholder status update for a service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Service receiving the status update",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "description": "Current status label: healthy, degraded, or outage",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "promptCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-prompt_get_request",
+        "type": "protocol",
+        "title": "Prompt get request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/get:investigate-incident",
+          "method": "prompts/get",
+          "name": "investigate-incident",
+          "arguments": {
+            "service": "billing-api",
+            "incident": "INC-2048"
+          },
+          "discoveredBeforeGet": true
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-prompt_get_response",
+        "type": "protocol",
+        "title": "Prompt get response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/get:investigate-incident",
+          "method": "prompts/get",
+          "name": "investigate-incident",
+          "arguments": {
+            "service": "billing-api",
+            "incident": "INC-2048"
+          },
+          "isError": false,
+          "description": "Start an incident investigation workflow for an Acme AI service.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Investigate incident INC-2048 affecting the billing-api service in the Acme AI environment."
+              }
+            },
+            {
+              "role": "assistant",
+              "content": {
+                "type": "text",
+                "text": "I will review recent deploys, error-rate dashboards, and dependency health for billing-api."
+              }
+            },
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Prioritize logs and traces tagged with INC-2048 and compare billing-api latency against the prior 24 hours."
+              }
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "discoveredPrompts": [
+        "summarize-service",
+        "investigate-incident",
+        "draft-status-update"
+      ],
+      "gets": [
+        {
+          "requestedPrompt": "investigate-incident",
+          "arguments": {
+            "service": "billing-api",
+            "incident": "INC-2048"
+          },
+          "isError": false,
+          "description": "Start an incident investigation workflow for an Acme AI service.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Investigate incident INC-2048 affecting the billing-api service in the Acme AI environment."
+              }
+            },
+            {
+              "role": "assistant",
+              "content": {
+                "type": "text",
+                "text": "I will review recent deploys, error-rate dashboards, and dependency health for billing-api."
+              }
+            },
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Prioritize logs and traces tagged with INC-2048 and compare billing-api latency against the prior 24 hours."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 2,
+      "initializeMs": 0,
+      "discoveryMs": 0,
+      "promptGetMs": 0,
+      "promptsDiscovered": 3,
+      "promptsRequested": 1,
+      "successfulGets": 1,
+      "failedGets": 0,
+      "messageCount": 3,
+      "messageBytes": 289,
+      "modelTurns": 0,
+      "toolCalls": 0,
+      "resourcesRead": 0,
+      "terminationReason": "session_closed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "interactionId": "initialize",
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            }
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-prompts",
+            "version": ""
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "prompts/list"
+        },
+        {
+          "phase": "PROMPTS",
+          "promptCount": 3,
+          "names": [
+            "summarize-service",
+            "investigate-incident",
+            "draft-status-update"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "GET",
+          "name": "investigate-incident"
+        },
+        {
+          "phase": "ARGUMENTS",
+          "name": "investigate-incident",
+          "arguments": {
+            "service": "billing-api",
+            "incident": "INC-2048"
+          }
+        },
+        {
+          "phase": "MESSAGES",
+          "name": "investigate-incident",
+          "isError": false,
+          "latencyMs": 0,
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Investigate incident INC-2048 affecting the billing-api service in the Acme AI environment."
+              }
+            },
+            {
+              "role": "assistant",
+              "content": {
+                "type": "text",
+                "text": "I will review recent deploys, error-rate dashboards, and dependency health for billing-api."
+              }
+            },
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Prioritize logs and traces tagged with INC-2048 and compare billing-api latency against the prior 24 hours."
+              }
+            }
+          ]
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 DISCOVER \u2192 PROMPTS \u2192 GET \u2192 ARGUMENTS \u2192 MESSAGES"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "prompts"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/03-prompts"
+    }
+  },
+  {
+    "labId": "mcp-prompts",
+    "traceId": "invalid-prompt-name",
+    "executionMode": "guided",
+    "recordedAt": "2026-08-29T11:52:23Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "INVALID_PROMPT",
+    "selectionNote": "Measured case: after discovery, the client requests a prompt name the server does not expose. The failure is recorded from the MCP prompts/get boundary.",
+    "architecture": {
+      "layout": "mcp-prompts",
+      "stages": [
+        "initialize",
+        "prompts-list",
+        "prompt-identity",
+        "prompts-get",
+        "prompt-messages"
+      ]
+    },
+    "input": {
+      "case": "invalid-prompt-name",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy"
+      },
+      "requestedPrompt": "does-not-exist",
+      "requestedArguments": {}
+    },
+    "prompts": [
+      {
+        "name": "summarize-service",
+        "description": "Produce a concise service summary tailored to a target audience.",
+        "arguments": [
+          {
+            "name": "service_name",
+            "description": "Canonical Acme service name, e.g. knowledge-platform",
+            "required": true
+          },
+          {
+            "name": "audience",
+            "description": "Target audience for the summary",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "investigate-incident",
+        "description": "Start an incident investigation workflow for an Acme AI service.",
+        "arguments": [
+          {
+            "name": "service",
+            "description": "Affected Acme service name",
+            "required": true
+          },
+          {
+            "name": "incident",
+            "description": "Incident identifier, e.g. INC-2048",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "draft-status-update",
+        "description": "Draft a stakeholder status update for a service.",
+        "arguments": [
+          {
+            "name": "service",
+            "description": "Service receiving the status update",
+            "required": true
+          },
+          {
+            "name": "status",
+            "description": "Current status label: healthy, degraded, or outage",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-prompts",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "prompts_list_request",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "prompts_list_response",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list",
+          "prompts": [
+            {
+              "name": "summarize-service",
+              "description": "Produce a concise service summary tailored to a target audience.",
+              "arguments": [
+                {
+                  "name": "service_name",
+                  "description": "Canonical Acme service name, e.g. knowledge-platform",
+                  "required": true
+                },
+                {
+                  "name": "audience",
+                  "description": "Target audience for the summary",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "investigate-incident",
+              "description": "Start an incident investigation workflow for an Acme AI service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Affected Acme service name",
+                  "required": true
+                },
+                {
+                  "name": "incident",
+                  "description": "Incident identifier, e.g. INC-2048",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "name": "draft-status-update",
+              "description": "Draft a stakeholder status update for a service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Service receiving the status update",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "description": "Current status label: healthy, degraded, or outage",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "promptCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "prompt_get_request",
+        "detail": {
+          "interactionId": "prompts/get:does-not-exist",
+          "method": "prompts/get",
+          "name": "does-not-exist",
+          "arguments": {},
+          "discoveredBeforeGet": false
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "prompt_get_response",
+        "detail": {
+          "interactionId": "prompts/get:does-not-exist",
+          "method": "prompts/get",
+          "name": "does-not-exist",
+          "arguments": {},
+          "isError": true,
+          "error": {
+            "code": 0,
+            "message": "Unknown prompt: does-not-exist"
+          },
+          "exceptionType": "MCPError"
+        },
+        "latencyMs": 3
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "prompt_get_rejected"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-prompts",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-prompts_list_request",
+        "type": "protocol",
+        "title": "Prompts list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-prompts_list_response",
+        "type": "protocol",
+        "title": "Prompts list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list",
+          "prompts": [
+            {
+              "name": "summarize-service",
+              "description": "Produce a concise service summary tailored to a target audience.",
+              "arguments": [
+                {
+                  "name": "service_name",
+                  "description": "Canonical Acme service name, e.g. knowledge-platform",
+                  "required": true
+                },
+                {
+                  "name": "audience",
+                  "description": "Target audience for the summary",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "investigate-incident",
+              "description": "Start an incident investigation workflow for an Acme AI service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Affected Acme service name",
+                  "required": true
+                },
+                {
+                  "name": "incident",
+                  "description": "Incident identifier, e.g. INC-2048",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "name": "draft-status-update",
+              "description": "Draft a stakeholder status update for a service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Service receiving the status update",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "description": "Current status label: healthy, degraded, or outage",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "promptCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-prompt_get_request",
+        "type": "protocol",
+        "title": "Prompt get request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/get:does-not-exist",
+          "method": "prompts/get",
+          "name": "does-not-exist",
+          "arguments": {},
+          "discoveredBeforeGet": false
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-prompt_get_response",
+        "type": "protocol",
+        "title": "Prompt get response",
+        "status": "error",
+        "detail": {
+          "interactionId": "prompts/get:does-not-exist",
+          "method": "prompts/get",
+          "name": "does-not-exist",
+          "arguments": {},
+          "isError": true,
+          "error": {
+            "code": 0,
+            "message": "Unknown prompt: does-not-exist"
+          },
+          "exceptionType": "MCPError"
+        },
+        "metrics": {
+          "latencyMs": 3,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "prompt_get_rejected"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "discoveredPrompts": [
+        "summarize-service",
+        "investigate-incident",
+        "draft-status-update"
+      ],
+      "gets": [
+        {
+          "requestedPrompt": "does-not-exist",
+          "arguments": {},
+          "isError": true,
+          "error": {
+            "code": 0,
+            "message": "Unknown prompt: does-not-exist"
+          }
+        }
+      ]
+    },
+    "errors": [
+      {
+        "stage": "prompts/get",
+        "name": "does-not-exist",
+        "isError": true,
+        "detail": {
+          "interactionId": "prompts/get:does-not-exist",
+          "method": "prompts/get",
+          "name": "does-not-exist",
+          "arguments": {},
+          "isError": true,
+          "error": {
+            "code": 0,
+            "message": "Unknown prompt: does-not-exist"
+          },
+          "exceptionType": "MCPError"
+        }
+      }
+    ],
+    "metrics": {
+      "totalMs": 5,
+      "initializeMs": 0,
+      "discoveryMs": 0,
+      "promptGetMs": 3,
+      "promptsDiscovered": 3,
+      "promptsRequested": 1,
+      "successfulGets": 0,
+      "failedGets": 1,
+      "messageCount": 0,
+      "messageBytes": 0,
+      "modelTurns": 0,
+      "toolCalls": 0,
+      "resourcesRead": 0,
+      "terminationReason": "prompt_get_rejected",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "interactionId": "initialize",
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            }
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-prompts",
+            "version": ""
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "prompts/list"
+        },
+        {
+          "phase": "PROMPTS",
+          "promptCount": 3,
+          "names": [
+            "summarize-service",
+            "investigate-incident",
+            "draft-status-update"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "GET",
+          "name": "does-not-exist"
+        },
+        {
+          "phase": "REJECTED",
+          "name": "does-not-exist",
+          "isError": true,
+          "latencyMs": 3,
+          "error": {
+            "code": 0,
+            "message": "Unknown prompt: does-not-exist"
+          }
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "prompt_get_rejected"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 DISCOVER \u2192 GET \u2192 REJECTED"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "prompts"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/03-prompts"
+    }
+  }
+]
