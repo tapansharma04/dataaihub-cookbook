@@ -49,6 +49,7 @@ Cookbook →  "How is it implemented?"
 | `mcp-tool-discovery` | [`examples/mcp/01-tool-discovery`](examples/mcp/01-tool-discovery) | MCP client/server protocol lifecycle (initialize → tools/list → tools/call) |
 | `mcp-resources` | [`examples/mcp/02-resources`](examples/mcp/02-resources) | MCP resource discovery and reading (initialize → resources/list → resources/read) |
 | `mcp-prompts` | [`examples/mcp/03-prompts`](examples/mcp/03-prompts) | MCP prompt discovery and retrieval (initialize → prompts/list → prompts/get) |
+| `mcp-composition` | [`examples/mcp/04-composition`](examples/mcp/04-composition) | Composed MCP workflow: resources, prompts, and tools with Sampling through the client |
 
 ### Knowledge Graphs
 
@@ -96,7 +97,8 @@ dataaihub-cookbook/
 │   ├── mcp/
 │   │   ├── 01-tool-discovery/
 │   │   ├── 02-resources/
-│   │   └── 03-prompts/
+│   │   ├── 03-prompts/
+│   │   └── 04-composition/
 │   └── knowledge-graphs/
 │       ├── 01-graph-traversal/
 │       ├── 02-sparql-queries/

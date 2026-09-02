@@ -1,0 +1,4173 @@
+[
+  {
+    "labId": "mcp-composition",
+    "traceId": "resource-to-sampling",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-02T05:31:03Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "RESOURCE_TO_SAMPLING",
+    "selectionNote": "Measured case: the client reads an MCP resource, then calls a composition tool. The server grounds a sampling request in that resource and the client sampling callback completes generation.",
+    "architecture": {
+      "layout": "mcp-composition",
+      "stages": [
+        "initialize",
+        "mcp-primitives",
+        "sampling-request",
+        "client-model-boundary",
+        "sampling-response",
+        "application-result"
+      ],
+      "samplingMode": "mock"
+    },
+    "input": {
+      "case": "resource-to-sampling",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy",
+        "samplingMode": "mock"
+      }
+    },
+    "resources": [
+      {
+        "uri": "acme://docs/knowledge-platform",
+        "name": "knowledge-platform",
+        "description": "Service documentation for the Knowledge Platform.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://docs/billing-portal",
+        "name": "billing-portal",
+        "description": "Service documentation for the Billing Portal.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://status/services",
+        "name": "service-status",
+        "description": "Service statuses for the Acme AI environment.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [],
+    "tools": [],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          },
+          "samplingCallbackRegistered": true,
+          "samplingMode": "mock"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-composition",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 3
+      },
+      {
+        "kind": "resources_list_request",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resources_list_response",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "resource_read_request",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resource_read_response",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        "latencyMs": 1
+      },
+      {
+        "kind": "tool_call_request",
+        "detail": {
+          "interactionId": "tools/call:compose_resource_brief:2",
+          "method": "tools/call",
+          "name": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "sampling_request",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "params": {
+            "meta": {},
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Resource URI: acme://docs/knowledge-platform\nName: knowledge-platform\nMIME type: text/markdown\nContent:\n# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n\n\nWrite a two-sentence operational brief using only this resource."
+                }
+              }
+            ],
+            "system_prompt": "Use only the supplied MCP resource content. Do not invent facts.",
+            "max_tokens": 200
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "sampling_response",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "isError": false,
+          "result": {
+            "role": "assistant",
+            "content": {
+              "type": "text",
+              "text": "[mock] Client sampling callback completed this request.\nGrounded context (1 message(s)):\nResource URI: acme://docs/knowledge-platform\nName: knowledge-platform\nMIME type: text/markdown\nContent:\n# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n\n\nWrite a two-sentence operational brief using only this resource."
+            },
+            "model": "mock"
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call_response",
+        "detail": {
+          "interactionId": "tools/call:compose_resource_brief:2",
+          "method": "tools/call",
+          "name": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          },
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"workflow\": \"resource_to_sampling\",\n  \"resourceUri\": \"acme://docs/knowledge-platform\",\n  \"resourceName\": \"knowledge-platform\",\n  \"mimeType\": \"text/markdown\",\n  \"sampling\": {\n    \"model\": \"mock\",\n    \"role\": \"assistant\",\n    \"text\": \"[mock] Client sampling callback completed this request.\\nGrounded context (1 message(s)):\\nResource URI: acme://docs/knowledge-platform\\nName: knowledge-platform\\nMIME type: text/markdown\\nContent:\\n# Knowledge Platform\\n\\nService documentation for the Knowledge Platform.\\n\\nThe Knowledge Platform indexes internal documents and serves retrieval\\nqueries for Acme applications. Clients read this resource for current\\nservice facts; they do not invent the catalog locally.\\n\\n## Services\\n\\n- knowledge-platform\\n- billing-api\\n- identity-api\\n\\n## Capabilities\\n\\n- Document ingest and chunking\\n- Keyword and vector retrieval\\n- Citation-preserving answer assembly\\n\\n## Operational notes\\n\\nStatus and incident details live in `acme://status/services`.\\nBilling product surfaces live in `acme://docs/billing-portal`.\\n\\n\\nWrite a two-sentence operational brief using only this resource.\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "workflow": "resource_to_sampling",
+              "resourceUri": "acme://docs/knowledge-platform",
+              "resourceName": "knowledge-platform",
+              "mimeType": "text/markdown",
+              "sampling": {
+                "model": "mock",
+                "role": "assistant",
+                "text": "[mock] Client sampling callback completed this request.\nGrounded context (1 message(s)):\nResource URI: acme://docs/knowledge-platform\nName: knowledge-platform\nMIME type: text/markdown\nContent:\n# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n\n\nWrite a two-sentence operational brief using only this resource."
+              }
+            }
+          }
+        },
+        "latencyMs": 3
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          },
+          "samplingCallbackRegistered": true,
+          "samplingMode": "mock"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-composition",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 3,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-resources_list_request",
+        "type": "protocol",
+        "title": "Resources list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-resources_list_response",
+        "type": "protocol",
+        "title": "Resources list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-resource_read_request",
+        "type": "protocol",
+        "title": "Resource read request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-resource_read_response",
+        "type": "protocol",
+        "title": "Resource read response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-tool_call_request",
+        "type": "protocol",
+        "title": "Tool call request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "tools/call:compose_resource_brief:2",
+          "method": "tools/call",
+          "name": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-sampling_request",
+        "type": "sampling",
+        "title": "Sampling request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "params": {
+            "meta": {},
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Resource URI: acme://docs/knowledge-platform\nName: knowledge-platform\nMIME type: text/markdown\nContent:\n# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n\n\nWrite a two-sentence operational brief using only this resource."
+                }
+              }
+            ],
+            "system_prompt": "Use only the supplied MCP resource content. Do not invent facts.",
+            "max_tokens": 200
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-sampling_response",
+        "type": "sampling",
+        "title": "Sampling response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "isError": false,
+          "result": {
+            "role": "assistant",
+            "content": {
+              "type": "text",
+              "text": "[mock] Client sampling callback completed this request.\nGrounded context (1 message(s)):\nResource URI: acme://docs/knowledge-platform\nName: knowledge-platform\nMIME type: text/markdown\nContent:\n# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n\n\nWrite a two-sentence operational brief using only this resource."
+            },
+            "model": "mock"
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-tool_call_response",
+        "type": "protocol",
+        "title": "Tool call response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "tools/call:compose_resource_brief:2",
+          "method": "tools/call",
+          "name": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          },
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"workflow\": \"resource_to_sampling\",\n  \"resourceUri\": \"acme://docs/knowledge-platform\",\n  \"resourceName\": \"knowledge-platform\",\n  \"mimeType\": \"text/markdown\",\n  \"sampling\": {\n    \"model\": \"mock\",\n    \"role\": \"assistant\",\n    \"text\": \"[mock] Client sampling callback completed this request.\\nGrounded context (1 message(s)):\\nResource URI: acme://docs/knowledge-platform\\nName: knowledge-platform\\nMIME type: text/markdown\\nContent:\\n# Knowledge Platform\\n\\nService documentation for the Knowledge Platform.\\n\\nThe Knowledge Platform indexes internal documents and serves retrieval\\nqueries for Acme applications. Clients read this resource for current\\nservice facts; they do not invent the catalog locally.\\n\\n## Services\\n\\n- knowledge-platform\\n- billing-api\\n- identity-api\\n\\n## Capabilities\\n\\n- Document ingest and chunking\\n- Keyword and vector retrieval\\n- Citation-preserving answer assembly\\n\\n## Operational notes\\n\\nStatus and incident details live in `acme://status/services`.\\nBilling product surfaces live in `acme://docs/billing-portal`.\\n\\n\\nWrite a two-sentence operational brief using only this resource.\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "workflow": "resource_to_sampling",
+              "resourceUri": "acme://docs/knowledge-platform",
+              "resourceName": "knowledge-platform",
+              "mimeType": "text/markdown",
+              "sampling": {
+                "model": "mock",
+                "role": "assistant",
+                "text": "[mock] Client sampling callback completed this request.\nGrounded context (1 message(s)):\nResource URI: acme://docs/knowledge-platform\nName: knowledge-platform\nMIME type: text/markdown\nContent:\n# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n\n\nWrite a two-sentence operational brief using only this resource."
+              }
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 3,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "reads": [
+        {
+          "requestedUri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        }
+      ],
+      "gets": [],
+      "invocations": [
+        {
+          "tool": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          },
+          "isError": false,
+          "result": {
+            "ok": true,
+            "workflow": "resource_to_sampling",
+            "resourceUri": "acme://docs/knowledge-platform",
+            "resourceName": "knowledge-platform",
+            "mimeType": "text/markdown",
+            "sampling": {
+              "model": "mock",
+              "role": "assistant",
+              "text": "[mock] Client sampling callback completed this request.\nGrounded context (1 message(s)):\nResource URI: acme://docs/knowledge-platform\nName: knowledge-platform\nMIME type: text/markdown\nContent:\n# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n\n\nWrite a two-sentence operational brief using only this resource."
+            }
+          }
+        }
+      ],
+      "sampling": [
+        {
+          "isError": false,
+          "result": {
+            "role": "assistant",
+            "content": {
+              "type": "text",
+              "text": "[mock] Client sampling callback completed this request.\nGrounded context (1 message(s)):\nResource URI: acme://docs/knowledge-platform\nName: knowledge-platform\nMIME type: text/markdown\nContent:\n# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n\n\nWrite a two-sentence operational brief using only this resource."
+            },
+            "model": "mock"
+          }
+        }
+      ],
+      "discoveredResources": [
+        "acme://docs/knowledge-platform",
+        "acme://docs/billing-portal",
+        "acme://status/services"
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 9,
+      "initializeMs": 3,
+      "discoveryMs": 0,
+      "resourceReadMs": 1,
+      "promptGetMs": 0,
+      "toolCallMs": 3,
+      "samplingMs": 0,
+      "resourcesDiscovered": 3,
+      "resourcesRead": 1,
+      "promptsDiscovered": 0,
+      "promptsRequested": 0,
+      "toolsDiscovered": 0,
+      "toolCalls": 1,
+      "successfulToolCalls": 1,
+      "failedToolCalls": 0,
+      "samplingRequests": 1,
+      "successfulSamplings": 1,
+      "failedSamplings": 0,
+      "modelTurns": 1,
+      "terminationReason": "session_closed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "interactionId": "initialize",
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            },
+            "samplingCallbackRegistered": true,
+            "samplingMode": "mock"
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-composition",
+            "version": ""
+          },
+          "latencyMs": 3
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "resources/list"
+        },
+        {
+          "phase": "RESOURCES",
+          "resourceCount": 3,
+          "uris": [
+            "acme://docs/knowledge-platform",
+            "acme://docs/billing-portal",
+            "acme://status/services"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "RESOURCE",
+          "uri": "acme://docs/knowledge-platform"
+        },
+        {
+          "phase": "CONTEXT",
+          "uri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "latencyMs": 1
+        },
+        {
+          "phase": "TOOL",
+          "name": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          }
+        },
+        {
+          "phase": "SAMPLING",
+          "method": "sampling/createMessage",
+          "boundary": "mcp-client-sampling-callback"
+        },
+        {
+          "phase": "RESULT",
+          "isError": false,
+          "boundary": "mcp-client-sampling-callback",
+          "latencyMs": 0,
+          "model": "mock"
+        },
+        {
+          "phase": "TOOL_RESULT",
+          "name": "compose_resource_brief",
+          "isError": false,
+          "latencyMs": 3
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 RESOURCE \u2192 CONTEXT \u2192 SAMPLING \u2192 RESULT"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "composition",
+      "sampling"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/04-composition"
+    }
+  },
+  {
+    "labId": "mcp-composition",
+    "traceId": "prompt-to-sampling",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-02T05:31:03Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "PROMPT_TO_SAMPLING",
+    "selectionNote": "Measured case: the client retrieves an MCP prompt template, then calls a composition tool. The server requests sampling using the same rendered prompt messages.",
+    "architecture": {
+      "layout": "mcp-composition",
+      "stages": [
+        "initialize",
+        "mcp-primitives",
+        "sampling-request",
+        "client-model-boundary",
+        "sampling-response",
+        "application-result"
+      ],
+      "samplingMode": "mock"
+    },
+    "input": {
+      "case": "prompt-to-sampling",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy",
+        "samplingMode": "mock"
+      }
+    },
+    "resources": [],
+    "prompts": [
+      {
+        "name": "summarize-service",
+        "description": "Produce a concise service summary tailored to a target audience.",
+        "arguments": [
+          {
+            "name": "service_name",
+            "description": "Canonical Acme service name, e.g. knowledge-platform",
+            "required": true
+          },
+          {
+            "name": "audience",
+            "description": "Target audience for the summary",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "draft-status-update",
+        "description": "Draft a stakeholder status update for a service.",
+        "arguments": [
+          {
+            "name": "service",
+            "description": "Service receiving the status update",
+            "required": true
+          },
+          {
+            "name": "status",
+            "description": "Current status label: operational, degraded, or outage",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "tools": [],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          },
+          "samplingCallbackRegistered": true,
+          "samplingMode": "mock"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-composition",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "prompts_list_request",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "prompts_list_response",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list",
+          "prompts": [
+            {
+              "name": "summarize-service",
+              "description": "Produce a concise service summary tailored to a target audience.",
+              "arguments": [
+                {
+                  "name": "service_name",
+                  "description": "Canonical Acme service name, e.g. knowledge-platform",
+                  "required": true
+                },
+                {
+                  "name": "audience",
+                  "description": "Target audience for the summary",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "draft-status-update",
+              "description": "Draft a stakeholder status update for a service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Service receiving the status update",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "description": "Current status label: operational, degraded, or outage",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "promptCount": 2
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "prompt_get_request",
+        "detail": {
+          "interactionId": "prompts/get:summarize-service",
+          "method": "prompts/get",
+          "name": "summarize-service",
+          "arguments": {
+            "service_name": "knowledge-platform",
+            "audience": "engineering"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "prompt_get_response",
+        "detail": {
+          "interactionId": "prompts/get:summarize-service",
+          "method": "prompts/get",
+          "name": "summarize-service",
+          "arguments": {
+            "service_name": "knowledge-platform",
+            "audience": "engineering"
+          },
+          "isError": false,
+          "description": "Produce a concise service summary tailored to a target audience.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+              }
+            }
+          ]
+        },
+        "latencyMs": 1
+      },
+      {
+        "kind": "tool_call_request",
+        "detail": {
+          "interactionId": "tools/call:compose_from_prompt:2",
+          "method": "tools/call",
+          "name": "compose_from_prompt",
+          "arguments": {
+            "prompt_name": "summarize-service",
+            "service_name": "knowledge-platform",
+            "audience": "engineering",
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+                }
+              }
+            ]
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "sampling_request",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "params": {
+            "meta": {},
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+                }
+              }
+            ],
+            "system_prompt": "Follow the supplied MCP prompt messages. Do not invent a different task.",
+            "max_tokens": 200
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "sampling_response",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "isError": false,
+          "result": {
+            "role": "assistant",
+            "content": {
+              "type": "text",
+              "text": "[mock] Client sampling callback completed this request.\nGrounded context (1 message(s)):\nProvide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+            },
+            "model": "mock"
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call_response",
+        "detail": {
+          "interactionId": "tools/call:compose_from_prompt:2",
+          "method": "tools/call",
+          "name": "compose_from_prompt",
+          "arguments": {
+            "prompt_name": "summarize-service",
+            "service_name": "knowledge-platform",
+            "audience": "engineering",
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+                }
+              }
+            ]
+          },
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"workflow\": \"prompt_to_sampling\",\n  \"promptName\": \"summarize-service\",\n  \"arguments\": {\n    \"service_name\": \"knowledge-platform\",\n    \"audience\": \"engineering\"\n  },\n  \"sampling\": {\n    \"model\": \"mock\",\n    \"role\": \"assistant\",\n    \"text\": \"[mock] Client sampling callback completed this request.\\nGrounded context (1 message(s)):\\nProvide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture.\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "workflow": "prompt_to_sampling",
+              "promptName": "summarize-service",
+              "arguments": {
+                "service_name": "knowledge-platform",
+                "audience": "engineering"
+              },
+              "sampling": {
+                "model": "mock",
+                "role": "assistant",
+                "text": "[mock] Client sampling callback completed this request.\nGrounded context (1 message(s)):\nProvide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+              }
+            }
+          }
+        },
+        "latencyMs": 1
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          },
+          "samplingCallbackRegistered": true,
+          "samplingMode": "mock"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-composition",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-prompts_list_request",
+        "type": "protocol",
+        "title": "Prompts list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-prompts_list_response",
+        "type": "protocol",
+        "title": "Prompts list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list",
+          "prompts": [
+            {
+              "name": "summarize-service",
+              "description": "Produce a concise service summary tailored to a target audience.",
+              "arguments": [
+                {
+                  "name": "service_name",
+                  "description": "Canonical Acme service name, e.g. knowledge-platform",
+                  "required": true
+                },
+                {
+                  "name": "audience",
+                  "description": "Target audience for the summary",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "draft-status-update",
+              "description": "Draft a stakeholder status update for a service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Service receiving the status update",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "description": "Current status label: operational, degraded, or outage",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "promptCount": 2
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-prompt_get_request",
+        "type": "protocol",
+        "title": "Prompt get request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/get:summarize-service",
+          "method": "prompts/get",
+          "name": "summarize-service",
+          "arguments": {
+            "service_name": "knowledge-platform",
+            "audience": "engineering"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-prompt_get_response",
+        "type": "protocol",
+        "title": "Prompt get response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/get:summarize-service",
+          "method": "prompts/get",
+          "name": "summarize-service",
+          "arguments": {
+            "service_name": "knowledge-platform",
+            "audience": "engineering"
+          },
+          "isError": false,
+          "description": "Produce a concise service summary tailored to a target audience.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+              }
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-tool_call_request",
+        "type": "protocol",
+        "title": "Tool call request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "tools/call:compose_from_prompt:2",
+          "method": "tools/call",
+          "name": "compose_from_prompt",
+          "arguments": {
+            "prompt_name": "summarize-service",
+            "service_name": "knowledge-platform",
+            "audience": "engineering",
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+                }
+              }
+            ]
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-sampling_request",
+        "type": "sampling",
+        "title": "Sampling request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "params": {
+            "meta": {},
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+                }
+              }
+            ],
+            "system_prompt": "Follow the supplied MCP prompt messages. Do not invent a different task.",
+            "max_tokens": 200
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-sampling_response",
+        "type": "sampling",
+        "title": "Sampling response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "isError": false,
+          "result": {
+            "role": "assistant",
+            "content": {
+              "type": "text",
+              "text": "[mock] Client sampling callback completed this request.\nGrounded context (1 message(s)):\nProvide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+            },
+            "model": "mock"
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-tool_call_response",
+        "type": "protocol",
+        "title": "Tool call response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "tools/call:compose_from_prompt:2",
+          "method": "tools/call",
+          "name": "compose_from_prompt",
+          "arguments": {
+            "prompt_name": "summarize-service",
+            "service_name": "knowledge-platform",
+            "audience": "engineering",
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+                }
+              }
+            ]
+          },
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"workflow\": \"prompt_to_sampling\",\n  \"promptName\": \"summarize-service\",\n  \"arguments\": {\n    \"service_name\": \"knowledge-platform\",\n    \"audience\": \"engineering\"\n  },\n  \"sampling\": {\n    \"model\": \"mock\",\n    \"role\": \"assistant\",\n    \"text\": \"[mock] Client sampling callback completed this request.\\nGrounded context (1 message(s)):\\nProvide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture.\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "workflow": "prompt_to_sampling",
+              "promptName": "summarize-service",
+              "arguments": {
+                "service_name": "knowledge-platform",
+                "audience": "engineering"
+              },
+              "sampling": {
+                "model": "mock",
+                "role": "assistant",
+                "text": "[mock] Client sampling callback completed this request.\nGrounded context (1 message(s)):\nProvide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+              }
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 1,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "reads": [],
+      "gets": [
+        {
+          "requestedPrompt": "summarize-service",
+          "arguments": {
+            "service_name": "knowledge-platform",
+            "audience": "engineering"
+          },
+          "isError": false,
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+              }
+            }
+          ]
+        }
+      ],
+      "invocations": [
+        {
+          "tool": "compose_from_prompt",
+          "arguments": {
+            "prompt_name": "summarize-service",
+            "service_name": "knowledge-platform",
+            "audience": "engineering",
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+                }
+              }
+            ]
+          },
+          "isError": false,
+          "result": {
+            "ok": true,
+            "workflow": "prompt_to_sampling",
+            "promptName": "summarize-service",
+            "arguments": {
+              "service_name": "knowledge-platform",
+              "audience": "engineering"
+            },
+            "sampling": {
+              "model": "mock",
+              "role": "assistant",
+              "text": "[mock] Client sampling callback completed this request.\nGrounded context (1 message(s)):\nProvide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+            }
+          }
+        }
+      ],
+      "sampling": [
+        {
+          "isError": false,
+          "result": {
+            "role": "assistant",
+            "content": {
+              "type": "text",
+              "text": "[mock] Client sampling callback completed this request.\nGrounded context (1 message(s)):\nProvide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+            },
+            "model": "mock"
+          }
+        }
+      ],
+      "discoveredPrompts": [
+        "summarize-service",
+        "draft-status-update"
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 4,
+      "initializeMs": 0,
+      "discoveryMs": 0,
+      "resourceReadMs": 0,
+      "promptGetMs": 1,
+      "toolCallMs": 1,
+      "samplingMs": 0,
+      "resourcesDiscovered": 0,
+      "resourcesRead": 0,
+      "promptsDiscovered": 2,
+      "promptsRequested": 1,
+      "toolsDiscovered": 0,
+      "toolCalls": 1,
+      "successfulToolCalls": 1,
+      "failedToolCalls": 0,
+      "samplingRequests": 1,
+      "successfulSamplings": 1,
+      "failedSamplings": 0,
+      "modelTurns": 1,
+      "terminationReason": "session_closed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "interactionId": "initialize",
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            },
+            "samplingCallbackRegistered": true,
+            "samplingMode": "mock"
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-composition",
+            "version": ""
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "prompts/list"
+        },
+        {
+          "phase": "PROMPTS",
+          "promptCount": 2,
+          "names": [
+            "summarize-service",
+            "draft-status-update"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "PROMPT",
+          "name": "summarize-service"
+        },
+        {
+          "phase": "ARGUMENTS",
+          "name": "summarize-service",
+          "arguments": {
+            "service_name": "knowledge-platform",
+            "audience": "engineering"
+          }
+        },
+        {
+          "phase": "MESSAGES",
+          "name": "summarize-service",
+          "isError": false,
+          "latencyMs": 1
+        },
+        {
+          "phase": "TOOL",
+          "name": "compose_from_prompt",
+          "arguments": {
+            "prompt_name": "summarize-service",
+            "service_name": "knowledge-platform",
+            "audience": "engineering",
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Provide a concise summary of the knowledge-platform service for a engineering audience. Cover purpose, upstream/downstream dependencies, and current operational posture."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "phase": "SAMPLING",
+          "method": "sampling/createMessage",
+          "boundary": "mcp-client-sampling-callback"
+        },
+        {
+          "phase": "RESULT",
+          "isError": false,
+          "boundary": "mcp-client-sampling-callback",
+          "latencyMs": 0,
+          "model": "mock"
+        },
+        {
+          "phase": "TOOL_RESULT",
+          "name": "compose_from_prompt",
+          "isError": false,
+          "latencyMs": 1
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 PROMPT \u2192 ARGUMENTS \u2192 SAMPLING \u2192 RESULT"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "composition",
+      "sampling"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/04-composition"
+    }
+  },
+  {
+    "labId": "mcp-composition",
+    "traceId": "tool-resource-prompt-composition",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-02T05:31:03Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "TOOL_RESOURCE_PROMPT_COMPOSITION",
+    "selectionNote": "Measured case: the client calls a status tool, reads the related resource, retrieves a prompt template, then calls a composition tool. The server requests sampling from the combined tool result, resource content, and prompt messages.",
+    "architecture": {
+      "layout": "mcp-composition",
+      "stages": [
+        "initialize",
+        "mcp-primitives",
+        "sampling-request",
+        "client-model-boundary",
+        "sampling-response",
+        "application-result"
+      ],
+      "samplingMode": "mock"
+    },
+    "input": {
+      "case": "tool-resource-prompt-composition",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy",
+        "samplingMode": "mock"
+      }
+    },
+    "resources": [
+      {
+        "uri": "acme://docs/knowledge-platform",
+        "name": "knowledge-platform",
+        "description": "Service documentation for the Knowledge Platform.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://docs/billing-portal",
+        "name": "billing-portal",
+        "description": "Service documentation for the Billing Portal.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://status/services",
+        "name": "service-status",
+        "description": "Service statuses for the Acme AI environment.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [
+      {
+        "name": "summarize-service",
+        "description": "Produce a concise service summary tailored to a target audience.",
+        "arguments": [
+          {
+            "name": "service_name",
+            "description": "Canonical Acme service name, e.g. knowledge-platform",
+            "required": true
+          },
+          {
+            "name": "audience",
+            "description": "Target audience for the summary",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "draft-status-update",
+        "description": "Draft a stakeholder status update for a service.",
+        "arguments": [
+          {
+            "name": "service",
+            "description": "Service receiving the status update",
+            "required": true
+          },
+          {
+            "name": "status",
+            "description": "Current status label: operational, degraded, or outage",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "get_service_status",
+        "description": "Return the current status for a canonical Acme AI service name.",
+        "inputSchema": {
+          "properties": {
+            "service": {
+              "description": "Canonical service name: knowledge-platform, billing-api, identity-api",
+              "title": "Service",
+              "type": "string"
+            }
+          },
+          "required": [
+            "service"
+          ],
+          "type": "object",
+          "title": "get_service_statusArguments"
+        }
+      },
+      {
+        "name": "compose_resource_brief",
+        "description": "Ground sampling in the supplied resources/read content.",
+        "inputSchema": {
+          "properties": {
+            "uri": {
+              "description": "Resource URI whose resources/read content is supplied",
+              "title": "Uri",
+              "type": "string"
+            },
+            "content": {
+              "description": "Text returned by resources/read for this URI",
+              "title": "Content",
+              "type": "string"
+            },
+            "mime_type": {
+              "default": "text/markdown",
+              "description": "MIME type returned by resources/read",
+              "title": "Mime Type",
+              "type": "string"
+            },
+            "name": {
+              "default": "",
+              "description": "Resource name from resources/list, if known",
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          "required": [
+            "uri",
+            "content"
+          ],
+          "type": "object",
+          "title": "compose_resource_briefArguments"
+        }
+      },
+      {
+        "name": "compose_from_prompt",
+        "description": "Request sampling from the supplied prompts/get messages.",
+        "inputSchema": {
+          "properties": {
+            "prompt_name": {
+              "description": "MCP prompt name retrieved via prompts/get",
+              "title": "Prompt Name",
+              "type": "string"
+            },
+            "messages": {
+              "description": "PromptMessage objects returned by prompts/get",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "service_name": {
+              "description": "Service name argument originally passed to prompts/get",
+              "title": "Service Name",
+              "type": "string"
+            },
+            "audience": {
+              "default": "engineering",
+              "description": "Audience argument originally passed to prompts/get",
+              "title": "Audience",
+              "type": "string"
+            }
+          },
+          "required": [
+            "prompt_name",
+            "messages",
+            "service_name"
+          ],
+          "type": "object",
+          "title": "compose_from_promptArguments"
+        }
+      },
+      {
+        "name": "compose_incident_brief",
+        "description": "Compose sampling from prior tool, resource, and prompt MCP results.",
+        "inputSchema": {
+          "properties": {
+            "service": {
+              "description": "Affected Acme service name",
+              "title": "Service",
+              "type": "string"
+            },
+            "tool_result": {
+              "additionalProperties": true,
+              "description": "Structured result returned by get_service_status",
+              "title": "Tool Result",
+              "type": "object"
+            },
+            "resource_uri": {
+              "description": "Resource URI returned by resources/read",
+              "title": "Resource Uri",
+              "type": "string"
+            },
+            "resource_content": {
+              "description": "Text returned by resources/read",
+              "title": "Resource Content",
+              "type": "string"
+            },
+            "prompt_name": {
+              "description": "Prompt name retrieved via prompts/get",
+              "title": "Prompt Name",
+              "type": "string"
+            },
+            "prompt_messages": {
+              "description": "PromptMessage objects returned by prompts/get",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Prompt Messages",
+              "type": "array"
+            },
+            "resource_mime_type": {
+              "default": "text/markdown",
+              "description": "MIME type returned by resources/read",
+              "title": "Resource Mime Type",
+              "type": "string"
+            },
+            "prompt_arguments": {
+              "anyOf": [
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Arguments originally supplied to prompts/get",
+              "title": "Prompt Arguments"
+            }
+          },
+          "required": [
+            "service",
+            "tool_result",
+            "resource_uri",
+            "resource_content",
+            "prompt_name",
+            "prompt_messages"
+          ],
+          "type": "object",
+          "title": "compose_incident_briefArguments"
+        }
+      }
+    ],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          },
+          "samplingCallbackRegistered": true,
+          "samplingMode": "mock"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-composition",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tools_list_request",
+        "detail": {
+          "interactionId": "tools/list",
+          "method": "tools/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "tools_list_response",
+        "detail": {
+          "interactionId": "tools/list",
+          "method": "tools/list",
+          "tools": [
+            {
+              "name": "get_service_status",
+              "description": "Return the current status for a canonical Acme AI service name.",
+              "inputSchema": {
+                "properties": {
+                  "service": {
+                    "description": "Canonical service name: knowledge-platform, billing-api, identity-api",
+                    "title": "Service",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "service"
+                ],
+                "type": "object",
+                "title": "get_service_statusArguments"
+              }
+            },
+            {
+              "name": "compose_resource_brief",
+              "description": "Ground sampling in the supplied resources/read content.",
+              "inputSchema": {
+                "properties": {
+                  "uri": {
+                    "description": "Resource URI whose resources/read content is supplied",
+                    "title": "Uri",
+                    "type": "string"
+                  },
+                  "content": {
+                    "description": "Text returned by resources/read for this URI",
+                    "title": "Content",
+                    "type": "string"
+                  },
+                  "mime_type": {
+                    "default": "text/markdown",
+                    "description": "MIME type returned by resources/read",
+                    "title": "Mime Type",
+                    "type": "string"
+                  },
+                  "name": {
+                    "default": "",
+                    "description": "Resource name from resources/list, if known",
+                    "title": "Name",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "uri",
+                  "content"
+                ],
+                "type": "object",
+                "title": "compose_resource_briefArguments"
+              }
+            },
+            {
+              "name": "compose_from_prompt",
+              "description": "Request sampling from the supplied prompts/get messages.",
+              "inputSchema": {
+                "properties": {
+                  "prompt_name": {
+                    "description": "MCP prompt name retrieved via prompts/get",
+                    "title": "Prompt Name",
+                    "type": "string"
+                  },
+                  "messages": {
+                    "description": "PromptMessage objects returned by prompts/get",
+                    "items": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "title": "Messages",
+                    "type": "array"
+                  },
+                  "service_name": {
+                    "description": "Service name argument originally passed to prompts/get",
+                    "title": "Service Name",
+                    "type": "string"
+                  },
+                  "audience": {
+                    "default": "engineering",
+                    "description": "Audience argument originally passed to prompts/get",
+                    "title": "Audience",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "prompt_name",
+                  "messages",
+                  "service_name"
+                ],
+                "type": "object",
+                "title": "compose_from_promptArguments"
+              }
+            },
+            {
+              "name": "compose_incident_brief",
+              "description": "Compose sampling from prior tool, resource, and prompt MCP results.",
+              "inputSchema": {
+                "properties": {
+                  "service": {
+                    "description": "Affected Acme service name",
+                    "title": "Service",
+                    "type": "string"
+                  },
+                  "tool_result": {
+                    "additionalProperties": true,
+                    "description": "Structured result returned by get_service_status",
+                    "title": "Tool Result",
+                    "type": "object"
+                  },
+                  "resource_uri": {
+                    "description": "Resource URI returned by resources/read",
+                    "title": "Resource Uri",
+                    "type": "string"
+                  },
+                  "resource_content": {
+                    "description": "Text returned by resources/read",
+                    "title": "Resource Content",
+                    "type": "string"
+                  },
+                  "prompt_name": {
+                    "description": "Prompt name retrieved via prompts/get",
+                    "title": "Prompt Name",
+                    "type": "string"
+                  },
+                  "prompt_messages": {
+                    "description": "PromptMessage objects returned by prompts/get",
+                    "items": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "title": "Prompt Messages",
+                    "type": "array"
+                  },
+                  "resource_mime_type": {
+                    "default": "text/markdown",
+                    "description": "MIME type returned by resources/read",
+                    "title": "Resource Mime Type",
+                    "type": "string"
+                  },
+                  "prompt_arguments": {
+                    "anyOf": [
+                      {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Arguments originally supplied to prompts/get",
+                    "title": "Prompt Arguments"
+                  }
+                },
+                "required": [
+                  "service",
+                  "tool_result",
+                  "resource_uri",
+                  "resource_content",
+                  "prompt_name",
+                  "prompt_messages"
+                ],
+                "type": "object",
+                "title": "compose_incident_briefArguments"
+              }
+            }
+          ],
+          "toolCount": 4
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call_request",
+        "detail": {
+          "interactionId": "tools/call:get_service_status:1",
+          "method": "tools/call",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing-api"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "tool_call_response",
+        "detail": {
+          "interactionId": "tools/call:get_service_status:1",
+          "method": "tools/call",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing-api"
+          },
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"service\": {\n    \"service\": \"billing-api\",\n    \"status\": \"degraded\",\n    \"region\": \"us-east-1\",\n    \"latencyP99Ms\": 2400,\n    \"incident\": \"BILL-2048: invoice PDF generation delayed\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "service": {
+                "service": "billing-api",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 2400,
+                "incident": "BILL-2048: invoice PDF generation delayed"
+              }
+            }
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "resources_list_request",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resources_list_response",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "resource_read_request",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/billing-portal",
+          "method": "resources/read",
+          "uri": "acme://docs/billing-portal"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resource_read_response",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/billing-portal",
+          "method": "resources/read",
+          "uri": "acme://docs/billing-portal",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/billing-portal",
+              "text": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "prompts_list_request",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "prompts_list_response",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list",
+          "prompts": [
+            {
+              "name": "summarize-service",
+              "description": "Produce a concise service summary tailored to a target audience.",
+              "arguments": [
+                {
+                  "name": "service_name",
+                  "description": "Canonical Acme service name, e.g. knowledge-platform",
+                  "required": true
+                },
+                {
+                  "name": "audience",
+                  "description": "Target audience for the summary",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "draft-status-update",
+              "description": "Draft a stakeholder status update for a service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Service receiving the status update",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "description": "Current status label: operational, degraded, or outage",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "promptCount": 2
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "prompt_get_request",
+        "detail": {
+          "interactionId": "prompts/get:draft-status-update",
+          "method": "prompts/get",
+          "name": "draft-status-update",
+          "arguments": {
+            "service": "billing-api",
+            "status": "degraded"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "prompt_get_response",
+        "detail": {
+          "interactionId": "prompts/get:draft-status-update",
+          "method": "prompts/get",
+          "name": "draft-status-update",
+          "arguments": {
+            "service": "billing-api",
+            "status": "degraded"
+          },
+          "isError": false,
+          "description": "Draft a stakeholder status update for a service.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Draft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+              }
+            }
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call_request",
+        "detail": {
+          "interactionId": "tools/call:compose_incident_brief:6",
+          "method": "tools/call",
+          "name": "compose_incident_brief",
+          "arguments": {
+            "service": "billing-api",
+            "tool_result": {
+              "ok": true,
+              "service": {
+                "service": "billing-api",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 2400,
+                "incident": "BILL-2048: invoice PDF generation delayed"
+              }
+            },
+            "resource_uri": "acme://docs/billing-portal",
+            "resource_content": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
+            "resource_mime_type": "text/markdown",
+            "prompt_name": "draft-status-update",
+            "prompt_messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Draft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+                }
+              }
+            ],
+            "prompt_arguments": {
+              "service": "billing-api",
+              "status": "degraded"
+            }
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "sampling_request",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "params": {
+            "meta": {},
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Tool result from get_service_status:\n{\n  \"ok\": true,\n  \"service\": {\n    \"incident\": \"BILL-2048: invoice PDF generation delayed\",\n    \"latencyP99Ms\": 2400,\n    \"region\": \"us-east-1\",\n    \"service\": \"billing-api\",\n    \"status\": \"degraded\"\n  }\n}"
+                }
+              },
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Resource URI: acme://docs/billing-portal\nMIME type: text/markdown\nContent:\n# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n"
+                }
+              },
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Draft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+                }
+              }
+            ],
+            "system_prompt": "Use only the tool result, resource content, and prompt messages supplied. Do not invent facts.",
+            "max_tokens": 200
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "sampling_response",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "isError": false,
+          "result": {
+            "role": "assistant",
+            "content": {
+              "type": "text",
+              "text": "[mock] Client sampling callback completed this request.\nGrounded context (3 message(s)):\nTool result from get_service_status:\n{\n  \"ok\": true,\n  \"service\": {\n    \"incident\": \"BILL-2048: invoice PDF generation delayed\",\n    \"latencyP99Ms\": 2400,\n    \"region\": \"us-east-1\",\n    \"service\": \"billing-api\",\n    \"status\": \"degraded\"\n  }\n}\n---\nResource URI: acme://docs/billing-portal\nMIME type: text/markdown\nContent:\n# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n\n---\nDraft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+            },
+            "model": "mock"
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call_response",
+        "detail": {
+          "interactionId": "tools/call:compose_incident_brief:6",
+          "method": "tools/call",
+          "name": "compose_incident_brief",
+          "arguments": {
+            "service": "billing-api",
+            "tool_result": {
+              "ok": true,
+              "service": {
+                "service": "billing-api",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 2400,
+                "incident": "BILL-2048: invoice PDF generation delayed"
+              }
+            },
+            "resource_uri": "acme://docs/billing-portal",
+            "resource_content": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
+            "resource_mime_type": "text/markdown",
+            "prompt_name": "draft-status-update",
+            "prompt_messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Draft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+                }
+              }
+            ],
+            "prompt_arguments": {
+              "service": "billing-api",
+              "status": "degraded"
+            }
+          },
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"workflow\": \"tool_resource_prompt_composition\",\n  \"tool\": \"get_service_status\",\n  \"toolResult\": {\n    \"ok\": true,\n    \"service\": {\n      \"service\": \"billing-api\",\n      \"status\": \"degraded\",\n      \"region\": \"us-east-1\",\n      \"latencyP99Ms\": 2400,\n      \"incident\": \"BILL-2048: invoice PDF generation delayed\"\n    }\n  },\n  \"resourceUri\": \"acme://docs/billing-portal\",\n  \"promptName\": \"draft-status-update\",\n  \"promptArguments\": {\n    \"service\": \"billing-api\",\n    \"status\": \"degraded\"\n  },\n  \"sampling\": {\n    \"model\": \"mock\",\n    \"role\": \"assistant\",\n    \"text\": \"[mock] Client sampling callback completed this request.\\nGrounded context (3 message(s)):\\nTool result from get_service_status:\\n{\\n  \\\"ok\\\": true,\\n  \\\"service\\\": {\\n    \\\"incident\\\": \\\"BILL-2048: invoice PDF generation delayed\\\",\\n    \\\"latencyP99Ms\\\": 2400,\\n    \\\"region\\\": \\\"us-east-1\\\",\\n    \\\"service\\\": \\\"billing-api\\\",\\n    \\\"status\\\": \\\"degraded\\\"\\n  }\\n}\\n---\\nResource URI: acme://docs/billing-portal\\nMIME type: text/markdown\\nContent:\\n# Billing Portal\\n\\nService documentation for the Billing Portal.\\n\\nThe Billing Portal exposes invoices, usage meters, and plan changes for\\nAcme AI customers. This resource is static fixture content owned by the\\nMCP server.\\n\\n## Related services\\n\\n- billing-api\\n- identity-api\\n- knowledge-platform\\n\\n## Surfaces\\n\\n- Invoice list and PDF retrieval\\n- Usage meters by product\\n- Plan upgrade and downgrade requests\\n\\n## Operational notes\\n\\nAuthentication is handled by identity-api. Live availability is published\\non `acme://status/services`. Invoice PDF generation is the component most\\noften cited when billing-api is degraded.\\n\\n---\\nDraft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time.\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "workflow": "tool_resource_prompt_composition",
+              "tool": "get_service_status",
+              "toolResult": {
+                "ok": true,
+                "service": {
+                  "service": "billing-api",
+                  "status": "degraded",
+                  "region": "us-east-1",
+                  "latencyP99Ms": 2400,
+                  "incident": "BILL-2048: invoice PDF generation delayed"
+                }
+              },
+              "resourceUri": "acme://docs/billing-portal",
+              "promptName": "draft-status-update",
+              "promptArguments": {
+                "service": "billing-api",
+                "status": "degraded"
+              },
+              "sampling": {
+                "model": "mock",
+                "role": "assistant",
+                "text": "[mock] Client sampling callback completed this request.\nGrounded context (3 message(s)):\nTool result from get_service_status:\n{\n  \"ok\": true,\n  \"service\": {\n    \"incident\": \"BILL-2048: invoice PDF generation delayed\",\n    \"latencyP99Ms\": 2400,\n    \"region\": \"us-east-1\",\n    \"service\": \"billing-api\",\n    \"status\": \"degraded\"\n  }\n}\n---\nResource URI: acme://docs/billing-portal\nMIME type: text/markdown\nContent:\n# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n\n---\nDraft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+              }
+            }
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          },
+          "samplingCallbackRegistered": true,
+          "samplingMode": "mock"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-composition",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-tools_list_request",
+        "type": "protocol",
+        "title": "Tools list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "tools/list",
+          "method": "tools/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-tools_list_response",
+        "type": "protocol",
+        "title": "Tools list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "tools/list",
+          "method": "tools/list",
+          "tools": [
+            {
+              "name": "get_service_status",
+              "description": "Return the current status for a canonical Acme AI service name.",
+              "inputSchema": {
+                "properties": {
+                  "service": {
+                    "description": "Canonical service name: knowledge-platform, billing-api, identity-api",
+                    "title": "Service",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "service"
+                ],
+                "type": "object",
+                "title": "get_service_statusArguments"
+              }
+            },
+            {
+              "name": "compose_resource_brief",
+              "description": "Ground sampling in the supplied resources/read content.",
+              "inputSchema": {
+                "properties": {
+                  "uri": {
+                    "description": "Resource URI whose resources/read content is supplied",
+                    "title": "Uri",
+                    "type": "string"
+                  },
+                  "content": {
+                    "description": "Text returned by resources/read for this URI",
+                    "title": "Content",
+                    "type": "string"
+                  },
+                  "mime_type": {
+                    "default": "text/markdown",
+                    "description": "MIME type returned by resources/read",
+                    "title": "Mime Type",
+                    "type": "string"
+                  },
+                  "name": {
+                    "default": "",
+                    "description": "Resource name from resources/list, if known",
+                    "title": "Name",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "uri",
+                  "content"
+                ],
+                "type": "object",
+                "title": "compose_resource_briefArguments"
+              }
+            },
+            {
+              "name": "compose_from_prompt",
+              "description": "Request sampling from the supplied prompts/get messages.",
+              "inputSchema": {
+                "properties": {
+                  "prompt_name": {
+                    "description": "MCP prompt name retrieved via prompts/get",
+                    "title": "Prompt Name",
+                    "type": "string"
+                  },
+                  "messages": {
+                    "description": "PromptMessage objects returned by prompts/get",
+                    "items": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "title": "Messages",
+                    "type": "array"
+                  },
+                  "service_name": {
+                    "description": "Service name argument originally passed to prompts/get",
+                    "title": "Service Name",
+                    "type": "string"
+                  },
+                  "audience": {
+                    "default": "engineering",
+                    "description": "Audience argument originally passed to prompts/get",
+                    "title": "Audience",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "prompt_name",
+                  "messages",
+                  "service_name"
+                ],
+                "type": "object",
+                "title": "compose_from_promptArguments"
+              }
+            },
+            {
+              "name": "compose_incident_brief",
+              "description": "Compose sampling from prior tool, resource, and prompt MCP results.",
+              "inputSchema": {
+                "properties": {
+                  "service": {
+                    "description": "Affected Acme service name",
+                    "title": "Service",
+                    "type": "string"
+                  },
+                  "tool_result": {
+                    "additionalProperties": true,
+                    "description": "Structured result returned by get_service_status",
+                    "title": "Tool Result",
+                    "type": "object"
+                  },
+                  "resource_uri": {
+                    "description": "Resource URI returned by resources/read",
+                    "title": "Resource Uri",
+                    "type": "string"
+                  },
+                  "resource_content": {
+                    "description": "Text returned by resources/read",
+                    "title": "Resource Content",
+                    "type": "string"
+                  },
+                  "prompt_name": {
+                    "description": "Prompt name retrieved via prompts/get",
+                    "title": "Prompt Name",
+                    "type": "string"
+                  },
+                  "prompt_messages": {
+                    "description": "PromptMessage objects returned by prompts/get",
+                    "items": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "title": "Prompt Messages",
+                    "type": "array"
+                  },
+                  "resource_mime_type": {
+                    "default": "text/markdown",
+                    "description": "MIME type returned by resources/read",
+                    "title": "Resource Mime Type",
+                    "type": "string"
+                  },
+                  "prompt_arguments": {
+                    "anyOf": [
+                      {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null,
+                    "description": "Arguments originally supplied to prompts/get",
+                    "title": "Prompt Arguments"
+                  }
+                },
+                "required": [
+                  "service",
+                  "tool_result",
+                  "resource_uri",
+                  "resource_content",
+                  "prompt_name",
+                  "prompt_messages"
+                ],
+                "type": "object",
+                "title": "compose_incident_briefArguments"
+              }
+            }
+          ],
+          "toolCount": 4
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-tool_call_request",
+        "type": "protocol",
+        "title": "Tool call request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "tools/call:get_service_status:1",
+          "method": "tools/call",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing-api"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-tool_call_response",
+        "type": "protocol",
+        "title": "Tool call response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "tools/call:get_service_status:1",
+          "method": "tools/call",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing-api"
+          },
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"service\": {\n    \"service\": \"billing-api\",\n    \"status\": \"degraded\",\n    \"region\": \"us-east-1\",\n    \"latencyP99Ms\": 2400,\n    \"incident\": \"BILL-2048: invoice PDF generation delayed\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "service": {
+                "service": "billing-api",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 2400,
+                "incident": "BILL-2048: invoice PDF generation delayed"
+              }
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-resources_list_request",
+        "type": "protocol",
+        "title": "Resources list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-resources_list_response",
+        "type": "protocol",
+        "title": "Resources list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-resource_read_request",
+        "type": "protocol",
+        "title": "Resource read request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/billing-portal",
+          "method": "resources/read",
+          "uri": "acme://docs/billing-portal"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-resource_read_response",
+        "type": "protocol",
+        "title": "Resource read response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/billing-portal",
+          "method": "resources/read",
+          "uri": "acme://docs/billing-portal",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/billing-portal",
+              "text": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-prompts_list_request",
+        "type": "protocol",
+        "title": "Prompts list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-prompts_list_response",
+        "type": "protocol",
+        "title": "Prompts list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/list",
+          "method": "prompts/list",
+          "prompts": [
+            {
+              "name": "summarize-service",
+              "description": "Produce a concise service summary tailored to a target audience.",
+              "arguments": [
+                {
+                  "name": "service_name",
+                  "description": "Canonical Acme service name, e.g. knowledge-platform",
+                  "required": true
+                },
+                {
+                  "name": "audience",
+                  "description": "Target audience for the summary",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "draft-status-update",
+              "description": "Draft a stakeholder status update for a service.",
+              "arguments": [
+                {
+                  "name": "service",
+                  "description": "Service receiving the status update",
+                  "required": true
+                },
+                {
+                  "name": "status",
+                  "description": "Current status label: operational, degraded, or outage",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "promptCount": 2
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-prompt_get_request",
+        "type": "protocol",
+        "title": "Prompt get request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/get:draft-status-update",
+          "method": "prompts/get",
+          "name": "draft-status-update",
+          "arguments": {
+            "service": "billing-api",
+            "status": "degraded"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-prompt_get_response",
+        "type": "protocol",
+        "title": "Prompt get response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "prompts/get:draft-status-update",
+          "method": "prompts/get",
+          "name": "draft-status-update",
+          "arguments": {
+            "service": "billing-api",
+            "status": "degraded"
+          },
+          "isError": false,
+          "description": "Draft a stakeholder status update for a service.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Draft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+              }
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-15-tool_call_request",
+        "type": "protocol",
+        "title": "Tool call request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "tools/call:compose_incident_brief:6",
+          "method": "tools/call",
+          "name": "compose_incident_brief",
+          "arguments": {
+            "service": "billing-api",
+            "tool_result": {
+              "ok": true,
+              "service": {
+                "service": "billing-api",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 2400,
+                "incident": "BILL-2048: invoice PDF generation delayed"
+              }
+            },
+            "resource_uri": "acme://docs/billing-portal",
+            "resource_content": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
+            "resource_mime_type": "text/markdown",
+            "prompt_name": "draft-status-update",
+            "prompt_messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Draft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+                }
+              }
+            ],
+            "prompt_arguments": {
+              "service": "billing-api",
+              "status": "degraded"
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-16-sampling_request",
+        "type": "sampling",
+        "title": "Sampling request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "params": {
+            "meta": {},
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Tool result from get_service_status:\n{\n  \"ok\": true,\n  \"service\": {\n    \"incident\": \"BILL-2048: invoice PDF generation delayed\",\n    \"latencyP99Ms\": 2400,\n    \"region\": \"us-east-1\",\n    \"service\": \"billing-api\",\n    \"status\": \"degraded\"\n  }\n}"
+                }
+              },
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Resource URI: acme://docs/billing-portal\nMIME type: text/markdown\nContent:\n# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n"
+                }
+              },
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Draft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+                }
+              }
+            ],
+            "system_prompt": "Use only the tool result, resource content, and prompt messages supplied. Do not invent facts.",
+            "max_tokens": 200
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-17-sampling_response",
+        "type": "sampling",
+        "title": "Sampling response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "isError": false,
+          "result": {
+            "role": "assistant",
+            "content": {
+              "type": "text",
+              "text": "[mock] Client sampling callback completed this request.\nGrounded context (3 message(s)):\nTool result from get_service_status:\n{\n  \"ok\": true,\n  \"service\": {\n    \"incident\": \"BILL-2048: invoice PDF generation delayed\",\n    \"latencyP99Ms\": 2400,\n    \"region\": \"us-east-1\",\n    \"service\": \"billing-api\",\n    \"status\": \"degraded\"\n  }\n}\n---\nResource URI: acme://docs/billing-portal\nMIME type: text/markdown\nContent:\n# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n\n---\nDraft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+            },
+            "model": "mock"
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-18-tool_call_response",
+        "type": "protocol",
+        "title": "Tool call response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "tools/call:compose_incident_brief:6",
+          "method": "tools/call",
+          "name": "compose_incident_brief",
+          "arguments": {
+            "service": "billing-api",
+            "tool_result": {
+              "ok": true,
+              "service": {
+                "service": "billing-api",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 2400,
+                "incident": "BILL-2048: invoice PDF generation delayed"
+              }
+            },
+            "resource_uri": "acme://docs/billing-portal",
+            "resource_content": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
+            "resource_mime_type": "text/markdown",
+            "prompt_name": "draft-status-update",
+            "prompt_messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Draft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+                }
+              }
+            ],
+            "prompt_arguments": {
+              "service": "billing-api",
+              "status": "degraded"
+            }
+          },
+          "isError": false,
+          "result": {
+            "isError": false,
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"ok\": true,\n  \"workflow\": \"tool_resource_prompt_composition\",\n  \"tool\": \"get_service_status\",\n  \"toolResult\": {\n    \"ok\": true,\n    \"service\": {\n      \"service\": \"billing-api\",\n      \"status\": \"degraded\",\n      \"region\": \"us-east-1\",\n      \"latencyP99Ms\": 2400,\n      \"incident\": \"BILL-2048: invoice PDF generation delayed\"\n    }\n  },\n  \"resourceUri\": \"acme://docs/billing-portal\",\n  \"promptName\": \"draft-status-update\",\n  \"promptArguments\": {\n    \"service\": \"billing-api\",\n    \"status\": \"degraded\"\n  },\n  \"sampling\": {\n    \"model\": \"mock\",\n    \"role\": \"assistant\",\n    \"text\": \"[mock] Client sampling callback completed this request.\\nGrounded context (3 message(s)):\\nTool result from get_service_status:\\n{\\n  \\\"ok\\\": true,\\n  \\\"service\\\": {\\n    \\\"incident\\\": \\\"BILL-2048: invoice PDF generation delayed\\\",\\n    \\\"latencyP99Ms\\\": 2400,\\n    \\\"region\\\": \\\"us-east-1\\\",\\n    \\\"service\\\": \\\"billing-api\\\",\\n    \\\"status\\\": \\\"degraded\\\"\\n  }\\n}\\n---\\nResource URI: acme://docs/billing-portal\\nMIME type: text/markdown\\nContent:\\n# Billing Portal\\n\\nService documentation for the Billing Portal.\\n\\nThe Billing Portal exposes invoices, usage meters, and plan changes for\\nAcme AI customers. This resource is static fixture content owned by the\\nMCP server.\\n\\n## Related services\\n\\n- billing-api\\n- identity-api\\n- knowledge-platform\\n\\n## Surfaces\\n\\n- Invoice list and PDF retrieval\\n- Usage meters by product\\n- Plan upgrade and downgrade requests\\n\\n## Operational notes\\n\\nAuthentication is handled by identity-api. Live availability is published\\non `acme://status/services`. Invoice PDF generation is the component most\\noften cited when billing-api is degraded.\\n\\n---\\nDraft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time.\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "ok": true,
+              "workflow": "tool_resource_prompt_composition",
+              "tool": "get_service_status",
+              "toolResult": {
+                "ok": true,
+                "service": {
+                  "service": "billing-api",
+                  "status": "degraded",
+                  "region": "us-east-1",
+                  "latencyP99Ms": 2400,
+                  "incident": "BILL-2048: invoice PDF generation delayed"
+                }
+              },
+              "resourceUri": "acme://docs/billing-portal",
+              "promptName": "draft-status-update",
+              "promptArguments": {
+                "service": "billing-api",
+                "status": "degraded"
+              },
+              "sampling": {
+                "model": "mock",
+                "role": "assistant",
+                "text": "[mock] Client sampling callback completed this request.\nGrounded context (3 message(s)):\nTool result from get_service_status:\n{\n  \"ok\": true,\n  \"service\": {\n    \"incident\": \"BILL-2048: invoice PDF generation delayed\",\n    \"latencyP99Ms\": 2400,\n    \"region\": \"us-east-1\",\n    \"service\": \"billing-api\",\n    \"status\": \"degraded\"\n  }\n}\n---\nResource URI: acme://docs/billing-portal\nMIME type: text/markdown\nContent:\n# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n\n---\nDraft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+              }
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-19-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "session_closed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "reads": [
+        {
+          "requestedUri": "acme://docs/billing-portal",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/billing-portal",
+              "text": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        }
+      ],
+      "gets": [
+        {
+          "requestedPrompt": "draft-status-update",
+          "arguments": {
+            "service": "billing-api",
+            "status": "degraded"
+          },
+          "isError": false,
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "Draft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+              }
+            }
+          ]
+        }
+      ],
+      "invocations": [
+        {
+          "tool": "get_service_status",
+          "arguments": {
+            "service": "billing-api"
+          },
+          "isError": false,
+          "result": {
+            "ok": true,
+            "service": {
+              "service": "billing-api",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 2400,
+              "incident": "BILL-2048: invoice PDF generation delayed"
+            }
+          }
+        },
+        {
+          "tool": "compose_incident_brief",
+          "arguments": {
+            "service": "billing-api",
+            "tool_result": {
+              "ok": true,
+              "service": {
+                "service": "billing-api",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 2400,
+                "incident": "BILL-2048: invoice PDF generation delayed"
+              }
+            },
+            "resource_uri": "acme://docs/billing-portal",
+            "resource_content": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
+            "resource_mime_type": "text/markdown",
+            "prompt_name": "draft-status-update",
+            "prompt_messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Draft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+                }
+              }
+            ],
+            "prompt_arguments": {
+              "service": "billing-api",
+              "status": "degraded"
+            }
+          },
+          "isError": false,
+          "result": {
+            "ok": true,
+            "workflow": "tool_resource_prompt_composition",
+            "tool": "get_service_status",
+            "toolResult": {
+              "ok": true,
+              "service": {
+                "service": "billing-api",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 2400,
+                "incident": "BILL-2048: invoice PDF generation delayed"
+              }
+            },
+            "resourceUri": "acme://docs/billing-portal",
+            "promptName": "draft-status-update",
+            "promptArguments": {
+              "service": "billing-api",
+              "status": "degraded"
+            },
+            "sampling": {
+              "model": "mock",
+              "role": "assistant",
+              "text": "[mock] Client sampling callback completed this request.\nGrounded context (3 message(s)):\nTool result from get_service_status:\n{\n  \"ok\": true,\n  \"service\": {\n    \"incident\": \"BILL-2048: invoice PDF generation delayed\",\n    \"latencyP99Ms\": 2400,\n    \"region\": \"us-east-1\",\n    \"service\": \"billing-api\",\n    \"status\": \"degraded\"\n  }\n}\n---\nResource URI: acme://docs/billing-portal\nMIME type: text/markdown\nContent:\n# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n\n---\nDraft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+            }
+          }
+        }
+      ],
+      "sampling": [
+        {
+          "isError": false,
+          "result": {
+            "role": "assistant",
+            "content": {
+              "type": "text",
+              "text": "[mock] Client sampling callback completed this request.\nGrounded context (3 message(s)):\nTool result from get_service_status:\n{\n  \"ok\": true,\n  \"service\": {\n    \"incident\": \"BILL-2048: invoice PDF generation delayed\",\n    \"latencyP99Ms\": 2400,\n    \"region\": \"us-east-1\",\n    \"service\": \"billing-api\",\n    \"status\": \"degraded\"\n  }\n}\n---\nResource URI: acme://docs/billing-portal\nMIME type: text/markdown\nContent:\n# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n\n---\nDraft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+            },
+            "model": "mock"
+          }
+        }
+      ],
+      "discoveredTools": [
+        "get_service_status",
+        "compose_resource_brief",
+        "compose_from_prompt",
+        "compose_incident_brief"
+      ],
+      "discoveredResources": [
+        "acme://docs/knowledge-platform",
+        "acme://docs/billing-portal",
+        "acme://status/services"
+      ],
+      "discoveredPrompts": [
+        "summarize-service",
+        "draft-status-update"
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 4,
+      "initializeMs": 0,
+      "discoveryMs": 0,
+      "resourceReadMs": 0,
+      "promptGetMs": 0,
+      "toolCallMs": 0,
+      "samplingMs": 0,
+      "resourcesDiscovered": 3,
+      "resourcesRead": 1,
+      "promptsDiscovered": 2,
+      "promptsRequested": 1,
+      "toolsDiscovered": 4,
+      "toolCalls": 2,
+      "successfulToolCalls": 2,
+      "failedToolCalls": 0,
+      "samplingRequests": 1,
+      "successfulSamplings": 1,
+      "failedSamplings": 0,
+      "modelTurns": 1,
+      "terminationReason": "session_closed",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "interactionId": "initialize",
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            },
+            "samplingCallbackRegistered": true,
+            "samplingMode": "mock"
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-composition",
+            "version": ""
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "tools/list"
+        },
+        {
+          "phase": "TOOLS",
+          "toolCount": 4,
+          "names": [
+            "get_service_status",
+            "compose_resource_brief",
+            "compose_from_prompt",
+            "compose_incident_brief"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "TOOL",
+          "name": "get_service_status",
+          "arguments": {
+            "service": "billing-api"
+          }
+        },
+        {
+          "phase": "TOOL_RESULT",
+          "name": "get_service_status",
+          "isError": false,
+          "latencyMs": 0
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "resources/list"
+        },
+        {
+          "phase": "RESOURCES",
+          "resourceCount": 3,
+          "uris": [
+            "acme://docs/knowledge-platform",
+            "acme://docs/billing-portal",
+            "acme://status/services"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "RESOURCE",
+          "uri": "acme://docs/billing-portal"
+        },
+        {
+          "phase": "CONTEXT",
+          "uri": "acme://docs/billing-portal",
+          "isError": false,
+          "latencyMs": 0
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "prompts/list"
+        },
+        {
+          "phase": "PROMPTS",
+          "promptCount": 2,
+          "names": [
+            "summarize-service",
+            "draft-status-update"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "PROMPT",
+          "name": "draft-status-update"
+        },
+        {
+          "phase": "ARGUMENTS",
+          "name": "draft-status-update",
+          "arguments": {
+            "service": "billing-api",
+            "status": "degraded"
+          }
+        },
+        {
+          "phase": "MESSAGES",
+          "name": "draft-status-update",
+          "isError": false,
+          "latencyMs": 0
+        },
+        {
+          "phase": "TOOL",
+          "name": "compose_incident_brief",
+          "arguments": {
+            "service": "billing-api",
+            "tool_result": {
+              "ok": true,
+              "service": {
+                "service": "billing-api",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 2400,
+                "incident": "BILL-2048: invoice PDF generation delayed"
+              }
+            },
+            "resource_uri": "acme://docs/billing-portal",
+            "resource_content": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
+            "resource_mime_type": "text/markdown",
+            "prompt_name": "draft-status-update",
+            "prompt_messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Draft a brief stakeholder status update for billing-api. Current status: degraded. Include impact, mitigation steps taken, and the next checkpoint time."
+                }
+              }
+            ],
+            "prompt_arguments": {
+              "service": "billing-api",
+              "status": "degraded"
+            }
+          }
+        },
+        {
+          "phase": "SAMPLING",
+          "method": "sampling/createMessage",
+          "boundary": "mcp-client-sampling-callback"
+        },
+        {
+          "phase": "RESULT",
+          "isError": false,
+          "boundary": "mcp-client-sampling-callback",
+          "latencyMs": 0,
+          "model": "mock"
+        },
+        {
+          "phase": "TOOL_RESULT",
+          "name": "compose_incident_brief",
+          "isError": false,
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "session_closed"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 TOOL \u2192 RESOURCE \u2192 PROMPT \u2192 SAMPLING \u2192 RESULT"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "composition",
+      "sampling"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/04-composition"
+    }
+  },
+  {
+    "labId": "mcp-composition",
+    "traceId": "sampling-failure",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-02T05:31:03Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "not_used",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "SAMPLING_FAILURE",
+    "selectionNote": "Measured case: the server requests sampling after a resource-grounded composition tool call. The client sampling callback returns a protocol ErrorData rejection. No model output is produced.",
+    "architecture": {
+      "layout": "mcp-composition",
+      "stages": [
+        "initialize",
+        "mcp-primitives",
+        "sampling-request",
+        "client-model-boundary",
+        "sampling-response",
+        "application-result"
+      ],
+      "samplingMode": "reject"
+    },
+    "input": {
+      "case": "sampling-failure",
+      "config": {
+        "transport": "in-process InMemoryTransport with JSON-RPC framing (legacy initialize handshake)",
+        "protocolVersion": "2025-11-25",
+        "clientName": "dataaihub-cookbook-mcp-client",
+        "clientVersion": "0.1.0",
+        "mcpClientMode": "legacy",
+        "samplingMode": "reject"
+      }
+    },
+    "resources": [
+      {
+        "uri": "acme://docs/knowledge-platform",
+        "name": "knowledge-platform",
+        "description": "Service documentation for the Knowledge Platform.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://docs/billing-portal",
+        "name": "billing-portal",
+        "description": "Service documentation for the Billing Portal.",
+        "mimeType": "text/markdown"
+      },
+      {
+        "uri": "acme://status/services",
+        "name": "service-status",
+        "description": "Service statuses for the Acme AI environment.",
+        "mimeType": "application/json"
+      }
+    ],
+    "prompts": [],
+    "tools": [],
+    "sequence": [
+      {
+        "kind": "initialize_request",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          },
+          "samplingCallbackRegistered": true,
+          "samplingMode": "reject"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "initialize_response",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-composition",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "resources_list_request",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resources_list_response",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "resource_read_request",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "resource_read_response",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call_request",
+        "detail": {
+          "interactionId": "tools/call:compose_resource_brief:2",
+          "method": "tools/call",
+          "name": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "sampling_request",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "params": {
+            "meta": {},
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Resource URI: acme://docs/knowledge-platform\nName: knowledge-platform\nMIME type: text/markdown\nContent:\n# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n\n\nWrite a two-sentence operational brief using only this resource."
+                }
+              }
+            ],
+            "system_prompt": "Use only the supplied MCP resource content. Do not invent facts.",
+            "max_tokens": 200
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "sampling_response",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "isError": true,
+          "error": {
+            "code": -32600,
+            "message": "Sampling rejected by client"
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "tool_call_response",
+        "detail": {
+          "interactionId": "tools/call:compose_resource_brief:2",
+          "method": "tools/call",
+          "name": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          },
+          "isError": true,
+          "error": {
+            "code": -32600,
+            "message": "Sampling rejected by client"
+          },
+          "exceptionType": "MCPError"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "sampling_rejected"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-initialize_request",
+        "type": "protocol",
+        "title": "Initialize request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "clientInfo": {
+            "name": "dataaihub-cookbook-mcp-client",
+            "version": "0.1.0"
+          },
+          "samplingCallbackRegistered": true,
+          "samplingMode": "reject"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-initialize_response",
+        "type": "protocol",
+        "title": "Initialize response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "initialize",
+          "method": "initialize",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-composition",
+            "version": ""
+          },
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "list_changed": false
+            },
+            "resources": {
+              "subscribe": false,
+              "list_changed": false
+            },
+            "tools": {
+              "list_changed": false
+            }
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-resources_list_request",
+        "type": "protocol",
+        "title": "Resources list request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-resources_list_response",
+        "type": "protocol",
+        "title": "Resources list response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/list",
+          "method": "resources/list",
+          "resources": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "name": "knowledge-platform",
+              "description": "Service documentation for the Knowledge Platform.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://docs/billing-portal",
+              "name": "billing-portal",
+              "description": "Service documentation for the Billing Portal.",
+              "mimeType": "text/markdown"
+            },
+            {
+              "uri": "acme://status/services",
+              "name": "service-status",
+              "description": "Service statuses for the Acme AI environment.",
+              "mimeType": "application/json"
+            }
+          ],
+          "resourceCount": 3
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-resource_read_request",
+        "type": "protocol",
+        "title": "Resource read request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-resource_read_response",
+        "type": "protocol",
+        "title": "Resource read response",
+        "status": "ok",
+        "detail": {
+          "interactionId": "resources/read:acme://docs/knowledge-platform",
+          "method": "resources/read",
+          "uri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-tool_call_request",
+        "type": "protocol",
+        "title": "Tool call request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "tools/call:compose_resource_brief:2",
+          "method": "tools/call",
+          "name": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-sampling_request",
+        "type": "sampling",
+        "title": "Sampling request",
+        "status": "ok",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "params": {
+            "meta": {},
+            "messages": [
+              {
+                "role": "user",
+                "content": {
+                  "type": "text",
+                  "text": "Resource URI: acme://docs/knowledge-platform\nName: knowledge-platform\nMIME type: text/markdown\nContent:\n# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n\n\nWrite a two-sentence operational brief using only this resource."
+                }
+              }
+            ],
+            "system_prompt": "Use only the supplied MCP resource content. Do not invent facts.",
+            "max_tokens": 200
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-sampling_response",
+        "type": "error",
+        "title": "Sampling response",
+        "status": "error",
+        "detail": {
+          "interactionId": "sampling/createMessage:1",
+          "method": "sampling/createMessage",
+          "isError": true,
+          "error": {
+            "code": -32600,
+            "message": "Sampling rejected by client"
+          },
+          "boundary": "mcp-client-sampling-callback"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-tool_call_response",
+        "type": "error",
+        "title": "Tool call response",
+        "status": "error",
+        "detail": {
+          "interactionId": "tools/call:compose_resource_brief:2",
+          "method": "tools/call",
+          "name": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          },
+          "isError": true,
+          "error": {
+            "code": -32600,
+            "message": "Sampling rejected by client"
+          },
+          "exceptionType": "MCPError"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-termination",
+        "type": "protocol",
+        "title": "Session termination",
+        "status": "ok",
+        "detail": {
+          "reason": "sampling_rejected"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "output": {
+      "reads": [
+        {
+          "requestedUri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "contents": [
+            {
+              "uri": "acme://docs/knowledge-platform",
+              "text": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+              "mimeType": "text/markdown"
+            }
+          ]
+        }
+      ],
+      "gets": [],
+      "invocations": [
+        {
+          "tool": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          },
+          "isError": true,
+          "error": {
+            "code": -32600,
+            "message": "Sampling rejected by client"
+          }
+        }
+      ],
+      "sampling": [
+        {
+          "isError": true,
+          "error": {
+            "code": -32600,
+            "message": "Sampling rejected by client"
+          }
+        }
+      ],
+      "discoveredResources": [
+        "acme://docs/knowledge-platform",
+        "acme://docs/billing-portal",
+        "acme://status/services"
+      ]
+    },
+    "errors": [
+      {
+        "stage": "sampling/createMessage",
+        "isError": true,
+        "detail": {
+          "code": -32600,
+          "message": "Sampling rejected by client"
+        }
+      },
+      {
+        "stage": "tools/call",
+        "tool": "compose_resource_brief",
+        "isError": true,
+        "detail": {
+          "interactionId": "tools/call:compose_resource_brief:2",
+          "method": "tools/call",
+          "name": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          },
+          "isError": true,
+          "error": {
+            "code": -32600,
+            "message": "Sampling rejected by client"
+          },
+          "exceptionType": "MCPError"
+        }
+      }
+    ],
+    "metrics": {
+      "totalMs": 3,
+      "initializeMs": 0,
+      "discoveryMs": 0,
+      "resourceReadMs": 0,
+      "promptGetMs": 0,
+      "toolCallMs": 0,
+      "samplingMs": 0,
+      "resourcesDiscovered": 3,
+      "resourcesRead": 1,
+      "promptsDiscovered": 0,
+      "promptsRequested": 0,
+      "toolsDiscovered": 0,
+      "toolCalls": 1,
+      "successfulToolCalls": 0,
+      "failedToolCalls": 1,
+      "samplingRequests": 1,
+      "successfulSamplings": 0,
+      "failedSamplings": 1,
+      "modelTurns": 0,
+      "terminationReason": "sampling_rejected",
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable MCP protocol events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "INITIALIZE",
+          "detail": {
+            "interactionId": "initialize",
+            "method": "initialize",
+            "clientInfo": {
+              "name": "dataaihub-cookbook-mcp-client",
+              "version": "0.1.0"
+            },
+            "samplingCallbackRegistered": true,
+            "samplingMode": "reject"
+          }
+        },
+        {
+          "phase": "INITIALIZED",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "dataaihub-cookbook-composition",
+            "version": ""
+          },
+          "latencyMs": 0
+        },
+        {
+          "phase": "DISCOVER",
+          "method": "resources/list"
+        },
+        {
+          "phase": "RESOURCES",
+          "resourceCount": 3,
+          "uris": [
+            "acme://docs/knowledge-platform",
+            "acme://docs/billing-portal",
+            "acme://status/services"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "RESOURCE",
+          "uri": "acme://docs/knowledge-platform"
+        },
+        {
+          "phase": "CONTEXT",
+          "uri": "acme://docs/knowledge-platform",
+          "isError": false,
+          "latencyMs": 0
+        },
+        {
+          "phase": "TOOL",
+          "name": "compose_resource_brief",
+          "arguments": {
+            "uri": "acme://docs/knowledge-platform",
+            "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform"
+          }
+        },
+        {
+          "phase": "SAMPLING",
+          "method": "sampling/createMessage",
+          "boundary": "mcp-client-sampling-callback"
+        },
+        {
+          "phase": "REJECTED",
+          "isError": true,
+          "boundary": "mcp-client-sampling-callback",
+          "latencyMs": 0,
+          "error": {
+            "code": -32600,
+            "message": "Sampling rejected by client"
+          }
+        },
+        {
+          "phase": "REJECTED",
+          "name": "compose_resource_brief",
+          "isError": true,
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "sampling_rejected"
+          }
+        }
+      ],
+      "signatureFlow": "INITIALIZE \u2192 RESOURCE \u2192 SAMPLING \u2192 REJECTED"
+    },
+    "relatedEntities": [
+      "mcp"
+    ],
+    "relatedContent": [
+      "mcp",
+      "composition",
+      "sampling"
+    ],
+    "cookbook": {
+      "path": "examples/mcp/04-composition"
+    }
+  }
+]

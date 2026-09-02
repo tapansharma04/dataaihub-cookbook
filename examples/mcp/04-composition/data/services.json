@@ -1,0 +1,23 @@
+{
+  "knowledge-platform": {
+    "service": "knowledge-platform",
+    "status": "operational",
+    "region": "us-east-1",
+    "latencyP99Ms": 80,
+    "incident": null
+  },
+  "billing-api": {
+    "service": "billing-api",
+    "status": "degraded",
+    "region": "us-east-1",
+    "latencyP99Ms": 2400,
+    "incident": "BILL-2048: invoice PDF generation delayed"
+  },
+  "identity-api": {
+    "service": "identity-api",
+    "status": "operational",
+    "region": "us-west-2",
+    "latencyP99Ms": 45,
+    "incident": null
+  }
+}
