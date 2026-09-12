@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import time
+from pathlib import Path
 from typing import Any
 
 from agent.cases import MeasuredCase
 from agent.schemas import CollaborationRunResult, SequenceEvent
-from config import EXAMPLE_ID, Settings
+from config import EXAMPLE_ID, ROOT, Settings
 
 # Presentation compression: omit the coordinator's AGGREGATE_DECISION.
 # AGENT is the specialist result (after handle), not agent_selected.
@@ -31,6 +32,14 @@ SIGNATURE_FLOWS = {
         "TASK → DELEGATE → AGENT → SKIP → AGGREGATE → TERMINATION"
     ),
 }
+
+
+def _portable_data_dir(settings: Settings) -> str:
+    data_dir = Path(settings.data_dir).resolve()
+    try:
+        return str(data_dir.relative_to(ROOT.resolve()))
+    except ValueError:
+        return data_dir.name
 
 
 def build_signature_view(sequence: list[SequenceEvent]) -> list[dict[str, Any]]:
@@ -226,7 +235,7 @@ def build_trace(
                 "modelDriver": result.model_driver,
                 "synthesizerModel": result.model,
                 "clientName": "dataaihub-cookbook-multi-agent",
-                "dataDir": str(settings.data_dir),
+                "dataDir": _portable_data_dir(settings),
             },
         },
         "sequence": sequence_payload,

@@ -129,6 +129,9 @@ def _assert_trace_contract(trace: dict[str, Any]) -> None:
     assert kinds[0] == "task_created"
     assert kinds[-1] == "termination"
     assert "collaborationScore" not in trace["metrics"]
+    data_dir = trace["input"]["config"]["dataDir"]
+    assert data_dir == "data"
+    assert not Path(data_dir).is_absolute()
 
 
 def test_committed_lab_traces_schema():

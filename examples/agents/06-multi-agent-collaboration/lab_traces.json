@@ -3,7 +3,7 @@
     "labId": "multi-agent-collaboration",
     "traceId": "independent-status-and-docs",
     "executionMode": "guided",
-    "recordedAt": "2026-09-12T14:37:51Z",
+    "recordedAt": "2026-09-12T17:54:00Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "mock",
@@ -31,7 +31,7 @@
         "modelDriver": "mock",
         "synthesizerModel": "mock",
         "clientName": "dataaihub-cookbook-multi-agent",
-        "dataDir": "/Users/tapansharma/Code/dataaihub-cookbook/examples/agents/06-multi-agent-collaboration/data"
+        "dataDir": "data"
       }
     },
     "sequence": [
@@ -693,7 +693,7 @@
     "labId": "multi-agent-collaboration",
     "traceId": "sequential-status-then-analysis",
     "executionMode": "guided",
-    "recordedAt": "2026-09-12T14:37:51Z",
+    "recordedAt": "2026-09-12T17:54:00Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "mock",
@@ -721,7 +721,7 @@
         "modelDriver": "mock",
         "synthesizerModel": "mock",
         "clientName": "dataaihub-cookbook-multi-agent",
-        "dataDir": "/Users/tapansharma/Code/dataaihub-cookbook/examples/agents/06-multi-agent-collaboration/data"
+        "dataDir": "data"
       }
     },
     "sequence": [
@@ -1454,7 +1454,7 @@
     "labId": "multi-agent-collaboration",
     "traceId": "docs-agent-failure",
     "executionMode": "guided",
-    "recordedAt": "2026-09-12T14:37:51Z",
+    "recordedAt": "2026-09-12T17:54:00Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "mock",
@@ -1482,7 +1482,7 @@
         "modelDriver": "mock",
         "synthesizerModel": "mock",
         "clientName": "dataaihub-cookbook-multi-agent",
-        "dataDir": "/Users/tapansharma/Code/dataaihub-cookbook/examples/agents/06-multi-agent-collaboration/data"
+        "dataDir": "data"
       }
     },
     "sequence": [
@@ -2198,7 +2198,7 @@
     "labId": "multi-agent-collaboration",
     "traceId": "operational-short-circuit",
     "executionMode": "guided",
-    "recordedAt": "2026-09-12T14:37:51Z",
+    "recordedAt": "2026-09-12T17:54:00Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "mock",
@@ -2226,7 +2226,7 @@
         "modelDriver": "mock",
         "synthesizerModel": "mock",
         "clientName": "dataaihub-cookbook-multi-agent",
-        "dataDir": "/Users/tapansharma/Code/dataaihub-cookbook/examples/agents/06-multi-agent-collaboration/data"
+        "dataDir": "data"
       }
     },
     "sequence": [
