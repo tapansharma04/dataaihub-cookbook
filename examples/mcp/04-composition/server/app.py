@@ -98,6 +98,16 @@ def _sampling_payload(result: Any) -> dict[str, Any]:
     return payload
 
 
+def _missing_composition_payload(
+    workflow: str, code: str, **extra: Any
+) -> dict[str, Any]:
+    return {
+        "ok": False,
+        "workflow": workflow,
+        "error": {"code": code, **extra},
+    }
+
+
 def build_server(data_dir: Path) -> MCPServer:
     """Create an MCP server wired to Acme AI fixtures and composition tools."""
     store = FixtureStore(data_dir)
@@ -198,6 +208,12 @@ def build_server(data_dir: Path) -> MCPServer:
         ] = "",
     ) -> dict:
         """Ground sampling in the supplied resources/read content."""
+        if not content.strip():
+            return _missing_composition_payload(
+                "resource_to_sampling",
+                "missing_resource_content",
+                resourceUri=uri,
+            )
         user_text = (
             f"Resource URI: {uri}\n"
             f"Name: {name or uri}\n"
@@ -305,6 +321,24 @@ def build_server(data_dir: Path) -> MCPServer:
         ] = None,
     ) -> dict:
         """Compose sampling from prior tool, resource, and prompt MCP results."""
+        if not tool_result:
+            return _missing_composition_payload(
+                "tool_resource_prompt_composition",
+                "missing_tool_result",
+                tool=TOOL_GET_SERVICE_STATUS,
+            )
+        if not resource_content.strip():
+            return _missing_composition_payload(
+                "tool_resource_prompt_composition",
+                "missing_resource_content",
+                resourceUri=resource_uri,
+            )
+        if not prompt_messages:
+            return _missing_composition_payload(
+                "tool_resource_prompt_composition",
+                "missing_prompt_messages",
+                promptName=prompt_name,
+            )
         prompt_sampling = _sampling_messages_from_prompt_dump(prompt_messages)
         sampling_messages = [
             SamplingMessage(

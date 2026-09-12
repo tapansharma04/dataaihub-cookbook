@@ -3,7 +3,7 @@
     "labId": "mcp-composition",
     "traceId": "resource-to-sampling",
     "executionMode": "guided",
-    "recordedAt": "2026-09-02T05:31:03Z",
+    "recordedAt": "2026-09-12T12:06:04Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "mock",
@@ -96,7 +96,7 @@
             }
           }
         },
-        "latencyMs": 3
+        "latencyMs": 9
       },
       {
         "kind": "resources_list_request",
@@ -140,7 +140,8 @@
         "detail": {
           "interactionId": "resources/read:acme://docs/knowledge-platform",
           "method": "resources/read",
-          "uri": "acme://docs/knowledge-platform"
+          "uri": "acme://docs/knowledge-platform",
+          "discoveredBeforeRead": true
         },
         "latencyMs": null
       },
@@ -159,7 +160,7 @@
             }
           ]
         },
-        "latencyMs": 1
+        "latencyMs": 2
       },
       {
         "kind": "tool_call_request",
@@ -172,7 +173,8 @@
             "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
             "mime_type": "text/markdown",
             "name": "knowledge-platform"
-          }
+          },
+          "discoveredBeforeCall": false
         },
         "latencyMs": null
       },
@@ -252,7 +254,7 @@
             }
           }
         },
-        "latencyMs": 3
+        "latencyMs": 6
       },
       {
         "kind": "termination",
@@ -311,7 +313,7 @@
           }
         },
         "metrics": {
-          "latencyMs": 3,
+          "latencyMs": 9,
           "provenance": "measured"
         }
       },
@@ -372,7 +374,8 @@
         "detail": {
           "interactionId": "resources/read:acme://docs/knowledge-platform",
           "method": "resources/read",
-          "uri": "acme://docs/knowledge-platform"
+          "uri": "acme://docs/knowledge-platform",
+          "discoveredBeforeRead": true
         },
         "metrics": {
           "latencyMs": null,
@@ -398,7 +401,7 @@
           ]
         },
         "metrics": {
-          "latencyMs": 1,
+          "latencyMs": 2,
           "provenance": "measured"
         }
       },
@@ -416,7 +419,8 @@
             "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
             "mime_type": "text/markdown",
             "name": "knowledge-platform"
-          }
+          },
+          "discoveredBeforeCall": false
         },
         "metrics": {
           "latencyMs": null,
@@ -515,7 +519,7 @@
           }
         },
         "metrics": {
-          "latencyMs": 3,
+          "latencyMs": 6,
           "provenance": "measured"
         }
       },
@@ -593,12 +597,12 @@
     },
     "errors": [],
     "metrics": {
-      "totalMs": 9,
-      "initializeMs": 3,
+      "totalMs": 19,
+      "initializeMs": 9,
       "discoveryMs": 0,
-      "resourceReadMs": 1,
+      "resourceReadMs": 2,
       "promptGetMs": 0,
-      "toolCallMs": 3,
+      "toolCallMs": 6,
       "samplingMs": 0,
       "resourcesDiscovered": 3,
       "resourcesRead": 1,
@@ -638,7 +642,7 @@
             "name": "dataaihub-cookbook-composition",
             "version": ""
           },
-          "latencyMs": 3
+          "latencyMs": 9
         },
         {
           "phase": "DISCOVER",
@@ -662,7 +666,7 @@
           "phase": "CONTEXT",
           "uri": "acme://docs/knowledge-platform",
           "isError": false,
-          "latencyMs": 1
+          "latencyMs": 2
         },
         {
           "phase": "TOOL",
@@ -690,7 +694,7 @@
           "phase": "TOOL_RESULT",
           "name": "compose_resource_brief",
           "isError": false,
-          "latencyMs": 3
+          "latencyMs": 6
         },
         {
           "phase": "TERMINATION",
@@ -717,7 +721,7 @@
     "labId": "mcp-composition",
     "traceId": "prompt-to-sampling",
     "executionMode": "guided",
-    "recordedAt": "2026-09-02T05:31:03Z",
+    "recordedAt": "2026-09-12T12:06:04Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "mock",
@@ -824,7 +828,7 @@
             }
           }
         },
-        "latencyMs": 0
+        "latencyMs": 1
       },
       {
         "kind": "prompts_list_request",
@@ -886,7 +890,8 @@
           "arguments": {
             "service_name": "knowledge-platform",
             "audience": "engineering"
-          }
+          },
+          "discoveredBeforeGet": true
         },
         "latencyMs": null
       },
@@ -933,7 +938,8 @@
                 }
               }
             ]
-          }
+          },
+          "discoveredBeforeCall": false
         },
         "latencyMs": null
       },
@@ -1082,7 +1088,7 @@
           }
         },
         "metrics": {
-          "latencyMs": 0,
+          "latencyMs": 1,
           "provenance": "measured"
         }
       },
@@ -1161,7 +1167,8 @@
           "arguments": {
             "service_name": "knowledge-platform",
             "audience": "engineering"
-          }
+          },
+          "discoveredBeforeGet": true
         },
         "metrics": {
           "latencyMs": null,
@@ -1220,7 +1227,8 @@
                 }
               }
             ]
-          }
+          },
+          "discoveredBeforeCall": false
         },
         "metrics": {
           "latencyMs": null,
@@ -1422,8 +1430,8 @@
     },
     "errors": [],
     "metrics": {
-      "totalMs": 4,
-      "initializeMs": 0,
+      "totalMs": 5,
+      "initializeMs": 1,
       "discoveryMs": 0,
       "resourceReadMs": 0,
       "promptGetMs": 1,
@@ -1467,7 +1475,7 @@
             "name": "dataaihub-cookbook-composition",
             "version": ""
           },
-          "latencyMs": 0
+          "latencyMs": 1
         },
         {
           "phase": "DISCOVER",
@@ -1561,7 +1569,7 @@
     "labId": "mcp-composition",
     "traceId": "tool-resource-prompt-composition",
     "executionMode": "guided",
-    "recordedAt": "2026-09-02T05:31:03Z",
+    "recordedAt": "2026-09-12T12:06:04Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "mock",
@@ -2051,7 +2059,8 @@
           "name": "get_service_status",
           "arguments": {
             "service": "billing-api"
-          }
+          },
+          "discoveredBeforeCall": true
         },
         "latencyMs": null
       },
@@ -2129,7 +2138,8 @@
         "detail": {
           "interactionId": "resources/read:acme://docs/billing-portal",
           "method": "resources/read",
-          "uri": "acme://docs/billing-portal"
+          "uri": "acme://docs/billing-portal",
+          "discoveredBeforeRead": true
         },
         "latencyMs": null
       },
@@ -2210,7 +2220,8 @@
           "arguments": {
             "service": "billing-api",
             "status": "degraded"
-          }
+          },
+          "discoveredBeforeGet": true
         },
         "latencyMs": null
       },
@@ -2246,6 +2257,8 @@
           "name": "compose_incident_brief",
           "arguments": {
             "service": "billing-api",
+            "resource_uri": "acme://docs/billing-portal",
+            "prompt_name": "draft-status-update",
             "tool_result": {
               "ok": true,
               "service": {
@@ -2256,10 +2269,8 @@
                 "incident": "BILL-2048: invoice PDF generation delayed"
               }
             },
-            "resource_uri": "acme://docs/billing-portal",
             "resource_content": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
             "resource_mime_type": "text/markdown",
-            "prompt_name": "draft-status-update",
             "prompt_messages": [
               {
                 "role": "user",
@@ -2273,7 +2284,8 @@
               "service": "billing-api",
               "status": "degraded"
             }
-          }
+          },
+          "discoveredBeforeCall": true
         },
         "latencyMs": null
       },
@@ -2340,6 +2352,8 @@
           "name": "compose_incident_brief",
           "arguments": {
             "service": "billing-api",
+            "resource_uri": "acme://docs/billing-portal",
+            "prompt_name": "draft-status-update",
             "tool_result": {
               "ok": true,
               "service": {
@@ -2350,10 +2364,8 @@
                 "incident": "BILL-2048: invoice PDF generation delayed"
               }
             },
-            "resource_uri": "acme://docs/billing-portal",
             "resource_content": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
             "resource_mime_type": "text/markdown",
-            "prompt_name": "draft-status-update",
             "prompt_messages": [
               {
                 "role": "user",
@@ -2405,7 +2417,7 @@
             }
           }
         },
-        "latencyMs": 0
+        "latencyMs": 1
       },
       {
         "kind": "termination",
@@ -2677,7 +2689,8 @@
           "name": "get_service_status",
           "arguments": {
             "service": "billing-api"
-          }
+          },
+          "discoveredBeforeCall": true
         },
         "metrics": {
           "latencyMs": null,
@@ -2779,7 +2792,8 @@
         "detail": {
           "interactionId": "resources/read:acme://docs/billing-portal",
           "method": "resources/read",
-          "uri": "acme://docs/billing-portal"
+          "uri": "acme://docs/billing-portal",
+          "discoveredBeforeRead": true
         },
         "metrics": {
           "latencyMs": null,
@@ -2884,7 +2898,8 @@
           "arguments": {
             "service": "billing-api",
             "status": "degraded"
-          }
+          },
+          "discoveredBeforeGet": true
         },
         "metrics": {
           "latencyMs": null,
@@ -2932,6 +2947,8 @@
           "name": "compose_incident_brief",
           "arguments": {
             "service": "billing-api",
+            "resource_uri": "acme://docs/billing-portal",
+            "prompt_name": "draft-status-update",
             "tool_result": {
               "ok": true,
               "service": {
@@ -2942,10 +2959,8 @@
                 "incident": "BILL-2048: invoice PDF generation delayed"
               }
             },
-            "resource_uri": "acme://docs/billing-portal",
             "resource_content": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
             "resource_mime_type": "text/markdown",
-            "prompt_name": "draft-status-update",
             "prompt_messages": [
               {
                 "role": "user",
@@ -2959,7 +2974,8 @@
               "service": "billing-api",
               "status": "degraded"
             }
-          }
+          },
+          "discoveredBeforeCall": true
         },
         "metrics": {
           "latencyMs": null,
@@ -3044,6 +3060,8 @@
           "name": "compose_incident_brief",
           "arguments": {
             "service": "billing-api",
+            "resource_uri": "acme://docs/billing-portal",
+            "prompt_name": "draft-status-update",
             "tool_result": {
               "ok": true,
               "service": {
@@ -3054,10 +3072,8 @@
                 "incident": "BILL-2048: invoice PDF generation delayed"
               }
             },
-            "resource_uri": "acme://docs/billing-portal",
             "resource_content": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
             "resource_mime_type": "text/markdown",
-            "prompt_name": "draft-status-update",
             "prompt_messages": [
               {
                 "role": "user",
@@ -3110,7 +3126,7 @@
           }
         },
         "metrics": {
-          "latencyMs": 0,
+          "latencyMs": 1,
           "provenance": "measured"
         }
       },
@@ -3183,6 +3199,8 @@
           "tool": "compose_incident_brief",
           "arguments": {
             "service": "billing-api",
+            "resource_uri": "acme://docs/billing-portal",
+            "prompt_name": "draft-status-update",
             "tool_result": {
               "ok": true,
               "service": {
@@ -3193,10 +3211,8 @@
                 "incident": "BILL-2048: invoice PDF generation delayed"
               }
             },
-            "resource_uri": "acme://docs/billing-portal",
             "resource_content": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
             "resource_mime_type": "text/markdown",
-            "prompt_name": "draft-status-update",
             "prompt_messages": [
               {
                 "role": "user",
@@ -3271,12 +3287,12 @@
     },
     "errors": [],
     "metrics": {
-      "totalMs": 4,
+      "totalMs": 5,
       "initializeMs": 0,
       "discoveryMs": 0,
       "resourceReadMs": 0,
       "promptGetMs": 0,
-      "toolCallMs": 0,
+      "toolCallMs": 1,
       "samplingMs": 0,
       "resourcesDiscovered": 3,
       "resourcesRead": 1,
@@ -3406,6 +3422,8 @@
           "name": "compose_incident_brief",
           "arguments": {
             "service": "billing-api",
+            "resource_uri": "acme://docs/billing-portal",
+            "prompt_name": "draft-status-update",
             "tool_result": {
               "ok": true,
               "service": {
@@ -3416,10 +3434,8 @@
                 "incident": "BILL-2048: invoice PDF generation delayed"
               }
             },
-            "resource_uri": "acme://docs/billing-portal",
             "resource_content": "# Billing Portal\n\nService documentation for the Billing Portal.\n\nThe Billing Portal exposes invoices, usage meters, and plan changes for\nAcme AI customers. This resource is static fixture content owned by the\nMCP server.\n\n## Related services\n\n- billing-api\n- identity-api\n- knowledge-platform\n\n## Surfaces\n\n- Invoice list and PDF retrieval\n- Usage meters by product\n- Plan upgrade and downgrade requests\n\n## Operational notes\n\nAuthentication is handled by identity-api. Live availability is published\non `acme://status/services`. Invoice PDF generation is the component most\noften cited when billing-api is degraded.\n",
             "resource_mime_type": "text/markdown",
-            "prompt_name": "draft-status-update",
             "prompt_messages": [
               {
                 "role": "user",
@@ -3451,7 +3467,7 @@
           "phase": "TOOL_RESULT",
           "name": "compose_incident_brief",
           "isError": false,
-          "latencyMs": 0
+          "latencyMs": 1
         },
         {
           "phase": "TERMINATION",
@@ -3478,7 +3494,7 @@
     "labId": "mcp-composition",
     "traceId": "sampling-failure",
     "executionMode": "guided",
-    "recordedAt": "2026-09-02T05:31:03Z",
+    "recordedAt": "2026-09-12T12:06:04Z",
     "metricsProvenance": "measured",
     "provenance": {
       "model": "not_used",
@@ -3571,7 +3587,7 @@
             }
           }
         },
-        "latencyMs": 0
+        "latencyMs": 1
       },
       {
         "kind": "resources_list_request",
@@ -3615,7 +3631,8 @@
         "detail": {
           "interactionId": "resources/read:acme://docs/knowledge-platform",
           "method": "resources/read",
-          "uri": "acme://docs/knowledge-platform"
+          "uri": "acme://docs/knowledge-platform",
+          "discoveredBeforeRead": true
         },
         "latencyMs": null
       },
@@ -3647,7 +3664,8 @@
             "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
             "mime_type": "text/markdown",
             "name": "knowledge-platform"
-          }
+          },
+          "discoveredBeforeCall": false
         },
         "latencyMs": null
       },
@@ -3766,7 +3784,7 @@
           }
         },
         "metrics": {
-          "latencyMs": 0,
+          "latencyMs": 1,
           "provenance": "measured"
         }
       },
@@ -3827,7 +3845,8 @@
         "detail": {
           "interactionId": "resources/read:acme://docs/knowledge-platform",
           "method": "resources/read",
-          "uri": "acme://docs/knowledge-platform"
+          "uri": "acme://docs/knowledge-platform",
+          "discoveredBeforeRead": true
         },
         "metrics": {
           "latencyMs": null,
@@ -3871,7 +3890,8 @@
             "content": "# Knowledge Platform\n\nService documentation for the Knowledge Platform.\n\nThe Knowledge Platform indexes internal documents and serves retrieval\nqueries for Acme applications. Clients read this resource for current\nservice facts; they do not invent the catalog locally.\n\n## Services\n\n- knowledge-platform\n- billing-api\n- identity-api\n\n## Capabilities\n\n- Document ingest and chunking\n- Keyword and vector retrieval\n- Citation-preserving answer assembly\n\n## Operational notes\n\nStatus and incident details live in `acme://status/services`.\nBilling product surfaces live in `acme://docs/billing-portal`.\n",
             "mime_type": "text/markdown",
             "name": "knowledge-platform"
-          }
+          },
+          "discoveredBeforeCall": false
         },
         "metrics": {
           "latencyMs": null,
@@ -4025,7 +4045,6 @@
       },
       {
         "stage": "tools/call",
-        "tool": "compose_resource_brief",
         "isError": true,
         "detail": {
           "interactionId": "tools/call:compose_resource_brief:2",
@@ -4048,7 +4067,7 @@
     ],
     "metrics": {
       "totalMs": 3,
-      "initializeMs": 0,
+      "initializeMs": 1,
       "discoveryMs": 0,
       "resourceReadMs": 0,
       "promptGetMs": 0,
@@ -4092,7 +4111,7 @@
             "name": "dataaihub-cookbook-composition",
             "version": ""
           },
-          "latencyMs": 0
+          "latencyMs": 1
         },
         {
           "phase": "DISCOVER",

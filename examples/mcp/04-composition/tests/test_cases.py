@@ -51,6 +51,16 @@ def test_composition_case_uses_all_primitives():
     assert kinds.count("call_tool") == 2
 
 
+def test_incident_case_selects_prior_results_explicitly():
+    compose = get_case("tool-resource-prompt-composition").steps[-1]
+    assert compose.tool_name == "compose_incident_brief"
+    assert compose.tool_arguments == {
+        "service": "billing-api",
+        "resource_uri": "acme://docs/billing-portal",
+        "prompt_name": "draft-status-update",
+    }
+
+
 def test_get_case_unknown():
     try:
         get_case("missing")

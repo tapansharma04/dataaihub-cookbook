@@ -198,6 +198,7 @@ async def test_tool_resource_prompt_composition_order(settings, server):
         if e.kind == "tool_call_request"
         and e.detail.get("name") == TOOL_COMPOSE_INCIDENT_BRIEF
     )
+    assert compose_req.detail["discoveredBeforeCall"] is True
     assert compose_req.detail["arguments"]["tool_result"] == status_inv["result"]
     assert compose_req.detail["arguments"]["resource_content"] == resource_text
     assert (
@@ -308,3 +309,197 @@ def test_failure_signature_flow(settings):
     assert "SAMPLING" in phases
     assert "REJECTED" in phases
     assert phases.count("RESULT") == 0
+
+
+@pytest.mark.asyncio
+async def test_missing_prior_resource_does_not_call_or_sample(settings, server):
+    result = await run_case_async(
+        MeasuredCase(
+            trace_id="missing-prior-resource",
+            example_class="RESOURCE_TO_SAMPLING",
+            selection_note="Test-only: composition without resources/read.",
+            steps=(
+                ProtocolStep(kind="list_resources"),
+                ProtocolStep(
+                    kind="call_tool",
+                    tool_name=TOOL_COMPOSE_RESOURCE_BRIEF,
+                    tool_arguments={"uri": URI_KNOWLEDGE_PLATFORM},
+                ),
+            ),
+            sampling_mode="mock",
+        ),
+        settings=settings,
+        server=server,
+    )
+    kinds = [event.kind for event in result.sequence]
+    assert "tool_call_request" not in kinds
+    assert "sampling_request" not in kinds
+    assert result.metrics.tool_calls == 0
+    assert result.metrics.sampling_requests == 0
+    assert result.metrics.termination_reason == "missing_prior_result"
+    bind_error = next(event for event in result.sequence if event.kind == "error")
+    assert bind_error.detail["stage"] == "compose_bind"
+    assert bind_error.detail["name"] == TOOL_COMPOSE_RESOURCE_BRIEF
+
+
+@pytest.mark.asyncio
+async def test_unknown_resource_stops_before_composition(settings, server):
+    result = await run_case_async(
+        MeasuredCase(
+            trace_id="unknown-resource-then-compose",
+            example_class="RESOURCE_TO_SAMPLING",
+            selection_note="Test-only: unknown URI must not invent content.",
+            steps=(
+                ProtocolStep(kind="list_resources"),
+                ProtocolStep(kind="read_resource", uri="acme://docs/does-not-exist"),
+                ProtocolStep(
+                    kind="call_tool",
+                    tool_name=TOOL_COMPOSE_RESOURCE_BRIEF,
+                    tool_arguments={"uri": "acme://docs/does-not-exist"},
+                ),
+            ),
+            sampling_mode="mock",
+        ),
+        settings=settings,
+        server=server,
+    )
+    kinds = [event.kind for event in result.sequence]
+    assert "tool_call_request" not in kinds
+    assert "sampling_request" not in kinds
+    assert result.metrics.termination_reason == "resource_read_rejected"
+    read_response = next(
+        event for event in result.sequence if event.kind == "resource_read_response"
+    )
+    assert read_response.detail["isError"] is True
+    assert "contents" not in read_response.detail
+    request = next(
+        event for event in result.sequence if event.kind == "resource_read_request"
+    )
+    assert request.detail["discoveredBeforeRead"] is False
+    assert result.output["reads"][0]["isError"] is True
+    assert result.output["reads"][0].get("contents") in (None, [])
+
+
+@pytest.mark.asyncio
+async def test_unknown_prompt_stops_before_composition(settings, server):
+    result = await run_case_async(
+        MeasuredCase(
+            trace_id="unknown-prompt-then-compose",
+            example_class="PROMPT_TO_SAMPLING",
+            selection_note="Test-only: unknown prompt must not invent messages.",
+            steps=(
+                ProtocolStep(kind="list_prompts"),
+                ProtocolStep(
+                    kind="get_prompt",
+                    prompt_name="does-not-exist",
+                    prompt_arguments={"service_name": "knowledge-platform"},
+                ),
+                ProtocolStep(
+                    kind="call_tool",
+                    tool_name=TOOL_COMPOSE_FROM_PROMPT,
+                    tool_arguments={
+                        "prompt_name": "does-not-exist",
+                        "service_name": "knowledge-platform",
+                    },
+                ),
+            ),
+            sampling_mode="mock",
+        ),
+        settings=settings,
+        server=server,
+    )
+    kinds = [event.kind for event in result.sequence]
+    assert "tool_call_request" not in kinds
+    assert "sampling_request" not in kinds
+    assert result.metrics.termination_reason == "prompt_get_rejected"
+    get_response = next(
+        event for event in result.sequence if event.kind == "prompt_get_response"
+    )
+    assert get_response.detail["isError"] is True
+    assert "messages" not in get_response.detail
+
+
+@pytest.mark.asyncio
+async def test_failed_tool_stops_remaining_steps(settings, server):
+    result = await run_case_async(
+        MeasuredCase(
+            trace_id="unknown-tool-then-resources",
+            example_class="RESOURCE_TO_SAMPLING",
+            selection_note="Test-only: a failed tools/call must stop the case.",
+            steps=(
+                ProtocolStep(kind="list_tools"),
+                ProtocolStep(
+                    kind="call_tool",
+                    tool_name="does_not_exist",
+                    tool_arguments={},
+                ),
+                ProtocolStep(kind="list_resources"),
+            ),
+            sampling_mode="mock",
+        ),
+        settings=settings,
+        server=server,
+    )
+    kinds = [event.kind for event in result.sequence]
+    assert "resources_list_request" not in kinds
+    assert kinds[-1] == "termination"
+    assert result.metrics.termination_reason == "protocol_error"
+
+
+@pytest.mark.asyncio
+async def test_unknown_service_is_structured_result_not_sampling(settings, server):
+    result = await run_case_async(
+        MeasuredCase(
+            trace_id="unknown-service-status",
+            example_class="TOOL_RESOURCE_PROMPT_COMPOSITION",
+            selection_note="Test-only: unknown service stays a tool result.",
+            steps=(
+                ProtocolStep(kind="list_tools"),
+                ProtocolStep(
+                    kind="call_tool",
+                    tool_name=TOOL_GET_SERVICE_STATUS,
+                    tool_arguments={"service": "not-a-service"},
+                ),
+            ),
+            sampling_mode="mock",
+        ),
+        settings=settings,
+        server=server,
+    )
+    assert result.metrics.sampling_requests == 0
+    assert result.metrics.successful_tool_calls == 1
+    invocation = result.output["invocations"][0]
+    assert invocation["isError"] is False
+    assert invocation["result"]["ok"] is False
+    assert invocation["result"]["error"]["code"] == "unknown_service"
+
+
+@pytest.mark.asyncio
+async def test_live_sampling_without_key_is_recorded_failure(settings, server):
+    result = await run_case_async(
+        get_case("resource-to-sampling"),
+        settings=settings,
+        server=server,
+        sampling_mode="live",
+    )
+    assert result.metrics.sampling_requests == 1
+    assert result.metrics.successful_samplings == 0
+    assert result.metrics.failed_samplings == 1
+    sampling_res = next(e for e in result.sequence if e.kind == "sampling_response")
+    assert sampling_res.detail["isError"] is True
+    assert "OPENAI_API_KEY" in sampling_res.detail["error"]["message"]
+    assert result.metrics.termination_reason == "sampling_rejected"
+
+
+def test_unknown_sampling_mode_is_rejected(settings):
+    from client.sampling import build_sampling_callback
+
+    with pytest.raises(ValueError, match="Unknown sampling mode"):
+        build_sampling_callback("not-a-mode", settings=settings)
+
+
+def test_main_live_requires_api_key(monkeypatch, settings):
+    from main import main
+
+    monkeypatch.setattr("main.get_settings", lambda: settings)
+    assert main(["--case", "resource-to-sampling", "--sampling", "live"]) == 1
