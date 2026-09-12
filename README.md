@@ -41,6 +41,7 @@ Cookbook →  "How is it implemented?"
 | `agent-evaluation` | [`examples/agents/03-agent-evaluation`](examples/agents/03-agent-evaluation) | Outcome + trajectory evaluation of a measured agent run under explicit constraints |
 | `planning` | [`examples/agents/04-planning`](examples/agents/04-planning) | Explicit multi-step plan as a runtime artifact (create → execute → observe → revise) |
 | `agent-memory` | [`examples/agents/05-memory`](examples/agents/05-memory) | Application-owned memory across interactions (store → retrieve → use, including miss and stale) |
+| `multi-agent-collaboration` | [`examples/agents/06-multi-agent-collaboration`](examples/agents/06-multi-agent-collaboration) | Coordinator-owned collaboration across specialized agents (delegate → message → shared state → aggregate) |
 
 ### MCP
 
@@ -93,7 +94,8 @@ dataaihub-cookbook/
 │   │   ├── 02-agent-loop/
 │   │   ├── 03-agent-evaluation/
 │   │   ├── 04-planning/
-│   │   └── 05-memory/
+│   │   ├── 05-memory/
+│   │   └── 06-multi-agent-collaboration/
 │   ├── mcp/
 │   │   ├── 01-tool-discovery/
 │   │   ├── 02-resources/

@@ -1,0 +1,2694 @@
+[
+  {
+    "labId": "multi-agent-collaboration",
+    "traceId": "independent-status-and-docs",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-12T14:37:51Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "BASIC_COLLABORATION",
+    "selectionNote": "Measured case: the coordinator delegates independent work to the status agent and the docs agent, then aggregates their actual results. Neither specialist receives the other's output.",
+    "architecture": {
+      "layout": "multi-agent-collaboration",
+      "stages": [
+        "task",
+        "delegate",
+        "specialist",
+        "shared-state",
+        "aggregate",
+        "termination"
+      ]
+    },
+    "input": {
+      "request": "Prepare an incident packet for the payments service.",
+      "service": "payments",
+      "config": {
+        "maxDelegations": 6,
+        "modelDriver": "mock",
+        "synthesizerModel": "mock",
+        "clientName": "dataaihub-cookbook-multi-agent",
+        "dataDir": "/Users/tapansharma/Code/dataaihub-cookbook/examples/agents/06-multi-agent-collaboration/data"
+      }
+    },
+    "sequence": [
+      {
+        "kind": "task_created",
+        "detail": {
+          "taskId": "task-independent-status-and-docs",
+          "request": "Prepare an incident packet for the payments service.",
+          "service": "payments",
+          "exampleClass": "BASIC_COLLABORATION"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "coordinator_decision",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "status_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "delegation",
+        "detail": {
+          "delegationId": "delegation-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "assignment": {
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_selected",
+        "detail": {
+          "agentId": "status_agent",
+          "role": "status"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_message",
+        "detail": {
+          "messageId": "msg-1",
+          "from": "coordinator",
+          "to": "status_agent",
+          "payload": {
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "inReplyTo": "msg-1",
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "state_updated",
+        "detail": {
+          "taskId": "task-independent-status-and-docs",
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "resultCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "coordinator_decision",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "docs_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "delegation",
+        "detail": {
+          "delegationId": "delegation-2",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "assignment": {
+            "doc_id": "doc-payments-runbook",
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_selected",
+        "detail": {
+          "agentId": "docs_agent",
+          "role": "docs"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_message",
+        "detail": {
+          "messageId": "msg-2",
+          "from": "coordinator",
+          "to": "docs_agent",
+          "payload": {
+            "doc_id": "doc-payments-runbook",
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-2",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "ok": true,
+          "inReplyTo": "msg-2",
+          "payload": {
+            "doc": {
+              "id": "doc-payments-runbook",
+              "title": "Payments degradation runbook",
+              "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "state_updated",
+        "detail": {
+          "taskId": "task-independent-status-and-docs",
+          "resultId": "result-2",
+          "agentId": "docs_agent",
+          "resultCount": 2
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "coordinator_decision",
+        "detail": {
+          "decision": "aggregate",
+          "resultCount": 2
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "aggregation",
+        "detail": {
+          "resultIds": [
+            "result-1",
+            "result-2"
+          ],
+          "agentIds": [
+            "status_agent",
+            "docs_agent"
+          ],
+          "answer": "Collaboration brief for: Prepare an incident packet for the payments service.\nService: payments\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}\n- docs_agent (docs) ok: {\"doc\": {\"body\": \"When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.\", \"id\": \"doc-payments-runbook\", \"title\": \"Payments degradation runbook\"}}",
+          "skippedAgentIds": []
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "aggregated"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-task_created",
+        "type": "protocol",
+        "title": "Task created",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-independent-status-and-docs",
+          "request": "Prepare an incident packet for the payments service.",
+          "service": "payments",
+          "exampleClass": "BASIC_COLLABORATION"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-coordinator_decision",
+        "type": "protocol",
+        "title": "Coordinator decision",
+        "status": "ok",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "status_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-delegation",
+        "type": "protocol",
+        "title": "Delegation",
+        "status": "ok",
+        "detail": {
+          "delegationId": "delegation-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "assignment": {
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-agent_selected",
+        "type": "protocol",
+        "title": "Agent selected",
+        "status": "ok",
+        "detail": {
+          "agentId": "status_agent",
+          "role": "status"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-agent_message",
+        "type": "agent",
+        "title": "Agent message",
+        "status": "ok",
+        "detail": {
+          "messageId": "msg-1",
+          "from": "coordinator",
+          "to": "status_agent",
+          "payload": {
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "inReplyTo": "msg-1",
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-state_updated",
+        "type": "protocol",
+        "title": "Shared state updated",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-independent-status-and-docs",
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "resultCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-coordinator_decision",
+        "type": "protocol",
+        "title": "Coordinator decision",
+        "status": "ok",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "docs_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-delegation",
+        "type": "protocol",
+        "title": "Delegation",
+        "status": "ok",
+        "detail": {
+          "delegationId": "delegation-2",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "assignment": {
+            "doc_id": "doc-payments-runbook",
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-agent_selected",
+        "type": "protocol",
+        "title": "Agent selected",
+        "status": "ok",
+        "detail": {
+          "agentId": "docs_agent",
+          "role": "docs"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-agent_message",
+        "type": "agent",
+        "title": "Agent message",
+        "status": "ok",
+        "detail": {
+          "messageId": "msg-2",
+          "from": "coordinator",
+          "to": "docs_agent",
+          "payload": {
+            "doc_id": "doc-payments-runbook",
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-2",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "ok": true,
+          "inReplyTo": "msg-2",
+          "payload": {
+            "doc": {
+              "id": "doc-payments-runbook",
+              "title": "Payments degradation runbook",
+              "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-state_updated",
+        "type": "protocol",
+        "title": "Shared state updated",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-independent-status-and-docs",
+          "resultId": "result-2",
+          "agentId": "docs_agent",
+          "resultCount": 2
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-coordinator_decision",
+        "type": "protocol",
+        "title": "Coordinator decision",
+        "status": "ok",
+        "detail": {
+          "decision": "aggregate",
+          "resultCount": 2
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-15-aggregation",
+        "type": "aggregation",
+        "title": "Coordinator aggregation",
+        "status": "ok",
+        "detail": {
+          "resultIds": [
+            "result-1",
+            "result-2"
+          ],
+          "agentIds": [
+            "status_agent",
+            "docs_agent"
+          ],
+          "answer": "Collaboration brief for: Prepare an incident packet for the payments service.\nService: payments\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}\n- docs_agent (docs) ok: {\"doc\": {\"body\": \"When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.\", \"id\": \"doc-payments-runbook\", \"title\": \"Payments degradation runbook\"}}",
+          "skippedAgentIds": []
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-16-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "aggregated"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "state": {
+      "taskId": "task-independent-status-and-docs",
+      "request": "Prepare an incident packet for the payments service.",
+      "service": "payments",
+      "delegations": [
+        {
+          "delegation_id": "delegation-1",
+          "agent_id": "status_agent",
+          "role": "status",
+          "assignment": {
+            "service": "payments"
+          },
+          "parent_result_id": null,
+          "skipped": false,
+          "skip_reason": null
+        },
+        {
+          "delegation_id": "delegation-2",
+          "agent_id": "docs_agent",
+          "role": "docs",
+          "assignment": {
+            "doc_id": "doc-payments-runbook",
+            "service": "payments"
+          },
+          "parent_result_id": null,
+          "skipped": false,
+          "skip_reason": null
+        }
+      ],
+      "messages": [
+        {
+          "message_id": "msg-1",
+          "from_agent": "coordinator",
+          "to_agent": "status_agent",
+          "task_id": "task-independent-status-and-docs",
+          "payload": {
+            "service": "payments"
+          },
+          "parent_result_id": null
+        },
+        {
+          "message_id": "msg-2",
+          "from_agent": "coordinator",
+          "to_agent": "docs_agent",
+          "task_id": "task-independent-status-and-docs",
+          "payload": {
+            "doc_id": "doc-payments-runbook",
+            "service": "payments"
+          },
+          "parent_result_id": null
+        }
+      ],
+      "results": [
+        {
+          "result_id": "result-1",
+          "agent_id": "status_agent",
+          "role": "status",
+          "ok": true,
+          "in_reply_to": "msg-1",
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        {
+          "result_id": "result-2",
+          "agent_id": "docs_agent",
+          "role": "docs",
+          "ok": true,
+          "in_reply_to": "msg-2",
+          "payload": {
+            "doc": {
+              "id": "doc-payments-runbook",
+              "title": "Payments degradation runbook",
+              "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+            }
+          },
+          "error": null
+        }
+      ],
+      "skipped": [],
+      "invokedAgentIds": [
+        "status_agent",
+        "docs_agent"
+      ],
+      "skippedAgentIds": [],
+      "finalAnswer": "Collaboration brief for: Prepare an incident packet for the payments service.\nService: payments\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}\n- docs_agent (docs) ok: {\"doc\": {\"body\": \"When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.\", \"id\": \"doc-payments-runbook\", \"title\": \"Payments degradation runbook\"}}",
+      "terminationReason": "aggregated",
+      "errors": []
+    },
+    "output": {
+      "answer": "Collaboration brief for: Prepare an incident packet for the payments service.\nService: payments\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}\n- docs_agent (docs) ok: {\"doc\": {\"body\": \"When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations.\", \"id\": \"doc-payments-runbook\", \"title\": \"Payments degradation runbook\"}}",
+      "ok": true,
+      "terminationReason": "aggregated"
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "coordinatorMs": 0,
+      "agentMs": 0,
+      "synthesisMs": 0,
+      "agentsInvoked": 2,
+      "successfulAgentResults": 2,
+      "failedAgentResults": 0,
+      "delegations": 2,
+      "skippedDelegations": 0,
+      "messages": 2,
+      "terminationReason": "aggregated",
+      "maxDelegations": 6,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable collaboration events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "TASK",
+          "taskId": "task-independent-status-and-docs",
+          "request": "Prepare an incident packet for the payments service."
+        },
+        {
+          "phase": "DELEGATE",
+          "agentId": "status_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "resultId": "result-1",
+          "latencyMs": 0
+        },
+        {
+          "phase": "DELEGATE",
+          "agentId": "docs_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "ok": true,
+          "resultId": "result-2",
+          "latencyMs": 0
+        },
+        {
+          "phase": "AGGREGATE_DECISION"
+        },
+        {
+          "phase": "AGGREGATE",
+          "agentIds": [
+            "status_agent",
+            "docs_agent"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "aggregated"
+          }
+        }
+      ],
+      "signatureFlow": "TASK \u2192 DELEGATE \u2192 AGENT \u2192 DELEGATE \u2192 AGENT \u2192 AGGREGATE \u2192 TERMINATION"
+    },
+    "relatedEntities": [
+      "agents"
+    ],
+    "relatedContent": [
+      "agents",
+      "multi-agent",
+      "collaboration"
+    ],
+    "cookbook": {
+      "path": "examples/agents/06-multi-agent-collaboration"
+    }
+  },
+  {
+    "labId": "multi-agent-collaboration",
+    "traceId": "sequential-status-then-analysis",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-12T14:37:51Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "SEQUENTIAL_COLLABORATION",
+    "selectionNote": "Measured case: the coordinator sends the status agent's actual result to the analysis agent. Analysis does not reload the status catalog.",
+    "architecture": {
+      "layout": "multi-agent-collaboration",
+      "stages": [
+        "task",
+        "delegate",
+        "specialist",
+        "shared-state",
+        "aggregate",
+        "termination"
+      ]
+    },
+    "input": {
+      "request": "Analyze the payments degradation using the status agent's result.",
+      "service": "payments",
+      "config": {
+        "maxDelegations": 6,
+        "modelDriver": "mock",
+        "synthesizerModel": "mock",
+        "clientName": "dataaihub-cookbook-multi-agent",
+        "dataDir": "/Users/tapansharma/Code/dataaihub-cookbook/examples/agents/06-multi-agent-collaboration/data"
+      }
+    },
+    "sequence": [
+      {
+        "kind": "task_created",
+        "detail": {
+          "taskId": "task-sequential-status-then-analysis",
+          "request": "Analyze the payments degradation using the status agent's result.",
+          "service": "payments",
+          "exampleClass": "SEQUENTIAL_COLLABORATION"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "coordinator_decision",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "status_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "delegation",
+        "detail": {
+          "delegationId": "delegation-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "assignment": {
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_selected",
+        "detail": {
+          "agentId": "status_agent",
+          "role": "status"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_message",
+        "detail": {
+          "messageId": "msg-1",
+          "from": "coordinator",
+          "to": "status_agent",
+          "payload": {
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "inReplyTo": "msg-1",
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "state_updated",
+        "detail": {
+          "taskId": "task-sequential-status-then-analysis",
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "resultCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "coordinator_decision",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "analysis_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "delegation",
+        "detail": {
+          "delegationId": "delegation-2",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "assignment": {
+            "prior_result": {
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            }
+          },
+          "parentResultId": "result-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_selected",
+        "detail": {
+          "agentId": "analysis_agent",
+          "role": "analysis"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_message",
+        "detail": {
+          "messageId": "msg-2",
+          "from": "coordinator",
+          "to": "analysis_agent",
+          "payload": {
+            "prior_result": {
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            }
+          },
+          "parentResultId": "result-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-2",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "inReplyTo": "msg-2",
+          "payload": {
+            "basedOn": {
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            },
+            "severity": "elevated",
+            "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+            "incident": "PAY-2041: elevated card-auth latency",
+            "status": "degraded"
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "state_updated",
+        "detail": {
+          "taskId": "task-sequential-status-then-analysis",
+          "resultId": "result-2",
+          "agentId": "analysis_agent",
+          "resultCount": 2
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "coordinator_decision",
+        "detail": {
+          "decision": "aggregate",
+          "resultCount": 2
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "aggregation",
+        "detail": {
+          "resultIds": [
+            "result-1",
+            "result-2"
+          ],
+          "agentIds": [
+            "status_agent",
+            "analysis_agent"
+          ],
+          "answer": "Collaboration brief for: Analyze the payments degradation using the status agent's result.\nService: payments\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}\n- analysis_agent (analysis) ok: {\"basedOn\": {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}, \"incident\": \"PAY-2041: elevated card-auth latency\", \"severity\": \"elevated\", \"status\": \"degraded\", \"summary\": \"payments is degraded. Incident: PAY-2041: elevated card-auth latency.\"}",
+          "skippedAgentIds": []
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "aggregated"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-task_created",
+        "type": "protocol",
+        "title": "Task created",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-sequential-status-then-analysis",
+          "request": "Analyze the payments degradation using the status agent's result.",
+          "service": "payments",
+          "exampleClass": "SEQUENTIAL_COLLABORATION"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-coordinator_decision",
+        "type": "protocol",
+        "title": "Coordinator decision",
+        "status": "ok",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "status_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-delegation",
+        "type": "protocol",
+        "title": "Delegation",
+        "status": "ok",
+        "detail": {
+          "delegationId": "delegation-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "assignment": {
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-agent_selected",
+        "type": "protocol",
+        "title": "Agent selected",
+        "status": "ok",
+        "detail": {
+          "agentId": "status_agent",
+          "role": "status"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-agent_message",
+        "type": "agent",
+        "title": "Agent message",
+        "status": "ok",
+        "detail": {
+          "messageId": "msg-1",
+          "from": "coordinator",
+          "to": "status_agent",
+          "payload": {
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "inReplyTo": "msg-1",
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-state_updated",
+        "type": "protocol",
+        "title": "Shared state updated",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-sequential-status-then-analysis",
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "resultCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-coordinator_decision",
+        "type": "protocol",
+        "title": "Coordinator decision",
+        "status": "ok",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "analysis_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-delegation",
+        "type": "protocol",
+        "title": "Delegation",
+        "status": "ok",
+        "detail": {
+          "delegationId": "delegation-2",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "assignment": {
+            "prior_result": {
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            }
+          },
+          "parentResultId": "result-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-agent_selected",
+        "type": "protocol",
+        "title": "Agent selected",
+        "status": "ok",
+        "detail": {
+          "agentId": "analysis_agent",
+          "role": "analysis"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-agent_message",
+        "type": "agent",
+        "title": "Agent message",
+        "status": "ok",
+        "detail": {
+          "messageId": "msg-2",
+          "from": "coordinator",
+          "to": "analysis_agent",
+          "payload": {
+            "prior_result": {
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            }
+          },
+          "parentResultId": "result-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-2",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "inReplyTo": "msg-2",
+          "payload": {
+            "basedOn": {
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            },
+            "severity": "elevated",
+            "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+            "incident": "PAY-2041: elevated card-auth latency",
+            "status": "degraded"
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-state_updated",
+        "type": "protocol",
+        "title": "Shared state updated",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-sequential-status-then-analysis",
+          "resultId": "result-2",
+          "agentId": "analysis_agent",
+          "resultCount": 2
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-coordinator_decision",
+        "type": "protocol",
+        "title": "Coordinator decision",
+        "status": "ok",
+        "detail": {
+          "decision": "aggregate",
+          "resultCount": 2
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-15-aggregation",
+        "type": "aggregation",
+        "title": "Coordinator aggregation",
+        "status": "ok",
+        "detail": {
+          "resultIds": [
+            "result-1",
+            "result-2"
+          ],
+          "agentIds": [
+            "status_agent",
+            "analysis_agent"
+          ],
+          "answer": "Collaboration brief for: Analyze the payments degradation using the status agent's result.\nService: payments\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}\n- analysis_agent (analysis) ok: {\"basedOn\": {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}, \"incident\": \"PAY-2041: elevated card-auth latency\", \"severity\": \"elevated\", \"status\": \"degraded\", \"summary\": \"payments is degraded. Incident: PAY-2041: elevated card-auth latency.\"}",
+          "skippedAgentIds": []
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-16-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "aggregated"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "state": {
+      "taskId": "task-sequential-status-then-analysis",
+      "request": "Analyze the payments degradation using the status agent's result.",
+      "service": "payments",
+      "delegations": [
+        {
+          "delegation_id": "delegation-1",
+          "agent_id": "status_agent",
+          "role": "status",
+          "assignment": {
+            "service": "payments"
+          },
+          "parent_result_id": null,
+          "skipped": false,
+          "skip_reason": null
+        },
+        {
+          "delegation_id": "delegation-2",
+          "agent_id": "analysis_agent",
+          "role": "analysis",
+          "assignment": {
+            "prior_result": {
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            }
+          },
+          "parent_result_id": "result-1",
+          "skipped": false,
+          "skip_reason": null
+        }
+      ],
+      "messages": [
+        {
+          "message_id": "msg-1",
+          "from_agent": "coordinator",
+          "to_agent": "status_agent",
+          "task_id": "task-sequential-status-then-analysis",
+          "payload": {
+            "service": "payments"
+          },
+          "parent_result_id": null
+        },
+        {
+          "message_id": "msg-2",
+          "from_agent": "coordinator",
+          "to_agent": "analysis_agent",
+          "task_id": "task-sequential-status-then-analysis",
+          "payload": {
+            "prior_result": {
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            }
+          },
+          "parent_result_id": "result-1"
+        }
+      ],
+      "results": [
+        {
+          "result_id": "result-1",
+          "agent_id": "status_agent",
+          "role": "status",
+          "ok": true,
+          "in_reply_to": "msg-1",
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        {
+          "result_id": "result-2",
+          "agent_id": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "in_reply_to": "msg-2",
+          "payload": {
+            "basedOn": {
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            },
+            "severity": "elevated",
+            "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+            "incident": "PAY-2041: elevated card-auth latency",
+            "status": "degraded"
+          },
+          "error": null
+        }
+      ],
+      "skipped": [],
+      "invokedAgentIds": [
+        "status_agent",
+        "analysis_agent"
+      ],
+      "skippedAgentIds": [],
+      "finalAnswer": "Collaboration brief for: Analyze the payments degradation using the status agent's result.\nService: payments\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}\n- analysis_agent (analysis) ok: {\"basedOn\": {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}, \"incident\": \"PAY-2041: elevated card-auth latency\", \"severity\": \"elevated\", \"status\": \"degraded\", \"summary\": \"payments is degraded. Incident: PAY-2041: elevated card-auth latency.\"}",
+      "terminationReason": "aggregated",
+      "errors": []
+    },
+    "output": {
+      "answer": "Collaboration brief for: Analyze the payments degradation using the status agent's result.\nService: payments\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}\n- analysis_agent (analysis) ok: {\"basedOn\": {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}, \"incident\": \"PAY-2041: elevated card-auth latency\", \"severity\": \"elevated\", \"status\": \"degraded\", \"summary\": \"payments is degraded. Incident: PAY-2041: elevated card-auth latency.\"}",
+      "ok": true,
+      "terminationReason": "aggregated"
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "coordinatorMs": 0,
+      "agentMs": 0,
+      "synthesisMs": 0,
+      "agentsInvoked": 2,
+      "successfulAgentResults": 2,
+      "failedAgentResults": 0,
+      "delegations": 2,
+      "skippedDelegations": 0,
+      "messages": 2,
+      "terminationReason": "aggregated",
+      "maxDelegations": 6,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable collaboration events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "TASK",
+          "taskId": "task-sequential-status-then-analysis",
+          "request": "Analyze the payments degradation using the status agent's result."
+        },
+        {
+          "phase": "DELEGATE",
+          "agentId": "status_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "resultId": "result-1",
+          "latencyMs": 0
+        },
+        {
+          "phase": "DELEGATE",
+          "agentId": "analysis_agent"
+        },
+        {
+          "phase": "PASS_RESULT",
+          "to": "analysis_agent",
+          "parentResultId": "result-1"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "resultId": "result-2",
+          "latencyMs": 0
+        },
+        {
+          "phase": "AGGREGATE_DECISION"
+        },
+        {
+          "phase": "AGGREGATE",
+          "agentIds": [
+            "status_agent",
+            "analysis_agent"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "aggregated"
+          }
+        }
+      ],
+      "signatureFlow": "TASK \u2192 DELEGATE \u2192 AGENT \u2192 DELEGATE \u2192 PASS_RESULT \u2192 AGENT \u2192 AGGREGATE \u2192 TERMINATION"
+    },
+    "relatedEntities": [
+      "agents"
+    ],
+    "relatedContent": [
+      "agents",
+      "multi-agent",
+      "collaboration"
+    ],
+    "cookbook": {
+      "path": "examples/agents/06-multi-agent-collaboration"
+    }
+  },
+  {
+    "labId": "multi-agent-collaboration",
+    "traceId": "docs-agent-failure",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-12T14:37:51Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "AGENT_FAILURE",
+    "selectionNote": "Measured case: the docs agent fails on an unknown document. The coordinator records the failure, does not treat it as success, and stops remaining work.",
+    "architecture": {
+      "layout": "multi-agent-collaboration",
+      "stages": [
+        "task",
+        "delegate",
+        "specialist",
+        "shared-state",
+        "aggregate",
+        "termination"
+      ]
+    },
+    "input": {
+      "request": "Prepare an incident packet, including a missing runbook.",
+      "service": "payments",
+      "config": {
+        "maxDelegations": 6,
+        "modelDriver": "mock",
+        "synthesizerModel": "mock",
+        "clientName": "dataaihub-cookbook-multi-agent",
+        "dataDir": "/Users/tapansharma/Code/dataaihub-cookbook/examples/agents/06-multi-agent-collaboration/data"
+      }
+    },
+    "sequence": [
+      {
+        "kind": "task_created",
+        "detail": {
+          "taskId": "task-docs-agent-failure",
+          "request": "Prepare an incident packet, including a missing runbook.",
+          "service": "payments",
+          "exampleClass": "AGENT_FAILURE"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "coordinator_decision",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "status_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "delegation",
+        "detail": {
+          "delegationId": "delegation-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "assignment": {
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_selected",
+        "detail": {
+          "agentId": "status_agent",
+          "role": "status"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_message",
+        "detail": {
+          "messageId": "msg-1",
+          "from": "coordinator",
+          "to": "status_agent",
+          "payload": {
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "inReplyTo": "msg-1",
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "state_updated",
+        "detail": {
+          "taskId": "task-docs-agent-failure",
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "resultCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "coordinator_decision",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "docs_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "delegation",
+        "detail": {
+          "delegationId": "delegation-2",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "assignment": {
+            "doc_id": "doc-does-not-exist",
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_selected",
+        "detail": {
+          "agentId": "docs_agent",
+          "role": "docs"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_message",
+        "detail": {
+          "messageId": "msg-2",
+          "from": "coordinator",
+          "to": "docs_agent",
+          "payload": {
+            "doc_id": "doc-does-not-exist",
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-2",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "ok": false,
+          "inReplyTo": "msg-2",
+          "payload": {},
+          "error": {
+            "code": "unknown_doc",
+            "message": "Unknown document 'doc-does-not-exist'",
+            "validDocIds": [
+              "doc-auth-ttl",
+              "doc-billing-overview",
+              "doc-payments-runbook"
+            ]
+          }
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "state_updated",
+        "detail": {
+          "taskId": "task-docs-agent-failure",
+          "resultId": "result-2",
+          "agentId": "docs_agent",
+          "resultCount": 2
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "failure",
+        "detail": {
+          "agentId": "docs_agent",
+          "resultId": "result-2",
+          "error": {
+            "code": "unknown_doc",
+            "message": "Unknown document 'doc-does-not-exist'",
+            "validDocIds": [
+              "doc-auth-ttl",
+              "doc-billing-overview",
+              "doc-payments-runbook"
+            ]
+          }
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "aggregation",
+        "detail": {
+          "resultIds": [
+            "result-1",
+            "result-2"
+          ],
+          "agentIds": [
+            "status_agent",
+            "docs_agent"
+          ],
+          "answer": "Collaboration brief for: Prepare an incident packet, including a missing runbook.\nService: payments\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}\n- docs_agent (docs) FAILED: unknown_doc: Unknown document 'doc-does-not-exist'\nCoordinator: specialist failure recorded; not treated as success.",
+          "failed": true
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "agent_failed"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-task_created",
+        "type": "protocol",
+        "title": "Task created",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-docs-agent-failure",
+          "request": "Prepare an incident packet, including a missing runbook.",
+          "service": "payments",
+          "exampleClass": "AGENT_FAILURE"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-coordinator_decision",
+        "type": "protocol",
+        "title": "Coordinator decision",
+        "status": "ok",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "status_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-delegation",
+        "type": "protocol",
+        "title": "Delegation",
+        "status": "ok",
+        "detail": {
+          "delegationId": "delegation-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "assignment": {
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-agent_selected",
+        "type": "protocol",
+        "title": "Agent selected",
+        "status": "ok",
+        "detail": {
+          "agentId": "status_agent",
+          "role": "status"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-agent_message",
+        "type": "agent",
+        "title": "Agent message",
+        "status": "ok",
+        "detail": {
+          "messageId": "msg-1",
+          "from": "coordinator",
+          "to": "status_agent",
+          "payload": {
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "inReplyTo": "msg-1",
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-state_updated",
+        "type": "protocol",
+        "title": "Shared state updated",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-docs-agent-failure",
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "resultCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-coordinator_decision",
+        "type": "protocol",
+        "title": "Coordinator decision",
+        "status": "ok",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "docs_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-delegation",
+        "type": "protocol",
+        "title": "Delegation",
+        "status": "ok",
+        "detail": {
+          "delegationId": "delegation-2",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "assignment": {
+            "doc_id": "doc-does-not-exist",
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-agent_selected",
+        "type": "protocol",
+        "title": "Agent selected",
+        "status": "ok",
+        "detail": {
+          "agentId": "docs_agent",
+          "role": "docs"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-agent_message",
+        "type": "agent",
+        "title": "Agent message",
+        "status": "ok",
+        "detail": {
+          "messageId": "msg-2",
+          "from": "coordinator",
+          "to": "docs_agent",
+          "payload": {
+            "doc_id": "doc-does-not-exist",
+            "service": "payments"
+          },
+          "parentResultId": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-agent_result",
+        "type": "error",
+        "title": "Agent result",
+        "status": "error",
+        "detail": {
+          "resultId": "result-2",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "ok": false,
+          "inReplyTo": "msg-2",
+          "payload": {},
+          "error": {
+            "code": "unknown_doc",
+            "message": "Unknown document 'doc-does-not-exist'",
+            "validDocIds": [
+              "doc-auth-ttl",
+              "doc-billing-overview",
+              "doc-payments-runbook"
+            ]
+          }
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-state_updated",
+        "type": "protocol",
+        "title": "Shared state updated",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-docs-agent-failure",
+          "resultId": "result-2",
+          "agentId": "docs_agent",
+          "resultCount": 2
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-failure",
+        "type": "error",
+        "title": "Agent failure",
+        "status": "error",
+        "detail": {
+          "agentId": "docs_agent",
+          "resultId": "result-2",
+          "error": {
+            "code": "unknown_doc",
+            "message": "Unknown document 'doc-does-not-exist'",
+            "validDocIds": [
+              "doc-auth-ttl",
+              "doc-billing-overview",
+              "doc-payments-runbook"
+            ]
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-15-aggregation",
+        "type": "aggregation",
+        "title": "Coordinator aggregation",
+        "status": "ok",
+        "detail": {
+          "resultIds": [
+            "result-1",
+            "result-2"
+          ],
+          "agentIds": [
+            "status_agent",
+            "docs_agent"
+          ],
+          "answer": "Collaboration brief for: Prepare an incident packet, including a missing runbook.\nService: payments\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}\n- docs_agent (docs) FAILED: unknown_doc: Unknown document 'doc-does-not-exist'\nCoordinator: specialist failure recorded; not treated as success.",
+          "failed": true
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-16-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "agent_failed"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "state": {
+      "taskId": "task-docs-agent-failure",
+      "request": "Prepare an incident packet, including a missing runbook.",
+      "service": "payments",
+      "delegations": [
+        {
+          "delegation_id": "delegation-1",
+          "agent_id": "status_agent",
+          "role": "status",
+          "assignment": {
+            "service": "payments"
+          },
+          "parent_result_id": null,
+          "skipped": false,
+          "skip_reason": null
+        },
+        {
+          "delegation_id": "delegation-2",
+          "agent_id": "docs_agent",
+          "role": "docs",
+          "assignment": {
+            "doc_id": "doc-does-not-exist",
+            "service": "payments"
+          },
+          "parent_result_id": null,
+          "skipped": false,
+          "skip_reason": null
+        }
+      ],
+      "messages": [
+        {
+          "message_id": "msg-1",
+          "from_agent": "coordinator",
+          "to_agent": "status_agent",
+          "task_id": "task-docs-agent-failure",
+          "payload": {
+            "service": "payments"
+          },
+          "parent_result_id": null
+        },
+        {
+          "message_id": "msg-2",
+          "from_agent": "coordinator",
+          "to_agent": "docs_agent",
+          "task_id": "task-docs-agent-failure",
+          "payload": {
+            "doc_id": "doc-does-not-exist",
+            "service": "payments"
+          },
+          "parent_result_id": null
+        }
+      ],
+      "results": [
+        {
+          "result_id": "result-1",
+          "agent_id": "status_agent",
+          "role": "status",
+          "ok": true,
+          "in_reply_to": "msg-1",
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null
+        },
+        {
+          "result_id": "result-2",
+          "agent_id": "docs_agent",
+          "role": "docs",
+          "ok": false,
+          "in_reply_to": "msg-2",
+          "payload": {},
+          "error": {
+            "code": "unknown_doc",
+            "message": "Unknown document 'doc-does-not-exist'",
+            "validDocIds": [
+              "doc-auth-ttl",
+              "doc-billing-overview",
+              "doc-payments-runbook"
+            ]
+          }
+        }
+      ],
+      "skipped": [],
+      "invokedAgentIds": [
+        "status_agent",
+        "docs_agent"
+      ],
+      "skippedAgentIds": [],
+      "finalAnswer": "Collaboration brief for: Prepare an incident packet, including a missing runbook.\nService: payments\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}\n- docs_agent (docs) FAILED: unknown_doc: Unknown document 'doc-does-not-exist'\nCoordinator: specialist failure recorded; not treated as success.",
+      "terminationReason": "agent_failed",
+      "errors": [
+        {
+          "code": "unknown_doc",
+          "message": "Unknown document 'doc-does-not-exist'",
+          "validDocIds": [
+            "doc-auth-ttl",
+            "doc-billing-overview",
+            "doc-payments-runbook"
+          ]
+        }
+      ]
+    },
+    "output": {
+      "answer": "Collaboration brief for: Prepare an incident packet, including a missing runbook.\nService: payments\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": \"PAY-2041: elevated card-auth latency\", \"latencyP99Ms\": 890, \"region\": \"us-east-1\", \"service\": \"payments\", \"status\": \"degraded\"}}\n- docs_agent (docs) FAILED: unknown_doc: Unknown document 'doc-does-not-exist'\nCoordinator: specialist failure recorded; not treated as success.",
+      "ok": false,
+      "terminationReason": "agent_failed"
+    },
+    "errors": [
+      {
+        "code": "unknown_doc",
+        "message": "Unknown document 'doc-does-not-exist'",
+        "validDocIds": [
+          "doc-auth-ttl",
+          "doc-billing-overview",
+          "doc-payments-runbook"
+        ]
+      }
+    ],
+    "metrics": {
+      "totalMs": 0,
+      "coordinatorMs": 0,
+      "agentMs": 0,
+      "synthesisMs": 0,
+      "agentsInvoked": 2,
+      "successfulAgentResults": 1,
+      "failedAgentResults": 1,
+      "delegations": 2,
+      "skippedDelegations": 0,
+      "messages": 2,
+      "terminationReason": "agent_failed",
+      "maxDelegations": 6,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable collaboration events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "TASK",
+          "taskId": "task-docs-agent-failure",
+          "request": "Prepare an incident packet, including a missing runbook."
+        },
+        {
+          "phase": "DELEGATE",
+          "agentId": "status_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "resultId": "result-1",
+          "latencyMs": 0
+        },
+        {
+          "phase": "DELEGATE",
+          "agentId": "docs_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "ok": false,
+          "resultId": "result-2",
+          "latencyMs": 0
+        },
+        {
+          "phase": "FAILURE",
+          "agentId": "docs_agent",
+          "error": {
+            "code": "unknown_doc",
+            "message": "Unknown document 'doc-does-not-exist'",
+            "validDocIds": [
+              "doc-auth-ttl",
+              "doc-billing-overview",
+              "doc-payments-runbook"
+            ]
+          }
+        },
+        {
+          "phase": "AGGREGATE",
+          "agentIds": [
+            "status_agent",
+            "docs_agent"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "agent_failed"
+          }
+        }
+      ],
+      "signatureFlow": "TASK \u2192 DELEGATE \u2192 AGENT \u2192 DELEGATE \u2192 AGENT \u2192 FAILURE \u2192 AGGREGATE \u2192 TERMINATION"
+    },
+    "relatedEntities": [
+      "agents"
+    ],
+    "relatedContent": [
+      "agents",
+      "multi-agent",
+      "collaboration"
+    ],
+    "cookbook": {
+      "path": "examples/agents/06-multi-agent-collaboration"
+    }
+  },
+  {
+    "labId": "multi-agent-collaboration",
+    "traceId": "operational-short-circuit",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-12T14:37:51Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "COLLABORATION_TERMINATION",
+    "selectionNote": "Measured case: billing is operational with no incident. The coordinator skips analysis and terminates without additional specialist work.",
+    "architecture": {
+      "layout": "multi-agent-collaboration",
+      "stages": [
+        "task",
+        "delegate",
+        "specialist",
+        "shared-state",
+        "aggregate",
+        "termination"
+      ]
+    },
+    "input": {
+      "request": "Check billing and analyze only if an incident is open.",
+      "service": "billing",
+      "config": {
+        "maxDelegations": 6,
+        "modelDriver": "mock",
+        "synthesizerModel": "mock",
+        "clientName": "dataaihub-cookbook-multi-agent",
+        "dataDir": "/Users/tapansharma/Code/dataaihub-cookbook/examples/agents/06-multi-agent-collaboration/data"
+      }
+    },
+    "sequence": [
+      {
+        "kind": "task_created",
+        "detail": {
+          "taskId": "task-operational-short-circuit",
+          "request": "Check billing and analyze only if an incident is open.",
+          "service": "billing",
+          "exampleClass": "COLLABORATION_TERMINATION"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "coordinator_decision",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "status_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "delegation",
+        "detail": {
+          "delegationId": "delegation-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "assignment": {
+            "service": "billing"
+          },
+          "parentResultId": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_selected",
+        "detail": {
+          "agentId": "status_agent",
+          "role": "status"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_message",
+        "detail": {
+          "messageId": "msg-1",
+          "from": "coordinator",
+          "to": "status_agent",
+          "payload": {
+            "service": "billing"
+          },
+          "parentResultId": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "inReplyTo": "msg-1",
+          "payload": {
+            "service": {
+              "service": "billing",
+              "status": "operational",
+              "region": "us-east-1",
+              "latencyP99Ms": 120,
+              "incident": null
+            }
+          },
+          "error": null
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "state_updated",
+        "detail": {
+          "taskId": "task-operational-short-circuit",
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "resultCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "coordinator_decision",
+        "detail": {
+          "decision": "skip",
+          "agentId": "analysis_agent",
+          "reason": "no_incident"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "coordinator_decision",
+        "detail": {
+          "decision": "aggregate",
+          "resultCount": 1
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "aggregation",
+        "detail": {
+          "resultIds": [
+            "result-1"
+          ],
+          "agentIds": [
+            "status_agent"
+          ],
+          "answer": "Collaboration brief for: Check billing and analyze only if an incident is open.\nService: billing\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": null, \"latencyP99Ms\": 120, \"region\": \"us-east-1\", \"service\": \"billing\", \"status\": \"operational\"}}\nSkipped: analysis_agent",
+          "skippedAgentIds": [
+            "analysis_agent"
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "no_further_work"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-task_created",
+        "type": "protocol",
+        "title": "Task created",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-operational-short-circuit",
+          "request": "Check billing and analyze only if an incident is open.",
+          "service": "billing",
+          "exampleClass": "COLLABORATION_TERMINATION"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-coordinator_decision",
+        "type": "protocol",
+        "title": "Coordinator decision",
+        "status": "ok",
+        "detail": {
+          "decision": "delegate",
+          "agentId": "status_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-delegation",
+        "type": "protocol",
+        "title": "Delegation",
+        "status": "ok",
+        "detail": {
+          "delegationId": "delegation-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "assignment": {
+            "service": "billing"
+          },
+          "parentResultId": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-agent_selected",
+        "type": "protocol",
+        "title": "Agent selected",
+        "status": "ok",
+        "detail": {
+          "agentId": "status_agent",
+          "role": "status"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-agent_message",
+        "type": "agent",
+        "title": "Agent message",
+        "status": "ok",
+        "detail": {
+          "messageId": "msg-1",
+          "from": "coordinator",
+          "to": "status_agent",
+          "payload": {
+            "service": "billing"
+          },
+          "parentResultId": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "inReplyTo": "msg-1",
+          "payload": {
+            "service": {
+              "service": "billing",
+              "status": "operational",
+              "region": "us-east-1",
+              "latencyP99Ms": 120,
+              "incident": null
+            }
+          },
+          "error": null
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-state_updated",
+        "type": "protocol",
+        "title": "Shared state updated",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-operational-short-circuit",
+          "resultId": "result-1",
+          "agentId": "status_agent",
+          "resultCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-coordinator_decision",
+        "type": "protocol",
+        "title": "Coordinator decision",
+        "status": "ok",
+        "detail": {
+          "decision": "skip",
+          "agentId": "analysis_agent",
+          "reason": "no_incident"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-coordinator_decision",
+        "type": "protocol",
+        "title": "Coordinator decision",
+        "status": "ok",
+        "detail": {
+          "decision": "aggregate",
+          "resultCount": 1
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-aggregation",
+        "type": "aggregation",
+        "title": "Coordinator aggregation",
+        "status": "ok",
+        "detail": {
+          "resultIds": [
+            "result-1"
+          ],
+          "agentIds": [
+            "status_agent"
+          ],
+          "answer": "Collaboration brief for: Check billing and analyze only if an incident is open.\nService: billing\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": null, \"latencyP99Ms\": 120, \"region\": \"us-east-1\", \"service\": \"billing\", \"status\": \"operational\"}}\nSkipped: analysis_agent",
+          "skippedAgentIds": [
+            "analysis_agent"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "no_further_work"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "state": {
+      "taskId": "task-operational-short-circuit",
+      "request": "Check billing and analyze only if an incident is open.",
+      "service": "billing",
+      "delegations": [
+        {
+          "delegation_id": "delegation-1",
+          "agent_id": "status_agent",
+          "role": "status",
+          "assignment": {
+            "service": "billing"
+          },
+          "parent_result_id": null,
+          "skipped": false,
+          "skip_reason": null
+        }
+      ],
+      "messages": [
+        {
+          "message_id": "msg-1",
+          "from_agent": "coordinator",
+          "to_agent": "status_agent",
+          "task_id": "task-operational-short-circuit",
+          "payload": {
+            "service": "billing"
+          },
+          "parent_result_id": null
+        }
+      ],
+      "results": [
+        {
+          "result_id": "result-1",
+          "agent_id": "status_agent",
+          "role": "status",
+          "ok": true,
+          "in_reply_to": "msg-1",
+          "payload": {
+            "service": {
+              "service": "billing",
+              "status": "operational",
+              "region": "us-east-1",
+              "latencyP99Ms": 120,
+              "incident": null
+            }
+          },
+          "error": null
+        }
+      ],
+      "skipped": [
+        {
+          "delegation_id": "skipped-analysis_agent",
+          "agent_id": "analysis_agent",
+          "role": null,
+          "assignment": {},
+          "parent_result_id": null,
+          "skipped": true,
+          "skip_reason": "no_incident"
+        }
+      ],
+      "invokedAgentIds": [
+        "status_agent"
+      ],
+      "skippedAgentIds": [
+        "analysis_agent"
+      ],
+      "finalAnswer": "Collaboration brief for: Check billing and analyze only if an incident is open.\nService: billing\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": null, \"latencyP99Ms\": 120, \"region\": \"us-east-1\", \"service\": \"billing\", \"status\": \"operational\"}}\nSkipped: analysis_agent",
+      "terminationReason": "no_further_work",
+      "errors": []
+    },
+    "output": {
+      "answer": "Collaboration brief for: Check billing and analyze only if an incident is open.\nService: billing\nAgent results:\n- status_agent (status) ok: {\"service\": {\"incident\": null, \"latencyP99Ms\": 120, \"region\": \"us-east-1\", \"service\": \"billing\", \"status\": \"operational\"}}\nSkipped: analysis_agent",
+      "ok": true,
+      "terminationReason": "no_further_work"
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "coordinatorMs": 0,
+      "agentMs": 0,
+      "synthesisMs": 0,
+      "agentsInvoked": 1,
+      "successfulAgentResults": 1,
+      "failedAgentResults": 0,
+      "delegations": 1,
+      "skippedDelegations": 1,
+      "messages": 1,
+      "terminationReason": "no_further_work",
+      "maxDelegations": 6,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable collaboration events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "TASK",
+          "taskId": "task-operational-short-circuit",
+          "request": "Check billing and analyze only if an incident is open."
+        },
+        {
+          "phase": "DELEGATE",
+          "agentId": "status_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "resultId": "result-1",
+          "latencyMs": 0
+        },
+        {
+          "phase": "SKIP",
+          "agentId": "analysis_agent",
+          "reason": "no_incident"
+        },
+        {
+          "phase": "AGGREGATE_DECISION"
+        },
+        {
+          "phase": "AGGREGATE",
+          "agentIds": [
+            "status_agent"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "no_further_work"
+          }
+        }
+      ],
+      "signatureFlow": "TASK \u2192 DELEGATE \u2192 AGENT \u2192 SKIP \u2192 AGGREGATE \u2192 TERMINATION"
+    },
+    "relatedEntities": [
+      "agents"
+    ],
+    "relatedContent": [
+      "agents",
+      "multi-agent",
+      "collaboration"
+    ],
+    "cookbook": {
+      "path": "examples/agents/06-multi-agent-collaboration"
+    }
+  }
+]
