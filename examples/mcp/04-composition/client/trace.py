@@ -54,11 +54,12 @@ def build_signature_view(sequence: list[SequenceEvent]) -> list[dict[str, Any]]:
         elif event.kind == "resource_read_request":
             view.append({"phase": "RESOURCE", "uri": event.detail.get("uri")})
         elif event.kind == "resource_read_response":
+            is_error = bool(event.detail.get("isError"))
             view.append(
                 {
-                    "phase": "CONTEXT",
+                    "phase": "REJECTED" if is_error else "CONTEXT",
                     "uri": event.detail.get("uri"),
-                    "isError": bool(event.detail.get("isError")),
+                    "isError": is_error,
                     "latencyMs": event.latency_ms,
                 }
             )
@@ -85,11 +86,12 @@ def build_signature_view(sequence: list[SequenceEvent]) -> list[dict[str, Any]]:
                     }
                 )
         elif event.kind == "prompt_get_response":
+            is_error = bool(event.detail.get("isError"))
             view.append(
                 {
-                    "phase": "MESSAGES",
+                    "phase": "REJECTED" if is_error else "MESSAGES",
                     "name": event.detail.get("name"),
-                    "isError": bool(event.detail.get("isError")),
+                    "isError": is_error,
                     "latencyMs": event.latency_ms,
                 }
             )
@@ -183,7 +185,15 @@ def sequence_to_steps(sequence: list[SequenceEvent]) -> list[dict[str, Any]]:
         status = "ok"
         if event.kind == "error":
             status = "error"
-        if event.kind in {"sampling_response", "tool_call_response"}:
+        if event.kind in {
+            "sampling_response",
+            "tool_call_response",
+            "resource_read_response",
+            "prompt_get_response",
+            "resources_list_response",
+            "prompts_list_response",
+            "tools_list_response",
+        }:
             if event.detail.get("isError"):
                 status = "error"
         step_type = "error" if status == "error" else "protocol"

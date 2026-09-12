@@ -1,0 +1,17 @@
+[
+  {
+    "id": "doc-payments-runbook",
+    "title": "Payments degradation runbook",
+    "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+  },
+  {
+    "id": "doc-billing-overview",
+    "title": "Billing service overview",
+    "body": "Billing records invoices and plan charges. Canonical name is billing. Status tooling rejects aliases such as billing-api."
+  },
+  {
+    "id": "doc-auth-ttl",
+    "title": "NebulaAuth token TTL",
+    "body": "NebulaAuth access tokens expire after eight hours of inactivity. Enable silent credential refresh so tokens renew without interactive prompts."
+  }
+]

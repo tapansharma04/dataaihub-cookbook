@@ -126,7 +126,11 @@ CASES: tuple[MeasuredCase, ...] = (
             ProtocolStep(
                 kind="call_tool",
                 tool_name="compose_incident_brief",
-                tool_arguments={"service": "billing-api"},
+                tool_arguments={
+                    "service": "billing-api",
+                    "resource_uri": "acme://docs/billing-portal",
+                    "prompt_name": "draft-status-update",
+                },
             ),
         ),
         sampling_mode="mock",

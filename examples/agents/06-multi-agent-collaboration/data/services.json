@@ -1,0 +1,23 @@
+{
+  "billing": {
+    "service": "billing",
+    "status": "operational",
+    "region": "us-east-1",
+    "latencyP99Ms": 120,
+    "incident": null
+  },
+  "payments": {
+    "service": "payments",
+    "status": "degraded",
+    "region": "us-east-1",
+    "latencyP99Ms": 890,
+    "incident": "PAY-2041: elevated card-auth latency"
+  },
+  "auth": {
+    "service": "auth",
+    "status": "major_outage",
+    "region": "us-west-2",
+    "latencyP99Ms": null,
+    "incident": "AUTH-881: token issuer unreachable"
+  }
+}

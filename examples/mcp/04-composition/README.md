@@ -63,7 +63,15 @@ The server uses `ctx.session.create_message(...)` from the MCP Python SDK
 client answers with `sampling_callback=` passed to `Client(...)`.
 
 Composition tools take the prior `resources/read`, `prompts/get`, and
-`tools/call` results as arguments. They do not reload those fixtures.
+`tools/call` results as arguments. The client runner binds those **observed
+protocol results** into the next `tools/call`. Composition tools do not
+reload server fixtures, and they do not re-render prompt templates.
+
+If a required prior result is missing, the runner records a `compose_bind`
+error and stops. It does not invent fixture content. Empty composition
+payloads return `ok: false` from the tool without requesting Sampling.
+
+A recorded protocol or application failure stops remaining steps.
 
 Handshake-era Sampling needs a back-channel. This example pins
 `mode="legacy"`, matching MCP #1–#3.
@@ -87,11 +95,13 @@ returned by the API.
 |----------|-------|----------|
 | `resource-to-sampling` | `RESOURCE_TO_SAMPLING` | `resources/read` → compose tool → sampling grounded in that resource |
 | `prompt-to-sampling` | `PROMPT_TO_SAMPLING` | `prompts/get` → compose tool → sampling from the same prompt template |
-| `tool-resource-prompt-composition` | `TOOL_RESOURCE_PROMPT_COMPOSITION` | status tool → resource → prompt → compose tool → sampling |
+| `tool-resource-prompt-composition` | `TOOL_RESOURCE_PROMPT_COMPOSITION` | status tool → resource → prompt → compose tool (explicit `resource_uri` / `prompt_name`) → sampling |
 | `sampling-failure` | `SAMPLING_FAILURE` | compose tool → sampling request → client `ErrorData` rejection |
 
 The failure case is a controlled mock Sampling client that returns JSON-RPC
-`ErrorData`. No model output is produced.
+`ErrorData`. No model output is produced. Missing prior results, unknown
+resource/prompt names, and empty composition payloads are covered by tests;
+they are not additional Lab traces.
 
 ## 5. Transport
 
@@ -208,9 +218,20 @@ Writes `lab_traces_llm.json` without overwriting `lab_traces.json`.
 
 Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
 
+## Limitations
+
+- In-process transport only (local fixture, not production topology).
+- Deterministic Acme AI catalog: three resources, two prompts, four tools.
+- No OAuth, multi-server federation, or agent loop.
+- The MCP Python SDK currently emits a deprecation warning for Sampling
+  (`SEP-2577`, 2026-07-28). This example still uses Sampling because that is
+  the protocol mechanism for server-requested generation through the client.
+
 ## Design boundaries
 
 - **Composition, not a Sampling-only demo** — Sampling exists to complete the workflow
 - **Server does not import OpenAI** — the client sampling callback owns model I/O
 - **Measured protocol** — traces come from actual SDK client/server runs
 - **Deterministic mock path** — CI has no API key dependency
+- **Prior-result dataflow** — composition arguments come from earlier MCP
+  responses in the same run, not from independently reloaded fixtures

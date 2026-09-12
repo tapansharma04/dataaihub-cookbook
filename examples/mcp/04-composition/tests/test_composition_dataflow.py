@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
@@ -221,7 +222,11 @@ def test_bind_incident_uses_prompts_get_arguments():
     get_arguments = {"service": "billing-api", "status": "degraded"}
     bound = _bind_composition_arguments(
         "compose_incident_brief",
-        {"service": "billing-api"},
+        {
+            "service": "billing-api",
+            "resource_uri": "acme://docs/billing-portal",
+            "prompt_name": "draft-status-update",
+        },
         output={
             "invocations": [
                 {
@@ -239,18 +244,31 @@ def test_bind_incident_uses_prompts_get_arguments():
             ],
             "reads": [
                 {
+                    "requestedUri": "acme://docs/knowledge-platform",
+                    "isError": False,
+                    "contents": [
+                        {"text": "KNOWLEDGE-DOC", "mimeType": "text/markdown"}
+                    ],
+                },
+                {
                     "requestedUri": "acme://docs/billing-portal",
                     "isError": False,
                     "contents": [{"text": "BILLING-DOC", "mimeType": "text/markdown"}],
-                }
+                },
             ],
             "gets": [
+                {
+                    "requestedPrompt": "summarize-service",
+                    "arguments": {"service_name": "knowledge-platform"},
+                    "isError": False,
+                    "messages": [{"role": "user", "content": {"text": "OTHER"}}],
+                },
                 {
                     "requestedPrompt": "draft-status-update",
                     "arguments": get_arguments,
                     "isError": False,
                     "messages": [{"role": "user", "content": {"text": "PROMPT"}}],
-                }
+                },
             ],
         },
         discovered_resources=[],
@@ -258,3 +276,183 @@ def test_bind_incident_uses_prompts_get_arguments():
     assert bound["tool_result"]["service"]["service"] == "billing-api"
     assert bound["prompt_arguments"] == get_arguments
     assert bound["resource_content"] == "BILLING-DOC"
+    assert bound["resource_uri"] == "acme://docs/billing-portal"
+    assert bound["prompt_name"] == "draft-status-update"
+
+
+def test_bind_incident_requires_named_selectors():
+    from client.runner import _bind_composition_arguments
+
+    with pytest.raises(ValueError, match="compose_incident_brief"):
+        _bind_composition_arguments(
+            "compose_incident_brief",
+            {"service": "billing-api"},
+            output={
+                "invocations": [
+                    {
+                        "tool": "get_service_status",
+                        "arguments": {"service": "billing-api"},
+                        "isError": False,
+                        "result": {"ok": True, "service": {"service": "billing-api"}},
+                    }
+                ],
+                "reads": [
+                    {
+                        "requestedUri": "acme://docs/billing-portal",
+                        "isError": False,
+                        "contents": [
+                            {"text": "BILLING-DOC", "mimeType": "text/markdown"}
+                        ],
+                    }
+                ],
+                "gets": [
+                    {
+                        "requestedPrompt": "draft-status-update",
+                        "arguments": {},
+                        "isError": False,
+                        "messages": [{"role": "user", "content": {"text": "PROMPT"}}],
+                    }
+                ],
+            },
+            discovered_resources=[],
+        )
+
+
+def test_bind_incident_missing_named_resource_raises():
+    from client.runner import _bind_composition_arguments
+
+    with pytest.raises(ValueError, match="compose_incident_brief"):
+        _bind_composition_arguments(
+            "compose_incident_brief",
+            {
+                "service": "billing-api",
+                "resource_uri": "acme://docs/billing-portal",
+                "prompt_name": "draft-status-update",
+            },
+            output={
+                "invocations": [
+                    {
+                        "tool": "get_service_status",
+                        "arguments": {"service": "billing-api"},
+                        "isError": False,
+                        "result": {"ok": True, "service": {"service": "billing-api"}},
+                    }
+                ],
+                "reads": [
+                    {
+                        "requestedUri": "acme://docs/knowledge-platform",
+                        "isError": False,
+                        "contents": [{"text": "OTHER", "mimeType": "text/markdown"}],
+                    }
+                ],
+                "gets": [
+                    {
+                        "requestedPrompt": "draft-status-update",
+                        "arguments": {},
+                        "isError": False,
+                        "messages": [{"role": "user", "content": {"text": "PROMPT"}}],
+                    }
+                ],
+            },
+            discovered_resources=[],
+        )
+
+
+def _structured(result: types.CallToolResult) -> dict[str, Any]:
+    if result.structured_content is not None and isinstance(
+        result.structured_content, dict
+    ):
+        return result.structured_content
+    texts = [
+        block.text
+        for block in result.content
+        if getattr(block, "type", None) == "text" and getattr(block, "text", None)
+    ]
+    if len(texts) == 1:
+        payload = json.loads(texts[0])
+        if isinstance(payload, dict):
+            return payload
+    raise AssertionError("expected structured tool content")
+
+
+async def _call_without_sampling(server, settings: Settings, tool_name: str, arguments):
+    captured: list[types.CreateMessageRequestParams] = []
+
+    async def sampling_callback(_context, params):
+        captured.append(params)
+        return mock_complete(params)
+
+    client_info = types.Implementation(
+        name=settings.client_name,
+        version=settings.client_version,
+    )
+    async with Client(
+        server,
+        mode=settings.mcp_client_mode,
+        client_info=client_info,
+        sampling_callback=sampling_callback,
+    ) as client:
+        result = await client.call_tool(tool_name, arguments)
+    return result, captured
+
+
+@pytest.mark.asyncio
+async def test_empty_resource_content_does_not_sample(settings, server):
+    result, captured = await _call_without_sampling(
+        server,
+        settings,
+        TOOL_COMPOSE_RESOURCE_BRIEF,
+        {
+            "uri": URI_KNOWLEDGE_PLATFORM,
+            "content": "   ",
+            "mime_type": "text/markdown",
+            "name": "knowledge-platform",
+        },
+    )
+    assert result.is_error is False
+    payload = _structured(result)
+    assert payload["ok"] is False
+    assert payload["error"]["code"] == "missing_resource_content"
+    assert captured == []
+
+
+@pytest.mark.asyncio
+async def test_empty_prompt_messages_do_not_sample(settings, server):
+    result, captured = await _call_without_sampling(
+        server,
+        settings,
+        TOOL_COMPOSE_FROM_PROMPT,
+        {
+            "prompt_name": "summarize-service",
+            "service_name": "knowledge-platform",
+            "audience": "engineering",
+            "messages": [],
+        },
+    )
+    assert result.is_error is False
+    payload = _structured(result)
+    assert payload["ok"] is False
+    assert payload["error"]["code"] == "missing_prompt_messages"
+    assert captured == []
+
+
+@pytest.mark.asyncio
+async def test_empty_incident_prompt_messages_do_not_sample(settings, server):
+    result, captured = await _call_without_sampling(
+        server,
+        settings,
+        TOOL_COMPOSE_INCIDENT_BRIEF,
+        {
+            "service": "billing-api",
+            "tool_result": SENTINEL_TOOL,
+            "resource_uri": "acme://docs/billing-portal",
+            "resource_content": SENTINEL_RESOURCE,
+            "prompt_name": "draft-status-update",
+            "prompt_messages": [],
+        },
+    )
+    assert result.is_error is False
+    payload = _structured(result)
+    assert payload["ok"] is False
+    assert payload["error"]["code"] == "missing_prompt_messages"
+    assert captured == []

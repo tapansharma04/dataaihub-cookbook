@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import time
-from typing import Any
+from typing import Any, Literal
 
 import mcp_types as types
 from mcp import Client
@@ -232,22 +232,86 @@ def _matching_status_result(
     return None
 
 
-def _successful_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    return [item for item in items if not item.get("isError")]
-
-
-def _unique_successful(items: list[dict[str, Any]]) -> dict[str, Any] | None:
-    successful = _successful_items(items)
-    if len(successful) == 1:
-        return successful[0]
-    return None
-
-
 def _had_sampling_rejection(sequence: list[SequenceEvent]) -> bool:
     return any(
         event.kind == "sampling_response" and event.detail.get("isError")
         for event in sequence
     )
+
+
+def _record_protocol_or_transport_failure(
+    exc: BaseException,
+    *,
+    sequence: list[SequenceEvent],
+    errors: list[dict[str, Any]],
+    counters: dict[str, Any],
+    latency_ms: int,
+    interaction_id: str,
+    stage: str,
+    response_kind: Literal[
+        "resources_list_response",
+        "resource_read_response",
+        "prompts_list_response",
+        "prompt_get_response",
+        "tools_list_response",
+        "tool_call_response",
+    ],
+    detail: dict[str, Any],
+    rejected_reason: str,
+) -> dict[str, Any]:
+    """Record a protocol-visible response or a transport `error` event."""
+    protocol_error = _protocol_error_payload(exc)
+    is_protocol = _is_mcp_protocol_error(exc) and protocol_error is not None
+    if is_protocol:
+        if _had_sampling_rejection(sequence):
+            counters["termination_reason"] = "sampling_rejected"
+        else:
+            counters["termination_reason"] = rejected_reason
+        response_detail = {
+            **detail,
+            "isError": True,
+            "error": protocol_error,
+            "exceptionType": type(exc).__name__,
+        }
+        sequence.append(
+            SequenceEvent(
+                kind=response_kind,
+                detail=response_detail,
+                latency_ms=latency_ms,
+            )
+        )
+        errors.append(
+            {
+                "stage": stage,
+                "isError": True,
+                "detail": response_detail,
+            }
+        )
+        return response_detail
+
+    counters["termination_reason"] = "protocol_error"
+    error_detail = {
+        "interactionId": interaction_id,
+        "stage": stage,
+        "message": str(exc),
+        "exceptionType": type(exc).__name__,
+    }
+    sequence.append(
+        SequenceEvent(
+            kind="error",
+            detail=error_detail,
+            latency_ms=latency_ms,
+        )
+    )
+    errors.append(
+        {
+            "stage": stage,
+            "isError": True,
+            "message": str(exc),
+            "exceptionType": type(exc).__name__,
+        }
+    )
+    return error_detail
 
 
 def _bind_composition_arguments(
@@ -291,20 +355,14 @@ def _bind_composition_arguments(
         gets = output.get("gets") or []
         resource_uri = bound.get("resource_uri")
         prompt_name = bound.get("prompt_name")
-        read = (
-            _matching_read(reads, resource_uri)
-            if resource_uri
-            else _unique_successful(reads)
-        )
-        get = (
-            _matching_get(gets, prompt_name)
-            if prompt_name
-            else _unique_successful(gets)
-        )
+        read = _matching_read(reads, resource_uri)
+        get = _matching_get(gets, prompt_name)
         if status is None or read is None or get is None:
             raise ValueError(
-                "compose_incident_brief requires a matching prior tools/call, "
-                "a unique or named resources/read, and a unique or named prompts/get"
+                "compose_incident_brief requires a matching prior tools/call "
+                f"for service={service!r}, resources/read for "
+                f"uri={resource_uri!r}, and prompts/get for "
+                f"prompt={prompt_name!r}"
             )
         bound["tool_result"] = status
         bound["resource_uri"] = read.get("requestedUri")
@@ -329,7 +387,8 @@ async def _run_step(
     discovered_prompts: list[DiscoveredPrompt],
     discovered_tools: list[DiscoveredTool],
     counters: dict[str, Any],
-) -> None:
+) -> bool:
+    """Execute one protocol step. Return False to stop remaining steps."""
     if step.kind == "list_resources":
         started = time.perf_counter()
         sequence.append(
@@ -341,7 +400,27 @@ async def _run_step(
                 },
             )
         )
-        result = await client.list_resources()
+        try:
+            result = await client.list_resources()
+        except Exception as exc:
+            latency = _elapsed_ms(started)
+            counters["discovery_ms"] += latency
+            _record_protocol_or_transport_failure(
+                exc,
+                sequence=sequence,
+                errors=errors,
+                counters=counters,
+                latency_ms=latency,
+                interaction_id="resources/list",
+                stage="resources/list",
+                response_kind="resources_list_response",
+                detail={
+                    "interactionId": "resources/list",
+                    "method": "resources/list",
+                },
+                rejected_reason="protocol_error",
+            )
+            return False
         latency = _elapsed_ms(started)
         counters["discovery_ms"] += latency
         discovered_resources.clear()
@@ -363,12 +442,13 @@ async def _run_step(
         output["discoveredResources"] = [
             resource.uri for resource in discovered_resources
         ]
-        return
+        return True
 
     if step.kind == "read_resource":
         assert step.uri is not None
         uri = step.uri
         interaction_id = f"resources/read:{uri}"
+        discovered_uris = {resource.uri for resource in discovered_resources}
         started = time.perf_counter()
         sequence.append(
             SequenceEvent(
@@ -377,11 +457,42 @@ async def _run_step(
                     "interactionId": interaction_id,
                     "method": "resources/read",
                     "uri": uri,
+                    "discoveredBeforeRead": uri in discovered_uris,
                 },
             )
         )
         counters["resources_read"] += 1
-        result = await client.read_resource(uri)
+        try:
+            result = await client.read_resource(uri)
+        except Exception as exc:
+            latency = _elapsed_ms(started)
+            counters["resource_read_ms"] += latency
+            recorded = _record_protocol_or_transport_failure(
+                exc,
+                sequence=sequence,
+                errors=errors,
+                counters=counters,
+                latency_ms=latency,
+                interaction_id=interaction_id,
+                stage="resources/read",
+                response_kind="resource_read_response",
+                detail={
+                    "interactionId": interaction_id,
+                    "method": "resources/read",
+                    "uri": uri,
+                },
+                rejected_reason="resource_read_rejected",
+            )
+            failed_read: dict[str, Any] = {
+                "requestedUri": uri,
+                "isError": True,
+            }
+            if "error" in recorded:
+                failed_read["error"] = recorded["error"]
+            if recorded.get("message"):
+                failed_read["message"] = recorded["message"]
+            output["reads"].append(failed_read)
+            return False
         latency = _elapsed_ms(started)
         counters["resource_read_ms"] += latency
         contents = _content_payload(list(result.contents))
@@ -401,7 +512,7 @@ async def _run_step(
         output["reads"].append(
             {"requestedUri": uri, "isError": False, "contents": contents}
         )
-        return
+        return True
 
     if step.kind == "list_prompts":
         started = time.perf_counter()
@@ -411,7 +522,27 @@ async def _run_step(
                 detail={"interactionId": "prompts/list", "method": "prompts/list"},
             )
         )
-        result = await client.list_prompts()
+        try:
+            result = await client.list_prompts()
+        except Exception as exc:
+            latency = _elapsed_ms(started)
+            counters["discovery_ms"] += latency
+            _record_protocol_or_transport_failure(
+                exc,
+                sequence=sequence,
+                errors=errors,
+                counters=counters,
+                latency_ms=latency,
+                interaction_id="prompts/list",
+                stage="prompts/list",
+                response_kind="prompts_list_response",
+                detail={
+                    "interactionId": "prompts/list",
+                    "method": "prompts/list",
+                },
+                rejected_reason="protocol_error",
+            )
+            return False
         latency = _elapsed_ms(started)
         counters["discovery_ms"] += latency
         discovered_prompts.clear()
@@ -431,13 +562,14 @@ async def _run_step(
             )
         )
         output["discoveredPrompts"] = [prompt.name for prompt in discovered_prompts]
-        return
+        return True
 
     if step.kind == "get_prompt":
         assert step.prompt_name is not None
         prompt_name = step.prompt_name
         arguments = dict(step.prompt_arguments or {})
         interaction_id = f"prompts/get:{prompt_name}"
+        discovered_names = {prompt.name for prompt in discovered_prompts}
         started = time.perf_counter()
         sequence.append(
             SequenceEvent(
@@ -447,11 +579,44 @@ async def _run_step(
                     "method": "prompts/get",
                     "name": prompt_name,
                     "arguments": arguments,
+                    "discoveredBeforeGet": prompt_name in discovered_names,
                 },
             )
         )
         counters["prompts_requested"] += 1
-        result = await client.get_prompt(prompt_name, arguments)
+        try:
+            result = await client.get_prompt(prompt_name, arguments)
+        except Exception as exc:
+            latency = _elapsed_ms(started)
+            counters["prompt_get_ms"] += latency
+            recorded = _record_protocol_or_transport_failure(
+                exc,
+                sequence=sequence,
+                errors=errors,
+                counters=counters,
+                latency_ms=latency,
+                interaction_id=interaction_id,
+                stage="prompts/get",
+                response_kind="prompt_get_response",
+                detail={
+                    "interactionId": interaction_id,
+                    "method": "prompts/get",
+                    "name": prompt_name,
+                    "arguments": arguments,
+                },
+                rejected_reason="prompt_get_rejected",
+            )
+            failed_get: dict[str, Any] = {
+                "requestedPrompt": prompt_name,
+                "arguments": arguments,
+                "isError": True,
+            }
+            if "error" in recorded:
+                failed_get["error"] = recorded["error"]
+            if recorded.get("message"):
+                failed_get["message"] = recorded["message"]
+            output["gets"].append(failed_get)
+            return False
         latency = _elapsed_ms(started)
         counters["prompt_get_ms"] += latency
         messages = _messages_payload(list(result.messages))
@@ -478,7 +643,7 @@ async def _run_step(
                 "messages": messages,
             }
         )
-        return
+        return True
 
     if step.kind == "list_tools":
         started = time.perf_counter()
@@ -488,7 +653,24 @@ async def _run_step(
                 detail={"interactionId": "tools/list", "method": "tools/list"},
             )
         )
-        result = await client.list_tools()
+        try:
+            result = await client.list_tools()
+        except Exception as exc:
+            latency = _elapsed_ms(started)
+            counters["discovery_ms"] += latency
+            _record_protocol_or_transport_failure(
+                exc,
+                sequence=sequence,
+                errors=errors,
+                counters=counters,
+                latency_ms=latency,
+                interaction_id="tools/list",
+                stage="tools/list",
+                response_kind="tools_list_response",
+                detail={"interactionId": "tools/list", "method": "tools/list"},
+                rejected_reason="protocol_error",
+            )
+            return False
         latency = _elapsed_ms(started)
         counters["discovery_ms"] += latency
         discovered_tools.clear()
@@ -506,18 +688,44 @@ async def _run_step(
             )
         )
         output["discoveredTools"] = [tool.name for tool in discovered_tools]
-        return
+        return True
 
     if step.kind == "call_tool":
         assert step.tool_name is not None
         tool_name = step.tool_name
-        arguments = _bind_composition_arguments(
-            tool_name,
-            dict(step.tool_arguments or {}),
-            output=output,
-            discovered_resources=discovered_resources,
-        )
+        requested_arguments = dict(step.tool_arguments or {})
+        try:
+            arguments = _bind_composition_arguments(
+                tool_name,
+                requested_arguments,
+                output=output,
+                discovered_resources=discovered_resources,
+            )
+        except ValueError as exc:
+            counters["termination_reason"] = "missing_prior_result"
+            sequence.append(
+                SequenceEvent(
+                    kind="error",
+                    detail={
+                        "stage": "compose_bind",
+                        "name": tool_name,
+                        "arguments": requested_arguments,
+                        "message": str(exc),
+                    },
+                )
+            )
+            errors.append(
+                {
+                    "stage": "compose_bind",
+                    "tool": tool_name,
+                    "isError": True,
+                    "message": str(exc),
+                }
+            )
+            return False
+
         interaction_id = f"tools/call:{tool_name}:{index}"
+        discovered_names = {tool.name for tool in discovered_tools}
         started = time.perf_counter()
         sequence.append(
             SequenceEvent(
@@ -527,6 +735,7 @@ async def _run_step(
                     "method": "tools/call",
                     "name": tool_name,
                     "arguments": arguments,
+                    "discoveredBeforeCall": tool_name in discovered_names,
                 },
             )
         )
@@ -537,78 +746,34 @@ async def _run_step(
             latency = _elapsed_ms(started)
             counters["tool_call_ms"] += latency
             counters["failed_tool_calls"] += 1
-            protocol_error = _protocol_error_payload(exc)
-            is_protocol = _is_mcp_protocol_error(exc) and protocol_error is not None
-            if is_protocol:
-                counters["termination_reason"] = (
-                    "sampling_rejected"
-                    if _had_sampling_rejection(sequence)
-                    else "protocol_error"
-                )
-                response_detail = {
+            recorded = _record_protocol_or_transport_failure(
+                exc,
+                sequence=sequence,
+                errors=errors,
+                counters=counters,
+                latency_ms=latency,
+                interaction_id=interaction_id,
+                stage="tools/call",
+                response_kind="tool_call_response",
+                detail={
                     "interactionId": interaction_id,
                     "method": "tools/call",
                     "name": tool_name,
                     "arguments": arguments,
-                    "isError": True,
-                    "error": protocol_error,
-                    "exceptionType": type(exc).__name__,
-                }
-                sequence.append(
-                    SequenceEvent(
-                        kind="tool_call_response",
-                        detail=response_detail,
-                        latency_ms=latency,
-                    )
-                )
-                errors.append(
-                    {
-                        "stage": "tools/call",
-                        "tool": tool_name,
-                        "isError": True,
-                        "detail": response_detail,
-                    }
-                )
-                output["invocations"].append(
-                    {
-                        "tool": tool_name,
-                        "arguments": arguments,
-                        "isError": True,
-                        "error": protocol_error,
-                    }
-                )
+                },
+                rejected_reason="protocol_error",
+            )
+            invocation: dict[str, Any] = {
+                "tool": tool_name,
+                "arguments": arguments,
+                "isError": True,
+            }
+            if "error" in recorded:
+                invocation["error"] = recorded["error"]
             else:
-                counters["termination_reason"] = "protocol_error"
-                sequence.append(
-                    SequenceEvent(
-                        kind="error",
-                        detail={
-                            "interactionId": interaction_id,
-                            "stage": "tools/call",
-                            "name": tool_name,
-                            "message": str(exc),
-                            "exceptionType": type(exc).__name__,
-                        },
-                        latency_ms=latency,
-                    )
-                )
-                errors.append(
-                    {
-                        "stage": "tools/call",
-                        "tool": tool_name,
-                        "isError": True,
-                        "message": str(exc),
-                    }
-                )
-                output["invocations"].append(
-                    {
-                        "tool": tool_name,
-                        "arguments": arguments,
-                        "isError": True,
-                        "message": str(exc),
-                    }
-                )
-            return
+                invocation["message"] = recorded.get("message", str(exc))
+            output["invocations"].append(invocation)
+            return False
         latency = _elapsed_ms(started)
         counters["tool_call_ms"] += latency
         parsed = _parse_tool_result(result)
@@ -640,7 +805,7 @@ async def _run_step(
                 "result": parsed.get("structuredContent") or parsed,
             }
         )
-        return
+        return not result.is_error
 
     raise ValueError(f"Unknown step kind '{step.kind}'")
 
@@ -710,7 +875,37 @@ async def run_case_async(
             )
         )
         started = time.perf_counter()
-        result = await inner_callback(context, params)
+        try:
+            result = await inner_callback(context, params)
+        except Exception as exc:
+            latency = _elapsed_ms(started)
+            sampling_ms += latency
+            failed_samplings += 1
+            error = types.ErrorData(code=-32603, message=str(exc))
+            error_payload = _dump(error)
+            sequence.append(
+                SequenceEvent(
+                    kind="sampling_response",
+                    detail={
+                        "interactionId": interaction_id,
+                        "method": "sampling/createMessage",
+                        "isError": True,
+                        "error": error_payload,
+                        "exceptionType": type(exc).__name__,
+                        "boundary": "mcp-client-sampling-callback",
+                    },
+                    latency_ms=latency,
+                )
+            )
+            output["sampling"].append({"isError": True, "error": error_payload})
+            errors.append(
+                {
+                    "stage": "sampling/createMessage",
+                    "isError": True,
+                    "detail": error_payload,
+                }
+            )
+            return error
         latency = _elapsed_ms(started)
         sampling_ms += latency
         if isinstance(result, types.ErrorData):
@@ -812,7 +1007,7 @@ async def run_case_async(
         )
 
         for index, step in enumerate(case.steps):
-            await _run_step(
+            keep_running = await _run_step(
                 client,
                 step,
                 index=index,
@@ -824,6 +1019,8 @@ async def run_case_async(
                 discovered_tools=discovered_tools,
                 counters=counters,
             )
+            if not keep_running:
+                break
 
     if failed_samplings and counters["termination_reason"] == "session_closed":
         counters["termination_reason"] = "sampling_rejected"
