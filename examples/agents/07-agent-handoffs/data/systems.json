@@ -1,0 +1,14 @@
+{
+  "checkout": {
+    "system_id": "checkout",
+    "status": "degraded",
+    "incident": "CHK-4401: payment capture timeouts",
+    "action": "retry_refund_after_capture_fix"
+  },
+  "invoicing": {
+    "system_id": "invoicing",
+    "status": "operational",
+    "incident": null,
+    "action": "no_technical_action"
+  }
+}

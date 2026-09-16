@@ -42,6 +42,7 @@ Cookbook →  "How is it implemented?"
 | `planning` | [`examples/agents/04-planning`](examples/agents/04-planning) | Explicit multi-step plan as a runtime artifact (create → execute → observe → revise) |
 | `agent-memory` | [`examples/agents/05-memory`](examples/agents/05-memory) | Application-owned memory across interactions (store → retrieve → use, including miss and stale) |
 | `multi-agent-collaboration` | [`examples/agents/06-multi-agent-collaboration`](examples/agents/06-multi-agent-collaboration) | Coordinator-owned collaboration across specialized agents (delegate → message → shared state → aggregate) |
+| `agent-handoffs` | [`examples/agents/07-agent-handoffs`](examples/agents/07-agent-handoffs) | Application-owned ownership transfer (active owner → handoff → new owner → terminate) |
 
 ### MCP
 
@@ -95,7 +96,8 @@ dataaihub-cookbook/
 │   │   ├── 03-agent-evaluation/
 │   │   ├── 04-planning/
 │   │   ├── 05-memory/
-│   │   └── 06-multi-agent-collaboration/
+│   │   ├── 06-multi-agent-collaboration/
+│   │   └── 07-agent-handoffs/
 │   ├── mcp/
 │   │   ├── 01-tool-discovery/
 │   │   ├── 02-resources/
