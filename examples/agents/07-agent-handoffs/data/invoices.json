@@ -1,0 +1,32 @@
+{
+  "INV-1001": {
+    "invoice_id": "INV-1001",
+    "account_id": "acct-100",
+    "status": "duplicate_charge",
+    "amount": 42.0,
+    "currency": "USD",
+    "requires_technical": false,
+    "system_id": null,
+    "blocker": null
+  },
+  "INV-2002": {
+    "invoice_id": "INV-2002",
+    "account_id": "acct-200",
+    "status": "refund_blocked",
+    "amount": 85.5,
+    "currency": "USD",
+    "requires_technical": true,
+    "system_id": "checkout",
+    "blocker": "checkout_outage"
+  },
+  "INV-3003": {
+    "invoice_id": "INV-3003",
+    "account_id": "acct-300",
+    "status": "refund_blocked",
+    "amount": 19.99,
+    "currency": "USD",
+    "requires_technical": true,
+    "system_id": "SYS-MISSING",
+    "blocker": "unknown_processor"
+  }
+}

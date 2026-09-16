@@ -1,0 +1,3397 @@
+[
+  {
+    "labId": "agent-handoffs",
+    "traceId": "invoice-duplicate-basic-handoff",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-16T05:56:42Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "BASIC_HANDOFF",
+    "selectionNote": "Measured case: triage classifies a duplicate-charge ticket and transfers ownership to billing. Billing completes the ticket. Control does not return to triage.",
+    "architecture": {
+      "layout": "agent-handoffs",
+      "stages": [
+        "task",
+        "activate",
+        "handoff",
+        "ownership-transfer",
+        "complete-or-fail",
+        "termination"
+      ]
+    },
+    "input": {
+      "request": "Invoice INV-1001 was charged twice.",
+      "ticketId": "tkt-duplicate-charge",
+      "config": {
+        "maxHandoffs": 6,
+        "modelDriver": "mock",
+        "synthesizerModel": "mock",
+        "clientName": "dataaihub-cookbook-agent-handoffs",
+        "dataDir": "data"
+      }
+    },
+    "sequence": [
+      {
+        "kind": "task_created",
+        "detail": {
+          "taskId": "task-invoice-duplicate-basic-handoff",
+          "request": "Invoice INV-1001 was charged twice.",
+          "ticketId": "tkt-duplicate-charge",
+          "exampleClass": "BASIC_HANDOFF"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_activated",
+        "detail": {
+          "agentId": "triage_agent",
+          "enteredVia": "initial",
+          "currentOwner": "triage_agent",
+          "previousOwner": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-100",
+            "invoice_id": "INV-1001",
+            "subject": "Invoice INV-1001 was charged twice"
+          },
+          "handoff": {
+            "handoff_id": "handoff-1",
+            "from_agent": "triage_agent",
+            "to_agent": "billing_agent",
+            "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+            "context": {
+              "department": "billing"
+            },
+            "payload": {
+              "department": "billing",
+              "account_id": "acct-100",
+              "invoice_id": "INV-1001",
+              "subject": "Invoice INV-1001 was charged twice"
+            },
+            "parent_result_id": "result-1"
+          },
+          "error": null,
+          "currentOwner": "triage_agent"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "handoff_requested",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-100",
+            "invoice_id": "INV-1001",
+            "subject": "Invoice INV-1001 was charged twice"
+          },
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "handoff_accepted",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "parentResultId": "result-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "ownership_transferred",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "previousOwner": "triage_agent",
+          "currentOwner": "billing_agent",
+          "parentResultId": "result-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_activated",
+        "detail": {
+          "agentId": "billing_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "billing_agent",
+          "previousOwner": "triage_agent",
+          "handoffId": "handoff-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-2",
+          "agentId": "billing_agent",
+          "role": "billing",
+          "kind": "complete",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-100",
+              "invoice_id": "INV-1001",
+              "subject": "Invoice INV-1001 was charged twice"
+            },
+            "invoice": {
+              "invoice_id": "INV-1001",
+              "account_id": "acct-100",
+              "status": "duplicate_charge",
+              "amount": 42.0,
+              "currency": "USD",
+              "requires_technical": false,
+              "system_id": null,
+              "blocker": null
+            },
+            "resolution": "issue_refund",
+            "summary": "Invoice INV-1001 has a duplicate_charge. Issue a refund of 42.0 USD."
+          },
+          "handoff": null,
+          "error": null,
+          "currentOwner": "billing_agent"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "completed",
+        "detail": {
+          "agentId": "billing_agent",
+          "resultId": "result-2",
+          "currentOwner": "billing_agent",
+          "answer": "Invoice INV-1001 has a duplicate_charge. Issue a refund of 42.0 USD."
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed",
+          "currentOwner": "billing_agent",
+          "previousOwner": "triage_agent"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-task_created",
+        "type": "protocol",
+        "title": "Task created",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-invoice-duplicate-basic-handoff",
+          "request": "Invoice INV-1001 was charged twice.",
+          "ticketId": "tkt-duplicate-charge",
+          "exampleClass": "BASIC_HANDOFF"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-agent_activated",
+        "type": "agent",
+        "title": "Agent activated",
+        "status": "ok",
+        "detail": {
+          "agentId": "triage_agent",
+          "enteredVia": "initial",
+          "currentOwner": "triage_agent",
+          "previousOwner": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-100",
+            "invoice_id": "INV-1001",
+            "subject": "Invoice INV-1001 was charged twice"
+          },
+          "handoff": {
+            "handoff_id": "handoff-1",
+            "from_agent": "triage_agent",
+            "to_agent": "billing_agent",
+            "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+            "context": {
+              "department": "billing"
+            },
+            "payload": {
+              "department": "billing",
+              "account_id": "acct-100",
+              "invoice_id": "INV-1001",
+              "subject": "Invoice INV-1001 was charged twice"
+            },
+            "parent_result_id": "result-1"
+          },
+          "error": null,
+          "currentOwner": "triage_agent"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-handoff_requested",
+        "type": "handoff",
+        "title": "Handoff requested",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-100",
+            "invoice_id": "INV-1001",
+            "subject": "Invoice INV-1001 was charged twice"
+          },
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-handoff_accepted",
+        "type": "handoff",
+        "title": "Handoff accepted",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "parentResultId": "result-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-ownership_transferred",
+        "type": "handoff",
+        "title": "Ownership transferred",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "previousOwner": "triage_agent",
+          "currentOwner": "billing_agent",
+          "parentResultId": "result-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-agent_activated",
+        "type": "agent",
+        "title": "Agent activated",
+        "status": "ok",
+        "detail": {
+          "agentId": "billing_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "billing_agent",
+          "previousOwner": "triage_agent",
+          "handoffId": "handoff-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-2",
+          "agentId": "billing_agent",
+          "role": "billing",
+          "kind": "complete",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-100",
+              "invoice_id": "INV-1001",
+              "subject": "Invoice INV-1001 was charged twice"
+            },
+            "invoice": {
+              "invoice_id": "INV-1001",
+              "account_id": "acct-100",
+              "status": "duplicate_charge",
+              "amount": 42.0,
+              "currency": "USD",
+              "requires_technical": false,
+              "system_id": null,
+              "blocker": null
+            },
+            "resolution": "issue_refund",
+            "summary": "Invoice INV-1001 has a duplicate_charge. Issue a refund of 42.0 USD."
+          },
+          "handoff": null,
+          "error": null,
+          "currentOwner": "billing_agent"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-completed",
+        "type": "completion",
+        "title": "Completed",
+        "status": "ok",
+        "detail": {
+          "agentId": "billing_agent",
+          "resultId": "result-2",
+          "currentOwner": "billing_agent",
+          "answer": "Invoice INV-1001 has a duplicate_charge. Issue a refund of 42.0 USD."
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed",
+          "currentOwner": "billing_agent",
+          "previousOwner": "triage_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "state": {
+      "taskId": "task-invoice-duplicate-basic-handoff",
+      "request": "Invoice INV-1001 was charged twice.",
+      "ticketId": "tkt-duplicate-charge",
+      "currentOwner": "billing_agent",
+      "previousOwner": "triage_agent",
+      "ownershipHistory": [
+        {
+          "agent_id": "triage_agent",
+          "entered_via": "initial",
+          "handoff_id": null,
+          "parent_result_id": null
+        },
+        {
+          "agent_id": "billing_agent",
+          "entered_via": "handoff",
+          "handoff_id": "handoff-1",
+          "parent_result_id": "result-1"
+        }
+      ],
+      "acceptedHandoffs": [
+        {
+          "handoff_id": "handoff-1",
+          "from_agent": "triage_agent",
+          "to_agent": "billing_agent",
+          "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+          "context": {
+            "department": "billing"
+          },
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-100",
+            "invoice_id": "INV-1001",
+            "subject": "Invoice INV-1001 was charged twice"
+          },
+          "parent_result_id": "result-1"
+        }
+      ],
+      "rejections": [],
+      "results": [
+        {
+          "result_id": "result-1",
+          "agent_id": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-100",
+            "invoice_id": "INV-1001",
+            "subject": "Invoice INV-1001 was charged twice"
+          },
+          "handoff": {
+            "handoff_id": "handoff-1",
+            "from_agent": "triage_agent",
+            "to_agent": "billing_agent",
+            "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+            "context": {
+              "department": "billing"
+            },
+            "payload": {
+              "department": "billing",
+              "account_id": "acct-100",
+              "invoice_id": "INV-1001",
+              "subject": "Invoice INV-1001 was charged twice"
+            },
+            "parent_result_id": "result-1"
+          },
+          "error": null
+        },
+        {
+          "result_id": "result-2",
+          "agent_id": "billing_agent",
+          "role": "billing",
+          "kind": "complete",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-100",
+              "invoice_id": "INV-1001",
+              "subject": "Invoice INV-1001 was charged twice"
+            },
+            "invoice": {
+              "invoice_id": "INV-1001",
+              "account_id": "acct-100",
+              "status": "duplicate_charge",
+              "amount": 42.0,
+              "currency": "USD",
+              "requires_technical": false,
+              "system_id": null,
+              "blocker": null
+            },
+            "resolution": "issue_refund",
+            "summary": "Invoice INV-1001 has a duplicate_charge. Issue a refund of 42.0 USD."
+          },
+          "handoff": null,
+          "error": null
+        }
+      ],
+      "activeHandoff": {
+        "handoff_id": "handoff-1",
+        "from_agent": "triage_agent",
+        "to_agent": "billing_agent",
+        "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+        "context": {
+          "department": "billing"
+        },
+        "payload": {
+          "department": "billing",
+          "account_id": "acct-100",
+          "invoice_id": "INV-1001",
+          "subject": "Invoice INV-1001 was charged twice"
+        },
+        "parent_result_id": "result-1"
+      },
+      "invokedAgentIds": [
+        "triage_agent",
+        "billing_agent"
+      ],
+      "finalAnswer": "Invoice INV-1001 has a duplicate_charge. Issue a refund of 42.0 USD.",
+      "terminationReason": "completed",
+      "errors": []
+    },
+    "output": {
+      "answer": "Invoice INV-1001 has a duplicate_charge. Issue a refund of 42.0 USD.",
+      "ok": true,
+      "terminationReason": "completed",
+      "currentOwner": "billing_agent"
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "agentMs": 0,
+      "runtimeMs": 0,
+      "agentsActivated": 2,
+      "handoffsRequested": 1,
+      "handoffsAccepted": 1,
+      "handoffsRejected": 0,
+      "ownershipTransfers": 1,
+      "successfulAgentResults": 2,
+      "failedAgentResults": 0,
+      "terminationReason": "completed",
+      "maxHandoffs": 6,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable handoff events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "TASK",
+          "taskId": "task-invoice-duplicate-basic-handoff",
+          "request": "Invoice INV-1001 was charged twice."
+        },
+        {
+          "phase": "AGENT_ACTIVATED",
+          "agentId": "triage_agent",
+          "enteredVia": "initial",
+          "currentOwner": "triage_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "resultId": "result-1",
+          "currentOwner": "triage_agent",
+          "latencyMs": 0
+        },
+        {
+          "phase": "HANDOFF",
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        {
+          "phase": "HANDOFF_ACCEPTED",
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent"
+        },
+        {
+          "phase": "OWNERSHIP_TRANSFERRED",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "currentOwner": "billing_agent",
+          "previousOwner": "triage_agent"
+        },
+        {
+          "phase": "AGENT_ACTIVATED",
+          "agentId": "billing_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "billing_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "billing_agent",
+          "role": "billing",
+          "kind": "complete",
+          "ok": true,
+          "resultId": "result-2",
+          "currentOwner": "billing_agent",
+          "latencyMs": 0
+        },
+        {
+          "phase": "COMPLETE",
+          "agentId": "billing_agent",
+          "currentOwner": "billing_agent",
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "completed",
+            "currentOwner": "billing_agent",
+            "previousOwner": "triage_agent"
+          }
+        }
+      ],
+      "signatureFlow": "TASK \u2192 AGENT \u2192 HANDOFF \u2192 AGENT \u2192 COMPLETE \u2192 TERMINATION"
+    },
+    "relatedEntities": [
+      "agents"
+    ],
+    "relatedContent": [
+      "agents",
+      "handoffs",
+      "ownership-transfer"
+    ],
+    "cookbook": {
+      "path": "examples/agents/07-agent-handoffs"
+    }
+  },
+  {
+    "labId": "agent-handoffs",
+    "traceId": "refund-blocked-multi-hop",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-16T05:56:42Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "MULTI_HOP_HANDOFF",
+    "selectionNote": "Measured case: triage hands off to billing, then billing hands off to technical because the refund is blocked by a system incident. Both ownership transfers are explicit.",
+    "architecture": {
+      "layout": "agent-handoffs",
+      "stages": [
+        "task",
+        "activate",
+        "handoff",
+        "ownership-transfer",
+        "complete-or-fail",
+        "termination"
+      ]
+    },
+    "input": {
+      "request": "Refund for INV-2002 is blocked because checkout capture is failing.",
+      "ticketId": "tkt-refund-blocked",
+      "config": {
+        "maxHandoffs": 6,
+        "modelDriver": "mock",
+        "synthesizerModel": "mock",
+        "clientName": "dataaihub-cookbook-agent-handoffs",
+        "dataDir": "data"
+      }
+    },
+    "sequence": [
+      {
+        "kind": "task_created",
+        "detail": {
+          "taskId": "task-refund-blocked-multi-hop",
+          "request": "Refund for INV-2002 is blocked because checkout capture is failing.",
+          "ticketId": "tkt-refund-blocked",
+          "exampleClass": "MULTI_HOP_HANDOFF"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_activated",
+        "detail": {
+          "agentId": "triage_agent",
+          "enteredVia": "initial",
+          "currentOwner": "triage_agent",
+          "previousOwner": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-200",
+            "invoice_id": "INV-2002",
+            "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+          },
+          "handoff": {
+            "handoff_id": "handoff-1",
+            "from_agent": "triage_agent",
+            "to_agent": "billing_agent",
+            "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+            "context": {
+              "department": "billing"
+            },
+            "payload": {
+              "department": "billing",
+              "account_id": "acct-200",
+              "invoice_id": "INV-2002",
+              "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+            },
+            "parent_result_id": "result-1"
+          },
+          "error": null,
+          "currentOwner": "triage_agent"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "handoff_requested",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-200",
+            "invoice_id": "INV-2002",
+            "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+          },
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "handoff_accepted",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "parentResultId": "result-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "ownership_transferred",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "previousOwner": "triage_agent",
+          "currentOwner": "billing_agent",
+          "parentResultId": "result-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_activated",
+        "detail": {
+          "agentId": "billing_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "billing_agent",
+          "previousOwner": "triage_agent",
+          "handoffId": "handoff-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-2",
+          "agentId": "billing_agent",
+          "role": "billing",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-200",
+              "invoice_id": "INV-2002",
+              "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+            },
+            "invoice": {
+              "invoice_id": "INV-2002",
+              "account_id": "acct-200",
+              "status": "refund_blocked",
+              "amount": 85.5,
+              "currency": "USD",
+              "requires_technical": true,
+              "system_id": "checkout",
+              "blocker": "checkout_outage"
+            },
+            "invoice_id": "INV-2002",
+            "system_id": "checkout",
+            "blocker": "checkout_outage"
+          },
+          "handoff": {
+            "handoff_id": "handoff-2",
+            "from_agent": "billing_agent",
+            "to_agent": "technical_agent",
+            "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+            "context": {
+              "invoice_id": "INV-2002",
+              "system_id": "checkout"
+            },
+            "payload": {
+              "basedOn": {
+                "department": "billing",
+                "account_id": "acct-200",
+                "invoice_id": "INV-2002",
+                "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+              },
+              "invoice": {
+                "invoice_id": "INV-2002",
+                "account_id": "acct-200",
+                "status": "refund_blocked",
+                "amount": 85.5,
+                "currency": "USD",
+                "requires_technical": true,
+                "system_id": "checkout",
+                "blocker": "checkout_outage"
+              },
+              "invoice_id": "INV-2002",
+              "system_id": "checkout",
+              "blocker": "checkout_outage"
+            },
+            "parent_result_id": "result-2"
+          },
+          "error": null,
+          "currentOwner": "billing_agent"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "handoff_requested",
+        "detail": {
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-200",
+              "invoice_id": "INV-2002",
+              "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+            },
+            "invoice": {
+              "invoice_id": "INV-2002",
+              "account_id": "acct-200",
+              "status": "refund_blocked",
+              "amount": 85.5,
+              "currency": "USD",
+              "requires_technical": true,
+              "system_id": "checkout",
+              "blocker": "checkout_outage"
+            },
+            "invoice_id": "INV-2002",
+            "system_id": "checkout",
+            "blocker": "checkout_outage"
+          },
+          "parentResultId": "result-2",
+          "currentOwner": "billing_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "handoff_accepted",
+        "detail": {
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "parentResultId": "result-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "ownership_transferred",
+        "detail": {
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "previousOwner": "billing_agent",
+          "currentOwner": "technical_agent",
+          "parentResultId": "result-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_activated",
+        "detail": {
+          "agentId": "technical_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "technical_agent",
+          "previousOwner": "billing_agent",
+          "handoffId": "handoff-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-3",
+          "agentId": "technical_agent",
+          "role": "technical",
+          "kind": "complete",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "department": "billing",
+                "account_id": "acct-200",
+                "invoice_id": "INV-2002",
+                "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+              },
+              "invoice": {
+                "invoice_id": "INV-2002",
+                "account_id": "acct-200",
+                "status": "refund_blocked",
+                "amount": 85.5,
+                "currency": "USD",
+                "requires_technical": true,
+                "system_id": "checkout",
+                "blocker": "checkout_outage"
+              },
+              "invoice_id": "INV-2002",
+              "system_id": "checkout",
+              "blocker": "checkout_outage"
+            },
+            "system": {
+              "system_id": "checkout",
+              "status": "degraded",
+              "incident": "CHK-4401: payment capture timeouts",
+              "action": "retry_refund_after_capture_fix"
+            },
+            "resolution": "retry_refund_after_capture_fix",
+            "summary": "System checkout is degraded. Incident: CHK-4401: payment capture timeouts. Action: retry_refund_after_capture_fix."
+          },
+          "handoff": null,
+          "error": null,
+          "currentOwner": "technical_agent"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "completed",
+        "detail": {
+          "agentId": "technical_agent",
+          "resultId": "result-3",
+          "currentOwner": "technical_agent",
+          "answer": "System checkout is degraded. Incident: CHK-4401: payment capture timeouts. Action: retry_refund_after_capture_fix."
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed",
+          "currentOwner": "technical_agent",
+          "previousOwner": "billing_agent"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-task_created",
+        "type": "protocol",
+        "title": "Task created",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-refund-blocked-multi-hop",
+          "request": "Refund for INV-2002 is blocked because checkout capture is failing.",
+          "ticketId": "tkt-refund-blocked",
+          "exampleClass": "MULTI_HOP_HANDOFF"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-agent_activated",
+        "type": "agent",
+        "title": "Agent activated",
+        "status": "ok",
+        "detail": {
+          "agentId": "triage_agent",
+          "enteredVia": "initial",
+          "currentOwner": "triage_agent",
+          "previousOwner": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-200",
+            "invoice_id": "INV-2002",
+            "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+          },
+          "handoff": {
+            "handoff_id": "handoff-1",
+            "from_agent": "triage_agent",
+            "to_agent": "billing_agent",
+            "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+            "context": {
+              "department": "billing"
+            },
+            "payload": {
+              "department": "billing",
+              "account_id": "acct-200",
+              "invoice_id": "INV-2002",
+              "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+            },
+            "parent_result_id": "result-1"
+          },
+          "error": null,
+          "currentOwner": "triage_agent"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-handoff_requested",
+        "type": "handoff",
+        "title": "Handoff requested",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-200",
+            "invoice_id": "INV-2002",
+            "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+          },
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-handoff_accepted",
+        "type": "handoff",
+        "title": "Handoff accepted",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "parentResultId": "result-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-ownership_transferred",
+        "type": "handoff",
+        "title": "Ownership transferred",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "previousOwner": "triage_agent",
+          "currentOwner": "billing_agent",
+          "parentResultId": "result-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-agent_activated",
+        "type": "agent",
+        "title": "Agent activated",
+        "status": "ok",
+        "detail": {
+          "agentId": "billing_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "billing_agent",
+          "previousOwner": "triage_agent",
+          "handoffId": "handoff-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-2",
+          "agentId": "billing_agent",
+          "role": "billing",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-200",
+              "invoice_id": "INV-2002",
+              "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+            },
+            "invoice": {
+              "invoice_id": "INV-2002",
+              "account_id": "acct-200",
+              "status": "refund_blocked",
+              "amount": 85.5,
+              "currency": "USD",
+              "requires_technical": true,
+              "system_id": "checkout",
+              "blocker": "checkout_outage"
+            },
+            "invoice_id": "INV-2002",
+            "system_id": "checkout",
+            "blocker": "checkout_outage"
+          },
+          "handoff": {
+            "handoff_id": "handoff-2",
+            "from_agent": "billing_agent",
+            "to_agent": "technical_agent",
+            "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+            "context": {
+              "invoice_id": "INV-2002",
+              "system_id": "checkout"
+            },
+            "payload": {
+              "basedOn": {
+                "department": "billing",
+                "account_id": "acct-200",
+                "invoice_id": "INV-2002",
+                "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+              },
+              "invoice": {
+                "invoice_id": "INV-2002",
+                "account_id": "acct-200",
+                "status": "refund_blocked",
+                "amount": 85.5,
+                "currency": "USD",
+                "requires_technical": true,
+                "system_id": "checkout",
+                "blocker": "checkout_outage"
+              },
+              "invoice_id": "INV-2002",
+              "system_id": "checkout",
+              "blocker": "checkout_outage"
+            },
+            "parent_result_id": "result-2"
+          },
+          "error": null,
+          "currentOwner": "billing_agent"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-handoff_requested",
+        "type": "handoff",
+        "title": "Handoff requested",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-200",
+              "invoice_id": "INV-2002",
+              "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+            },
+            "invoice": {
+              "invoice_id": "INV-2002",
+              "account_id": "acct-200",
+              "status": "refund_blocked",
+              "amount": 85.5,
+              "currency": "USD",
+              "requires_technical": true,
+              "system_id": "checkout",
+              "blocker": "checkout_outage"
+            },
+            "invoice_id": "INV-2002",
+            "system_id": "checkout",
+            "blocker": "checkout_outage"
+          },
+          "parentResultId": "result-2",
+          "currentOwner": "billing_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-handoff_accepted",
+        "type": "handoff",
+        "title": "Handoff accepted",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "parentResultId": "result-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-ownership_transferred",
+        "type": "handoff",
+        "title": "Ownership transferred",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "previousOwner": "billing_agent",
+          "currentOwner": "technical_agent",
+          "parentResultId": "result-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-agent_activated",
+        "type": "agent",
+        "title": "Agent activated",
+        "status": "ok",
+        "detail": {
+          "agentId": "technical_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "technical_agent",
+          "previousOwner": "billing_agent",
+          "handoffId": "handoff-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-3",
+          "agentId": "technical_agent",
+          "role": "technical",
+          "kind": "complete",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "department": "billing",
+                "account_id": "acct-200",
+                "invoice_id": "INV-2002",
+                "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+              },
+              "invoice": {
+                "invoice_id": "INV-2002",
+                "account_id": "acct-200",
+                "status": "refund_blocked",
+                "amount": 85.5,
+                "currency": "USD",
+                "requires_technical": true,
+                "system_id": "checkout",
+                "blocker": "checkout_outage"
+              },
+              "invoice_id": "INV-2002",
+              "system_id": "checkout",
+              "blocker": "checkout_outage"
+            },
+            "system": {
+              "system_id": "checkout",
+              "status": "degraded",
+              "incident": "CHK-4401: payment capture timeouts",
+              "action": "retry_refund_after_capture_fix"
+            },
+            "resolution": "retry_refund_after_capture_fix",
+            "summary": "System checkout is degraded. Incident: CHK-4401: payment capture timeouts. Action: retry_refund_after_capture_fix."
+          },
+          "handoff": null,
+          "error": null,
+          "currentOwner": "technical_agent"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-completed",
+        "type": "completion",
+        "title": "Completed",
+        "status": "ok",
+        "detail": {
+          "agentId": "technical_agent",
+          "resultId": "result-3",
+          "currentOwner": "technical_agent",
+          "answer": "System checkout is degraded. Incident: CHK-4401: payment capture timeouts. Action: retry_refund_after_capture_fix."
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-15-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed",
+          "currentOwner": "technical_agent",
+          "previousOwner": "billing_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "state": {
+      "taskId": "task-refund-blocked-multi-hop",
+      "request": "Refund for INV-2002 is blocked because checkout capture is failing.",
+      "ticketId": "tkt-refund-blocked",
+      "currentOwner": "technical_agent",
+      "previousOwner": "billing_agent",
+      "ownershipHistory": [
+        {
+          "agent_id": "triage_agent",
+          "entered_via": "initial",
+          "handoff_id": null,
+          "parent_result_id": null
+        },
+        {
+          "agent_id": "billing_agent",
+          "entered_via": "handoff",
+          "handoff_id": "handoff-1",
+          "parent_result_id": "result-1"
+        },
+        {
+          "agent_id": "technical_agent",
+          "entered_via": "handoff",
+          "handoff_id": "handoff-2",
+          "parent_result_id": "result-2"
+        }
+      ],
+      "acceptedHandoffs": [
+        {
+          "handoff_id": "handoff-1",
+          "from_agent": "triage_agent",
+          "to_agent": "billing_agent",
+          "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+          "context": {
+            "department": "billing"
+          },
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-200",
+            "invoice_id": "INV-2002",
+            "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+          },
+          "parent_result_id": "result-1"
+        },
+        {
+          "handoff_id": "handoff-2",
+          "from_agent": "billing_agent",
+          "to_agent": "technical_agent",
+          "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+          "context": {
+            "invoice_id": "INV-2002",
+            "system_id": "checkout"
+          },
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-200",
+              "invoice_id": "INV-2002",
+              "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+            },
+            "invoice": {
+              "invoice_id": "INV-2002",
+              "account_id": "acct-200",
+              "status": "refund_blocked",
+              "amount": 85.5,
+              "currency": "USD",
+              "requires_technical": true,
+              "system_id": "checkout",
+              "blocker": "checkout_outage"
+            },
+            "invoice_id": "INV-2002",
+            "system_id": "checkout",
+            "blocker": "checkout_outage"
+          },
+          "parent_result_id": "result-2"
+        }
+      ],
+      "rejections": [],
+      "results": [
+        {
+          "result_id": "result-1",
+          "agent_id": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-200",
+            "invoice_id": "INV-2002",
+            "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+          },
+          "handoff": {
+            "handoff_id": "handoff-1",
+            "from_agent": "triage_agent",
+            "to_agent": "billing_agent",
+            "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+            "context": {
+              "department": "billing"
+            },
+            "payload": {
+              "department": "billing",
+              "account_id": "acct-200",
+              "invoice_id": "INV-2002",
+              "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+            },
+            "parent_result_id": "result-1"
+          },
+          "error": null
+        },
+        {
+          "result_id": "result-2",
+          "agent_id": "billing_agent",
+          "role": "billing",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-200",
+              "invoice_id": "INV-2002",
+              "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+            },
+            "invoice": {
+              "invoice_id": "INV-2002",
+              "account_id": "acct-200",
+              "status": "refund_blocked",
+              "amount": 85.5,
+              "currency": "USD",
+              "requires_technical": true,
+              "system_id": "checkout",
+              "blocker": "checkout_outage"
+            },
+            "invoice_id": "INV-2002",
+            "system_id": "checkout",
+            "blocker": "checkout_outage"
+          },
+          "handoff": {
+            "handoff_id": "handoff-2",
+            "from_agent": "billing_agent",
+            "to_agent": "technical_agent",
+            "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+            "context": {
+              "invoice_id": "INV-2002",
+              "system_id": "checkout"
+            },
+            "payload": {
+              "basedOn": {
+                "department": "billing",
+                "account_id": "acct-200",
+                "invoice_id": "INV-2002",
+                "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+              },
+              "invoice": {
+                "invoice_id": "INV-2002",
+                "account_id": "acct-200",
+                "status": "refund_blocked",
+                "amount": 85.5,
+                "currency": "USD",
+                "requires_technical": true,
+                "system_id": "checkout",
+                "blocker": "checkout_outage"
+              },
+              "invoice_id": "INV-2002",
+              "system_id": "checkout",
+              "blocker": "checkout_outage"
+            },
+            "parent_result_id": "result-2"
+          },
+          "error": null
+        },
+        {
+          "result_id": "result-3",
+          "agent_id": "technical_agent",
+          "role": "technical",
+          "kind": "complete",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "department": "billing",
+                "account_id": "acct-200",
+                "invoice_id": "INV-2002",
+                "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+              },
+              "invoice": {
+                "invoice_id": "INV-2002",
+                "account_id": "acct-200",
+                "status": "refund_blocked",
+                "amount": 85.5,
+                "currency": "USD",
+                "requires_technical": true,
+                "system_id": "checkout",
+                "blocker": "checkout_outage"
+              },
+              "invoice_id": "INV-2002",
+              "system_id": "checkout",
+              "blocker": "checkout_outage"
+            },
+            "system": {
+              "system_id": "checkout",
+              "status": "degraded",
+              "incident": "CHK-4401: payment capture timeouts",
+              "action": "retry_refund_after_capture_fix"
+            },
+            "resolution": "retry_refund_after_capture_fix",
+            "summary": "System checkout is degraded. Incident: CHK-4401: payment capture timeouts. Action: retry_refund_after_capture_fix."
+          },
+          "handoff": null,
+          "error": null
+        }
+      ],
+      "activeHandoff": {
+        "handoff_id": "handoff-2",
+        "from_agent": "billing_agent",
+        "to_agent": "technical_agent",
+        "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+        "context": {
+          "invoice_id": "INV-2002",
+          "system_id": "checkout"
+        },
+        "payload": {
+          "basedOn": {
+            "department": "billing",
+            "account_id": "acct-200",
+            "invoice_id": "INV-2002",
+            "subject": "Refund for INV-2002 is blocked because checkout capture is failing"
+          },
+          "invoice": {
+            "invoice_id": "INV-2002",
+            "account_id": "acct-200",
+            "status": "refund_blocked",
+            "amount": 85.5,
+            "currency": "USD",
+            "requires_technical": true,
+            "system_id": "checkout",
+            "blocker": "checkout_outage"
+          },
+          "invoice_id": "INV-2002",
+          "system_id": "checkout",
+          "blocker": "checkout_outage"
+        },
+        "parent_result_id": "result-2"
+      },
+      "invokedAgentIds": [
+        "triage_agent",
+        "billing_agent",
+        "technical_agent"
+      ],
+      "finalAnswer": "System checkout is degraded. Incident: CHK-4401: payment capture timeouts. Action: retry_refund_after_capture_fix.",
+      "terminationReason": "completed",
+      "errors": []
+    },
+    "output": {
+      "answer": "System checkout is degraded. Incident: CHK-4401: payment capture timeouts. Action: retry_refund_after_capture_fix.",
+      "ok": true,
+      "terminationReason": "completed",
+      "currentOwner": "technical_agent"
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "agentMs": 0,
+      "runtimeMs": 0,
+      "agentsActivated": 3,
+      "handoffsRequested": 2,
+      "handoffsAccepted": 2,
+      "handoffsRejected": 0,
+      "ownershipTransfers": 2,
+      "successfulAgentResults": 3,
+      "failedAgentResults": 0,
+      "terminationReason": "completed",
+      "maxHandoffs": 6,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable handoff events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "TASK",
+          "taskId": "task-refund-blocked-multi-hop",
+          "request": "Refund for INV-2002 is blocked because checkout capture is failing."
+        },
+        {
+          "phase": "AGENT_ACTIVATED",
+          "agentId": "triage_agent",
+          "enteredVia": "initial",
+          "currentOwner": "triage_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "resultId": "result-1",
+          "currentOwner": "triage_agent",
+          "latencyMs": 0
+        },
+        {
+          "phase": "HANDOFF",
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        {
+          "phase": "HANDOFF_ACCEPTED",
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent"
+        },
+        {
+          "phase": "OWNERSHIP_TRANSFERRED",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "currentOwner": "billing_agent",
+          "previousOwner": "triage_agent"
+        },
+        {
+          "phase": "AGENT_ACTIVATED",
+          "agentId": "billing_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "billing_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "billing_agent",
+          "role": "billing",
+          "kind": "handoff",
+          "ok": true,
+          "resultId": "result-2",
+          "currentOwner": "billing_agent",
+          "latencyMs": 0
+        },
+        {
+          "phase": "HANDOFF",
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "parentResultId": "result-2",
+          "currentOwner": "billing_agent"
+        },
+        {
+          "phase": "HANDOFF_ACCEPTED",
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent"
+        },
+        {
+          "phase": "OWNERSHIP_TRANSFERRED",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "currentOwner": "technical_agent",
+          "previousOwner": "billing_agent"
+        },
+        {
+          "phase": "AGENT_ACTIVATED",
+          "agentId": "technical_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "technical_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "technical_agent",
+          "role": "technical",
+          "kind": "complete",
+          "ok": true,
+          "resultId": "result-3",
+          "currentOwner": "technical_agent",
+          "latencyMs": 0
+        },
+        {
+          "phase": "COMPLETE",
+          "agentId": "technical_agent",
+          "currentOwner": "technical_agent",
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "completed",
+            "currentOwner": "technical_agent",
+            "previousOwner": "billing_agent"
+          }
+        }
+      ],
+      "signatureFlow": "TASK \u2192 AGENT \u2192 HANDOFF \u2192 AGENT \u2192 HANDOFF \u2192 AGENT \u2192 COMPLETE \u2192 TERMINATION"
+    },
+    "relatedEntities": [
+      "agents"
+    ],
+    "relatedContent": [
+      "agents",
+      "handoffs",
+      "ownership-transfer"
+    ],
+    "cookbook": {
+      "path": "examples/agents/07-agent-handoffs"
+    }
+  },
+  {
+    "labId": "agent-handoffs",
+    "traceId": "legal-target-invalid-handoff",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-16T05:56:42Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "INVALID_HANDOFF",
+    "selectionNote": "Measured case: triage requests a handoff to legal_agent, which is not a registered owner. The runtime rejects the target and does not silently reroute.",
+    "architecture": {
+      "layout": "agent-handoffs",
+      "stages": [
+        "task",
+        "activate",
+        "handoff",
+        "ownership-transfer",
+        "complete-or-fail",
+        "termination"
+      ]
+    },
+    "input": {
+      "request": "Forward this billing dispute to the legal department.",
+      "ticketId": "tkt-legal-dispute",
+      "config": {
+        "maxHandoffs": 6,
+        "modelDriver": "mock",
+        "synthesizerModel": "mock",
+        "clientName": "dataaihub-cookbook-agent-handoffs",
+        "dataDir": "data"
+      }
+    },
+    "sequence": [
+      {
+        "kind": "task_created",
+        "detail": {
+          "taskId": "task-legal-target-invalid-handoff",
+          "request": "Forward this billing dispute to the legal department.",
+          "ticketId": "tkt-legal-dispute",
+          "exampleClass": "INVALID_HANDOFF"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_activated",
+        "detail": {
+          "agentId": "triage_agent",
+          "enteredVia": "initial",
+          "currentOwner": "triage_agent",
+          "previousOwner": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "department": "legal",
+            "account_id": "acct-100",
+            "invoice_id": "INV-1001",
+            "subject": "Forward this billing dispute to the legal department"
+          },
+          "handoff": {
+            "handoff_id": "handoff-1",
+            "from_agent": "triage_agent",
+            "to_agent": "legal_agent",
+            "reason": "Ticket classified as legal; transferring ownership to legal_agent.",
+            "context": {
+              "department": "legal"
+            },
+            "payload": {
+              "department": "legal",
+              "account_id": "acct-100",
+              "invoice_id": "INV-1001",
+              "subject": "Forward this billing dispute to the legal department"
+            },
+            "parent_result_id": "result-1"
+          },
+          "error": null,
+          "currentOwner": "triage_agent"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "handoff_requested",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "legal_agent",
+          "reason": "Ticket classified as legal; transferring ownership to legal_agent.",
+          "payload": {
+            "department": "legal",
+            "account_id": "acct-100",
+            "invoice_id": "INV-1001",
+            "subject": "Forward this billing dispute to the legal department"
+          },
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "handoff_rejected",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "legal_agent",
+          "code": "unknown_target",
+          "message": "Unknown handoff target 'legal_agent'.",
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "invalid_handoff",
+          "currentOwner": "triage_agent",
+          "previousOwner": null
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-task_created",
+        "type": "protocol",
+        "title": "Task created",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-legal-target-invalid-handoff",
+          "request": "Forward this billing dispute to the legal department.",
+          "ticketId": "tkt-legal-dispute",
+          "exampleClass": "INVALID_HANDOFF"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-agent_activated",
+        "type": "agent",
+        "title": "Agent activated",
+        "status": "ok",
+        "detail": {
+          "agentId": "triage_agent",
+          "enteredVia": "initial",
+          "currentOwner": "triage_agent",
+          "previousOwner": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "department": "legal",
+            "account_id": "acct-100",
+            "invoice_id": "INV-1001",
+            "subject": "Forward this billing dispute to the legal department"
+          },
+          "handoff": {
+            "handoff_id": "handoff-1",
+            "from_agent": "triage_agent",
+            "to_agent": "legal_agent",
+            "reason": "Ticket classified as legal; transferring ownership to legal_agent.",
+            "context": {
+              "department": "legal"
+            },
+            "payload": {
+              "department": "legal",
+              "account_id": "acct-100",
+              "invoice_id": "INV-1001",
+              "subject": "Forward this billing dispute to the legal department"
+            },
+            "parent_result_id": "result-1"
+          },
+          "error": null,
+          "currentOwner": "triage_agent"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-handoff_requested",
+        "type": "handoff",
+        "title": "Handoff requested",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "legal_agent",
+          "reason": "Ticket classified as legal; transferring ownership to legal_agent.",
+          "payload": {
+            "department": "legal",
+            "account_id": "acct-100",
+            "invoice_id": "INV-1001",
+            "subject": "Forward this billing dispute to the legal department"
+          },
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-handoff_rejected",
+        "type": "error",
+        "title": "Handoff rejected",
+        "status": "error",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "legal_agent",
+          "code": "unknown_target",
+          "message": "Unknown handoff target 'legal_agent'.",
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "invalid_handoff",
+          "currentOwner": "triage_agent",
+          "previousOwner": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "state": {
+      "taskId": "task-legal-target-invalid-handoff",
+      "request": "Forward this billing dispute to the legal department.",
+      "ticketId": "tkt-legal-dispute",
+      "currentOwner": "triage_agent",
+      "previousOwner": null,
+      "ownershipHistory": [
+        {
+          "agent_id": "triage_agent",
+          "entered_via": "initial",
+          "handoff_id": null,
+          "parent_result_id": null
+        }
+      ],
+      "acceptedHandoffs": [],
+      "rejections": [
+        {
+          "handoff_id": "handoff-1",
+          "from_agent": "triage_agent",
+          "to_agent": "legal_agent",
+          "code": "unknown_target",
+          "message": "Unknown handoff target 'legal_agent'.",
+          "parent_result_id": "result-1"
+        }
+      ],
+      "results": [
+        {
+          "result_id": "result-1",
+          "agent_id": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "department": "legal",
+            "account_id": "acct-100",
+            "invoice_id": "INV-1001",
+            "subject": "Forward this billing dispute to the legal department"
+          },
+          "handoff": {
+            "handoff_id": "handoff-1",
+            "from_agent": "triage_agent",
+            "to_agent": "legal_agent",
+            "reason": "Ticket classified as legal; transferring ownership to legal_agent.",
+            "context": {
+              "department": "legal"
+            },
+            "payload": {
+              "department": "legal",
+              "account_id": "acct-100",
+              "invoice_id": "INV-1001",
+              "subject": "Forward this billing dispute to the legal department"
+            },
+            "parent_result_id": "result-1"
+          },
+          "error": null
+        }
+      ],
+      "activeHandoff": null,
+      "invokedAgentIds": [
+        "triage_agent"
+      ],
+      "finalAnswer": "Handoff rejected: triage_agent -> legal_agent (unknown_target). Ownership remains with triage_agent.",
+      "terminationReason": "invalid_handoff",
+      "errors": [
+        {
+          "code": "unknown_target",
+          "from": "triage_agent",
+          "to": "legal_agent",
+          "message": "Unknown handoff target 'legal_agent'."
+        }
+      ]
+    },
+    "output": {
+      "answer": "Handoff rejected: triage_agent -> legal_agent (unknown_target). Ownership remains with triage_agent.",
+      "ok": false,
+      "terminationReason": "invalid_handoff",
+      "currentOwner": "triage_agent"
+    },
+    "errors": [
+      {
+        "code": "unknown_target",
+        "from": "triage_agent",
+        "to": "legal_agent",
+        "message": "Unknown handoff target 'legal_agent'."
+      }
+    ],
+    "metrics": {
+      "totalMs": 0,
+      "agentMs": 0,
+      "runtimeMs": 0,
+      "agentsActivated": 1,
+      "handoffsRequested": 1,
+      "handoffsAccepted": 0,
+      "handoffsRejected": 1,
+      "ownershipTransfers": 0,
+      "successfulAgentResults": 1,
+      "failedAgentResults": 0,
+      "terminationReason": "invalid_handoff",
+      "maxHandoffs": 6,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable handoff events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "TASK",
+          "taskId": "task-legal-target-invalid-handoff",
+          "request": "Forward this billing dispute to the legal department."
+        },
+        {
+          "phase": "AGENT_ACTIVATED",
+          "agentId": "triage_agent",
+          "enteredVia": "initial",
+          "currentOwner": "triage_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "resultId": "result-1",
+          "currentOwner": "triage_agent",
+          "latencyMs": 0
+        },
+        {
+          "phase": "HANDOFF",
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "legal_agent",
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        {
+          "phase": "HANDOFF_REJECTED",
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "legal_agent",
+          "code": "unknown_target",
+          "currentOwner": "triage_agent"
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "invalid_handoff",
+            "currentOwner": "triage_agent",
+            "previousOwner": null
+          }
+        }
+      ],
+      "signatureFlow": "TASK \u2192 AGENT \u2192 HANDOFF \u2192 HANDOFF_REJECTED \u2192 TERMINATION"
+    },
+    "relatedEntities": [
+      "agents"
+    ],
+    "relatedContent": [
+      "agents",
+      "handoffs",
+      "ownership-transfer"
+    ],
+    "cookbook": {
+      "path": "examples/agents/07-agent-handoffs"
+    }
+  },
+  {
+    "labId": "agent-handoffs",
+    "traceId": "unknown-system-handoff-failure",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-16T05:56:42Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "HANDOFF_FAILURE",
+    "selectionNote": "Measured case: triage hands off to billing, billing hands off to technical, and technical fails on an unknown system. The failure remains a failure.",
+    "architecture": {
+      "layout": "agent-handoffs",
+      "stages": [
+        "task",
+        "activate",
+        "handoff",
+        "ownership-transfer",
+        "complete-or-fail",
+        "termination"
+      ]
+    },
+    "input": {
+      "request": "Refund for INV-3003 is blocked by processor SYS-MISSING.",
+      "ticketId": "tkt-unknown-processor",
+      "config": {
+        "maxHandoffs": 6,
+        "modelDriver": "mock",
+        "synthesizerModel": "mock",
+        "clientName": "dataaihub-cookbook-agent-handoffs",
+        "dataDir": "data"
+      }
+    },
+    "sequence": [
+      {
+        "kind": "task_created",
+        "detail": {
+          "taskId": "task-unknown-system-handoff-failure",
+          "request": "Refund for INV-3003 is blocked by processor SYS-MISSING.",
+          "ticketId": "tkt-unknown-processor",
+          "exampleClass": "HANDOFF_FAILURE"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_activated",
+        "detail": {
+          "agentId": "triage_agent",
+          "enteredVia": "initial",
+          "currentOwner": "triage_agent",
+          "previousOwner": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-300",
+            "invoice_id": "INV-3003",
+            "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+          },
+          "handoff": {
+            "handoff_id": "handoff-1",
+            "from_agent": "triage_agent",
+            "to_agent": "billing_agent",
+            "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+            "context": {
+              "department": "billing"
+            },
+            "payload": {
+              "department": "billing",
+              "account_id": "acct-300",
+              "invoice_id": "INV-3003",
+              "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+            },
+            "parent_result_id": "result-1"
+          },
+          "error": null,
+          "currentOwner": "triage_agent"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "handoff_requested",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-300",
+            "invoice_id": "INV-3003",
+            "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+          },
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "handoff_accepted",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "parentResultId": "result-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "ownership_transferred",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "previousOwner": "triage_agent",
+          "currentOwner": "billing_agent",
+          "parentResultId": "result-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_activated",
+        "detail": {
+          "agentId": "billing_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "billing_agent",
+          "previousOwner": "triage_agent",
+          "handoffId": "handoff-1"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-2",
+          "agentId": "billing_agent",
+          "role": "billing",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-300",
+              "invoice_id": "INV-3003",
+              "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+            },
+            "invoice": {
+              "invoice_id": "INV-3003",
+              "account_id": "acct-300",
+              "status": "refund_blocked",
+              "amount": 19.99,
+              "currency": "USD",
+              "requires_technical": true,
+              "system_id": "SYS-MISSING",
+              "blocker": "unknown_processor"
+            },
+            "invoice_id": "INV-3003",
+            "system_id": "SYS-MISSING",
+            "blocker": "unknown_processor"
+          },
+          "handoff": {
+            "handoff_id": "handoff-2",
+            "from_agent": "billing_agent",
+            "to_agent": "technical_agent",
+            "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+            "context": {
+              "invoice_id": "INV-3003",
+              "system_id": "SYS-MISSING"
+            },
+            "payload": {
+              "basedOn": {
+                "department": "billing",
+                "account_id": "acct-300",
+                "invoice_id": "INV-3003",
+                "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+              },
+              "invoice": {
+                "invoice_id": "INV-3003",
+                "account_id": "acct-300",
+                "status": "refund_blocked",
+                "amount": 19.99,
+                "currency": "USD",
+                "requires_technical": true,
+                "system_id": "SYS-MISSING",
+                "blocker": "unknown_processor"
+              },
+              "invoice_id": "INV-3003",
+              "system_id": "SYS-MISSING",
+              "blocker": "unknown_processor"
+            },
+            "parent_result_id": "result-2"
+          },
+          "error": null,
+          "currentOwner": "billing_agent"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "handoff_requested",
+        "detail": {
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-300",
+              "invoice_id": "INV-3003",
+              "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+            },
+            "invoice": {
+              "invoice_id": "INV-3003",
+              "account_id": "acct-300",
+              "status": "refund_blocked",
+              "amount": 19.99,
+              "currency": "USD",
+              "requires_technical": true,
+              "system_id": "SYS-MISSING",
+              "blocker": "unknown_processor"
+            },
+            "invoice_id": "INV-3003",
+            "system_id": "SYS-MISSING",
+            "blocker": "unknown_processor"
+          },
+          "parentResultId": "result-2",
+          "currentOwner": "billing_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "handoff_accepted",
+        "detail": {
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "parentResultId": "result-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "ownership_transferred",
+        "detail": {
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "previousOwner": "billing_agent",
+          "currentOwner": "technical_agent",
+          "parentResultId": "result-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_activated",
+        "detail": {
+          "agentId": "technical_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "technical_agent",
+          "previousOwner": "billing_agent",
+          "handoffId": "handoff-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "agent_result",
+        "detail": {
+          "resultId": "result-3",
+          "agentId": "technical_agent",
+          "role": "technical",
+          "kind": "failure",
+          "ok": false,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "department": "billing",
+                "account_id": "acct-300",
+                "invoice_id": "INV-3003",
+                "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+              },
+              "invoice": {
+                "invoice_id": "INV-3003",
+                "account_id": "acct-300",
+                "status": "refund_blocked",
+                "amount": 19.99,
+                "currency": "USD",
+                "requires_technical": true,
+                "system_id": "SYS-MISSING",
+                "blocker": "unknown_processor"
+              },
+              "invoice_id": "INV-3003",
+              "system_id": "SYS-MISSING",
+              "blocker": "unknown_processor"
+            },
+            "system_id": "SYS-MISSING"
+          },
+          "handoff": null,
+          "error": {
+            "code": "unknown_system",
+            "message": "Unknown system 'SYS-MISSING'",
+            "systemId": "SYS-MISSING",
+            "validSystemIds": [
+              "checkout",
+              "invoicing"
+            ]
+          },
+          "currentOwner": "technical_agent"
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "failure",
+        "detail": {
+          "agentId": "technical_agent",
+          "resultId": "result-3",
+          "error": {
+            "code": "unknown_system",
+            "message": "Unknown system 'SYS-MISSING'",
+            "systemId": "SYS-MISSING",
+            "validSystemIds": [
+              "checkout",
+              "invoicing"
+            ]
+          },
+          "currentOwner": "technical_agent"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "agent_failed",
+          "currentOwner": "technical_agent",
+          "previousOwner": "billing_agent"
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-task_created",
+        "type": "protocol",
+        "title": "Task created",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-unknown-system-handoff-failure",
+          "request": "Refund for INV-3003 is blocked by processor SYS-MISSING.",
+          "ticketId": "tkt-unknown-processor",
+          "exampleClass": "HANDOFF_FAILURE"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-agent_activated",
+        "type": "agent",
+        "title": "Agent activated",
+        "status": "ok",
+        "detail": {
+          "agentId": "triage_agent",
+          "enteredVia": "initial",
+          "currentOwner": "triage_agent",
+          "previousOwner": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-1",
+          "agentId": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-300",
+            "invoice_id": "INV-3003",
+            "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+          },
+          "handoff": {
+            "handoff_id": "handoff-1",
+            "from_agent": "triage_agent",
+            "to_agent": "billing_agent",
+            "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+            "context": {
+              "department": "billing"
+            },
+            "payload": {
+              "department": "billing",
+              "account_id": "acct-300",
+              "invoice_id": "INV-3003",
+              "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+            },
+            "parent_result_id": "result-1"
+          },
+          "error": null,
+          "currentOwner": "triage_agent"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-handoff_requested",
+        "type": "handoff",
+        "title": "Handoff requested",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-300",
+            "invoice_id": "INV-3003",
+            "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+          },
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-handoff_accepted",
+        "type": "handoff",
+        "title": "Handoff accepted",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "parentResultId": "result-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-ownership_transferred",
+        "type": "handoff",
+        "title": "Ownership transferred",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "previousOwner": "triage_agent",
+          "currentOwner": "billing_agent",
+          "parentResultId": "result-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-agent_activated",
+        "type": "agent",
+        "title": "Agent activated",
+        "status": "ok",
+        "detail": {
+          "agentId": "billing_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "billing_agent",
+          "previousOwner": "triage_agent",
+          "handoffId": "handoff-1"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-agent_result",
+        "type": "agent",
+        "title": "Agent result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-2",
+          "agentId": "billing_agent",
+          "role": "billing",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-300",
+              "invoice_id": "INV-3003",
+              "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+            },
+            "invoice": {
+              "invoice_id": "INV-3003",
+              "account_id": "acct-300",
+              "status": "refund_blocked",
+              "amount": 19.99,
+              "currency": "USD",
+              "requires_technical": true,
+              "system_id": "SYS-MISSING",
+              "blocker": "unknown_processor"
+            },
+            "invoice_id": "INV-3003",
+            "system_id": "SYS-MISSING",
+            "blocker": "unknown_processor"
+          },
+          "handoff": {
+            "handoff_id": "handoff-2",
+            "from_agent": "billing_agent",
+            "to_agent": "technical_agent",
+            "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+            "context": {
+              "invoice_id": "INV-3003",
+              "system_id": "SYS-MISSING"
+            },
+            "payload": {
+              "basedOn": {
+                "department": "billing",
+                "account_id": "acct-300",
+                "invoice_id": "INV-3003",
+                "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+              },
+              "invoice": {
+                "invoice_id": "INV-3003",
+                "account_id": "acct-300",
+                "status": "refund_blocked",
+                "amount": 19.99,
+                "currency": "USD",
+                "requires_technical": true,
+                "system_id": "SYS-MISSING",
+                "blocker": "unknown_processor"
+              },
+              "invoice_id": "INV-3003",
+              "system_id": "SYS-MISSING",
+              "blocker": "unknown_processor"
+            },
+            "parent_result_id": "result-2"
+          },
+          "error": null,
+          "currentOwner": "billing_agent"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-handoff_requested",
+        "type": "handoff",
+        "title": "Handoff requested",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-300",
+              "invoice_id": "INV-3003",
+              "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+            },
+            "invoice": {
+              "invoice_id": "INV-3003",
+              "account_id": "acct-300",
+              "status": "refund_blocked",
+              "amount": 19.99,
+              "currency": "USD",
+              "requires_technical": true,
+              "system_id": "SYS-MISSING",
+              "blocker": "unknown_processor"
+            },
+            "invoice_id": "INV-3003",
+            "system_id": "SYS-MISSING",
+            "blocker": "unknown_processor"
+          },
+          "parentResultId": "result-2",
+          "currentOwner": "billing_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-handoff_accepted",
+        "type": "handoff",
+        "title": "Handoff accepted",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "parentResultId": "result-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-ownership_transferred",
+        "type": "handoff",
+        "title": "Ownership transferred",
+        "status": "ok",
+        "detail": {
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "previousOwner": "billing_agent",
+          "currentOwner": "technical_agent",
+          "parentResultId": "result-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-agent_activated",
+        "type": "agent",
+        "title": "Agent activated",
+        "status": "ok",
+        "detail": {
+          "agentId": "technical_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "technical_agent",
+          "previousOwner": "billing_agent",
+          "handoffId": "handoff-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-agent_result",
+        "type": "error",
+        "title": "Agent result",
+        "status": "error",
+        "detail": {
+          "resultId": "result-3",
+          "agentId": "technical_agent",
+          "role": "technical",
+          "kind": "failure",
+          "ok": false,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "department": "billing",
+                "account_id": "acct-300",
+                "invoice_id": "INV-3003",
+                "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+              },
+              "invoice": {
+                "invoice_id": "INV-3003",
+                "account_id": "acct-300",
+                "status": "refund_blocked",
+                "amount": 19.99,
+                "currency": "USD",
+                "requires_technical": true,
+                "system_id": "SYS-MISSING",
+                "blocker": "unknown_processor"
+              },
+              "invoice_id": "INV-3003",
+              "system_id": "SYS-MISSING",
+              "blocker": "unknown_processor"
+            },
+            "system_id": "SYS-MISSING"
+          },
+          "handoff": null,
+          "error": {
+            "code": "unknown_system",
+            "message": "Unknown system 'SYS-MISSING'",
+            "systemId": "SYS-MISSING",
+            "validSystemIds": [
+              "checkout",
+              "invoicing"
+            ]
+          },
+          "currentOwner": "technical_agent"
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-failure",
+        "type": "error",
+        "title": "Agent failure",
+        "status": "error",
+        "detail": {
+          "agentId": "technical_agent",
+          "resultId": "result-3",
+          "error": {
+            "code": "unknown_system",
+            "message": "Unknown system 'SYS-MISSING'",
+            "systemId": "SYS-MISSING",
+            "validSystemIds": [
+              "checkout",
+              "invoicing"
+            ]
+          },
+          "currentOwner": "technical_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-15-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "agent_failed",
+          "currentOwner": "technical_agent",
+          "previousOwner": "billing_agent"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "state": {
+      "taskId": "task-unknown-system-handoff-failure",
+      "request": "Refund for INV-3003 is blocked by processor SYS-MISSING.",
+      "ticketId": "tkt-unknown-processor",
+      "currentOwner": "technical_agent",
+      "previousOwner": "billing_agent",
+      "ownershipHistory": [
+        {
+          "agent_id": "triage_agent",
+          "entered_via": "initial",
+          "handoff_id": null,
+          "parent_result_id": null
+        },
+        {
+          "agent_id": "billing_agent",
+          "entered_via": "handoff",
+          "handoff_id": "handoff-1",
+          "parent_result_id": "result-1"
+        },
+        {
+          "agent_id": "technical_agent",
+          "entered_via": "handoff",
+          "handoff_id": "handoff-2",
+          "parent_result_id": "result-2"
+        }
+      ],
+      "acceptedHandoffs": [
+        {
+          "handoff_id": "handoff-1",
+          "from_agent": "triage_agent",
+          "to_agent": "billing_agent",
+          "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+          "context": {
+            "department": "billing"
+          },
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-300",
+            "invoice_id": "INV-3003",
+            "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+          },
+          "parent_result_id": "result-1"
+        },
+        {
+          "handoff_id": "handoff-2",
+          "from_agent": "billing_agent",
+          "to_agent": "technical_agent",
+          "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+          "context": {
+            "invoice_id": "INV-3003",
+            "system_id": "SYS-MISSING"
+          },
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-300",
+              "invoice_id": "INV-3003",
+              "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+            },
+            "invoice": {
+              "invoice_id": "INV-3003",
+              "account_id": "acct-300",
+              "status": "refund_blocked",
+              "amount": 19.99,
+              "currency": "USD",
+              "requires_technical": true,
+              "system_id": "SYS-MISSING",
+              "blocker": "unknown_processor"
+            },
+            "invoice_id": "INV-3003",
+            "system_id": "SYS-MISSING",
+            "blocker": "unknown_processor"
+          },
+          "parent_result_id": "result-2"
+        }
+      ],
+      "rejections": [],
+      "results": [
+        {
+          "result_id": "result-1",
+          "agent_id": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "department": "billing",
+            "account_id": "acct-300",
+            "invoice_id": "INV-3003",
+            "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+          },
+          "handoff": {
+            "handoff_id": "handoff-1",
+            "from_agent": "triage_agent",
+            "to_agent": "billing_agent",
+            "reason": "Ticket classified as billing; transferring ownership to billing_agent.",
+            "context": {
+              "department": "billing"
+            },
+            "payload": {
+              "department": "billing",
+              "account_id": "acct-300",
+              "invoice_id": "INV-3003",
+              "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+            },
+            "parent_result_id": "result-1"
+          },
+          "error": null
+        },
+        {
+          "result_id": "result-2",
+          "agent_id": "billing_agent",
+          "role": "billing",
+          "kind": "handoff",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "department": "billing",
+              "account_id": "acct-300",
+              "invoice_id": "INV-3003",
+              "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+            },
+            "invoice": {
+              "invoice_id": "INV-3003",
+              "account_id": "acct-300",
+              "status": "refund_blocked",
+              "amount": 19.99,
+              "currency": "USD",
+              "requires_technical": true,
+              "system_id": "SYS-MISSING",
+              "blocker": "unknown_processor"
+            },
+            "invoice_id": "INV-3003",
+            "system_id": "SYS-MISSING",
+            "blocker": "unknown_processor"
+          },
+          "handoff": {
+            "handoff_id": "handoff-2",
+            "from_agent": "billing_agent",
+            "to_agent": "technical_agent",
+            "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+            "context": {
+              "invoice_id": "INV-3003",
+              "system_id": "SYS-MISSING"
+            },
+            "payload": {
+              "basedOn": {
+                "department": "billing",
+                "account_id": "acct-300",
+                "invoice_id": "INV-3003",
+                "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+              },
+              "invoice": {
+                "invoice_id": "INV-3003",
+                "account_id": "acct-300",
+                "status": "refund_blocked",
+                "amount": 19.99,
+                "currency": "USD",
+                "requires_technical": true,
+                "system_id": "SYS-MISSING",
+                "blocker": "unknown_processor"
+              },
+              "invoice_id": "INV-3003",
+              "system_id": "SYS-MISSING",
+              "blocker": "unknown_processor"
+            },
+            "parent_result_id": "result-2"
+          },
+          "error": null
+        },
+        {
+          "result_id": "result-3",
+          "agent_id": "technical_agent",
+          "role": "technical",
+          "kind": "failure",
+          "ok": false,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "department": "billing",
+                "account_id": "acct-300",
+                "invoice_id": "INV-3003",
+                "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+              },
+              "invoice": {
+                "invoice_id": "INV-3003",
+                "account_id": "acct-300",
+                "status": "refund_blocked",
+                "amount": 19.99,
+                "currency": "USD",
+                "requires_technical": true,
+                "system_id": "SYS-MISSING",
+                "blocker": "unknown_processor"
+              },
+              "invoice_id": "INV-3003",
+              "system_id": "SYS-MISSING",
+              "blocker": "unknown_processor"
+            },
+            "system_id": "SYS-MISSING"
+          },
+          "handoff": null,
+          "error": {
+            "code": "unknown_system",
+            "message": "Unknown system 'SYS-MISSING'",
+            "systemId": "SYS-MISSING",
+            "validSystemIds": [
+              "checkout",
+              "invoicing"
+            ]
+          }
+        }
+      ],
+      "activeHandoff": {
+        "handoff_id": "handoff-2",
+        "from_agent": "billing_agent",
+        "to_agent": "technical_agent",
+        "reason": "Invoice refund is blocked by a system incident; transferring ownership to technical_agent.",
+        "context": {
+          "invoice_id": "INV-3003",
+          "system_id": "SYS-MISSING"
+        },
+        "payload": {
+          "basedOn": {
+            "department": "billing",
+            "account_id": "acct-300",
+            "invoice_id": "INV-3003",
+            "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING"
+          },
+          "invoice": {
+            "invoice_id": "INV-3003",
+            "account_id": "acct-300",
+            "status": "refund_blocked",
+            "amount": 19.99,
+            "currency": "USD",
+            "requires_technical": true,
+            "system_id": "SYS-MISSING",
+            "blocker": "unknown_processor"
+          },
+          "invoice_id": "INV-3003",
+          "system_id": "SYS-MISSING",
+          "blocker": "unknown_processor"
+        },
+        "parent_result_id": "result-2"
+      },
+      "invokedAgentIds": [
+        "triage_agent",
+        "billing_agent",
+        "technical_agent"
+      ],
+      "finalAnswer": "Agent technical_agent failed: unknown_system: Unknown system 'SYS-MISSING'. Not treated as success.",
+      "terminationReason": "agent_failed",
+      "errors": [
+        {
+          "code": "unknown_system",
+          "message": "Unknown system 'SYS-MISSING'",
+          "systemId": "SYS-MISSING",
+          "validSystemIds": [
+            "checkout",
+            "invoicing"
+          ]
+        }
+      ]
+    },
+    "output": {
+      "answer": "Agent technical_agent failed: unknown_system: Unknown system 'SYS-MISSING'. Not treated as success.",
+      "ok": false,
+      "terminationReason": "agent_failed",
+      "currentOwner": "technical_agent"
+    },
+    "errors": [
+      {
+        "code": "unknown_system",
+        "message": "Unknown system 'SYS-MISSING'",
+        "systemId": "SYS-MISSING",
+        "validSystemIds": [
+          "checkout",
+          "invoicing"
+        ]
+      }
+    ],
+    "metrics": {
+      "totalMs": 0,
+      "agentMs": 0,
+      "runtimeMs": 0,
+      "agentsActivated": 3,
+      "handoffsRequested": 2,
+      "handoffsAccepted": 2,
+      "handoffsRejected": 0,
+      "ownershipTransfers": 2,
+      "successfulAgentResults": 2,
+      "failedAgentResults": 1,
+      "terminationReason": "agent_failed",
+      "maxHandoffs": 6,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable handoff events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "TASK",
+          "taskId": "task-unknown-system-handoff-failure",
+          "request": "Refund for INV-3003 is blocked by processor SYS-MISSING."
+        },
+        {
+          "phase": "AGENT_ACTIVATED",
+          "agentId": "triage_agent",
+          "enteredVia": "initial",
+          "currentOwner": "triage_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "triage_agent",
+          "role": "triage",
+          "kind": "handoff",
+          "ok": true,
+          "resultId": "result-1",
+          "currentOwner": "triage_agent",
+          "latencyMs": 0
+        },
+        {
+          "phase": "HANDOFF",
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "parentResultId": "result-1",
+          "currentOwner": "triage_agent"
+        },
+        {
+          "phase": "HANDOFF_ACCEPTED",
+          "handoffId": "handoff-1",
+          "from": "triage_agent",
+          "to": "billing_agent"
+        },
+        {
+          "phase": "OWNERSHIP_TRANSFERRED",
+          "from": "triage_agent",
+          "to": "billing_agent",
+          "currentOwner": "billing_agent",
+          "previousOwner": "triage_agent"
+        },
+        {
+          "phase": "AGENT_ACTIVATED",
+          "agentId": "billing_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "billing_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "billing_agent",
+          "role": "billing",
+          "kind": "handoff",
+          "ok": true,
+          "resultId": "result-2",
+          "currentOwner": "billing_agent",
+          "latencyMs": 0
+        },
+        {
+          "phase": "HANDOFF",
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "parentResultId": "result-2",
+          "currentOwner": "billing_agent"
+        },
+        {
+          "phase": "HANDOFF_ACCEPTED",
+          "handoffId": "handoff-2",
+          "from": "billing_agent",
+          "to": "technical_agent"
+        },
+        {
+          "phase": "OWNERSHIP_TRANSFERRED",
+          "from": "billing_agent",
+          "to": "technical_agent",
+          "currentOwner": "technical_agent",
+          "previousOwner": "billing_agent"
+        },
+        {
+          "phase": "AGENT_ACTIVATED",
+          "agentId": "technical_agent",
+          "enteredVia": "handoff",
+          "currentOwner": "technical_agent"
+        },
+        {
+          "phase": "AGENT",
+          "agentId": "technical_agent",
+          "role": "technical",
+          "kind": "failure",
+          "ok": false,
+          "resultId": "result-3",
+          "currentOwner": "technical_agent",
+          "latencyMs": 0
+        },
+        {
+          "phase": "FAILURE",
+          "agentId": "technical_agent",
+          "error": {
+            "code": "unknown_system",
+            "message": "Unknown system 'SYS-MISSING'",
+            "systemId": "SYS-MISSING",
+            "validSystemIds": [
+              "checkout",
+              "invoicing"
+            ]
+          },
+          "currentOwner": "technical_agent"
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "agent_failed",
+            "currentOwner": "technical_agent",
+            "previousOwner": "billing_agent"
+          }
+        }
+      ],
+      "signatureFlow": "TASK \u2192 AGENT \u2192 HANDOFF \u2192 AGENT \u2192 HANDOFF \u2192 AGENT \u2192 FAILURE \u2192 TERMINATION"
+    },
+    "relatedEntities": [
+      "agents"
+    ],
+    "relatedContent": [
+      "agents",
+      "handoffs",
+      "ownership-transfer"
+    ],
+    "cookbook": {
+      "path": "examples/agents/07-agent-handoffs"
+    }
+  }
+]

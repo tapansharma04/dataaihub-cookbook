@@ -1,0 +1,30 @@
+{
+  "tkt-duplicate-charge": {
+    "id": "tkt-duplicate-charge",
+    "subject": "Invoice INV-1001 was charged twice",
+    "department": "billing",
+    "account_id": "acct-100",
+    "invoice_id": "INV-1001"
+  },
+  "tkt-refund-blocked": {
+    "id": "tkt-refund-blocked",
+    "subject": "Refund for INV-2002 is blocked because checkout capture is failing",
+    "department": "billing",
+    "account_id": "acct-200",
+    "invoice_id": "INV-2002"
+  },
+  "tkt-legal-dispute": {
+    "id": "tkt-legal-dispute",
+    "subject": "Forward this billing dispute to the legal department",
+    "department": "legal",
+    "account_id": "acct-100",
+    "invoice_id": "INV-1001"
+  },
+  "tkt-unknown-processor": {
+    "id": "tkt-unknown-processor",
+    "subject": "Refund for INV-3003 is blocked by processor SYS-MISSING",
+    "department": "billing",
+    "account_id": "acct-300",
+    "invoice_id": "INV-3003"
+  }
+}
