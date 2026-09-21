@@ -1,0 +1,4936 @@
+[
+  {
+    "labId": "agent-orchestration",
+    "traceId": "payments-incident-basic-orchestration",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-21T06:18:32Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "BASIC_ORCHESTRATION",
+    "selectionNote": "Measured case: status and docs have no dependency on each other and become READY independently. Analysis becomes READY only after both complete. Decision consumes the analysis result.",
+    "architecture": {
+      "layout": "agent-orchestration",
+      "stages": [
+        "task",
+        "plan",
+        "ready",
+        "execute",
+        "condition",
+        "complete-or-fail",
+        "termination"
+      ]
+    },
+    "input": {
+      "request": "Prepare an operational decision for the payments service using status and documentation.",
+      "service": "payments",
+      "config": {
+        "maxNodes": 12,
+        "modelDriver": "mock",
+        "synthesizerModel": "mock",
+        "clientName": "dataaihub-cookbook-agent-orchestration",
+        "dataDir": "data"
+      }
+    },
+    "sequence": [
+      {
+        "kind": "task_created",
+        "detail": {
+          "taskId": "task-payments-incident-basic-orchestration",
+          "request": "Prepare an operational decision for the payments service using status and documentation.",
+          "service": "payments",
+          "exampleClass": "BASIC_ORCHESTRATION"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "plan_created",
+        "detail": {
+          "planId": "plan-payments-incident-basic-orchestration",
+          "nodeIds": [
+            "status",
+            "docs",
+            "analysis",
+            "decision"
+          ],
+          "nodes": [
+            {
+              "nodeId": "status",
+              "agentId": "status_agent",
+              "dependencies": [],
+              "condition": null
+            },
+            {
+              "nodeId": "docs",
+              "agentId": "docs_agent",
+              "dependencies": [],
+              "condition": null
+            },
+            {
+              "nodeId": "analysis",
+              "agentId": "analysis_agent",
+              "dependencies": [
+                "status",
+                "docs"
+              ],
+              "condition": null
+            },
+            {
+              "nodeId": "decision",
+              "agentId": "decision_agent",
+              "dependencies": [
+                "analysis"
+              ],
+              "condition": null
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_ready",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "conditionMatched": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_ready",
+        "detail": {
+          "nodeId": "docs",
+          "agentId": "docs_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "conditionMatched": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_started",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_result",
+        "detail": {
+          "resultId": "result-1",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "upstreamResultIds": [],
+          "dependencyIds": []
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "node_completed",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "resultId": "result-1",
+          "upstreamResultIds": []
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_started",
+        "detail": {
+          "nodeId": "docs",
+          "agentId": "docs_agent",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_result",
+        "detail": {
+          "resultId": "result-2",
+          "nodeId": "docs",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "ok": true,
+          "payload": {
+            "doc": {
+              "id": "doc-payments-runbook",
+              "title": "Payments degradation runbook",
+              "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+            }
+          },
+          "error": null,
+          "upstreamResultIds": [],
+          "dependencyIds": []
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "node_completed",
+        "detail": {
+          "nodeId": "docs",
+          "agentId": "docs_agent",
+          "resultId": "result-2",
+          "upstreamResultIds": []
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_ready",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "status",
+            "docs"
+          ],
+          "upstreamResultIds": [
+            "result-1",
+            "result-2"
+          ],
+          "conditionMatched": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_started",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "dependencyIds": [
+            "status",
+            "docs"
+          ],
+          "upstreamResultIds": [
+            "result-1",
+            "result-2"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_result",
+        "detail": {
+          "resultId": "result-3",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "status": {
+                "service": {
+                  "service": "payments",
+                  "status": "degraded",
+                  "region": "us-east-1",
+                  "latencyP99Ms": 890,
+                  "incident": "PAY-2041: elevated card-auth latency"
+                }
+              },
+              "docs": {
+                "doc": {
+                  "id": "doc-payments-runbook",
+                  "title": "Payments degradation runbook",
+                  "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+                }
+              }
+            },
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "status": "degraded",
+            "severity": "elevated",
+            "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook.",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+          },
+          "error": null,
+          "upstreamResultIds": [
+            "result-1",
+            "result-2"
+          ],
+          "dependencyIds": [
+            "status",
+            "docs"
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "node_completed",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "resultId": "result-3",
+          "upstreamResultIds": [
+            "result-1",
+            "result-2"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_ready",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-3"
+          ],
+          "conditionMatched": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_started",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-3"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_result",
+        "detail": {
+          "resultId": "result-4",
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "role": "decision",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "status": {
+                  "service": {
+                    "service": "payments",
+                    "status": "degraded",
+                    "region": "us-east-1",
+                    "latencyP99Ms": 890,
+                    "incident": "PAY-2041: elevated card-auth latency"
+                  }
+                },
+                "docs": {
+                  "doc": {
+                    "id": "doc-payments-runbook",
+                    "title": "Payments degradation runbook",
+                    "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+                  }
+                }
+              },
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "status": "degraded",
+              "severity": "elevated",
+              "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook.",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+            },
+            "outcome": "escalate",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency",
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "summary": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook."
+          },
+          "error": null,
+          "upstreamResultIds": [
+            "result-3"
+          ],
+          "dependencyIds": [
+            "analysis"
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "node_completed",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "resultId": "result-4",
+          "upstreamResultIds": [
+            "result-3"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "completed",
+        "detail": {
+          "answer": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook.",
+          "terminalNodeIds": [
+            "decision"
+          ],
+          "resultIds": [
+            "result-1",
+            "result-2",
+            "result-3",
+            "result-4"
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed",
+          "ok": true,
+          "nodeStates": {
+            "status": "COMPLETED",
+            "docs": "COMPLETED",
+            "analysis": "COMPLETED",
+            "decision": "COMPLETED"
+          }
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-task_created",
+        "type": "protocol",
+        "title": "Task created",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-payments-incident-basic-orchestration",
+          "request": "Prepare an operational decision for the payments service using status and documentation.",
+          "service": "payments",
+          "exampleClass": "BASIC_ORCHESTRATION"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-plan_created",
+        "type": "plan",
+        "title": "Plan created",
+        "status": "ok",
+        "detail": {
+          "planId": "plan-payments-incident-basic-orchestration",
+          "nodeIds": [
+            "status",
+            "docs",
+            "analysis",
+            "decision"
+          ],
+          "nodes": [
+            {
+              "nodeId": "status",
+              "agentId": "status_agent",
+              "dependencies": [],
+              "condition": null
+            },
+            {
+              "nodeId": "docs",
+              "agentId": "docs_agent",
+              "dependencies": [],
+              "condition": null
+            },
+            {
+              "nodeId": "analysis",
+              "agentId": "analysis_agent",
+              "dependencies": [
+                "status",
+                "docs"
+              ],
+              "condition": null
+            },
+            {
+              "nodeId": "decision",
+              "agentId": "decision_agent",
+              "dependencies": [
+                "analysis"
+              ],
+              "condition": null
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-node_ready",
+        "type": "orchestration",
+        "title": "Node ready",
+        "status": "ok",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "conditionMatched": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-node_ready",
+        "type": "orchestration",
+        "title": "Node ready",
+        "status": "ok",
+        "detail": {
+          "nodeId": "docs",
+          "agentId": "docs_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "conditionMatched": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-node_started",
+        "type": "agent",
+        "title": "Node started",
+        "status": "ok",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-node_result",
+        "type": "agent",
+        "title": "Node result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-1",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "upstreamResultIds": [],
+          "dependencyIds": []
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-node_completed",
+        "type": "agent",
+        "title": "Node completed",
+        "status": "ok",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "resultId": "result-1",
+          "upstreamResultIds": []
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-node_started",
+        "type": "agent",
+        "title": "Node started",
+        "status": "ok",
+        "detail": {
+          "nodeId": "docs",
+          "agentId": "docs_agent",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-node_result",
+        "type": "agent",
+        "title": "Node result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-2",
+          "nodeId": "docs",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "ok": true,
+          "payload": {
+            "doc": {
+              "id": "doc-payments-runbook",
+              "title": "Payments degradation runbook",
+              "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+            }
+          },
+          "error": null,
+          "upstreamResultIds": [],
+          "dependencyIds": []
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-node_completed",
+        "type": "agent",
+        "title": "Node completed",
+        "status": "ok",
+        "detail": {
+          "nodeId": "docs",
+          "agentId": "docs_agent",
+          "resultId": "result-2",
+          "upstreamResultIds": []
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-node_ready",
+        "type": "orchestration",
+        "title": "Node ready",
+        "status": "ok",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "status",
+            "docs"
+          ],
+          "upstreamResultIds": [
+            "result-1",
+            "result-2"
+          ],
+          "conditionMatched": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-node_started",
+        "type": "agent",
+        "title": "Node started",
+        "status": "ok",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "dependencyIds": [
+            "status",
+            "docs"
+          ],
+          "upstreamResultIds": [
+            "result-1",
+            "result-2"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-node_result",
+        "type": "agent",
+        "title": "Node result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-3",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "status": {
+                "service": {
+                  "service": "payments",
+                  "status": "degraded",
+                  "region": "us-east-1",
+                  "latencyP99Ms": 890,
+                  "incident": "PAY-2041: elevated card-auth latency"
+                }
+              },
+              "docs": {
+                "doc": {
+                  "id": "doc-payments-runbook",
+                  "title": "Payments degradation runbook",
+                  "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+                }
+              }
+            },
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "status": "degraded",
+            "severity": "elevated",
+            "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook.",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+          },
+          "error": null,
+          "upstreamResultIds": [
+            "result-1",
+            "result-2"
+          ],
+          "dependencyIds": [
+            "status",
+            "docs"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-node_completed",
+        "type": "agent",
+        "title": "Node completed",
+        "status": "ok",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "resultId": "result-3",
+          "upstreamResultIds": [
+            "result-1",
+            "result-2"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-15-node_ready",
+        "type": "orchestration",
+        "title": "Node ready",
+        "status": "ok",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-3"
+          ],
+          "conditionMatched": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-16-node_started",
+        "type": "agent",
+        "title": "Node started",
+        "status": "ok",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-3"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-17-node_result",
+        "type": "agent",
+        "title": "Node result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-4",
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "role": "decision",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "status": {
+                  "service": {
+                    "service": "payments",
+                    "status": "degraded",
+                    "region": "us-east-1",
+                    "latencyP99Ms": 890,
+                    "incident": "PAY-2041: elevated card-auth latency"
+                  }
+                },
+                "docs": {
+                  "doc": {
+                    "id": "doc-payments-runbook",
+                    "title": "Payments degradation runbook",
+                    "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+                  }
+                }
+              },
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "status": "degraded",
+              "severity": "elevated",
+              "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook.",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+            },
+            "outcome": "escalate",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency",
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "summary": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook."
+          },
+          "error": null,
+          "upstreamResultIds": [
+            "result-3"
+          ],
+          "dependencyIds": [
+            "analysis"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-18-node_completed",
+        "type": "agent",
+        "title": "Node completed",
+        "status": "ok",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "resultId": "result-4",
+          "upstreamResultIds": [
+            "result-3"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-19-completed",
+        "type": "completion",
+        "title": "Completed",
+        "status": "ok",
+        "detail": {
+          "answer": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook.",
+          "terminalNodeIds": [
+            "decision"
+          ],
+          "resultIds": [
+            "result-1",
+            "result-2",
+            "result-3",
+            "result-4"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-20-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed",
+          "ok": true,
+          "nodeStates": {
+            "status": "COMPLETED",
+            "docs": "COMPLETED",
+            "analysis": "COMPLETED",
+            "decision": "COMPLETED"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "state": {
+      "taskId": "task-payments-incident-basic-orchestration",
+      "request": "Prepare an operational decision for the payments service using status and documentation.",
+      "service": "payments",
+      "plan": {
+        "plan_id": "plan-payments-incident-basic-orchestration",
+        "nodes": [
+          {
+            "node_id": "status",
+            "agent_id": "status_agent",
+            "dependencies": [],
+            "condition": null,
+            "assignment": {
+              "service": "payments"
+            }
+          },
+          {
+            "node_id": "docs",
+            "agent_id": "docs_agent",
+            "dependencies": [],
+            "condition": null,
+            "assignment": {
+              "doc_id": "doc-payments-runbook"
+            }
+          },
+          {
+            "node_id": "analysis",
+            "agent_id": "analysis_agent",
+            "dependencies": [
+              "status",
+              "docs"
+            ],
+            "condition": null,
+            "assignment": {}
+          },
+          {
+            "node_id": "decision",
+            "agent_id": "decision_agent",
+            "dependencies": [
+              "analysis"
+            ],
+            "condition": null,
+            "assignment": {}
+          }
+        ]
+      },
+      "nodes": {
+        "status": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "state": "COMPLETED",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "result": {
+            "result_id": "result-1",
+            "node_id": "status",
+            "agent_id": "status_agent",
+            "role": "status",
+            "ok": true,
+            "payload": {
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            },
+            "error": null,
+            "upstream_result_ids": []
+          },
+          "skipReason": null,
+          "readyReason": "no_dependencies",
+          "conditionMatched": null,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "READY",
+              "reason": "no_dependencies"
+            },
+            {
+              "from_state": "READY",
+              "to_state": "RUNNING",
+              "reason": "scheduled"
+            },
+            {
+              "from_state": "RUNNING",
+              "to_state": "COMPLETED",
+              "reason": "agent_ok"
+            }
+          ]
+        },
+        "docs": {
+          "nodeId": "docs",
+          "agentId": "docs_agent",
+          "state": "COMPLETED",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "result": {
+            "result_id": "result-2",
+            "node_id": "docs",
+            "agent_id": "docs_agent",
+            "role": "docs",
+            "ok": true,
+            "payload": {
+              "doc": {
+                "id": "doc-payments-runbook",
+                "title": "Payments degradation runbook",
+                "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+              }
+            },
+            "error": null,
+            "upstream_result_ids": []
+          },
+          "skipReason": null,
+          "readyReason": "no_dependencies",
+          "conditionMatched": null,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "READY",
+              "reason": "no_dependencies"
+            },
+            {
+              "from_state": "READY",
+              "to_state": "RUNNING",
+              "reason": "scheduled"
+            },
+            {
+              "from_state": "RUNNING",
+              "to_state": "COMPLETED",
+              "reason": "agent_ok"
+            }
+          ]
+        },
+        "analysis": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "state": "COMPLETED",
+          "dependencyIds": [
+            "status",
+            "docs"
+          ],
+          "upstreamResultIds": [
+            "result-1",
+            "result-2"
+          ],
+          "result": {
+            "result_id": "result-3",
+            "node_id": "analysis",
+            "agent_id": "analysis_agent",
+            "role": "analysis",
+            "ok": true,
+            "payload": {
+              "basedOn": {
+                "status": {
+                  "service": {
+                    "service": "payments",
+                    "status": "degraded",
+                    "region": "us-east-1",
+                    "latencyP99Ms": 890,
+                    "incident": "PAY-2041: elevated card-auth latency"
+                  }
+                },
+                "docs": {
+                  "doc": {
+                    "id": "doc-payments-runbook",
+                    "title": "Payments degradation runbook",
+                    "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+                  }
+                }
+              },
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "status": "degraded",
+              "severity": "elevated",
+              "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook.",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+            },
+            "error": null,
+            "upstream_result_ids": [
+              "result-1",
+              "result-2"
+            ]
+          },
+          "skipReason": null,
+          "readyReason": "dependencies_completed",
+          "conditionMatched": null,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "READY",
+              "reason": "dependencies_completed"
+            },
+            {
+              "from_state": "READY",
+              "to_state": "RUNNING",
+              "reason": "scheduled"
+            },
+            {
+              "from_state": "RUNNING",
+              "to_state": "COMPLETED",
+              "reason": "agent_ok"
+            }
+          ]
+        },
+        "decision": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "state": "COMPLETED",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-3"
+          ],
+          "result": {
+            "result_id": "result-4",
+            "node_id": "decision",
+            "agent_id": "decision_agent",
+            "role": "decision",
+            "ok": true,
+            "payload": {
+              "basedOn": {
+                "basedOn": {
+                  "status": {
+                    "service": {
+                      "service": "payments",
+                      "status": "degraded",
+                      "region": "us-east-1",
+                      "latencyP99Ms": 890,
+                      "incident": "PAY-2041: elevated card-auth latency"
+                    }
+                  },
+                  "docs": {
+                    "doc": {
+                      "id": "doc-payments-runbook",
+                      "title": "Payments degradation runbook",
+                      "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+                    }
+                  }
+                },
+                "incident": true,
+                "incident_id": "PAY-2041: elevated card-auth latency",
+                "status": "degraded",
+                "severity": "elevated",
+                "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook.",
+                "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+              },
+              "outcome": "escalate",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency",
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "summary": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook."
+            },
+            "error": null,
+            "upstream_result_ids": [
+              "result-3"
+            ]
+          },
+          "skipReason": null,
+          "readyReason": "dependencies_completed",
+          "conditionMatched": null,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "READY",
+              "reason": "dependencies_completed"
+            },
+            {
+              "from_state": "READY",
+              "to_state": "RUNNING",
+              "reason": "scheduled"
+            },
+            {
+              "from_state": "RUNNING",
+              "to_state": "COMPLETED",
+              "reason": "agent_ok"
+            }
+          ]
+        }
+      },
+      "nodeStates": {
+        "status": "COMPLETED",
+        "docs": "COMPLETED",
+        "analysis": "COMPLETED",
+        "decision": "COMPLETED"
+      },
+      "results": [
+        {
+          "result_id": "result-1",
+          "node_id": "status",
+          "agent_id": "status_agent",
+          "role": "status",
+          "ok": true,
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "upstream_result_ids": []
+        },
+        {
+          "result_id": "result-2",
+          "node_id": "docs",
+          "agent_id": "docs_agent",
+          "role": "docs",
+          "ok": true,
+          "payload": {
+            "doc": {
+              "id": "doc-payments-runbook",
+              "title": "Payments degradation runbook",
+              "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+            }
+          },
+          "error": null,
+          "upstream_result_ids": []
+        },
+        {
+          "result_id": "result-3",
+          "node_id": "analysis",
+          "agent_id": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "status": {
+                "service": {
+                  "service": "payments",
+                  "status": "degraded",
+                  "region": "us-east-1",
+                  "latencyP99Ms": 890,
+                  "incident": "PAY-2041: elevated card-auth latency"
+                }
+              },
+              "docs": {
+                "doc": {
+                  "id": "doc-payments-runbook",
+                  "title": "Payments degradation runbook",
+                  "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+                }
+              }
+            },
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "status": "degraded",
+            "severity": "elevated",
+            "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook.",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+          },
+          "error": null,
+          "upstream_result_ids": [
+            "result-1",
+            "result-2"
+          ]
+        },
+        {
+          "result_id": "result-4",
+          "node_id": "decision",
+          "agent_id": "decision_agent",
+          "role": "decision",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "status": {
+                  "service": {
+                    "service": "payments",
+                    "status": "degraded",
+                    "region": "us-east-1",
+                    "latencyP99Ms": 890,
+                    "incident": "PAY-2041: elevated card-auth latency"
+                  }
+                },
+                "docs": {
+                  "doc": {
+                    "id": "doc-payments-runbook",
+                    "title": "Payments degradation runbook",
+                    "body": "When payments status is degraded, check card-auth latency and incident PAY-2041. Enterprise operators in us-east-1 may see slower checkout confirmations."
+                  }
+                }
+              },
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "status": "degraded",
+              "severity": "elevated",
+              "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook.",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+            },
+            "outcome": "escalate",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency",
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "summary": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook."
+          },
+          "error": null,
+          "upstream_result_ids": [
+            "result-3"
+          ]
+        }
+      ],
+      "executionOrder": [
+        "status",
+        "docs",
+        "analysis",
+        "decision"
+      ],
+      "invokedNodeIds": [
+        "status",
+        "docs",
+        "analysis",
+        "decision"
+      ],
+      "invokedAgentIds": [
+        "status_agent",
+        "docs_agent",
+        "analysis_agent",
+        "decision_agent"
+      ],
+      "skippedNodeIds": [],
+      "blockedNodes": [],
+      "finalAnswer": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook.",
+      "terminationReason": "completed",
+      "errors": []
+    },
+    "output": {
+      "answer": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency. Docs: Payments degradation runbook.",
+      "ok": true,
+      "terminationReason": "completed",
+      "nodeStates": {
+        "status": "COMPLETED",
+        "docs": "COMPLETED",
+        "analysis": "COMPLETED",
+        "decision": "COMPLETED"
+      },
+      "executionOrder": [
+        "status",
+        "docs",
+        "analysis",
+        "decision"
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 1,
+      "runtimeMs": 1,
+      "agentMs": 0,
+      "nodesReady": 4,
+      "nodesExecuted": 4,
+      "nodesCompleted": 4,
+      "nodesFailed": 0,
+      "nodesSkipped": 0,
+      "terminationReason": "completed",
+      "maxNodes": 12,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable orchestration events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "TASK",
+          "taskId": "task-payments-incident-basic-orchestration",
+          "request": "Prepare an operational decision for the payments service using status and documentation."
+        },
+        {
+          "phase": "PLAN",
+          "planId": "plan-payments-incident-basic-orchestration",
+          "nodeIds": [
+            "status",
+            "docs",
+            "analysis",
+            "decision"
+          ]
+        },
+        {
+          "phase": "READY",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        {
+          "phase": "READY",
+          "nodeId": "docs",
+          "agentId": "docs_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        {
+          "phase": "NODE_STARTED",
+          "nodeId": "status",
+          "agentId": "status_agent"
+        },
+        {
+          "phase": "AGENT",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "resultId": "result-1",
+          "upstreamResultIds": [],
+          "latencyMs": 0
+        },
+        {
+          "phase": "NODE_COMPLETED",
+          "nodeId": "status",
+          "resultId": "result-1"
+        },
+        {
+          "phase": "NODE_STARTED",
+          "nodeId": "docs",
+          "agentId": "docs_agent"
+        },
+        {
+          "phase": "AGENT",
+          "nodeId": "docs",
+          "agentId": "docs_agent",
+          "role": "docs",
+          "ok": true,
+          "resultId": "result-2",
+          "upstreamResultIds": [],
+          "latencyMs": 0
+        },
+        {
+          "phase": "NODE_COMPLETED",
+          "nodeId": "docs",
+          "resultId": "result-2"
+        },
+        {
+          "phase": "READY",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "status",
+            "docs"
+          ],
+          "upstreamResultIds": [
+            "result-1",
+            "result-2"
+          ]
+        },
+        {
+          "phase": "NODE_STARTED",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent"
+        },
+        {
+          "phase": "AGENT",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "resultId": "result-3",
+          "upstreamResultIds": [
+            "result-1",
+            "result-2"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "NODE_COMPLETED",
+          "nodeId": "analysis",
+          "resultId": "result-3"
+        },
+        {
+          "phase": "READY",
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-3"
+          ]
+        },
+        {
+          "phase": "NODE_STARTED",
+          "nodeId": "decision",
+          "agentId": "decision_agent"
+        },
+        {
+          "phase": "AGENT",
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "role": "decision",
+          "ok": true,
+          "resultId": "result-4",
+          "upstreamResultIds": [
+            "result-3"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "NODE_COMPLETED",
+          "nodeId": "decision",
+          "resultId": "result-4"
+        },
+        {
+          "phase": "COMPLETE",
+          "terminalNodeIds": [
+            "decision"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "completed",
+            "ok": true,
+            "nodeStates": {
+              "status": "COMPLETED",
+              "docs": "COMPLETED",
+              "analysis": "COMPLETED",
+              "decision": "COMPLETED"
+            }
+          }
+        }
+      ],
+      "signatureFlow": "TASK \u2192 PLAN \u2192 READY \u2192 READY \u2192 AGENT \u2192 AGENT \u2192 READY \u2192 AGENT \u2192 READY \u2192 AGENT \u2192 COMPLETE \u2192 TERMINATION",
+      "logicalParallelism": "READY means independently schedulable. Independent nodes become READY in the same wave before either executes. This example does not use OS threads."
+    },
+    "relatedEntities": [
+      "agents"
+    ],
+    "relatedContent": [
+      "agents",
+      "orchestration",
+      "workflow-runtime"
+    ],
+    "cookbook": {
+      "path": "examples/agents/08-agent-orchestration"
+    }
+  },
+  {
+    "labId": "agent-orchestration",
+    "traceId": "payments-status-dependency-chain",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-21T06:18:32Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "DEPENDENCY_CHAIN",
+    "selectionNote": "Measured case: a strict chain status \u2192 analysis \u2192 decision. Analysis cannot execute before status completes. Decision cannot execute before analysis completes.",
+    "architecture": {
+      "layout": "agent-orchestration",
+      "stages": [
+        "task",
+        "plan",
+        "ready",
+        "execute",
+        "condition",
+        "complete-or-fail",
+        "termination"
+      ]
+    },
+    "input": {
+      "request": "Analyze payments status and decide the operational outcome.",
+      "service": "payments",
+      "config": {
+        "maxNodes": 12,
+        "modelDriver": "mock",
+        "synthesizerModel": "mock",
+        "clientName": "dataaihub-cookbook-agent-orchestration",
+        "dataDir": "data"
+      }
+    },
+    "sequence": [
+      {
+        "kind": "task_created",
+        "detail": {
+          "taskId": "task-payments-status-dependency-chain",
+          "request": "Analyze payments status and decide the operational outcome.",
+          "service": "payments",
+          "exampleClass": "DEPENDENCY_CHAIN"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "plan_created",
+        "detail": {
+          "planId": "plan-payments-status-dependency-chain",
+          "nodeIds": [
+            "status",
+            "analysis",
+            "decision"
+          ],
+          "nodes": [
+            {
+              "nodeId": "status",
+              "agentId": "status_agent",
+              "dependencies": [],
+              "condition": null
+            },
+            {
+              "nodeId": "analysis",
+              "agentId": "analysis_agent",
+              "dependencies": [
+                "status"
+              ],
+              "condition": null
+            },
+            {
+              "nodeId": "decision",
+              "agentId": "decision_agent",
+              "dependencies": [
+                "analysis"
+              ],
+              "condition": null
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_ready",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "conditionMatched": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_started",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_result",
+        "detail": {
+          "resultId": "result-1",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "upstreamResultIds": [],
+          "dependencyIds": []
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "node_completed",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "resultId": "result-1",
+          "upstreamResultIds": []
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_ready",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [
+            "result-1"
+          ],
+          "conditionMatched": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_started",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [
+            "result-1"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_result",
+        "detail": {
+          "resultId": "result-2",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "status": {
+                "service": {
+                  "service": "payments",
+                  "status": "degraded",
+                  "region": "us-east-1",
+                  "latencyP99Ms": 890,
+                  "incident": "PAY-2041: elevated card-auth latency"
+                }
+              }
+            },
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "status": "degraded",
+            "severity": "elevated",
+            "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+          },
+          "error": null,
+          "upstreamResultIds": [
+            "result-1"
+          ],
+          "dependencyIds": [
+            "status"
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "node_completed",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "resultId": "result-2",
+          "upstreamResultIds": [
+            "result-1"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_ready",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "conditionMatched": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_started",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_result",
+        "detail": {
+          "resultId": "result-3",
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "role": "decision",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "status": {
+                  "service": {
+                    "service": "payments",
+                    "status": "degraded",
+                    "region": "us-east-1",
+                    "latencyP99Ms": 890,
+                    "incident": "PAY-2041: elevated card-auth latency"
+                  }
+                }
+              },
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "status": "degraded",
+              "severity": "elevated",
+              "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+            },
+            "outcome": "escalate",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency",
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "summary": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency."
+          },
+          "error": null,
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "dependencyIds": [
+            "analysis"
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "node_completed",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "resultId": "result-3",
+          "upstreamResultIds": [
+            "result-2"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "completed",
+        "detail": {
+          "answer": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+          "terminalNodeIds": [
+            "decision"
+          ],
+          "resultIds": [
+            "result-1",
+            "result-2",
+            "result-3"
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed",
+          "ok": true,
+          "nodeStates": {
+            "status": "COMPLETED",
+            "analysis": "COMPLETED",
+            "decision": "COMPLETED"
+          }
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-task_created",
+        "type": "protocol",
+        "title": "Task created",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-payments-status-dependency-chain",
+          "request": "Analyze payments status and decide the operational outcome.",
+          "service": "payments",
+          "exampleClass": "DEPENDENCY_CHAIN"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-plan_created",
+        "type": "plan",
+        "title": "Plan created",
+        "status": "ok",
+        "detail": {
+          "planId": "plan-payments-status-dependency-chain",
+          "nodeIds": [
+            "status",
+            "analysis",
+            "decision"
+          ],
+          "nodes": [
+            {
+              "nodeId": "status",
+              "agentId": "status_agent",
+              "dependencies": [],
+              "condition": null
+            },
+            {
+              "nodeId": "analysis",
+              "agentId": "analysis_agent",
+              "dependencies": [
+                "status"
+              ],
+              "condition": null
+            },
+            {
+              "nodeId": "decision",
+              "agentId": "decision_agent",
+              "dependencies": [
+                "analysis"
+              ],
+              "condition": null
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-node_ready",
+        "type": "orchestration",
+        "title": "Node ready",
+        "status": "ok",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "conditionMatched": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-node_started",
+        "type": "agent",
+        "title": "Node started",
+        "status": "ok",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-node_result",
+        "type": "agent",
+        "title": "Node result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-1",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "upstreamResultIds": [],
+          "dependencyIds": []
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-node_completed",
+        "type": "agent",
+        "title": "Node completed",
+        "status": "ok",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "resultId": "result-1",
+          "upstreamResultIds": []
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-node_ready",
+        "type": "orchestration",
+        "title": "Node ready",
+        "status": "ok",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [
+            "result-1"
+          ],
+          "conditionMatched": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-node_started",
+        "type": "agent",
+        "title": "Node started",
+        "status": "ok",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [
+            "result-1"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-node_result",
+        "type": "agent",
+        "title": "Node result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-2",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "status": {
+                "service": {
+                  "service": "payments",
+                  "status": "degraded",
+                  "region": "us-east-1",
+                  "latencyP99Ms": 890,
+                  "incident": "PAY-2041: elevated card-auth latency"
+                }
+              }
+            },
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "status": "degraded",
+            "severity": "elevated",
+            "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+          },
+          "error": null,
+          "upstreamResultIds": [
+            "result-1"
+          ],
+          "dependencyIds": [
+            "status"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-node_completed",
+        "type": "agent",
+        "title": "Node completed",
+        "status": "ok",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "resultId": "result-2",
+          "upstreamResultIds": [
+            "result-1"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-node_ready",
+        "type": "orchestration",
+        "title": "Node ready",
+        "status": "ok",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "conditionMatched": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-node_started",
+        "type": "agent",
+        "title": "Node started",
+        "status": "ok",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-node_result",
+        "type": "agent",
+        "title": "Node result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-3",
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "role": "decision",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "status": {
+                  "service": {
+                    "service": "payments",
+                    "status": "degraded",
+                    "region": "us-east-1",
+                    "latencyP99Ms": 890,
+                    "incident": "PAY-2041: elevated card-auth latency"
+                  }
+                }
+              },
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "status": "degraded",
+              "severity": "elevated",
+              "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+            },
+            "outcome": "escalate",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency",
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "summary": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency."
+          },
+          "error": null,
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "dependencyIds": [
+            "analysis"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-node_completed",
+        "type": "agent",
+        "title": "Node completed",
+        "status": "ok",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "resultId": "result-3",
+          "upstreamResultIds": [
+            "result-2"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-15-completed",
+        "type": "completion",
+        "title": "Completed",
+        "status": "ok",
+        "detail": {
+          "answer": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+          "terminalNodeIds": [
+            "decision"
+          ],
+          "resultIds": [
+            "result-1",
+            "result-2",
+            "result-3"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-16-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed",
+          "ok": true,
+          "nodeStates": {
+            "status": "COMPLETED",
+            "analysis": "COMPLETED",
+            "decision": "COMPLETED"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "state": {
+      "taskId": "task-payments-status-dependency-chain",
+      "request": "Analyze payments status and decide the operational outcome.",
+      "service": "payments",
+      "plan": {
+        "plan_id": "plan-payments-status-dependency-chain",
+        "nodes": [
+          {
+            "node_id": "status",
+            "agent_id": "status_agent",
+            "dependencies": [],
+            "condition": null,
+            "assignment": {
+              "service": "payments"
+            }
+          },
+          {
+            "node_id": "analysis",
+            "agent_id": "analysis_agent",
+            "dependencies": [
+              "status"
+            ],
+            "condition": null,
+            "assignment": {}
+          },
+          {
+            "node_id": "decision",
+            "agent_id": "decision_agent",
+            "dependencies": [
+              "analysis"
+            ],
+            "condition": null,
+            "assignment": {}
+          }
+        ]
+      },
+      "nodes": {
+        "status": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "state": "COMPLETED",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "result": {
+            "result_id": "result-1",
+            "node_id": "status",
+            "agent_id": "status_agent",
+            "role": "status",
+            "ok": true,
+            "payload": {
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            },
+            "error": null,
+            "upstream_result_ids": []
+          },
+          "skipReason": null,
+          "readyReason": "no_dependencies",
+          "conditionMatched": null,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "READY",
+              "reason": "no_dependencies"
+            },
+            {
+              "from_state": "READY",
+              "to_state": "RUNNING",
+              "reason": "scheduled"
+            },
+            {
+              "from_state": "RUNNING",
+              "to_state": "COMPLETED",
+              "reason": "agent_ok"
+            }
+          ]
+        },
+        "analysis": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "state": "COMPLETED",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [
+            "result-1"
+          ],
+          "result": {
+            "result_id": "result-2",
+            "node_id": "analysis",
+            "agent_id": "analysis_agent",
+            "role": "analysis",
+            "ok": true,
+            "payload": {
+              "basedOn": {
+                "status": {
+                  "service": {
+                    "service": "payments",
+                    "status": "degraded",
+                    "region": "us-east-1",
+                    "latencyP99Ms": 890,
+                    "incident": "PAY-2041: elevated card-auth latency"
+                  }
+                }
+              },
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "status": "degraded",
+              "severity": "elevated",
+              "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+            },
+            "error": null,
+            "upstream_result_ids": [
+              "result-1"
+            ]
+          },
+          "skipReason": null,
+          "readyReason": "dependencies_completed",
+          "conditionMatched": null,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "READY",
+              "reason": "dependencies_completed"
+            },
+            {
+              "from_state": "READY",
+              "to_state": "RUNNING",
+              "reason": "scheduled"
+            },
+            {
+              "from_state": "RUNNING",
+              "to_state": "COMPLETED",
+              "reason": "agent_ok"
+            }
+          ]
+        },
+        "decision": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "state": "COMPLETED",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "result": {
+            "result_id": "result-3",
+            "node_id": "decision",
+            "agent_id": "decision_agent",
+            "role": "decision",
+            "ok": true,
+            "payload": {
+              "basedOn": {
+                "basedOn": {
+                  "status": {
+                    "service": {
+                      "service": "payments",
+                      "status": "degraded",
+                      "region": "us-east-1",
+                      "latencyP99Ms": 890,
+                      "incident": "PAY-2041: elevated card-auth latency"
+                    }
+                  }
+                },
+                "incident": true,
+                "incident_id": "PAY-2041: elevated card-auth latency",
+                "status": "degraded",
+                "severity": "elevated",
+                "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+                "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+              },
+              "outcome": "escalate",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency",
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "summary": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency."
+            },
+            "error": null,
+            "upstream_result_ids": [
+              "result-2"
+            ]
+          },
+          "skipReason": null,
+          "readyReason": "dependencies_completed",
+          "conditionMatched": null,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "READY",
+              "reason": "dependencies_completed"
+            },
+            {
+              "from_state": "READY",
+              "to_state": "RUNNING",
+              "reason": "scheduled"
+            },
+            {
+              "from_state": "RUNNING",
+              "to_state": "COMPLETED",
+              "reason": "agent_ok"
+            }
+          ]
+        }
+      },
+      "nodeStates": {
+        "status": "COMPLETED",
+        "analysis": "COMPLETED",
+        "decision": "COMPLETED"
+      },
+      "results": [
+        {
+          "result_id": "result-1",
+          "node_id": "status",
+          "agent_id": "status_agent",
+          "role": "status",
+          "ok": true,
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "upstream_result_ids": []
+        },
+        {
+          "result_id": "result-2",
+          "node_id": "analysis",
+          "agent_id": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "status": {
+                "service": {
+                  "service": "payments",
+                  "status": "degraded",
+                  "region": "us-east-1",
+                  "latencyP99Ms": 890,
+                  "incident": "PAY-2041: elevated card-auth latency"
+                }
+              }
+            },
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "status": "degraded",
+            "severity": "elevated",
+            "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+          },
+          "error": null,
+          "upstream_result_ids": [
+            "result-1"
+          ]
+        },
+        {
+          "result_id": "result-3",
+          "node_id": "decision",
+          "agent_id": "decision_agent",
+          "role": "decision",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "status": {
+                  "service": {
+                    "service": "payments",
+                    "status": "degraded",
+                    "region": "us-east-1",
+                    "latencyP99Ms": 890,
+                    "incident": "PAY-2041: elevated card-auth latency"
+                  }
+                }
+              },
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "status": "degraded",
+              "severity": "elevated",
+              "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+            },
+            "outcome": "escalate",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency",
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "summary": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency."
+          },
+          "error": null,
+          "upstream_result_ids": [
+            "result-2"
+          ]
+        }
+      ],
+      "executionOrder": [
+        "status",
+        "analysis",
+        "decision"
+      ],
+      "invokedNodeIds": [
+        "status",
+        "analysis",
+        "decision"
+      ],
+      "invokedAgentIds": [
+        "status_agent",
+        "analysis_agent",
+        "decision_agent"
+      ],
+      "skippedNodeIds": [],
+      "blockedNodes": [],
+      "finalAnswer": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+      "terminationReason": "completed",
+      "errors": []
+    },
+    "output": {
+      "answer": "Decision: escalate. payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+      "ok": true,
+      "terminationReason": "completed",
+      "nodeStates": {
+        "status": "COMPLETED",
+        "analysis": "COMPLETED",
+        "decision": "COMPLETED"
+      },
+      "executionOrder": [
+        "status",
+        "analysis",
+        "decision"
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "runtimeMs": 0,
+      "agentMs": 0,
+      "nodesReady": 3,
+      "nodesExecuted": 3,
+      "nodesCompleted": 3,
+      "nodesFailed": 0,
+      "nodesSkipped": 0,
+      "terminationReason": "completed",
+      "maxNodes": 12,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable orchestration events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "TASK",
+          "taskId": "task-payments-status-dependency-chain",
+          "request": "Analyze payments status and decide the operational outcome."
+        },
+        {
+          "phase": "PLAN",
+          "planId": "plan-payments-status-dependency-chain",
+          "nodeIds": [
+            "status",
+            "analysis",
+            "decision"
+          ]
+        },
+        {
+          "phase": "READY",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        {
+          "phase": "NODE_STARTED",
+          "nodeId": "status",
+          "agentId": "status_agent"
+        },
+        {
+          "phase": "AGENT",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "resultId": "result-1",
+          "upstreamResultIds": [],
+          "latencyMs": 0
+        },
+        {
+          "phase": "NODE_COMPLETED",
+          "nodeId": "status",
+          "resultId": "result-1"
+        },
+        {
+          "phase": "READY",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [
+            "result-1"
+          ]
+        },
+        {
+          "phase": "NODE_STARTED",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent"
+        },
+        {
+          "phase": "AGENT",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "resultId": "result-2",
+          "upstreamResultIds": [
+            "result-1"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "NODE_COMPLETED",
+          "nodeId": "analysis",
+          "resultId": "result-2"
+        },
+        {
+          "phase": "READY",
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ]
+        },
+        {
+          "phase": "NODE_STARTED",
+          "nodeId": "decision",
+          "agentId": "decision_agent"
+        },
+        {
+          "phase": "AGENT",
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "role": "decision",
+          "ok": true,
+          "resultId": "result-3",
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "NODE_COMPLETED",
+          "nodeId": "decision",
+          "resultId": "result-3"
+        },
+        {
+          "phase": "COMPLETE",
+          "terminalNodeIds": [
+            "decision"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "completed",
+            "ok": true,
+            "nodeStates": {
+              "status": "COMPLETED",
+              "analysis": "COMPLETED",
+              "decision": "COMPLETED"
+            }
+          }
+        }
+      ],
+      "signatureFlow": "TASK \u2192 PLAN \u2192 READY \u2192 AGENT \u2192 READY \u2192 AGENT \u2192 READY \u2192 AGENT \u2192 COMPLETE \u2192 TERMINATION",
+      "logicalParallelism": "READY means independently schedulable. Independent nodes become READY in the same wave before either executes. This example does not use OS threads."
+    },
+    "relatedEntities": [
+      "agents"
+    ],
+    "relatedContent": [
+      "agents",
+      "orchestration",
+      "workflow-runtime"
+    ],
+    "cookbook": {
+      "path": "examples/agents/08-agent-orchestration"
+    }
+  },
+  {
+    "labId": "agent-orchestration",
+    "traceId": "payments-incident-conditional-branch",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-21T06:18:32Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "CONDITIONAL_BRANCH",
+    "selectionNote": "Measured case: after analysis, the runtime evaluates the incident condition from the actual analysis result. Remediation executes; no_action is explicitly SKIPPED.",
+    "architecture": {
+      "layout": "agent-orchestration",
+      "stages": [
+        "task",
+        "plan",
+        "ready",
+        "execute",
+        "condition",
+        "complete-or-fail",
+        "termination"
+      ]
+    },
+    "input": {
+      "request": "Analyze payments and remediate only if an incident is open.",
+      "service": "payments",
+      "config": {
+        "maxNodes": 12,
+        "modelDriver": "mock",
+        "synthesizerModel": "mock",
+        "clientName": "dataaihub-cookbook-agent-orchestration",
+        "dataDir": "data"
+      }
+    },
+    "sequence": [
+      {
+        "kind": "task_created",
+        "detail": {
+          "taskId": "task-payments-incident-conditional-branch",
+          "request": "Analyze payments and remediate only if an incident is open.",
+          "service": "payments",
+          "exampleClass": "CONDITIONAL_BRANCH"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "plan_created",
+        "detail": {
+          "planId": "plan-payments-incident-conditional-branch",
+          "nodeIds": [
+            "status",
+            "analysis",
+            "remediation",
+            "no_action"
+          ],
+          "nodes": [
+            {
+              "nodeId": "status",
+              "agentId": "status_agent",
+              "dependencies": [],
+              "condition": null
+            },
+            {
+              "nodeId": "analysis",
+              "agentId": "analysis_agent",
+              "dependencies": [
+                "status"
+              ],
+              "condition": null
+            },
+            {
+              "nodeId": "remediation",
+              "agentId": "remediation_agent",
+              "dependencies": [
+                "analysis"
+              ],
+              "condition": {
+                "source_node_id": "analysis",
+                "field": "incident",
+                "equals": true
+              }
+            },
+            {
+              "nodeId": "no_action",
+              "agentId": "no_action_agent",
+              "dependencies": [
+                "analysis"
+              ],
+              "condition": {
+                "source_node_id": "analysis",
+                "field": "incident",
+                "equals": false
+              }
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_ready",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "conditionMatched": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_started",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_result",
+        "detail": {
+          "resultId": "result-1",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "upstreamResultIds": [],
+          "dependencyIds": []
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "node_completed",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "resultId": "result-1",
+          "upstreamResultIds": []
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_ready",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [
+            "result-1"
+          ],
+          "conditionMatched": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_started",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [
+            "result-1"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_result",
+        "detail": {
+          "resultId": "result-2",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "status": {
+                "service": {
+                  "service": "payments",
+                  "status": "degraded",
+                  "region": "us-east-1",
+                  "latencyP99Ms": 890,
+                  "incident": "PAY-2041: elevated card-auth latency"
+                }
+              }
+            },
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "status": "degraded",
+            "severity": "elevated",
+            "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+          },
+          "error": null,
+          "upstreamResultIds": [
+            "result-1"
+          ],
+          "dependencyIds": [
+            "status"
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "node_completed",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "resultId": "result-2",
+          "upstreamResultIds": [
+            "result-1"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "condition_evaluated",
+        "detail": {
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "sourceNodeId": "analysis",
+          "field": "incident",
+          "expected": true,
+          "actual": true,
+          "selected": true,
+          "sourceResultId": "result-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_ready",
+        "detail": {
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "conditionMatched": true
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "condition_evaluated",
+        "detail": {
+          "nodeId": "no_action",
+          "agentId": "no_action_agent",
+          "sourceNodeId": "analysis",
+          "field": "incident",
+          "expected": false,
+          "actual": true,
+          "selected": false,
+          "sourceResultId": "result-2"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_skipped",
+        "detail": {
+          "nodeId": "no_action",
+          "agentId": "no_action_agent",
+          "reason": "condition_not_selected",
+          "sourceNodeId": "analysis",
+          "field": "incident",
+          "expected": false,
+          "actual": true,
+          "sourceResultId": "result-2",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_started",
+        "detail": {
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_result",
+        "detail": {
+          "resultId": "result-3",
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "role": "remediation",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "status": {
+                  "service": {
+                    "service": "payments",
+                    "status": "degraded",
+                    "region": "us-east-1",
+                    "latencyP99Ms": 890,
+                    "incident": "PAY-2041: elevated card-auth latency"
+                  }
+                }
+              },
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "status": "degraded",
+              "severity": "elevated",
+              "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+            },
+            "action": "open_incident_bridge",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency",
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "summary": "Remediation started for PAY-2041: elevated card-auth latency."
+          },
+          "error": null,
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "dependencyIds": [
+            "analysis"
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "node_completed",
+        "detail": {
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "resultId": "result-3",
+          "upstreamResultIds": [
+            "result-2"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "completed",
+        "detail": {
+          "answer": "Remediation started for PAY-2041: elevated card-auth latency.",
+          "terminalNodeIds": [
+            "remediation"
+          ],
+          "resultIds": [
+            "result-1",
+            "result-2",
+            "result-3"
+          ]
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "completed",
+          "ok": true,
+          "nodeStates": {
+            "status": "COMPLETED",
+            "analysis": "COMPLETED",
+            "remediation": "COMPLETED",
+            "no_action": "SKIPPED"
+          }
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-task_created",
+        "type": "protocol",
+        "title": "Task created",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-payments-incident-conditional-branch",
+          "request": "Analyze payments and remediate only if an incident is open.",
+          "service": "payments",
+          "exampleClass": "CONDITIONAL_BRANCH"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-plan_created",
+        "type": "plan",
+        "title": "Plan created",
+        "status": "ok",
+        "detail": {
+          "planId": "plan-payments-incident-conditional-branch",
+          "nodeIds": [
+            "status",
+            "analysis",
+            "remediation",
+            "no_action"
+          ],
+          "nodes": [
+            {
+              "nodeId": "status",
+              "agentId": "status_agent",
+              "dependencies": [],
+              "condition": null
+            },
+            {
+              "nodeId": "analysis",
+              "agentId": "analysis_agent",
+              "dependencies": [
+                "status"
+              ],
+              "condition": null
+            },
+            {
+              "nodeId": "remediation",
+              "agentId": "remediation_agent",
+              "dependencies": [
+                "analysis"
+              ],
+              "condition": {
+                "source_node_id": "analysis",
+                "field": "incident",
+                "equals": true
+              }
+            },
+            {
+              "nodeId": "no_action",
+              "agentId": "no_action_agent",
+              "dependencies": [
+                "analysis"
+              ],
+              "condition": {
+                "source_node_id": "analysis",
+                "field": "incident",
+                "equals": false
+              }
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-node_ready",
+        "type": "orchestration",
+        "title": "Node ready",
+        "status": "ok",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "conditionMatched": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-node_started",
+        "type": "agent",
+        "title": "Node started",
+        "status": "ok",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-node_result",
+        "type": "agent",
+        "title": "Node result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-1",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "upstreamResultIds": [],
+          "dependencyIds": []
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-node_completed",
+        "type": "agent",
+        "title": "Node completed",
+        "status": "ok",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "resultId": "result-1",
+          "upstreamResultIds": []
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-node_ready",
+        "type": "orchestration",
+        "title": "Node ready",
+        "status": "ok",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [
+            "result-1"
+          ],
+          "conditionMatched": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-node_started",
+        "type": "agent",
+        "title": "Node started",
+        "status": "ok",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [
+            "result-1"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-node_result",
+        "type": "agent",
+        "title": "Node result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-2",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "status": {
+                "service": {
+                  "service": "payments",
+                  "status": "degraded",
+                  "region": "us-east-1",
+                  "latencyP99Ms": 890,
+                  "incident": "PAY-2041: elevated card-auth latency"
+                }
+              }
+            },
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "status": "degraded",
+            "severity": "elevated",
+            "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+          },
+          "error": null,
+          "upstreamResultIds": [
+            "result-1"
+          ],
+          "dependencyIds": [
+            "status"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-10-node_completed",
+        "type": "agent",
+        "title": "Node completed",
+        "status": "ok",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "resultId": "result-2",
+          "upstreamResultIds": [
+            "result-1"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-11-condition_evaluated",
+        "type": "orchestration",
+        "title": "Condition evaluated",
+        "status": "ok",
+        "detail": {
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "sourceNodeId": "analysis",
+          "field": "incident",
+          "expected": true,
+          "actual": true,
+          "selected": true,
+          "sourceResultId": "result-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-12-node_ready",
+        "type": "orchestration",
+        "title": "Node ready",
+        "status": "ok",
+        "detail": {
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "conditionMatched": true
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-13-condition_evaluated",
+        "type": "orchestration",
+        "title": "Condition evaluated",
+        "status": "ok",
+        "detail": {
+          "nodeId": "no_action",
+          "agentId": "no_action_agent",
+          "sourceNodeId": "analysis",
+          "field": "incident",
+          "expected": false,
+          "actual": true,
+          "selected": false,
+          "sourceResultId": "result-2"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-14-node_skipped",
+        "type": "orchestration",
+        "title": "Node skipped",
+        "status": "skipped",
+        "detail": {
+          "nodeId": "no_action",
+          "agentId": "no_action_agent",
+          "reason": "condition_not_selected",
+          "sourceNodeId": "analysis",
+          "field": "incident",
+          "expected": false,
+          "actual": true,
+          "sourceResultId": "result-2",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-15-node_started",
+        "type": "agent",
+        "title": "Node started",
+        "status": "ok",
+        "detail": {
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-16-node_result",
+        "type": "agent",
+        "title": "Node result",
+        "status": "ok",
+        "detail": {
+          "resultId": "result-3",
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "role": "remediation",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "status": {
+                  "service": {
+                    "service": "payments",
+                    "status": "degraded",
+                    "region": "us-east-1",
+                    "latencyP99Ms": 890,
+                    "incident": "PAY-2041: elevated card-auth latency"
+                  }
+                }
+              },
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "status": "degraded",
+              "severity": "elevated",
+              "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+            },
+            "action": "open_incident_bridge",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency",
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "summary": "Remediation started for PAY-2041: elevated card-auth latency."
+          },
+          "error": null,
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "dependencyIds": [
+            "analysis"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-17-node_completed",
+        "type": "agent",
+        "title": "Node completed",
+        "status": "ok",
+        "detail": {
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "resultId": "result-3",
+          "upstreamResultIds": [
+            "result-2"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-18-completed",
+        "type": "completion",
+        "title": "Completed",
+        "status": "ok",
+        "detail": {
+          "answer": "Remediation started for PAY-2041: elevated card-auth latency.",
+          "terminalNodeIds": [
+            "remediation"
+          ],
+          "resultIds": [
+            "result-1",
+            "result-2",
+            "result-3"
+          ]
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-19-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "completed",
+          "ok": true,
+          "nodeStates": {
+            "status": "COMPLETED",
+            "analysis": "COMPLETED",
+            "remediation": "COMPLETED",
+            "no_action": "SKIPPED"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "state": {
+      "taskId": "task-payments-incident-conditional-branch",
+      "request": "Analyze payments and remediate only if an incident is open.",
+      "service": "payments",
+      "plan": {
+        "plan_id": "plan-payments-incident-conditional-branch",
+        "nodes": [
+          {
+            "node_id": "status",
+            "agent_id": "status_agent",
+            "dependencies": [],
+            "condition": null,
+            "assignment": {
+              "service": "payments"
+            }
+          },
+          {
+            "node_id": "analysis",
+            "agent_id": "analysis_agent",
+            "dependencies": [
+              "status"
+            ],
+            "condition": null,
+            "assignment": {}
+          },
+          {
+            "node_id": "remediation",
+            "agent_id": "remediation_agent",
+            "dependencies": [
+              "analysis"
+            ],
+            "condition": {
+              "source_node_id": "analysis",
+              "field": "incident",
+              "equals": true
+            },
+            "assignment": {}
+          },
+          {
+            "node_id": "no_action",
+            "agent_id": "no_action_agent",
+            "dependencies": [
+              "analysis"
+            ],
+            "condition": {
+              "source_node_id": "analysis",
+              "field": "incident",
+              "equals": false
+            },
+            "assignment": {}
+          }
+        ]
+      },
+      "nodes": {
+        "status": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "state": "COMPLETED",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "result": {
+            "result_id": "result-1",
+            "node_id": "status",
+            "agent_id": "status_agent",
+            "role": "status",
+            "ok": true,
+            "payload": {
+              "service": {
+                "service": "payments",
+                "status": "degraded",
+                "region": "us-east-1",
+                "latencyP99Ms": 890,
+                "incident": "PAY-2041: elevated card-auth latency"
+              }
+            },
+            "error": null,
+            "upstream_result_ids": []
+          },
+          "skipReason": null,
+          "readyReason": "no_dependencies",
+          "conditionMatched": null,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "READY",
+              "reason": "no_dependencies"
+            },
+            {
+              "from_state": "READY",
+              "to_state": "RUNNING",
+              "reason": "scheduled"
+            },
+            {
+              "from_state": "RUNNING",
+              "to_state": "COMPLETED",
+              "reason": "agent_ok"
+            }
+          ]
+        },
+        "analysis": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "state": "COMPLETED",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [
+            "result-1"
+          ],
+          "result": {
+            "result_id": "result-2",
+            "node_id": "analysis",
+            "agent_id": "analysis_agent",
+            "role": "analysis",
+            "ok": true,
+            "payload": {
+              "basedOn": {
+                "status": {
+                  "service": {
+                    "service": "payments",
+                    "status": "degraded",
+                    "region": "us-east-1",
+                    "latencyP99Ms": 890,
+                    "incident": "PAY-2041: elevated card-auth latency"
+                  }
+                }
+              },
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "status": "degraded",
+              "severity": "elevated",
+              "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+            },
+            "error": null,
+            "upstream_result_ids": [
+              "result-1"
+            ]
+          },
+          "skipReason": null,
+          "readyReason": "dependencies_completed",
+          "conditionMatched": null,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "READY",
+              "reason": "dependencies_completed"
+            },
+            {
+              "from_state": "READY",
+              "to_state": "RUNNING",
+              "reason": "scheduled"
+            },
+            {
+              "from_state": "RUNNING",
+              "to_state": "COMPLETED",
+              "reason": "agent_ok"
+            }
+          ]
+        },
+        "remediation": {
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "state": "COMPLETED",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "result": {
+            "result_id": "result-3",
+            "node_id": "remediation",
+            "agent_id": "remediation_agent",
+            "role": "remediation",
+            "ok": true,
+            "payload": {
+              "basedOn": {
+                "basedOn": {
+                  "status": {
+                    "service": {
+                      "service": "payments",
+                      "status": "degraded",
+                      "region": "us-east-1",
+                      "latencyP99Ms": 890,
+                      "incident": "PAY-2041: elevated card-auth latency"
+                    }
+                  }
+                },
+                "incident": true,
+                "incident_id": "PAY-2041: elevated card-auth latency",
+                "status": "degraded",
+                "severity": "elevated",
+                "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+                "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+              },
+              "action": "open_incident_bridge",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency",
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "summary": "Remediation started for PAY-2041: elevated card-auth latency."
+            },
+            "error": null,
+            "upstream_result_ids": [
+              "result-2"
+            ]
+          },
+          "skipReason": null,
+          "readyReason": "dependencies_completed",
+          "conditionMatched": true,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "READY",
+              "reason": "dependencies_completed"
+            },
+            {
+              "from_state": "READY",
+              "to_state": "RUNNING",
+              "reason": "scheduled"
+            },
+            {
+              "from_state": "RUNNING",
+              "to_state": "COMPLETED",
+              "reason": "agent_ok"
+            }
+          ]
+        },
+        "no_action": {
+          "nodeId": "no_action",
+          "agentId": "no_action_agent",
+          "state": "SKIPPED",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "result": null,
+          "skipReason": "condition_not_selected",
+          "readyReason": null,
+          "conditionMatched": false,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "SKIPPED",
+              "reason": "condition_not_selected"
+            }
+          ]
+        }
+      },
+      "nodeStates": {
+        "status": "COMPLETED",
+        "analysis": "COMPLETED",
+        "remediation": "COMPLETED",
+        "no_action": "SKIPPED"
+      },
+      "results": [
+        {
+          "result_id": "result-1",
+          "node_id": "status",
+          "agent_id": "status_agent",
+          "role": "status",
+          "ok": true,
+          "payload": {
+            "service": {
+              "service": "payments",
+              "status": "degraded",
+              "region": "us-east-1",
+              "latencyP99Ms": 890,
+              "incident": "PAY-2041: elevated card-auth latency"
+            }
+          },
+          "error": null,
+          "upstream_result_ids": []
+        },
+        {
+          "result_id": "result-2",
+          "node_id": "analysis",
+          "agent_id": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "status": {
+                "service": {
+                  "service": "payments",
+                  "status": "degraded",
+                  "region": "us-east-1",
+                  "latencyP99Ms": 890,
+                  "incident": "PAY-2041: elevated card-auth latency"
+                }
+              }
+            },
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "status": "degraded",
+            "severity": "elevated",
+            "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+          },
+          "error": null,
+          "upstream_result_ids": [
+            "result-1"
+          ]
+        },
+        {
+          "result_id": "result-3",
+          "node_id": "remediation",
+          "agent_id": "remediation_agent",
+          "role": "remediation",
+          "ok": true,
+          "payload": {
+            "basedOn": {
+              "basedOn": {
+                "status": {
+                  "service": {
+                    "service": "payments",
+                    "status": "degraded",
+                    "region": "us-east-1",
+                    "latencyP99Ms": 890,
+                    "incident": "PAY-2041: elevated card-auth latency"
+                  }
+                }
+              },
+              "incident": true,
+              "incident_id": "PAY-2041: elevated card-auth latency",
+              "status": "degraded",
+              "severity": "elevated",
+              "summary": "payments is degraded. Incident: PAY-2041: elevated card-auth latency.",
+              "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency"
+            },
+            "action": "open_incident_bridge",
+            "analysis_token": "analysis:degraded:PAY-2041: elevated card-auth latency",
+            "incident": true,
+            "incident_id": "PAY-2041: elevated card-auth latency",
+            "summary": "Remediation started for PAY-2041: elevated card-auth latency."
+          },
+          "error": null,
+          "upstream_result_ids": [
+            "result-2"
+          ]
+        }
+      ],
+      "executionOrder": [
+        "status",
+        "analysis",
+        "remediation"
+      ],
+      "invokedNodeIds": [
+        "status",
+        "analysis",
+        "remediation"
+      ],
+      "invokedAgentIds": [
+        "status_agent",
+        "analysis_agent",
+        "remediation_agent"
+      ],
+      "skippedNodeIds": [
+        "no_action"
+      ],
+      "blockedNodes": [],
+      "finalAnswer": "Remediation started for PAY-2041: elevated card-auth latency.",
+      "terminationReason": "completed",
+      "errors": []
+    },
+    "output": {
+      "answer": "Remediation started for PAY-2041: elevated card-auth latency.",
+      "ok": true,
+      "terminationReason": "completed",
+      "nodeStates": {
+        "status": "COMPLETED",
+        "analysis": "COMPLETED",
+        "remediation": "COMPLETED",
+        "no_action": "SKIPPED"
+      },
+      "executionOrder": [
+        "status",
+        "analysis",
+        "remediation"
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "runtimeMs": 0,
+      "agentMs": 0,
+      "nodesReady": 3,
+      "nodesExecuted": 3,
+      "nodesCompleted": 3,
+      "nodesFailed": 0,
+      "nodesSkipped": 1,
+      "terminationReason": "completed",
+      "maxNodes": 12,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable orchestration events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "TASK",
+          "taskId": "task-payments-incident-conditional-branch",
+          "request": "Analyze payments and remediate only if an incident is open."
+        },
+        {
+          "phase": "PLAN",
+          "planId": "plan-payments-incident-conditional-branch",
+          "nodeIds": [
+            "status",
+            "analysis",
+            "remediation",
+            "no_action"
+          ]
+        },
+        {
+          "phase": "READY",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        {
+          "phase": "NODE_STARTED",
+          "nodeId": "status",
+          "agentId": "status_agent"
+        },
+        {
+          "phase": "AGENT",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": true,
+          "resultId": "result-1",
+          "upstreamResultIds": [],
+          "latencyMs": 0
+        },
+        {
+          "phase": "NODE_COMPLETED",
+          "nodeId": "status",
+          "resultId": "result-1"
+        },
+        {
+          "phase": "READY",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [
+            "result-1"
+          ]
+        },
+        {
+          "phase": "NODE_STARTED",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent"
+        },
+        {
+          "phase": "AGENT",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "role": "analysis",
+          "ok": true,
+          "resultId": "result-2",
+          "upstreamResultIds": [
+            "result-1"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "NODE_COMPLETED",
+          "nodeId": "analysis",
+          "resultId": "result-2"
+        },
+        {
+          "phase": "CONDITION",
+          "nodeId": "remediation",
+          "sourceNodeId": "analysis",
+          "field": "incident",
+          "expected": true,
+          "actual": true,
+          "selected": true,
+          "sourceResultId": "result-2"
+        },
+        {
+          "phase": "READY",
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "reason": "dependencies_completed",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [
+            "result-2"
+          ]
+        },
+        {
+          "phase": "CONDITION",
+          "nodeId": "no_action",
+          "sourceNodeId": "analysis",
+          "field": "incident",
+          "expected": false,
+          "actual": true,
+          "selected": false,
+          "sourceResultId": "result-2"
+        },
+        {
+          "phase": "SKIP",
+          "nodeId": "no_action",
+          "agentId": "no_action_agent",
+          "reason": "condition_not_selected"
+        },
+        {
+          "phase": "NODE_STARTED",
+          "nodeId": "remediation",
+          "agentId": "remediation_agent"
+        },
+        {
+          "phase": "AGENT",
+          "nodeId": "remediation",
+          "agentId": "remediation_agent",
+          "role": "remediation",
+          "ok": true,
+          "resultId": "result-3",
+          "upstreamResultIds": [
+            "result-2"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "NODE_COMPLETED",
+          "nodeId": "remediation",
+          "resultId": "result-3"
+        },
+        {
+          "phase": "COMPLETE",
+          "terminalNodeIds": [
+            "remediation"
+          ],
+          "latencyMs": 0
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "completed",
+            "ok": true,
+            "nodeStates": {
+              "status": "COMPLETED",
+              "analysis": "COMPLETED",
+              "remediation": "COMPLETED",
+              "no_action": "SKIPPED"
+            }
+          }
+        }
+      ],
+      "signatureFlow": "TASK \u2192 PLAN \u2192 READY \u2192 AGENT \u2192 READY \u2192 AGENT \u2192 CONDITION \u2192 READY \u2192 CONDITION \u2192 SKIP \u2192 AGENT \u2192 COMPLETE \u2192 TERMINATION",
+      "logicalParallelism": "READY means independently schedulable. Independent nodes become READY in the same wave before either executes. This example does not use OS threads."
+    },
+    "relatedEntities": [
+      "agents"
+    ],
+    "relatedContent": [
+      "agents",
+      "orchestration",
+      "workflow-runtime"
+    ],
+    "cookbook": {
+      "path": "examples/agents/08-agent-orchestration"
+    }
+  },
+  {
+    "labId": "agent-orchestration",
+    "traceId": "unknown-service-orchestration-failure",
+    "executionMode": "guided",
+    "recordedAt": "2026-09-21T06:18:32Z",
+    "metricsProvenance": "measured",
+    "provenance": {
+      "model": "mock",
+      "tools": "measured",
+      "metrics": "measured"
+    },
+    "exampleClass": "ORCHESTRATION_FAILURE",
+    "selectionNote": "Measured case: status fails on an unknown service. Analysis and decision are SKIPPED because their required upstream results are missing. The workflow remains a failure.",
+    "architecture": {
+      "layout": "agent-orchestration",
+      "stages": [
+        "task",
+        "plan",
+        "ready",
+        "execute",
+        "condition",
+        "complete-or-fail",
+        "termination"
+      ]
+    },
+    "input": {
+      "request": "Analyze an unknown service and decide the operational outcome.",
+      "service": "does-not-exist",
+      "config": {
+        "maxNodes": 12,
+        "modelDriver": "mock",
+        "synthesizerModel": "mock",
+        "clientName": "dataaihub-cookbook-agent-orchestration",
+        "dataDir": "data"
+      }
+    },
+    "sequence": [
+      {
+        "kind": "task_created",
+        "detail": {
+          "taskId": "task-unknown-service-orchestration-failure",
+          "request": "Analyze an unknown service and decide the operational outcome.",
+          "service": "does-not-exist",
+          "exampleClass": "ORCHESTRATION_FAILURE"
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "plan_created",
+        "detail": {
+          "planId": "plan-unknown-service-orchestration-failure",
+          "nodeIds": [
+            "status",
+            "analysis",
+            "decision"
+          ],
+          "nodes": [
+            {
+              "nodeId": "status",
+              "agentId": "status_agent",
+              "dependencies": [],
+              "condition": null
+            },
+            {
+              "nodeId": "analysis",
+              "agentId": "analysis_agent",
+              "dependencies": [
+                "status"
+              ],
+              "condition": null
+            },
+            {
+              "nodeId": "decision",
+              "agentId": "decision_agent",
+              "dependencies": [
+                "analysis"
+              ],
+              "condition": null
+            }
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_ready",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "conditionMatched": null
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_started",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_result",
+        "detail": {
+          "resultId": "result-1",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": false,
+          "payload": {
+            "service_id": "does-not-exist"
+          },
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'does-not-exist'",
+            "serviceId": "does-not-exist",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          },
+          "upstreamResultIds": [],
+          "dependencyIds": []
+        },
+        "latencyMs": 0
+      },
+      {
+        "kind": "node_failed",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "resultId": "result-1",
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'does-not-exist'",
+            "serviceId": "does-not-exist",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          },
+          "upstreamResultIds": []
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_skipped",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "reason": "dependency_failed",
+          "failedDependencyIds": [
+            "status"
+          ],
+          "dependencyIds": [
+            "status"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "node_skipped",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "reason": "dependency_skipped",
+          "skippedDependencyIds": [
+            "analysis"
+          ],
+          "dependencyIds": [
+            "analysis"
+          ]
+        },
+        "latencyMs": null
+      },
+      {
+        "kind": "termination",
+        "detail": {
+          "reason": "workflow_failed",
+          "ok": false,
+          "nodeStates": {
+            "status": "FAILED",
+            "analysis": "SKIPPED",
+            "decision": "SKIPPED"
+          }
+        },
+        "latencyMs": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "step-1-task_created",
+        "type": "protocol",
+        "title": "Task created",
+        "status": "ok",
+        "detail": {
+          "taskId": "task-unknown-service-orchestration-failure",
+          "request": "Analyze an unknown service and decide the operational outcome.",
+          "service": "does-not-exist",
+          "exampleClass": "ORCHESTRATION_FAILURE"
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-2-plan_created",
+        "type": "plan",
+        "title": "Plan created",
+        "status": "ok",
+        "detail": {
+          "planId": "plan-unknown-service-orchestration-failure",
+          "nodeIds": [
+            "status",
+            "analysis",
+            "decision"
+          ],
+          "nodes": [
+            {
+              "nodeId": "status",
+              "agentId": "status_agent",
+              "dependencies": [],
+              "condition": null
+            },
+            {
+              "nodeId": "analysis",
+              "agentId": "analysis_agent",
+              "dependencies": [
+                "status"
+              ],
+              "condition": null
+            },
+            {
+              "nodeId": "decision",
+              "agentId": "decision_agent",
+              "dependencies": [
+                "analysis"
+              ],
+              "condition": null
+            }
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-3-node_ready",
+        "type": "orchestration",
+        "title": "Node ready",
+        "status": "ok",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "conditionMatched": null
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-4-node_started",
+        "type": "agent",
+        "title": "Node started",
+        "status": "ok",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-5-node_result",
+        "type": "error",
+        "title": "Node result",
+        "status": "error",
+        "detail": {
+          "resultId": "result-1",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": false,
+          "payload": {
+            "service_id": "does-not-exist"
+          },
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'does-not-exist'",
+            "serviceId": "does-not-exist",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          },
+          "upstreamResultIds": [],
+          "dependencyIds": []
+        },
+        "metrics": {
+          "latencyMs": 0,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-6-node_failed",
+        "type": "error",
+        "title": "Node failed",
+        "status": "error",
+        "detail": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "resultId": "result-1",
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'does-not-exist'",
+            "serviceId": "does-not-exist",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          },
+          "upstreamResultIds": []
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-7-node_skipped",
+        "type": "orchestration",
+        "title": "Node skipped",
+        "status": "skipped",
+        "detail": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "reason": "dependency_failed",
+          "failedDependencyIds": [
+            "status"
+          ],
+          "dependencyIds": [
+            "status"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-8-node_skipped",
+        "type": "orchestration",
+        "title": "Node skipped",
+        "status": "skipped",
+        "detail": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "reason": "dependency_skipped",
+          "skippedDependencyIds": [
+            "analysis"
+          ],
+          "dependencyIds": [
+            "analysis"
+          ]
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      },
+      {
+        "id": "step-9-termination",
+        "type": "termination",
+        "title": "Termination",
+        "status": "ok",
+        "detail": {
+          "reason": "workflow_failed",
+          "ok": false,
+          "nodeStates": {
+            "status": "FAILED",
+            "analysis": "SKIPPED",
+            "decision": "SKIPPED"
+          }
+        },
+        "metrics": {
+          "latencyMs": null,
+          "provenance": "measured"
+        }
+      }
+    ],
+    "state": {
+      "taskId": "task-unknown-service-orchestration-failure",
+      "request": "Analyze an unknown service and decide the operational outcome.",
+      "service": "does-not-exist",
+      "plan": {
+        "plan_id": "plan-unknown-service-orchestration-failure",
+        "nodes": [
+          {
+            "node_id": "status",
+            "agent_id": "status_agent",
+            "dependencies": [],
+            "condition": null,
+            "assignment": {
+              "service": "does-not-exist"
+            }
+          },
+          {
+            "node_id": "analysis",
+            "agent_id": "analysis_agent",
+            "dependencies": [
+              "status"
+            ],
+            "condition": null,
+            "assignment": {}
+          },
+          {
+            "node_id": "decision",
+            "agent_id": "decision_agent",
+            "dependencies": [
+              "analysis"
+            ],
+            "condition": null,
+            "assignment": {}
+          }
+        ]
+      },
+      "nodes": {
+        "status": {
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "state": "FAILED",
+          "dependencyIds": [],
+          "upstreamResultIds": [],
+          "result": {
+            "result_id": "result-1",
+            "node_id": "status",
+            "agent_id": "status_agent",
+            "role": "status",
+            "ok": false,
+            "payload": {
+              "service_id": "does-not-exist"
+            },
+            "error": {
+              "code": "unknown_service",
+              "message": "Unknown service 'does-not-exist'",
+              "serviceId": "does-not-exist",
+              "validServices": [
+                "auth",
+                "billing",
+                "payments"
+              ]
+            },
+            "upstream_result_ids": []
+          },
+          "skipReason": null,
+          "readyReason": "no_dependencies",
+          "conditionMatched": null,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "READY",
+              "reason": "no_dependencies"
+            },
+            {
+              "from_state": "READY",
+              "to_state": "RUNNING",
+              "reason": "scheduled"
+            },
+            {
+              "from_state": "RUNNING",
+              "to_state": "FAILED",
+              "reason": "agent_failed"
+            }
+          ]
+        },
+        "analysis": {
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "state": "SKIPPED",
+          "dependencyIds": [
+            "status"
+          ],
+          "upstreamResultIds": [],
+          "result": null,
+          "skipReason": "dependency_failed",
+          "readyReason": null,
+          "conditionMatched": null,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "SKIPPED",
+              "reason": "dependency_failed"
+            }
+          ]
+        },
+        "decision": {
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "state": "SKIPPED",
+          "dependencyIds": [
+            "analysis"
+          ],
+          "upstreamResultIds": [],
+          "result": null,
+          "skipReason": "dependency_skipped",
+          "readyReason": null,
+          "conditionMatched": null,
+          "transitions": [
+            {
+              "from_state": "PENDING",
+              "to_state": "SKIPPED",
+              "reason": "dependency_skipped"
+            }
+          ]
+        }
+      },
+      "nodeStates": {
+        "status": "FAILED",
+        "analysis": "SKIPPED",
+        "decision": "SKIPPED"
+      },
+      "results": [
+        {
+          "result_id": "result-1",
+          "node_id": "status",
+          "agent_id": "status_agent",
+          "role": "status",
+          "ok": false,
+          "payload": {
+            "service_id": "does-not-exist"
+          },
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'does-not-exist'",
+            "serviceId": "does-not-exist",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          },
+          "upstream_result_ids": []
+        }
+      ],
+      "executionOrder": [
+        "status"
+      ],
+      "invokedNodeIds": [
+        "status"
+      ],
+      "invokedAgentIds": [
+        "status_agent"
+      ],
+      "skippedNodeIds": [
+        "analysis",
+        "decision"
+      ],
+      "blockedNodes": [],
+      "finalAnswer": "Node status failed: unknown_service: Unknown service 'does-not-exist'. Skipped: analysis, decision. Not treated as success.",
+      "terminationReason": "workflow_failed",
+      "errors": []
+    },
+    "output": {
+      "answer": "Node status failed: unknown_service: Unknown service 'does-not-exist'. Skipped: analysis, decision. Not treated as success.",
+      "ok": false,
+      "terminationReason": "workflow_failed",
+      "nodeStates": {
+        "status": "FAILED",
+        "analysis": "SKIPPED",
+        "decision": "SKIPPED"
+      },
+      "executionOrder": [
+        "status"
+      ]
+    },
+    "errors": [],
+    "metrics": {
+      "totalMs": 0,
+      "runtimeMs": 0,
+      "agentMs": 0,
+      "nodesReady": 1,
+      "nodesExecuted": 1,
+      "nodesCompleted": 0,
+      "nodesFailed": 1,
+      "nodesSkipped": 2,
+      "terminationReason": "workflow_failed",
+      "maxNodes": 12,
+      "provenance": "measured"
+    },
+    "presentation": {
+      "purpose": "Frontend-friendly projection of observable orchestration events. Not a new measurement.",
+      "signatureView": [
+        {
+          "phase": "TASK",
+          "taskId": "task-unknown-service-orchestration-failure",
+          "request": "Analyze an unknown service and decide the operational outcome."
+        },
+        {
+          "phase": "PLAN",
+          "planId": "plan-unknown-service-orchestration-failure",
+          "nodeIds": [
+            "status",
+            "analysis",
+            "decision"
+          ]
+        },
+        {
+          "phase": "READY",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "reason": "no_dependencies",
+          "dependencyIds": [],
+          "upstreamResultIds": []
+        },
+        {
+          "phase": "NODE_STARTED",
+          "nodeId": "status",
+          "agentId": "status_agent"
+        },
+        {
+          "phase": "AGENT",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "role": "status",
+          "ok": false,
+          "resultId": "result-1",
+          "upstreamResultIds": [],
+          "latencyMs": 0
+        },
+        {
+          "phase": "FAILURE",
+          "nodeId": "status",
+          "agentId": "status_agent",
+          "error": {
+            "code": "unknown_service",
+            "message": "Unknown service 'does-not-exist'",
+            "serviceId": "does-not-exist",
+            "validServices": [
+              "auth",
+              "billing",
+              "payments"
+            ]
+          },
+          "resultId": "result-1"
+        },
+        {
+          "phase": "SKIP",
+          "nodeId": "analysis",
+          "agentId": "analysis_agent",
+          "reason": "dependency_failed"
+        },
+        {
+          "phase": "SKIP",
+          "nodeId": "decision",
+          "agentId": "decision_agent",
+          "reason": "dependency_skipped"
+        },
+        {
+          "phase": "TERMINATION",
+          "detail": {
+            "reason": "workflow_failed",
+            "ok": false,
+            "nodeStates": {
+              "status": "FAILED",
+              "analysis": "SKIPPED",
+              "decision": "SKIPPED"
+            }
+          }
+        }
+      ],
+      "signatureFlow": "TASK \u2192 PLAN \u2192 READY \u2192 AGENT \u2192 FAILURE \u2192 SKIP \u2192 SKIP \u2192 TERMINATION",
+      "logicalParallelism": "READY means independently schedulable. Independent nodes become READY in the same wave before either executes. This example does not use OS threads."
+    },
+    "relatedEntities": [
+      "agents"
+    ],
+    "relatedContent": [
+      "agents",
+      "orchestration",
+      "workflow-runtime"
+    ],
+    "cookbook": {
+      "path": "examples/agents/08-agent-orchestration"
+    }
+  }
+]

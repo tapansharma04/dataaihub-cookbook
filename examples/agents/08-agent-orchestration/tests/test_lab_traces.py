@@ -1,0 +1,300 @@
+"""Validate committed lab_traces.json and semantic regeneration stability."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from typing import Any
+
+from agent.cases import CASES, get_case
+from agent.catalog import Catalog
+from agent.runtime import run_orchestration
+from agent.trace import SIGNATURE_FLOWS, SIGNATURE_OMITTED_PHASES, build_trace
+from config import EXAMPLE_ID, Settings
+
+ROOT = Path(__file__).resolve().parents[1]
+DATA = ROOT / "data"
+LAB_TRACES_PATH = ROOT / "lab_traces.json"
+
+EXPECTED_TRACE_IDS = frozenset(
+    {
+        "payments-incident-basic-orchestration",
+        "payments-status-dependency-chain",
+        "payments-incident-conditional-branch",
+        "unknown-service-orchestration-failure",
+    }
+)
+EXPECTED_EXAMPLE_CLASSES = frozenset(
+    {
+        "BASIC_ORCHESTRATION",
+        "DEPENDENCY_CHAIN",
+        "CONDITIONAL_BRANCH",
+        "ORCHESTRATION_FAILURE",
+    }
+)
+COT_FIELD_NAMES = frozenset(
+    {
+        "chainOfThought",
+        "chain_of_thought",
+        "cot",
+        "reasoning",
+        "hiddenReasoning",
+        "hidden_reasoning",
+        "internalReasoning",
+        "internal_reasoning",
+        "thoughtProcess",
+        "thought_process",
+        "thought",
+        "thoughts",
+        "privateReasoning",
+        "private_reasoning",
+        "scratchpad",
+    }
+)
+VOLATILE_KEYS = frozenset(
+    {
+        "recordedAt",
+        "latencyMs",
+        "latency_ms",
+        "totalMs",
+        "total_ms",
+        "agentMs",
+        "agent_ms",
+        "runtimeMs",
+        "runtime_ms",
+    }
+)
+FORBIDDEN_METRIC_KEYS = frozenset(
+    {
+        "qualityScore",
+        "orchestrationScore",
+        "collaborationScore",
+        "handoffScore",
+        "intelligenceScore",
+        "accuracyScore",
+        "benchmarkScore",
+        "confidenceScore",
+    }
+)
+FORBIDDEN_PHASES = frozenset({"DELEGATE", "HANDOFF", "HANDOFF_REJECTED"})
+
+
+def _collect_cot_violations(obj: Any, path: str = "") -> list[str]:
+    violations: list[str] = []
+    if isinstance(obj, dict):
+        for key, value in obj.items():
+            child_path = f"{path}.{key}" if path else key
+            if key in COT_FIELD_NAMES:
+                violations.append(child_path)
+            violations.extend(_collect_cot_violations(value, child_path))
+    elif isinstance(obj, list):
+        for index, item in enumerate(obj):
+            violations.extend(_collect_cot_violations(item, f"{path}[{index}]"))
+    return violations
+
+
+def _strip_volatile(obj: Any) -> Any:
+    if isinstance(obj, dict):
+        return {
+            key: _strip_volatile(value)
+            for key, value in obj.items()
+            if key not in VOLATILE_KEYS
+        }
+    if isinstance(obj, list):
+        return [_strip_volatile(item) for item in obj]
+    return obj
+
+
+def _build(trace_id: str) -> dict[str, Any]:
+    settings = Settings(openai_api_key="", data_dir=DATA)
+    case = get_case(trace_id)
+    result = run_orchestration(case, catalog=Catalog(DATA))
+    return build_trace(case=case, result=result, settings=settings)
+
+
+def _assert_trace_contract(trace: dict[str, Any]) -> None:
+    assert trace["labId"] == EXAMPLE_ID
+    assert trace["traceId"] in EXPECTED_TRACE_IDS
+    assert trace["exampleClass"] in EXPECTED_EXAMPLE_CLASSES
+    assert trace["metricsProvenance"] == "measured"
+    assert trace["provenance"]["tools"] == "measured"
+    assert trace["provenance"]["metrics"] == "measured"
+    assert trace["provenance"]["model"] == "mock"
+    assert FORBIDDEN_METRIC_KEYS.isdisjoint(trace["metrics"])
+    assert trace["sequence"]
+    assert trace["steps"]
+    assert trace["state"]
+    assert "presentation" in trace
+    assert _collect_cot_violations(trace) == []
+    kinds = [event["kind"] for event in trace["sequence"]]
+    assert kinds[0] == "task_created"
+    assert kinds[-1] == "termination"
+    assert "delegation" not in kinds
+    assert "handoff_requested" not in kinds
+    data_dir = trace["input"]["config"]["dataDir"]
+    assert data_dir == "data"
+    assert not Path(data_dir).is_absolute()
+    phases = [
+        item["phase"]
+        for item in trace["presentation"]["signatureView"]
+        if item["phase"] not in SIGNATURE_OMITTED_PHASES
+    ]
+    assert FORBIDDEN_PHASES.isdisjoint(phases)
+    plan = next(event for event in trace["sequence"] if event["kind"] == "plan_created")
+    node_ids = [node["nodeId"] for node in plan["detail"]["nodes"]]
+    assert node_ids == plan["detail"]["nodeIds"]
+    for node in plan["detail"]["nodes"]:
+        for dep in node["dependencies"]:
+            assert dep in node_ids
+
+
+def test_committed_lab_traces_schema():
+    assert LAB_TRACES_PATH.exists()
+    traces = json.loads(LAB_TRACES_PATH.read_text(encoding="utf-8"))
+    assert len(traces) == len(CASES)
+    assert {trace["traceId"] for trace in traces} == EXPECTED_TRACE_IDS
+    for trace in traces:
+        _assert_trace_contract(trace)
+        assert (
+            trace["presentation"]["signatureFlow"]
+            == SIGNATURE_FLOWS[trace["exampleClass"]]
+        )
+        kinds = [event["kind"] for event in trace["sequence"]]
+        assert kinds.count("termination") == 1
+        assert kinds[-1] == "termination"
+
+
+def test_committed_basic_preserves_independent_readiness():
+    traces = json.loads(LAB_TRACES_PATH.read_text(encoding="utf-8"))
+    basic = next(
+        trace
+        for trace in traces
+        if trace["traceId"] == "payments-incident-basic-orchestration"
+    )
+    phases = [
+        item["phase"]
+        for item in basic["presentation"]["signatureView"]
+        if item["phase"] not in SIGNATURE_OMITTED_PHASES
+    ]
+    assert phases == [
+        "TASK",
+        "PLAN",
+        "READY",
+        "READY",
+        "AGENT",
+        "AGENT",
+        "READY",
+        "AGENT",
+        "READY",
+        "AGENT",
+        "COMPLETE",
+        "TERMINATION",
+    ]
+    assert (
+        basic["presentation"]["signatureFlow"] == SIGNATURE_FLOWS["BASIC_ORCHESTRATION"]
+    )
+    assert basic["state"]["nodeStates"]["status"] == "COMPLETED"
+    assert basic["state"]["nodeStates"]["docs"] == "COMPLETED"
+    analysis = basic["state"]["results"][2]
+    status = basic["state"]["results"][0]
+    docs = basic["state"]["results"][1]
+    assert analysis["payload"]["basedOn"]["status"] == status["payload"]
+    assert analysis["payload"]["basedOn"]["docs"] == docs["payload"]
+
+
+def test_committed_chain_preserves_order():
+    traces = json.loads(LAB_TRACES_PATH.read_text(encoding="utf-8"))
+    chain = next(
+        trace
+        for trace in traces
+        if trace["traceId"] == "payments-status-dependency-chain"
+    )
+    assert chain["state"]["executionOrder"] == ["status", "analysis", "decision"]
+    phases = [
+        item["phase"]
+        for item in chain["presentation"]["signatureView"]
+        if item["phase"] not in SIGNATURE_OMITTED_PHASES
+    ]
+    assert phases == [
+        "TASK",
+        "PLAN",
+        "READY",
+        "AGENT",
+        "READY",
+        "AGENT",
+        "READY",
+        "AGENT",
+        "COMPLETE",
+        "TERMINATION",
+    ]
+    decision = chain["state"]["results"][2]
+    analysis = chain["state"]["results"][1]
+    assert decision["payload"]["basedOn"] == analysis["payload"]
+    assert decision["upstream_result_ids"] == [analysis["result_id"]]
+
+
+def test_committed_conditional_skips_non_selected_branch():
+    traces = json.loads(LAB_TRACES_PATH.read_text(encoding="utf-8"))
+    branch = next(
+        trace
+        for trace in traces
+        if trace["traceId"] == "payments-incident-conditional-branch"
+    )
+    assert branch["state"]["nodeStates"]["remediation"] == "COMPLETED"
+    assert branch["state"]["nodeStates"]["no_action"] == "SKIPPED"
+    assert branch["state"]["nodes"]["no_action"]["skipReason"] == (
+        "condition_not_selected"
+    )
+    kinds = [event["kind"] for event in branch["sequence"]]
+    assert "node_skipped" in kinds
+    assert kinds.count("condition_evaluated") == 2
+    assert (
+        branch["presentation"]["signatureFlow"] == SIGNATURE_FLOWS["CONDITIONAL_BRANCH"]
+    )
+
+
+def test_committed_failure_is_not_success():
+    traces = json.loads(LAB_TRACES_PATH.read_text(encoding="utf-8"))
+    failure = next(
+        trace
+        for trace in traces
+        if trace["traceId"] == "unknown-service-orchestration-failure"
+    )
+    assert failure["output"]["ok"] is False
+    assert failure["metrics"]["terminationReason"] == "workflow_failed"
+    assert failure["metrics"]["nodesFailed"] == 1
+    assert failure["metrics"]["nodesSkipped"] == 2
+    assert failure["state"]["nodeStates"] == {
+        "status": "FAILED",
+        "analysis": "SKIPPED",
+        "decision": "SKIPPED",
+    }
+    kinds = [event["kind"] for event in failure["sequence"]]
+    assert kinds.count("termination") == 1
+    assert kinds.index("node_failed") < kinds.index("termination")
+    assert "completed" not in kinds
+    assert failure["presentation"]["signatureFlow"].endswith(
+        "SKIP → SKIP → TERMINATION"
+    )
+
+
+def test_no_chain_of_thought_in_lab_traces():
+    traces = json.loads(LAB_TRACES_PATH.read_text(encoding="utf-8"))
+    for trace in traces:
+        assert _collect_cot_violations(trace) == []
+
+
+def test_semantic_regeneration_matches_committed():
+    committed = json.loads(LAB_TRACES_PATH.read_text(encoding="utf-8"))
+    committed_by_id = {trace["traceId"]: trace for trace in committed}
+    for case in CASES:
+        regenerated = _build(case.trace_id)
+        assert _strip_volatile(committed_by_id[case.trace_id]) == _strip_volatile(
+            regenerated
+        )
+
+
+def test_semantic_regeneration_is_stable_across_runs():
+    first = [_strip_volatile(_build(case.trace_id)) for case in CASES]
+    second = [_strip_volatile(_build(case.trace_id)) for case in CASES]
+    assert first == second
